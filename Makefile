@@ -37,14 +37,16 @@ HTML=$(SRC:.md=.html)
 TEX=$(SRC:.md=.tex)
 ODT=$(SRC:.md=.odt)
 DOCX=$(SRC:.md=.docx)
+BIB=$(SRC:.md=.bib)
 
-all:	$(PDFS) $(HTML) $(TEX) $(ODT) $(DOCX)
+all:	$(PDFS) $(HTML) $(TEX) $(ODT) $(DOCX) $(BIB)
 
-pdf:	clean $(PDFS)
-html:	clean $(HTML)
-tex:	clean $(TEX)
-odt:	clean $(ODT)
-docx:	clean $(DOCX)
+pdf:	clean $(BIB) $(PDFS)
+html:	clean $(BIB) $(HTML)
+tex:	clean $(BIB) $(TEX)
+odt:	clean $(BIB) $(ODT)
+docx:	clean $(BIB) $(DOCX)
+bib: 	$(BIB)
 
 %.html:	%.md
 	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w html -S --table-of-contents --template=$(PREFIX)/templates/html.template --css=$(PREFIX)/marked/kultiad-serif.css --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(BIB) -o $@ $<
@@ -60,6 +62,9 @@ docx:	clean $(DOCX)
 
 %.docx:	%.odt
 	/Applications/LibreOffice.app/Contents/MacOS/soffice --invisible --convert-to docx $<
+
+%.bib: %.md
+	bib_extract $< $@
 
 clean:
 	rm -f $(addsuffix .html, $(BASE)) $(addsuffix .pdf, $(BASE)) $(addsuffix .tex, $(BASE)) $(addsuffix .odt, $(BASE)) $(addsuffix .docx, $(BASE))
