@@ -17,9 +17,10 @@ The theoretical foundation for my research combines disciplinary literature from
 
 # Important notes
 
-This reading is is still preliminary, and readings in the second half are still unorganized. This is only meant to show progress towards a more complete version of the list (and elicit early suggestions for IR-related readings). 
+This reading is still preliminary, and readings in the second half are still unorganized. This is only meant to show progress towards a more complete version of the list (and elicit early suggestions for IR-related readings). 
 
 Additionally, citations are very inconsistent and unalphabetized as well. Many of the items are saved to my bibliography manager, but many are also temporarily copied and pasted here from other bibliographies I and others have made. As this takes better, shape, all citations will be consistent and correctly formatted.
+
 
 # Political institutions
 
@@ -41,21 +42,21 @@ Ostrum stuff… that's all down in collective action for now
 
 \begingroup \hangstart
 
-[@Pierson:2000]
-
-[@Hall:2010]
-
-[@Tsai:2006]
-
-[@Platteau:2000]
-
-[@Greif:2006]
-
 [@Acemoglu:2001]
 
 [@Acemoglu:2012]
 
-Rafael La Porta, Florencio Lopez-de-Silanes, Andrei Shleifer, and Robert W. Vishny, “Law and Finance.” Journal of Political Economy, 106 (1998): 1113-55.
+[@Greif:2006]
+
+Rafael La Porta, Florencio Lopez-de-Silanes, Andrei Shleifer, and Robert W. Vishny, “Law and Finance.” *Journal of Political Economy*, 106 (1998): 1113-55.
+
+[@Hall:2010]
+
+[@Pierson:2000]
+
+[@Platteau:2000]
+
+[@Tsai:2006]
 
 \endgroup
 
@@ -63,15 +64,16 @@ Rafael La Porta, Florencio Lopez-de-Silanes, Andrei Shleifer, and Robert W. Vish
 
 \begingroup \hangstart
 
-[@Weyland:2008]
+Stephen Bell, "Do We Really Need a New 'Constructivist Institutionalism' to Explain Institutional Change?" *British Journal of Political Science* 41:4 (October 2011): 883-906.
 
 [@DiMaggioPowell:1983]
 
 Robert C. Lieberman, "Ideas, Institutions, and Political Order: Explaining Political Change," *American Political Science Review* 96 (December 2002): 697-712.
 
-Stephen Bell, "Do We Really Need a New 'Constructivist Institutionalism' to Explain Institutional Change?" *British Journal of Political Science* 41:4 (October 2011): 883-906.
+[@Weyland:2008]
 
 \endgroup
+
 
 ## Institutional dynamics
 
@@ -85,16 +87,17 @@ Stephen Bell, "Do We Really Need a New 'Constructivist Institutionalism' to Expl
 
 [@Mackie:1996]
 
-[@Sugden:1989]
-
 [@Putnam:1994, chapters 1, 4--6]
 
-\endgroup
+[@Sugden:1989]
 
+\endgroup
 
 ### Institutional change
 
 \begingroup \hangstart
+
+Brian W. Arthur, “Competing Technologies, Increasing Returns, and Lock-In by Historical Events.” In *Increasing Returns and Path Dependence in the Economy*, pp. 13-32. Ann Arbor: University of Michigan Press, 1994.
 
 [@Gamm:1989]
 
@@ -104,15 +107,13 @@ Stephen Bell, "Do We Really Need a New 'Constructivist Institutionalism' to Expl
 
 [@Kuran:1995]
 
-Brian W. Arthur, “Competing Technologies, Increasing Returns, and Lock-In by Historical Events.” In his Increasing Returns and Path Dependence in the Economy, pp. 13-32. Ann Arbor: University of Michigan Press, 1994.
-
 \endgroup
 
 ### Collective action
 
 \begingroup \hangstart
 
-[@Schelling:1978]
+[@Calvert:1992]
 
 [@Kuran:1989]
 
@@ -124,7 +125,7 @@ Brian W. Arthur, “Competing Technologies, Increasing Returns, and Lock-In by H
 
 [@Ostrom:1999]
 
-[@Calvert:1992]
+[@Schelling:1978]
 
 [@Weingast:1997]
 
@@ -141,29 +142,27 @@ Brian W. Arthur, “Competing Technologies, Increasing Returns, and Lock-In by H
 
 [@Riker:1980]
 
-[@Shepsle:1981]
-
 Amartya Sen. “Rationality and Social Choice,” *American Economic Review* 85 (1995): 1-24.
 
 [@Sen:1999]
 
-\endgroup
+[@Shepsle:1981]
 
+\endgroup
 
 ### Overcoming cognitive limitations
 
 \begingroup \hangstart
 
-[@Thaler:2008]
+[@Caplan:2007]
 
 [@Thaler:2004]
 
-[@Caplan:2007]
+[@Thaler:2008]
 
 [@Tversky:1974]
 
 \endgroup
-
 
 ### Provision of collective goods
 
@@ -171,9 +170,9 @@ Amartya Sen. “Rationality and Social Choice,” *American Economic Review* 85 
 
 [@Coase:1974]
 
-[@Ostrom:1990]
-
 [@Ellickson:1991]
+
+[@Ostrom:1990]
 
 \endgroup
 
@@ -190,53 +189,63 @@ Stuff here?
 
 [@Acemoglu:2006]
 
-[@Olson:1993]
-
-[@Rodrik:2007]
-
 [@de-Alcantara:1998]
+
+[@Glaeser:2004]
 
 [@Grindle:2004]
 
 [@Grindle:2010]
 
-[@Rodrik:2004]
-
-[@Glaeser:2004]
+[@Olson:1993]
 
 [@Przeworski:2004]
 
-\endgroup
+[@Rodrik:2004]
 
+[@Rodrik:2007]
+
+\endgroup
 
 ### Institutions under democracy (?)
 
 Boix, others here?
 
-
 ### Institutions under autocracy
 
 \begingroup \hangstart
 
-[@Blaydes:2011]
-
 [@Bellin:2002]
 
-[@Jamal:2007]
+[@Blaydes:2011]
 
-[@Olson:1993]
+Brownlee, Jason.  2007.  *Authoritarianism in an Age of Democratization*.  Cambridge: Cambridge University Press.
+
+Brumberg, Daniel.  2002.  “Democratization in the Arab World?  The  Trap of Liberalized Autocracy.”  *Journal of Democracy* 13(4).
+
+Carothers, Thomas.  2002.  “The End of the Transition Paradigm.”  *Journal of Democracy* 13(1):5-21.
 
 [@Gandhi:2006]
 
+Ghandi, Jennifer and Adam Przeworski.  2007.  “Authoritarian Institutions and the Survival of Autocrats.”  *Comparative Political Studies* 40(11).
+
+Marc Morje Howard and Philip G. Roessler, “Liberalizing Outcomes in Competitive Authoritarian Regimes,” *American Journal of Political Science* 50 (April 2006): 365-381.
+
+Hadenius, Axel and Jan Teorell.  2006.  “Authoritarian Regimes: Stability, Change, and Pathways Toward Democracy, 1972-2002.”  Working Paper #331, Helen Kellogg Institute, November.
+
+[@Jamal:2007]
+
+Magaloni, Beatriz.  2008.  “Credible Power-Sharing and the Longevity of Authoritarian Rule.”  *Comparative Political Studies* 45(4-5).
+
 Malesky, Edmund, Paul Schuler, and Anh Tran. 2012. “The Adverse Effects of Sunshine: A Field Experiment on Legislative Transparency in an Authoritarian Assembly.” *American Political Science Review*. 106: 762-786.
 
+[@Olson:1993]
+
+Wickham, Carrie Rosefsky.  1994.  “Beyond Democratization: Political Change in the Arab World.”  *PS: Political Science and Politics* 27(3):507-9.
+
+Wickham, Carrie Rosefsky.  2002.  *Mobilizing Islam: Religion, Activism, and Political Change in Egypt*.  New York: Columbia University Press.
+
 Wintrobe, Ronald. 1990. “The Tinpot and the Totalitarian: An Economic Theory of Dictatorship.” *American Political Science Review* 84: 849-872.
-
-Carothers, Thomas.  2002.  “The End of the Transition Paradigm.”  Journal of Democracy 13(1):5-21.Brownlee, Jason.  2007.  Authoritarianism in an Age of Democratization.  Cambridge: Cambridge University Press.
-
-Brumberg, Daniel.  2002.  “Democratization in the Arab World?  The  Trap of Liberalized Autocracy.”  Journal of Democracy 13(4). Brumberg, Daniel.  2003.  Ghandi, Jennifer and Adam Przeworski.  2007.  “Authoritarian Institutions and the Survival of Autocrats.”  Comparative Political Studies 40(11).Hadenius, Axel and Jan Teorell.  2006.  “Authoritarian Regimes: Stability, Change, and Pathways Toward Democracy, 1972-2002.”  Working Paper #331, Helen Kellogg Institute, November.Marc Morje Howard and Philip G. Roessler, “Liberalizing Outcomes in Competitive Authoritarian Regimes,” American Journal of Political Science 50 (April 2006): 365-381.Magaloni, Beatriz.  2008.  “Credible Power-Sharing and the Longevity of Authoritarian Rule.”  Comparative Political Studies 45(4-5).
-
-Wickham, Carrie Rosefsky.  2002.  Mobilizing Islam: Religion, Activism, and Political Change in Egypt.  New York: Columbia University Press.Wickham, Carrie Rosefsky.  1994.  “Beyond Democratization: Political Change in the Arab World.”  PS: Political Science and Politics 27(3):507-9.
 
 \endgroup
 
@@ -250,9 +259,9 @@ Wickham, Carrie Rosefsky.  2002.  Mobilizing Islam: Religion, Activism, and Poli
 
 Gilligan, Michael and Leslie Johns. 2012. “Formal Models of International Institutions.” *Annual Review of Political Science* 15: 221-43. 
 
-Mearsheimer, John. 1995. “The False Promise of International Institutions.”*International Security* 5-49.
+Mearsheimer, John. 1995. “The False Promise of International Institutions.” *International Security* 5-49.
 
-Tarrow, Sidney. 2001. “Transnational Politics: Contention and Institutions inInternational Politics,” *Annual Review of Political Science*. 4: 1-20.
+Tarrow, Sidney. 2001. “Transnational Politics: Contention and Institutions in International Politics,” *Annual Review of Political Science*. 4: 1-20.
 
 \endgroup
 
@@ -300,6 +309,8 @@ Sheri Berman, "Civil Society and the Collapse of the Weimar Republic", *World Po
 
 [@NyeKeohane:1971]
 
+Price, Richard. 2003. “Transnational Civil Society and Advocacy in World Politics.” In *World Politics* 55 (July):579-606.
+
 [@Reimann:2006]
 
 [@Skjelsbaek:1971]
@@ -310,20 +321,15 @@ Theda Skocpol, Marshall Ganz, and Ziad Munson, "A Nation of Organizers: the Inst
 
 [@Tallberg:2013]
 
+Tarrow, Sidney. 2005. *The New Transnational Activism*. Cambridge: Cambridge University Press.
+
+Thomas, C. 2000. *Global Governance, Development and Human Security: The Challenge of Poverty and Inequality*. London ; Sterling.
+
+Ward, T. 2007. The Political Economy of NGOS and Human Security. *International Journal on World Peace*, 43(22).
+
 [@Wood:1990]
 
-Price, Richard. 2003. “Transnational Civil Society and Advocacy in World 
-Politics.” In *World Politics* 55 (July):579-606.
-
-Tarrow, Sidney. 2005. The New Transnational Activism. Cambridge: 
-Cambridge University Press.
-
-Thomas, C. 2000. Global Governance, Development and Human Security: The Challenge of Poverty and Inequality. London ; Sterling.
-
 Stuff here?: http://people.umass.edu/charli/networks/tanbibliography.html
-
-Ward, T. 2007. The Political Economy of NGOS and Human Security. 
-International Journal on World Peace, 43(22).
 
 \endgroup
 
@@ -333,49 +339,49 @@ International Journal on World Peace, 43(22).
 
 \begingroup \hangstart
 
-Agati, Mohamed.  2007.  “Undermining Standards of Good Governance: Egypt’s NGO Law and Its Impact on the Transparency and Accountability of CSOs.”  International Journal of Nonprofit Law 9(2).
+Agati, Mohamed.  2007.  “Undermining Standards of Good Governance: Egypt’s NGO Law and Its Impact on the Transparency and Accountability of CSOs.”  *International Journal of Nonprofit Law* 9(2).
 
-Albrow, Martin, Helmut Anheier, Marlies Glasius, Monroe E. Price, and Mary Kaldor (eds.).  2008.  Global Civil Society 2007/8: Communicative Power and Democracy.  Los Angeles: Sage Publications.
+Albrow, Martin, Helmut Anheier, Marlies Glasius, Monroe E. Price, and Mary Kaldor (eds.).  2008.  *Global Civil Society 2007/8: Communicative Power and Democracy*.  Los Angeles: Sage Publications.
 
-Batiwala, Srilatha and L. David Brown (eds.).  2006.  Transnational Civil Society: An Introduction.  Bloomfield, CT: Kumarian Press.
+Batiwala, Srilatha and L. David Brown (eds.).  2006.  *Transnational Civil Society: An Introduction*.  Bloomfield, CT: Kumarian Press.
 
-Bellin, Eva.  1994.  “Civil Society: Effective Tool of Analysis for Middle East Politics?”  PS: Political Science and Politics 27(3):509-10.
+Bellin, Eva.  1994.  “Civil Society: Effective Tool of Analysis for Middle East Politics?”  *PS: Political Science and Politics* 27(3):509-10.
 
-Ben NeFissa, Sarah, Nabil Abd al-Fattah, Sari Hanifi, and Carlos Milani (eds).  2005.  NGOs and Governance in the Arab World.  Cairo: The American University in Cairo Press.
+Ben NeFissa, Sarah, Nabil Abd al-Fattah, Sari Hanifi, and Carlos Milani (eds).  2005.  *NGOs and Governance in the Arab World*.  Cairo: The American University in Cairo Press.
 
-Bradley, Joseph.  2002.  “Subjects into Citizens: Societies, Civil Society, and Autocracy in Tsarist Russia.”  The American Historical Review 107(4):1094-1123.
+Bradley, Joseph.  2002.  “Subjects into Citizens: Societies, Civil Society, and Autocracy in Tsarist Russia.”  *The American Historical Review* 107(4):1094-1123.
 
-Carapico, Sheila.  1998.  Civil Society in Yemen: The Political Economy of Activism in Modern Arabia. Cambridge: Cambridge University Press.
+Carapico, Sheila.  1998.  *Civil Society in Yemen: The Political Economy of Activism in Modern Arabia*. Cambridge: Cambridge University Press.
 
-de Tocqueville, Alexis.  2001.  Democracy in America.  New York: Signet.
+de Tocqueville, Alexis.  2001.  *Democracy in America*.  New York: Signet.
 
-Fouad, Viviane, Nadia Ref’at and Samir Murcos.  2005.  “From Inertia to Movement: A Study of the Conflict over the NGO Law in Egypt.”  Chapter Five in Ben Nefissa et al (eds.) NGOs and Governance in the Arab World.  Cairo: The American University in Cairo Press.
+Fouad, Viviane, Nadia Ref’at and Samir Murcos.  2005.  “From Inertia to Movement: A Study of the Conflict over the NGO Law in Egypt.”  Chapter Five in Ben Nefissa et al (eds.) *NGOs and Governance in the Arab World*.  Cairo: The American University in Cairo Press.
 
-Gellner, Ernest.  1991.  “Civil Society in Historical Context.”  International Social Science Journal 129(August):506.
+Gellner, Ernest.  1991.  “Civil Society in Historical Context.”  *International Social Science Journal* 129(August):506.
 
-Kopecky, Petr and Cas Mudde (eds.).  2002.  Uncivil Society?  Contentious Politics in Post-Communist Europe.  London: Routledge.
+Kopecky, Petr and Cas Mudde (eds.).  2002.  *Uncivil Society?  Contentious Politics in Post-Communist Europe*.  London: Routledge.
 
-Liverani, Andrea.  2008.  Civil Society in Algeria: The political functions of associational life.  London: Routledge.
+Liverani, Andrea.  2008.  *Civil Society in Algeria: The political functions of associational life*.  London: Routledge.
 
-Mardin, Serif.  1995.  “Civil Society and Islam.”  Chapter 12 in John Hall (ed.) Civil Society: Theory, History, Comparison.  Cambridge: Polity Press.
+Mardin, Serif.  1995.  “Civil Society and Islam.”  Chapter 12 in John Hall (ed.) *Civil Society: Theory, History, Comparison*.  Cambridge: Polity Press.
 
-Norton, Augustus Richard (ed.)  2005.  Civil Society in the Middle East, Volume One.  Leiden, The Netherlands: Brill.
+Norton, Augustus Richard (ed.)  2005.  *Civil Society in the Middle East*, Volume One.  Leiden, The Netherlands: Brill.
 
-Norton, Augustus Richard.  1993.  “The Future of Civil Society in the Middle East.”  Middle East Journal.  47(2): 205-216.
+Norton, Augustus Richard.  1993.  “The Future of Civil Society in the Middle East.”  *Middle East Journal*.  47(2): 205-216.
 
-Ozdalga, Elisabeth and Sune Persson.  1996.  Civil Society, Democracy and the Muslim World.  Istanbul: Swedish Research Institute in Istanbul.
+Ozdalga, Elisabeth and Sune Persson.  1996.  *Civil Society, Democracy and the Muslim World*.  Istanbul: Swedish Research Institute in Istanbul.
 
-Wedeen, Lisa.  2008.  Peripheral Visions: Publics, Power, and Performance in Yemen. Chicago: University of Chicago Press.
+Wedeen, Lisa.  2008.  *Peripheral Visions: Publics, Power, and Performance in Yemen*. Chicago: University of Chicago Press.
 
-Wickham. 2002.  Mobilizing Islam: Religion, Activism, and Political Change in Egypt Today.
+Wickham. 2002.  *Mobilizing Islam: Religion, Activism, and Political Change in Egypt Today*.
 
-Wiktorowicz, Quintan.  2000.  “Civil Society as Social Control: State Power in Jordan.”  Comparative Politics.  33(1):43-61.
+Wiktorowicz, Quintan.  2000.  “Civil Society as Social Control: State Power in Jordan.”  *Comparative Politics*.  33(1):43-61.
 
-Wiktorowicz, Quintan.  2002.  “The Political Limits to Nongovernmental Organizations in Jordan.”  World Development 30(1):77-93.
+Wiktorowicz, Quintan.  2002.  “The Political Limits to Nongovernmental Organizations in Jordan.”  *World Development* 30(1):77-93.
 
-Yom, Sean L.  2005.  “Civil Society and Democratization in the Arab World.”  The Middle East Review of International Affairs 9(4):Article 2.
+Yom, Sean L.  2005.  “Civil Society and Democratization in the Arab World.”  *The Middle East Review of International Affairs* 9(4):Article 2.
 
-Zaki.  2007.  Civil Society and Democratization in the Arab World.  Annual Report: Ibn Khaldun Center for Development Studies.
+Zaki.  2007.  *Civil Society and Democratization in the Arab World*.  Annual Report: Ibn Khaldun Center for Development Studies.
 
 \endgroup
 
@@ -383,23 +389,26 @@ Zaki.  2007.  Civil Society and Democratization in the Arab World.  Annual Repor
 ## Global civil society in action
 
 \begingroup \hangstart
-Keck, Margaret E., and Kathryn Sikkink. Activists Beyond Borders: Advocacy Net- works in International Politics. Ithaca: Cornell University Press, 1998.
 
-Murdie, Amanda. “The Ties that Bind: A Network Analysis of Human Rights International Nongovernmental Organizations.” British Journal of Political Science (September 2013): 1–27.
+Barry, Colin M., K. Chad Clay, and Michael E. Flynn. “Avoiding the Spotlight: Human Rights Shaming and Foreign Direct Investment.” *International Studies Quarterly* 57 (2013): 532–44.
 
-Murdie, Amanda M., and David R. Davis. “Shaming and Blaming: Using Events Data to Assess the Impact of Human Rights INGOs.” International Studies Quarterly 56, no. 1 (March 2012): 1–16.
+Bob, Clifford. “Merchants of Morality.” *Foreign Policy*, no. 129 (March 2002): 36–45.
 
-Barry, Colin M., K. Chad Clay, and Michael E. Flynn. “Avoiding the Spot- light: Human Rights Shaming and Foreign Direct Investment.” Interna- tional Studies Quarterly 57 (2013): 532–44.
+Cooley, Alexander, and James Ron. “The NGO Scramble: Organizational Insecurity and the Political Economy of Transnational Action.” *International Security* 27, no. 1 (Summer 2002): 5–39.
 
-Bob, Clifford. “Merchants of Morality.” Foreign Policy, no. 129 (March 2002): 36–45.Cooley, Alexander, and James Ron. “The NGO Scramble: Organizational In- security and the Political Economy of Transnational Action.” International Security 27, no. 1 (Summer 2002): 5–39.
+Gugerty, Mary Kay, and Michael Kremer. “Outside Funding and the Dynamics of Participation in Community Associations.” *American Journal of Political Science* 52, no. 3 (July 2008): 585–602.
 
-Reimann, Kim D. “Up to No Good? Recent Critics and Critiques of NGOs.” Chap. 3 in Subcontracting Peace: The Challenges of NGO Peacebuilding, edited by Oliver P. Richmond and Henry F. Carey, 37–53. Surrey, UK: Ashgate, 2005.
+Henderson, Sarah L. “Selling Civil Society: Western Aid and the Nongovernmental Organization Sector in Russia.” *Comparative Political Studies* 35, no. 2 (March 2002): 139–67.
 
-Henderson, Sarah L. “Selling Civil Society: Western Aid and the Nongovern- mental Organization Sector in Russia.” Comparative Political Studies 35, no. 2 (March 2002): 139–67.
+Keck, Margaret E., and Kathryn Sikkink. *Activists Beyond Borders: Advocacy Networks in International Politics*. Ithaca: Cornell University Press, 1998.
 
-Gugerty, Mary Kay, and Michael Kremer. “Outside Funding and the Dynamics of Participation in Community Associations.” American Journal of Political Science 52, no. 3 (July 2008): 585–602.
+Murdie, Amanda M., and David R. Davis. “Shaming and Blaming: Using Events Data to Assess the Impact of Human Rights INGOs.” *International Studies Quarterly* 56, no. 1 (March 2012): 1–16.
 
-Murdie, Amanda. “Scrambling for Contact: The Determinants of Inter-NGO Cooperation in Non-Western Countries.” Review of International Organiza- tions (October 2013): 1–23.
+Murdie, Amanda. “Scrambling for Contact: The Determinants of Inter-NGO Cooperation in Non-Western Countries.” *Review of International Organizations* (October 2013): 1–23.
+
+Murdie, Amanda. “The Ties that Bind: A Network Analysis of Human Rights International Nongovernmental Organizations.” *British Journal of Political Science* (September 2013): 1–27.
+
+Reimann, Kim D. “Up to No Good? Recent Critics and Critiques of NGOs.” Chap. 3 in *Subcontracting Peace: The Challenges of NGO Peacebuilding*, edited by Oliver P. Richmond and Henry F. Carey, 37–53. Surrey, UK: Ashgate, 2005.
 
 [@Wong:2012]
 
