@@ -143,6 +143,8 @@ published: Nearly final draft.
 
 [@Slaughter:2004]
 
+[@Stiles:2002]
+
 [@Thomas:2000]
 
 [@ThomsonKrasner:1989]
