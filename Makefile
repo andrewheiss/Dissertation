@@ -24,7 +24,7 @@ BASE = $(basename $(SRC))
 PREFIX = /Users/andrew/.pandoc
 
 ## Location of your working bibliography file
-BIB = /Users/andrew/Dropbox/Readings/Papers.bib
+BIB_MAIN = /Users/andrew/Dropbox/Readings/Papers.bib
 
 ## CSL stylesheet (located in the csl folder of the PREFIX directory).
 # CSL = chicago-fullnote-bibliography
@@ -49,16 +49,17 @@ docx:	clean $(BIB) $(DOCX)
 bib: 	$(BIB)
 
 %.html:	%.md
-	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w html -S -N --table-of-contents --template=$(PREFIX)/templates/html.template --css=$(PREFIX)/marked/kultiad-serif.css --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(BIB) -o $@ $<
+	# -N --table-of-contents 
+	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w html -S --template=$(PREFIX)/templates/html.template --css=$(PREFIX)/marked/kultiad-serif.css --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(basename $@).bib -o $@ $<
 
 %.odt:	%.md
-	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S --template=$(PREFIX)/templates/odt.template --reference-odt=$(PREFIX)/reference-collaboration.odt --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(BIB) -o $@ $<
+	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S --template=$(PREFIX)/templates/odt.template --reference-odt=$(PREFIX)/reference-collaboration.odt --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(basename $@).bib -o $@ $<
 
 %.tex:	%.md
-	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S --latex-engine=xelatex --template=$(PREFIX)/templates/xelatex.template --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(BIB) -o $@ $<
+	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S --latex-engine=xelatex --template=$(PREFIX)/templates/xelatex.template --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(basename $@).bib -o $@ $<
 
 %.pdf:	%.md
-	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -s -S -N --latex-engine=xelatex --template=$(PREFIX)/templates/xelatex.template --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(BIB) -o $@ $<
+	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -s -S --latex-engine=xelatex --template=$(PREFIX)/templates/xelatex.template --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(basename $@).bib -o $@ $<
 
 %.docx:	%.odt
 	/Applications/LibreOffice.app/Contents/MacOS/soffice --invisible --convert-to docx $<
@@ -67,4 +68,4 @@ bib: 	$(BIB)
 	bib_extract $< $@
 
 clean:
-	rm -f $(addsuffix .html, $(BASE)) $(addsuffix .pdf, $(BASE)) $(addsuffix .tex, $(BASE)) $(addsuffix .odt, $(BASE)) $(addsuffix .docx, $(BASE))
+	rm -f $(addsuffix .html, $(BASE)) $(addsuffix .pdf, $(BASE)) $(addsuffix .tex, $(BASE)) $(addsuffix .odt, $(BASE)) $(addsuffix .docx, $(BASE)) $(addsuffix .bib, $(BASE))
