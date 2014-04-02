@@ -80,6 +80,8 @@ published: Nearly final draft.
 
 \begingroup \hangstart
 
+[@Abd-al-FattahNefissa:2005]
+
 [@Bellin:2002]
 
 [@Blaydes:2011]
@@ -90,9 +92,13 @@ published: Nearly final draft.
 
 [@Carothers:2002]
 
+[@Denoeux:2005]
+
 [@Gandhi:2006]
 
 [@GandhiPrzeworski:2007]
+
+[@FouadRefatMurcos:2005]
 
 [@HadeniusTeorell:2006]
 
@@ -103,6 +109,10 @@ published: Nearly final draft.
 [@LevitskyWay:2010]
 
 [@MaleskySchulerTran:2012]
+
+[@Nefissa:2005]
+
+[@Pratt:2005]
 
 [@Wickham:1994]
 
@@ -156,8 +166,6 @@ published: Nearly final draft.
 
 \begingroup \hangstart
 
-[@Abd-al-FattahNefissa:2005]
-
 [@Bob:2005]
 
 [@Carpenter:2007]
@@ -166,19 +174,11 @@ published: Nearly final draft.
 
 [@DeMars:2005]
 
-[@Denoeux:2005]
-
-[@FouadRefatMurcos:2005]
-
 [@Granzer:1999]
-
-[@Nefissa:2005]
 
 [@Keck:1998]
 
 [@PrakashGugerty:2010a]
-
-[@Pratt:2005]
 
 [@Price:2003]
 
