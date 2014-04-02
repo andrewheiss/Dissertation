@@ -156,6 +156,8 @@ published: Nearly final draft.
 
 \begingroup \hangstart
 
+[@Abd-al-FattahNefissa:2005]
+
 [@Bob:2005]
 
 [@Carpenter:2007]
@@ -164,11 +166,19 @@ published: Nearly final draft.
 
 [@DeMars:2005]
 
+[@Denoeux:2005]
+
+[@FouadRefatMurcos:2005]
+
 [@Granzer:1999]
+
+[@Nefissa:2005]
 
 [@Keck:1998]
 
 [@PrakashGugerty:2010a]
+
+[@Pratt:2005]
 
 [@Price:2003]
 
