@@ -4,27 +4,33 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: April 1, 2014
-published: Nearly final draft.
+date: April 29, 2014
+published: Final version.
 ...
+
+I plan to situate my research in the burgeoning new field of INGO research, started by Clifford Bob in the mid-2000s. This literature seeks to open the "black box" of INGO behavior and explain variation in these organizations' success. Recent works have posited that INGOs are effective because of their internal management and organizational structures (Wong 2012), their connections to IGOs (Tallberg et al. 2012), their position in networks of other INGOs (Carpenter 2014, Murdie 2013), or the institutional regulatory and legal environments of their home nations (Stroup 2012). However, little research has looked at the effects of host countries on NGO effectiveness, especially host countries with hybrid regimes where seemingly democratic institutions work in unexpected ways. My work will fill this gap.
+
+This reading list reflects my plan to (1) research the role of transnational and foreign-based advocacy and human rights NGOs operating in authoritarian and hybrid regimes and (2) determine their effectiveness in influencing institutional reform. Given my regional expertise and the ongoing revolutionary upheaval, I plan on focusing the bulk of my research on regimes in the Middle East, but I also plan on comparatively testing my hypotheses on China, a non-Middle Eastern hybrid regime that also engages with civil society in counterintuitive ways.
+
+The theoretical foundation for my research combines disciplinary literature from political science and economics, in particular institutional analysis and international relations. This list includes canonical books and articles on political institutions and civil society in international relations, as well as recent empirical work on the effects of global civil society on particular advocacy and human rights activities in non-democratic regimes (such as election monitoring, human rights shaming, and post-revolutionary advocacy).
 
 
 # Main theoretic questions
 
+**Primary analytic question:** What explains the variability in the ability of transnational non-state actors and global civil society to influence policy in hybrid regimes?
+
 * Autocratic institutions
-	* How can we best explain the emergence and persistence of semi-democratic institutions in hybrid regimes?
+	* How can we best explain the emergence and persistence of semi-democratic institutions—such as a civil society sector—in hybrid regimes?
 	* How do seemingly democratic institutions (elections, parliaments, bureaucratic insulation, civil society) operate under authoritarian and hybrid regimes (with emphasis on the Middle East)?
-* Non-state and non-governmental actors
-	* How do non-state actors and global civil society influence policy reforms?
+* The global third sector
+	* How does global civil society influence policy reforms?
 	* How do third sector advocacy organizations influence policy reforms?
-	* Is the idea of global civil society inextricably linked to norms of democracy?
 
 
 # More specific theoretic questions
 
-* Can INGOs play a role on the international stage on their own, or are they dependent on IGOs as gatekeepers?
-* Why do autocrats allow local NGOs to exist and operate? Do these organizations actually wield power? What determines that power?
-* Why do autocrats allow international NGOs to exist and operate? Do these organizations actually wield power? What determines that power?
+* Why do autocrats allow local and international NGOs to exist and operate? Do these organizations actually wield power? What determines that power?
+* Why do autocrats allow INGOs to exist and operate? Do these organizations actually wield power? What determines that power?
 * How do foreign INGOs operate in authoritarian regimes? What changes (if any) do they make to be more palatable to the host country?
 * How does foreign funding and support affect the effectiveness of INGOs operating in authoritarian regimes?
 
@@ -33,9 +39,9 @@ published: Nearly final draft.
 
 * What are the determinants of INGO political power in authoritarian regimes?
 * Can global civil society improve governance in autocracies? Should it?
-* Are there policies or strategies than can improve and enhance (I)NGO activities in autocracies without falling afoul of the autocrats?
+* Are there policies or strategies than can improve and enhance INGO activities in autocracies without falling afoul of the autocrats?
 
----
+\newpage
 
 # Autocratic institutions
 
@@ -57,6 +63,8 @@ published: Nearly final draft.
 
 [@Kuran:2004]
 
+[@Kuran:2011]
+
 [@Levi:2013]
 
 [@Lieberman:2002]
@@ -76,7 +84,7 @@ published: Nearly final draft.
 \endgroup
 
 
-## How do seemingly democratic institutions (elections, parliaments, bureaucratic insulation, civil society) operate under authoritarian and hybrid regimes (with emphasis on the Middle East)?
+## How do seemingly democratic institutions (elections, parliaments, bureaucratic insulation, civil society) operate under authoritarian and hybrid regimes?
 
 \begingroup \hangstart
 
@@ -87,6 +95,8 @@ published: Nearly final draft.
 [@Blaydes:2011]
 
 [@Brownlee:2007]
+
+[@Brownlee:2012]
 
 [@Brumberg:2002]
 
@@ -114,6 +124,10 @@ published: Nearly final draft.
 
 [@Pratt:2005]
 
+[@Spires:2012]
+
+[@Weiss:2013]
+
 [@Wickham:1994]
 
 [@Wickham:2002]
@@ -125,9 +139,9 @@ published: Nearly final draft.
 
 ---
 
-# Non-state and non-governmental actors
+# The global third sector
 
-## How do non-state actors and global civil society influence policy reforms?
+## How does global civil society influence policy reforms?
 
 \begingroup \hangstart
 
@@ -137,11 +151,15 @@ published: Nearly final draft.
 
 [@GordenkerWeiss:1996]
 
-[@HagelPeretz:2005]
-
 [@HallBiersteker:2002]
 
 [@JosselinWallace:2001]
+
+[@Kelley:2004]
+
+[@Kelley:2012a]
+
+[@Kelley:2012]
 
 [@KeohaneNye:2001]
 
@@ -157,8 +175,6 @@ published: Nearly final draft.
 
 [@Thomas:2000]
 
-[@ThomsonKrasner:1989]
-
 \endgroup
 
 
@@ -166,9 +182,15 @@ published: Nearly final draft.
 
 \begingroup \hangstart
 
+[@BarryClayFlynn:2013]
+
+[@BarryBellClay:2015]
+
 [@Bob:2005]
 
 [@Carpenter:2007]
+
+[@Carpenter:2014]
 
 [@Cooley:2002]
 
@@ -177,6 +199,12 @@ published: Nearly final draft.
 [@Granzer:1999]
 
 [@Keck:1998]
+
+[@Murdie:2012]
+
+[@Murdie:2013]
+
+[@Murdie:2013a]
 
 [@PrakashGugerty:2010a]
 
@@ -190,23 +218,8 @@ published: Nearly final draft.
 
 [@Stroup:2012]
 
+[@Tarrow:2001]
+
 [@Wong:2012]
-
-\endgroup
-
-
-## Is the idea of global civil society inextricably linked to norms of democracy?
-
-\begingroup \hangstart
-
-[@Hawkins:2002]
-
-[@Kelley:2004]
-
-[@Reimann:2006]
-
-[@Thomas:2002]
-
-[@Wood:1990]
 
 \endgroup
