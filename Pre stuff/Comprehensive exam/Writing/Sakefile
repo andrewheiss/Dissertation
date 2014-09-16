@@ -26,47 +26,51 @@ generate output:
     dependencies:
       - $FILENAME.md
     formula: >
-      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S --latex-engine=xelatex --template=$PREFIX/templates/xelatex.template --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -V chapterstyle=hikma-article -V pagestyle=ath -o $FILENAME.pdf $FILENAME.md; 
-      open $FILENAME.pdf
+      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S --latex-engine=xelatex --template=$PREFIX/templates/xelatex.template --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -V chapterstyle=hikma-article -V pagestyle=ath -o $FILENAME.pdf $FILENAME.md;
+      mv $FILENAME.pdf Output/$FILENAME.pdf
     output: 
-      - $FILENAME.pdf
+      - Output/$FILENAME.pdf
 
   word:
     help: convert to nice looking Word file through LibreOffice
     dependencies:
       - $FILENAME.md
     formula: >
-      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S --template=$PREFIX/templates/odt.template --reference-odt=$PREFIX/templates/reference.odt --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -o $FILENAME.odt; 
+      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S --template=$PREFIX/templates/odt.template --reference-odt=$PREFIX/styles/reference.odt --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -o $FILENAME.odt; 
       /Applications/LibreOffice.app/Contents/MacOS/soffice --invisible --convert-to docx $FILENAME.odt;
+      mv $FILENAME.docx Output/$FILENAME.docx;
       rm $FILENAME.odt
     output: 
-      - $FILENAME.docx
+      - Output/$FILENAME.docx
 
   manuscript:
     help: convert to a Word file formatted as a manuscript through LibreOffice
     dependencies:
       - $FILENAME.md
     formula: >
-      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S --template=$PREFIX/templates/odt-manuscript.template --reference-odt=$PREFIX/templates/reference-manuscript.odt --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -o $FILENAME-manuscript.odt $FILENAME.md; 
+      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S --template=$PREFIX/templates/odt-manuscript.template --reference-odt=$PREFIX/styles/reference-manuscript.odt --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -o $FILENAME-manuscript.odt $FILENAME.md; 
       /Applications/LibreOffice.app/Contents/MacOS/soffice --invisible --convert-to docx $FILENAME-manuscript.odt;
+      mv $FILENAME-manuscript.docx Output/$FILENAME-manuscript.docx;
       rm $FILENAME-manuscript.odt
     output: 
-      - $FILENAME-manuscript.docx
+      - Output/$FILENAME-manuscript.docx
 
   html:
     help: convert to HTML
     dependencies:
       - $FILENAME.md
     formula: >
-      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w html -S --template=$PREFIX/templates/html.template --css=$PREFIX/marked/kultiad-serif.css --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -o $FILENAME.html
+      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w html -S --template=$PREFIX/templates/html.template --css=$PREFIX/marked/kultiad-serif.css --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -o $FILENAME.html;
+      mv $FILENAME.html Output/$FILENAME.html
     output: 
-      - $FILENAME.html
+      - Output/$FILENAME.html
 
   bibliography:
     help: extract citations into a separate BibTeX file
     dependencies:
       - $FILENAME.md
     formula: >
-      bib_extract --bibtex_file $BIB_FILE $FILENAME.md $FILENAME.bib
+      bib_extract --bibtex_file $BIB_FILE $FILENAME.md $FILENAME.bib; 
+      mv $FILENAME.bib Output/$FILENAME.bib;
     output:
-      - $FILENAME.bib
+      - Output/$FILENAME.bib
