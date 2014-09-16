@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: April 29, 2014
+date: Septemner 2, 2014
 published: Final version.
 ...
 
@@ -49,11 +49,7 @@ The theoretical foundation for my research combines disciplinary literature from
 
 \begingroup \hangstart
 
-[@Arthur:1994]
-
 [@DiMaggioPowell:1983]
-
-[@Gamm:1989]
 
 [@Greif:2004]
 
@@ -79,8 +75,6 @@ The theoretical foundation for my research combines disciplinary literature from
 
 [@Tsai:2006]
 
-[@Weyland:2008]
-
 \endgroup
 
 
@@ -92,6 +86,8 @@ The theoretical foundation for my research combines disciplinary literature from
 
 [@Bellin:2002]
 
+[@Bellin:2004]
+
 [@Blaydes:2011]
 
 [@Brownlee:2007]
@@ -99,6 +95,8 @@ The theoretical foundation for my research combines disciplinary literature from
 [@Brownlee:2012]
 
 [@Brumberg:2002]
+
+[@Carapico:2002]
 
 [@Carothers:2002]
 
@@ -120,11 +118,19 @@ The theoretical foundation for my research combines disciplinary literature from
 
 [@MaleskySchulerTran:2012]
 
+[@Marzouk:1997]
+
 [@Nefissa:2005]
 
 [@Pratt:2005]
 
+[@Said:2005]
+
+[@Stacher:2012]
+
 [@Spires:2012]
+
+[@Svolik:2009]
 
 [@Weiss:2013]
 
@@ -141,9 +147,11 @@ The theoretical foundation for my research combines disciplinary literature from
 
 # The global third sector
 
-## How does global civil society influence policy reforms?
+## How do non-state actors influence domestic policy reforms?
 
 \begingroup \hangstart
+
+[@BierstekerHall:2002]
 
 [@Buthe:2004]
 
@@ -151,11 +159,17 @@ The theoretical foundation for my research combines disciplinary literature from
 
 [@GordenkerWeiss:1996]
 
-[@HallBiersteker:2002]
+[@HallBiersteker:2002a]
 
-[@JosselinWallace:2001]
+[@Halliday:2001]
+
+[@JosselinWallace:2001a]
+
+[@JosselinWallace:2001b]
 
 [@Kelley:2004]
+
+[@Kelley:2004a]
 
 [@Kelley:2012a]
 
@@ -163,7 +177,9 @@ The theoretical foundation for my research combines disciplinary literature from
 
 [@KeohaneNye:2001]
 
-[@Mathews:1997]
+[@LipschutzFogel:2002]
+
+[@Milani:2005]
 
 [@Risse:2002]
 
@@ -198,6 +214,12 @@ The theoretical foundation for my research combines disciplinary literature from
 
 [@Granzer:1999]
 
+[@GugertyPrakash:2010]
+
+[@Henderson:2010]
+
+[@HulmeEdwards:1997a]
+
 [@Keck:1998]
 
 [@Murdie:2012]
@@ -210,15 +232,23 @@ The theoretical foundation for my research combines disciplinary literature from
 
 [@Price:2003]
 
+[@Risse:2010]
+
 [@RisseRopp:1999]
 
 [@RisseSikkink:1999]
+
+[@Roca:2005]
+
+[@SmithWest:2005]
 
 [@Simmons:2009]
 
 [@Stroup:2012]
 
 [@Tarrow:2001]
+
+[@TsutsuiWotipka:2004]
 
 [@Wong:2012]
 
