@@ -1,0 +1,72 @@
+# Extensionless name of Markdown file
+#! FILENAME = comprehensive_exam
+
+# Variables
+#! PREFIX = /Users/andrew/.pandoc
+#! BIB_FILE = /Users/andrew/Dropbox/Readings/Papers.bib
+#! CSL = american-political-science-association
+
+
+# Other common CSLs: 
+#   * chicago-fullnote-bibliography
+#   * chicago-syllabus-no-bib
+#   * apa
+
+# To add version control footer support in PDFs:
+#   1. Run vcinit in the directory
+#   2. Place `./vc` at the front of the formula
+#   3. Add `-V vc` to the pandoc command
+#   4. Change pagestyle to athgit instead of ath
+
+generate output:
+  help: convert Markdown file to different formats
+
+  pdf:
+    help: convert to PDF
+    dependencies:
+      - $FILENAME.md
+    formula: >
+      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S --latex-engine=xelatex --template=$PREFIX/templates/xelatex.template --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -V chapterstyle=hikma-article -V pagestyle=ath -o $FILENAME.pdf $FILENAME.md; 
+      open $FILENAME.pdf
+    output: 
+      - $FILENAME.pdf
+
+  word:
+    help: convert to nice looking Word file through LibreOffice
+    dependencies:
+      - $FILENAME.md
+    formula: >
+      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S --template=$PREFIX/templates/odt.template --reference-odt=$PREFIX/templates/reference.odt --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -o $FILENAME.odt; 
+      /Applications/LibreOffice.app/Contents/MacOS/soffice --invisible --convert-to docx $FILENAME.odt;
+      rm $FILENAME.odt
+    output: 
+      - $FILENAME.docx
+
+  manuscript:
+    help: convert to a Word file formatted as a manuscript through LibreOffice
+    dependencies:
+      - $FILENAME.md
+    formula: >
+      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S --template=$PREFIX/templates/odt-manuscript.template --reference-odt=$PREFIX/templates/reference-manuscript.odt --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -o $FILENAME-manuscript.odt $FILENAME.md; 
+      /Applications/LibreOffice.app/Contents/MacOS/soffice --invisible --convert-to docx $FILENAME-manuscript.odt;
+      rm $FILENAME-manuscript.odt
+    output: 
+      - $FILENAME-manuscript.docx
+
+  html:
+    help: convert to HTML
+    dependencies:
+      - $FILENAME.md
+    formula: >
+      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w html -S --template=$PREFIX/templates/html.template --css=$PREFIX/marked/kultiad-serif.css --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -o $FILENAME.html
+    output: 
+      - $FILENAME.html
+
+  bibliography:
+    help: extract citations into a separate BibTeX file
+    dependencies:
+      - $FILENAME.md
+    formula: >
+      bib_extract --bibtex_file $BIB_FILE $FILENAME.md $FILENAME.bib
+    output:
+      - $FILENAME.bib
