@@ -1,6 +1,17 @@
+# OS X stuff
 .DS_Store
-*.pdf
-*.docx
-*.odt
-*.html
-Examples/*
+
+# Sake stuff
+.shastore
+
+# Output
+# See individual Output/.gitignore files
+#
+# This works:
+#   **/Output/*
+# But adding this doesn't:
+#   !**/Output/.gitignore
+
+# Miscellaneous
+Pre stuff/Comprehensive exam/Reading list/Examples/
+Pre stuff/Comprehensive exam/Writing/Figures/Originals/
