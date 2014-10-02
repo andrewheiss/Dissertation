@@ -16,7 +16,7 @@ Introduction, ¶ on what I'm studying
 Difficult to measure, absence of rich data
 
 
-# NGO identification
+# Identifying Civil Society Organizations
 
 One difficulty in studying NGOs on a massive scale is that there is no comprehensive country-level or international list of organizations. My experience this past summer exemplifies this problem—Judith Kelley and her research assistants have compiled a list of NGOs that work with human trafficking, but after months of scouring the internet and contacting hundreds of these organizations, the list is still incomplete (even though it has over 1,000 organizations). 
 
@@ -67,13 +67,13 @@ Data can be exported from the EA, but is limited to 50–200 records at a time (
 
 ## UN-DESA
 
-The UN's Department of Economic and Social Affairs (DESA)^[[http://csonet.org/](http://csonet.org/)] maintains a list of 3,900 NGOs that have consultative status with the Economic and Social Council (ECOSOC). This list is literally just a list—a 125-page PDF with organization names and founding dates.^[[http://csonet.org/content/documents/e2013inf6.pdf](http://csonet.org/content/documents/e2013inf6.pdf)] 
+The UN's Department of Economic and Social Affairs (DESA)^[[http://csonet.org/](http://csonet.org/)] maintains a list of 3,900 NGOs that have consultative status with the UN's Economic and Social Council (ECOSOC). This list is literally just a list—a 125-page PDF with organization names and founding dates.^[[http://csonet.org/content/documents/e2013inf6.pdf](http://csonet.org/content/documents/e2013inf6.pdf)] 
 
 UN-DESA also maintains a database of 31,000 NGOs that work with the UN,^[[http://esango.un.org/civilsociety/displayAdvancedSearch.do?method=search](http://esango.un.org/civilsociety/displayAdvancedSearch.do?method=search)] but the search function for the database is extremely clunky and limited. The database has an incomplete taxonomy, with categories focused primarily around Millennium Development Goals and organizational areas of expertise. Each entry contains only basic contact information and omits the organization's categorization. Additionally, there is no export function and the website is structured poorly, making scraping more difficult.
 
 ## Regional lists
 
-Studying domestic NGOs in authoritarian regimes poses unique identification challenges—few authoritarian governments (if any) make their lists of registered NGOs publicly available, and NGOs that aren't formally registered typically have an incentive to remain unregistered. Regional research institutes have attempted to collect lists of NGOs, with varying levels of completeness and comprehensiveness:
+Identifying domestic NGOs in authoritarian regimes poses unique challenges—few authoritarian governments (if any) make their lists of registered NGOs publicly available, and NGOs that aren't formally registered typically have an incentive to remain unregistered. Regional research institutes have attempted to collect lists of NGOs, with varying levels of completeness and comprehensiveness:
 
 ### The Arab Institute for Human Rights
 
@@ -104,7 +104,7 @@ Data is available in Chinese and English and can be purchased online in report f
 CDB provides additional data on Chinese NGOs, including a longer list of 1,953 local nonprofits^[In Chinese, [http://www.chinadevelopmentbrief.org.cn/service/action/org_search.php?org_type=1](http://www.chinadevelopmentbrief.org.cn/service/action/org_search.php?org_type=1). See also [http://www.hks.harvard.edu/centers/hauser/programs/past-programs/nonprofits-in-china](http://www.hks.harvard.edu/centers/hauser/programs/past-programs/nonprofits-in-china)]
 
 
-# NGO and Civil Society Data
+# Measuring Civil Society Strength
 
 Beyond measuring and identifying *individual actors* in domestic and global civil society, there have been some attempts at measuring the *nature* of civil society itself. However, an absence of regular updates and funding makes these data sources more difficult to use.
 
@@ -128,15 +128,26 @@ The GCSI has unfortunately not been updated since 2004 and is not especially use
 
 ## World Values Survey and Barometers
 
-Public opinion surveys such as the World Values Survey (WVS) or regional projects like the Arab Barometer,^[[http://www.arabbarometer.org/](http://www.arabbarometer.org/)] Afrobarometer^[[http://www.afrobarometer.org/](http://www.afrobarometer.org/)], and Asian Barometer^[[http://www.asianbarometer.org/](http://www.asianbarometer.org/)] can provide insight into associational life that can be comparable to the apparently defunct CSI and GCSI indexes. These surveys do not collect data on organizations' budgets or funding sources or strategies, but they do measure individual-level trust, civic values, and engagement with government—all dimensions of civil society. 
+Public opinion surveys such as the World Values Survey (WVS)^[[http://www.worldvaluessurvey.org/](http://www.worldvaluessurvey.org/)] or regional projects like the Arab Barometer,^[[http://www.arabbarometer.org/](http://www.arabbarometer.org/)] Afrobarometer^[[http://www.afrobarometer.org/](http://www.afrobarometer.org/)], and Asian Barometer^[[http://www.asianbarometer.org/](http://www.asianbarometer.org/)] can provide insight into associational life that can be comparable to the apparently defunct CSI and GCSI indexes. These surveys do not collect data on organizations' budgets or funding sources or strategies, but they do measure individual-level trust, civic values, and engagement with government—all dimensions of civil society. 
 
 These surveys are not conducted annually (the WVS is done every 5 years; regional barometers are done every 3–5 years), but they can give a somewhat more complete view of changes in public opinion over time and can potentially be used in longitudinal work. This survey data is not a perfect replacement for more detailed and specialized data on civil society strength, but can potentially provide a crude proxy for some more general aspects of a nation's civil society.
 
 
-# Other methods
+# Measuring Civil Society Activity
 
-Event data: Open event data, IDEA, GDELT
-Wikileaks
+Measuring civil society activity is another difficult empirical hurdle. Recent advances in event data and text analysis methods may provide some tools for quantitatively measuring the activities of (I)NGOs. However, event data faces some powerful limitations (which can be overcome, to some degree)
+
+## IDEA
+
+## GDELT
+
+## Open Event Data Alliance
+
+## Other approaches
+
+### Collection of specific text corpora
+
+### Wikileaks
 
 
 # Questions 
