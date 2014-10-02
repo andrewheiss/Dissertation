@@ -30,7 +30,7 @@ generate output:
     dependencies:
       - $MARKDOWN_FILE.md
     formula: >
-      replace_includes $MARKDOWN_FILE.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S --default-image-extension=pdf --latex-engine=xelatex --template=$PREFIX/templates/xelatex.template --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -V chapterstyle=hikma-article-numbered -V pagestyle=ath -o $MARKDOWN_FILE.pdf $MARKDOWN_FILE.md
+      ./vc; replace_includes $MARKDOWN_FILE.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S --default-image-extension=pdf --latex-engine=xelatex --template=$PREFIX/templates/xelatex.template --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -V chapterstyle=hikma-article-numbered -V pagestyle=athgit -V vc -o $MARKDOWN_FILE.pdf $MARKDOWN_FILE.md
     output: 
       - $MARKDOWN_FILE.pdf
 
