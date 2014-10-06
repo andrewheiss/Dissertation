@@ -1,6 +1,6 @@
 ---
 memo: True
-title: "Landscape of NGO-related data"
+title: "Landscape of NGO and civil society data"
 author:
 - name: Andrew Heiss
   affiliation: Duke University
@@ -73,7 +73,7 @@ UN-DESA also maintains a database of 31,000 NGOs that work with the UN,^[[http:/
 
 ## Regional lists
 
-Identifying domestic NGOs in authoritarian regimes poses unique challenges—few authoritarian governments (if any) make their lists of registered NGOs publicly available, and NGOs that aren't formally registered typically have an incentive to remain unregistered. Regional research institutes have attempted to collect lists of NGOs, with varying levels of completeness and comprehensiveness:
+Identifying domestic NGOs in authoritarian regimes poses unique challenges—few authoritarian governments (if any) make their lists of registered NGOs publicly available, and NGOs that aren't formally registered typically have an incentive to remain unregistered. Regional research institutes have attempted to collect lists of NGOs, with varying levels of completeness and comprehensiveness.
 
 ### The Arab Institute for Human Rights
 
@@ -133,23 +133,30 @@ Public opinion surveys such as the World Values Survey (WVS)^[[http://www.worldv
 These surveys are not conducted annually (the WVS is done every 5 years; regional barometers are done every 3–5 years), but they can give a somewhat more complete view of changes in public opinion over time and can potentially be used in longitudinal work. This survey data is not a perfect replacement for more detailed and specialized data on civil society strength, but can potentially provide a crude proxy for some more general aspects of a nation's civil society.
 
 
-# Measuring Civil Society Activity
+# Measuring Civil Society Activity with Text
 
-Measuring civil society activity is another difficult empirical hurdle. Recent advances in event data and text analysis methods may provide some tools for quantitatively measuring the activities of (I)NGOs. However, event data faces some powerful limitations (which can be overcome, to some degree)
+Measuring civil society activity is another difficult empirical hurdle. Recent advances in event data and text analysis methods may provide some tools for quantitatively measuring the activities of (I)NGOs. 
 
-## IDEA
+## Event data
 
-## GDELT
+Governments, militaries, and academics have long been interested in using publicly available news reports to measure and predict political and social events. Several event data projects have evolved in parallel, such as the US Department of Defense's Integrated Conflict Early Warning System (ICEWS),^[[http://www.lockheedmartin.com/us/products/W-ICEWS.html](http://www.lockheedmartin.com/us/products/W-ICEWS.html)] the Global Database of Events, Language, and Tone (GDELT),^[[http://www.gdeltproject.org/](http://www.gdeltproject.org/)] Integrated Data for Event Analysis (IDEA),^[[http://vranet.com/data.aspx](http://vranet.com/data.aspx)] and the Open Event Data Alliance (OEDA).^[[http://openeventdata.org/](http://openeventdata.org/)] Each of these projects fundamentally attempts to the do the same thing: use computational natural language text algorithms to parse a text and determine *who* did *what* to *whom* *where* and *when*. The resulting data can be used to track civil wars, popular protests,^[See [http://www.foreignpolicy.com/articles/2013/08/22/mapped_what_every_protest_in_the_last_34_years_looks_like](http://www.foreignpolicy.com/articles/2013/08/22/mapped_what_every_protest_in_the_last_34_years_looks_like) for a fascinating interactive map of all recorded protests worldwide since 1978, created with GDELT.] and even instances where INGOs target authoritarian governments through shaming campaigns. 
 
-## Open Event Data Alliance
+However, each of these projects face serious limitations with accessibility. ICEWS is only available to government employees and a handful of academic contractors (including Duke's Michael Ward), and IDEA is only available commercially.^[And it's really expensive.] GDELT received very positive coverage in the media and among international relations scholars from 2012–13, as it includes events since 1978 and is updated daily, providing an ostensible real time and historical database of human political events. However, in July 2013 it was suddenly shuddered because of legal problems with the underlying data. After a complicated legal battle, it has reemerged and is once again available, but the original researchers have all jumped ship. Additionally, the list of actors that GDELT picks up is heavily skewed toward protests, revolutions, and other forms of social unrest—it was not created with non-state actors like NGOs in mind. 
 
-## Other approaches
+GDELT's principal investigators created the OEDA in the fall of 2013 to address the legal issues inherent in GDELT, providing open source projects to collect and parse event data. OEDA is far more modular and customizable—it is possible to feed the parsing algorithm a list of specific NGOs (such as those identified in the YIO or elsewhere) to track over time. OEDA is still under active development, but can be used for research—I'm already running my own instance of the event parsing software and am collecting data, just for fun. If I were to use event data in my dissertation work, I would use OEDA with a custom list of (I)NGOs that work in authoritarian regimes.
 
-### Collection of specific text corpora
+## Other corpora-based approaches
 
-### Wikileaks
+Event data methods are on the bleeding edge of text-as-data methods. In addition to (or instead of) using ODEA or other event data sources, I can also use more reliable and research-tested methods on large corpora of text. 
 
+### Topic modeling and content analysis
 
-# Questions 
+In my previous (and ongoing) research, I have used Latent Dirichlet Allocation (LDA) to identify the topics and frames Egyptian news media has used when reporting on a small subset of NGOs. I can use a similar approach for dissertation work on a larger collection of corpora (i.e. not just the English-language Egyptian press, but international Arabic, Chinese, and English publications as well) with a larger list of (I)NGOs (i.e. organizations found in the YIO and/or regional lists of NGOs discussed above). I can also use non-news corpora, such as the US State Department cables released by Chelsea Manning and Wikileaks.^[I've downloaded these cables and have been playing with them already.] Using this approach would require better research design—I'm not entirely satisfied with the design of my second year paper—but could provide fascinating insights into the activities and public perceptions of NGOs in authoritarian regimes.
 
-empirical questions that can be answered with the data, more data that needs to be found
+### Generation of new variables
+
+Scholars have (very) recently begun to use LDA output as variables in standard statistical models rather than simply using the results as inputs to large-scale content analysis. For example, two parallel projects are attempting to create new measures of democracy scores and regime type categories based on text inputs. Jay Ulfelder, Mike Ward, and Philip Schrodt (all connected with ODEA) use State Department Country Reports on Human Rights Practices and Freedom House's *Freedom in the Press* reports to classify countries as democracies, military dictatorships, monarchies, single-party systems, etc. based on the output of text analysis algorithms.^[[http://dartthrowingchimp.wordpress.com/2014/08/25/mining-texts-to-generate-fuzzy-measures- of-political-regime-type-at-low-cost/](http://dartthrowingchimp.wordpress.com/2014/08/25/mining-texts-to-generate-fuzzy-measures-of-political-regime-type-at-low-cost/)] Similarly, Thiago Marzagão has created a measure of democracy that can replace or substitute Polity IV and Freedom House scores, based on a collection of 42 million news articles.^[[http://ssrn.com/abstract=2412325](http://ssrn.com/abstract=2412325)] Both projects output country-year scores and categories with standard errors, making them useful inputs for standard statistical models. 
+
+This new approach of using LDA to generate real data is not limited to measuring IR concepts (unlike event data, which is explicitly IR-focused). A group of scholars at Harvard recently used LDA on a large corpus of American news articles to generate a regional index of rape culture, which they then used to predict rape coverage and prevalence in every US state over time.^[See Matthew A. Baum, Dara Kay Cohen, and Yuri M. Zhukov, "Measuring Rape Culture," [http://cpsblog.isr.umich.edu/?p=1028](http://cpsblog.isr.umich.edu/?p=1028)]
+
+I could potentially use a similar approach in my own dissertation work, using corpora of text to generate measures of NGO activity or measures of legal and practical restrictions on NGOs in authoritarian regimes.
