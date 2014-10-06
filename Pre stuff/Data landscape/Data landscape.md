@@ -5,15 +5,15 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: September 30, 2014
+date: October 6, 2014
 to: "Judith Kelley, Tim Büthe, and Timur Kuran"
 ...
 
-As
+As outlined in my comprehensive exam review essay, I'm very interested in studying the relationship between INGOs, domestic civil society, and authoritarian regimes. In particular, I hope to discover the mechanisms of how INGO and domestic NGO behavior is influenced by these regimes. 
 
-Introduction, ¶ on what I'm studying
+However, measuring domestic and international NGO activity is difficult, primarily because of an absence of good data on NGOs. Other fields of IR, such as civil wars, security, peace, trade, etc. have been heavily studied and have canonical datasets scholars turn to (e.g. the Correlates of War project). No such data exists for (I)NGOs. 
 
-Difficult to measure, absence of rich data
+This memo will briefly survey the landscape of NGO-related data, investigating (1) methods for identifying domestic and international NGOs, (2) sources for measuring civil society attributes, such as its strength or popular attitudes towards associational life, and (3) text-based techniques for measuring large-scale NGO activity.
 
 
 # Identifying Civil Society Organizations
@@ -84,7 +84,7 @@ The Arab Institute for Human Rights (AIHR)^[[http://aihr-resourcescenter.org/](h
 * Mission, goals, and strategies
 * Activities
 
-The website and all the data is in Arabic, but reading and translating are trivial. The website has no export function, but I can easily download it all with a web scraper (which I plan to do next week). 
+The website and all the data are in Arabic, but reading and translating the directory entries is trivial. The website has no export function, but I can easily download it all with a web scraper (which I plan to do next week). 
 
 ### China Development Brief
 
@@ -101,7 +101,7 @@ China Development Brief (CDB)^[[http://www.chinadevelopmentbrief.cn/](http://www
 
 Data is available in Chinese and English and can be purchased online in report form. The raw data is unavailable for download, but can easily be collected with a web scraper. 
 
-CDB provides additional data on Chinese NGOs, including a longer list of 1,953 local nonprofits^[In Chinese, [http://www.chinadevelopmentbrief.org.cn/service/action/org_search.php?org_type=1](http://www.chinadevelopmentbrief.org.cn/service/action/org_search.php?org_type=1). See also [http://www.hks.harvard.edu/centers/hauser/programs/past-programs/nonprofits-in-china](http://www.hks.harvard.edu/centers/hauser/programs/past-programs/nonprofits-in-china)]
+CDB provides additional data on Chinese NGOs, including a longer list of 1,953 local nonprofits^[In Chinese, [http://www.chinadevelopmentbrief.org.cn/service/action/org_search.php?org_type=1](http://www.chinadevelopmentbrief.org.cn/service/action/org_search.php?org_type=1). See also [http://www.hks.harvard.edu/centers/hauser/programs/past-programs/nonprofits-in-china](http://www.hks.harvard.edu/centers/hauser/programs/past-programs/nonprofits-in-china).]
 
 
 # Measuring Civil Society Strength
@@ -110,7 +110,7 @@ Beyond measuring and identifying *individual actors* in domestic and global civi
 
 ## CIVICUS Civil Society Index
 
-The CIVICUS^[[http://civicus.org/](http://civicus.org/)] Civil Society Index Project (CSI)^[[http://www.civicus.org/csi/](http://www.civicus.org/csi/)] evaluates national civil society structure and values using country experts' opinions on four dimensions: (1) the *structure* of civil society, (2) the *external environment* in which civil society exists and functions, (3) the *values* practiced and promoted by civil society, and (4) the *impact* of activities pursued by civil society actors. Each dimension is scored on a 1–3 scale according to a set of sub dimensions and indicators (such as measures of charitable giving, amount of lobbying regarding social issues, or level of autonomy from the state). The scores for the four dimensions are then plotted as a diamond (see Figure 1)—countries with a larger spatial area ostensibly have a stronger civil society sector.
+The CIVICUS Civil Society Index Project (CSI)^[[http://www.civicus.org/csi/](http://www.civicus.org/csi/)] evaluates national civil society structure and values using country experts' opinions on four dimensions: (1) the *structure* of civil society, (2) the *external environment* in which civil society exists and functions, (3) the *values* practiced and promoted by civil society, and (4) the *impact* of activities pursued by civil society actors. Each dimension is scored on a 1–3 scale according to a set of sub dimensions and indicators (such as measures of charitable giving, amount of lobbying regarding social issues, or level of autonomy from the state). The scores for the four dimensions are then plotted as a diamond (see Figure 1)—countries with a larger spatial area ostensibly have a stronger civil society sector.
 
 ![Sample CSI diamond](Figures/csi_diamond.png)
 
@@ -122,7 +122,7 @@ Recognizing that the CSI was too slow-moving to be useful for research, in 2012 
 
 ## Global Civil Society Index
 
-The Johns Hopkins Center for Civil Society Studies^[[http://ccss.jhu.edu/](http://ccss.jhu.edu/)] created a rival index in 2004 named the Global Civil Society Index (GCSI), based on data collected in 34 countries between 1995–2002.^[[http://ccss.jhu.edu/publications-findings?did=360](http://ccss.jhu.edu/publications-findings?did=360)] Similar to the CSI, the GCSI rates civil society strength along three dimensions: (1) the sector's *capacity*, size, and amount of effort, (2) the sector's resources for financial and strategic *sustainability*, and (3) the sector's social, economic, and political *impact*.
+The Johns Hopkins Center for Civil Society Studies created a rival index in 2004 named the Global Civil Society Index (GCSI), based on data collected in 34 countries between 1995–2002.^[[http://ccss.jhu.edu/publications-findings?did=360](http://ccss.jhu.edu/publications-findings?did=360)] Similar to the CSI, the GCSI rates civil society strength along three dimensions: (1) the sector's *capacity*, size, and amount of effort, (2) the sector's resources for financial and strategic *sustainability*, and (3) the sector's social, economic, and political *impact*.
 
 The GCSI has unfortunately not been updated since 2004 and is not especially useful for any longitudinal research. Additionally, it only covers a handful of non-OECD countries, which makes it unsuitable for studying civil society in authoritarian regimes.
 
@@ -135,7 +135,7 @@ These surveys are not conducted annually (the WVS is done every 5 years; regiona
 
 # Measuring Civil Society Activity with Text
 
-Measuring civil society activity is another difficult empirical hurdle. Recent advances in event data and text analysis methods may provide some tools for quantitatively measuring the activities of (I)NGOs. 
+Measuring civil society activity is another difficult empirical hurdle. Recent advances in event data and text analysis methods may provide some tools for quantitatively measuring the activities of (I)NGOs.^[My growing expertise in this area of methods gives me some comparative advantage for this type of research. Plus Miles Kahler and Ken Scheve both argued last week that text-as-data research is an exciting new approach in IR research. So there's that :)]
 
 ## Event data
 
