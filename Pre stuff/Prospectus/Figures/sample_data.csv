@@ -1,0 +1,9 @@
+country_name,cowcode,year,legis_name,passed,restrictiveness,source,original_link
+Algeria,615,2012,.,TRUE,.,.,.
+Angola,540,2002,.,TRUE,.,.,.
+China,710,2007,Notice of the Ministry of Finance and the State Administration of Taxation on the Policies and Relevant Management Issues Concerning the Pre-Tax Deduction of Public Welfare Relief Donations,TRUE,2,.,.
+China,710,2009,Notice of the State Administration of Foreign Exchange on Issues concerning the Administration of Foreign Exchange Donated to or by Domestic Institutions,TRUE,2,.,.
+Egypt,651,2002,Law on Associations and Community Foundations (Law 84 of 2002),TRUE,3,.,http://www.icnl.org/research/library/files/Egypt/law84-2002-En.pdf
+Egypt,651,2014,Draft law on associations,FALSE,5,.,http://www.hrw.org/news/2014/07/14/egypt-draft-law-threatens-independent-organizations
+Somalia,520,2010,.,TRUE,.,.,.
+Zimbabwe,552,2007,.,TRUE,4,.,.
