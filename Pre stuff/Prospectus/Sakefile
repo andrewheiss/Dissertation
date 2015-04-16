@@ -4,13 +4,14 @@
 # Variables
 #! PREFIX = /Users/andrew/.pandoc
 #! BIB_FILE = /Users/andrew/Dropbox/Readings/Papers.bib
-#! CSL = apsa-no-bib
+#! CSL = american-political-science-association
 #! CROSSREF = --filter pandoc-crossref -M figPrefix:"Figure" -M eqnPrefix:"Equation" -M tblPrefix:"Table"
 
 # Other common CSLs: 
 #   * chicago-fullnote-bibliography
 #   * chicago-syllabus-no-bib
 #   * apa
+#   * apsa-no-bib
 
 # To add version control footer support in PDFs:
 #   1. Run vcinit in the directory
@@ -26,7 +27,7 @@ generate output:
     dependencies:
       - $FILENAME.md
     formula: >
-      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block $CROSSREF -w latex -s -S --latex-engine=xelatex --template=$PREFIX/templates/xelatex.template --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -V chapterstyle=hikma-article -V pagestyle=ath -o $FILENAME.pdf $FILENAME.md;
+      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block $CROSSREF -w latex -s -S --latex-engine=xelatex --template=$PREFIX/templates/xelatex.template --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -V chapterstyle=hikma-article -V pagestyle=ath -o $FILENAME.pdf;
       mv $FILENAME.pdf Output/$FILENAME.pdf
     output: 
       - Output/$FILENAME.pdf

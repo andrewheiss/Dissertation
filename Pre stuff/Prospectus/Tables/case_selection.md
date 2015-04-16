@@ -1,0 +1,15 @@
+
+-----------------------------------------------------
+       &nbsp;              Egypt           China     
+--------------------- --------------- ---------------
+Freedom of expression Organization~x~ Organization~x~
+
+                      Organization~a~ Organization~b~
+
+      Education       Organization~y~ Organization~y~
+
+                      Organization~c~ Organization~d~
+-----------------------------------------------------
+
+Table: Example mix of INGO cases {#tbl:case_mix}
+

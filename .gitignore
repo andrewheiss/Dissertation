@@ -23,3 +23,6 @@ Administration/**.png
 Administration/**.docx
 Sandbox/
 vc.tex
+
+# R stuff
+.Rhistory
