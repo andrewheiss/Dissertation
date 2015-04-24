@@ -9,9 +9,9 @@ INGO regulatory environment          collected and coded by me.    existing coun
                                                                    regression and other          
                                                                    statistical methods.          
 
-&nbsp;                       Micro   Legislative transcripts, news Trace the historical          
-                                     reports, interviews           legislative process behind    
-                                                                   INGO regulations in China and 
+&nbsp;                       Micro   Legislative transcripts (if   Trace the historical          
+                                     available), newspaper         legislative process behind    
+                                     archives, interviews          INGO regulations in China and 
                                                                    Egypt, linking developments to
                                                                    incidents and trends of       
                                                                    instability, threat, or       
@@ -36,9 +36,9 @@ the INGO issue                                                     preferences a
                                                                    issues became more salient in 
                                                                    post-revolutionary Egypt).    
 
-H~3~: INGO response to       Macro   (1) Database of complete      (1) Analyze the shape,        
-authoritarian regulatory             freedom of expression and     density, and size of each     
-environment                          education INGO sectors,       sector network to determine   
+H~3~: INGO ideal menu of     Macro   (1) Database of complete      (1) Analyze the shape,        
+programming; H~4~: INGO              freedom of expression and     density, and size of each     
+flexibility                          education INGO sectors,       sector network to determine   
                                      collected by parsing existing the influence of peer         
                                      data sources (like the        relationships on              
                                      Yearbook of International     organizational flexibility.   
@@ -48,16 +48,17 @@ environment                          education INGO sectors,       sector networ
                                      surveys about experiences in                                
                                      authoritarian regimes.                                      
 
-&nbsp;                       Micro   Interviews and more detailed  Determine the level of        
-                                     surveys of randomly selected  divergence between the INGO's 
-                                     organizations that work       ideal programming and actual  
-                                     specifically in Egypt and     programming and correlate that
-                                     China; annual reports,        divergence with the severity  
-                                     statements, press releases,   of the regulatory environment.
-                                     etc.                          Examine the influence of      
-                                                                   different types of flexibility
-                                                                   on the menu of programs the   
-                                                                   INGO offers.                  
+&nbsp;                       Micro   Interviews and more detailed  (1) Determine the INGO's ideal
+                                     surveys of randomly selected  programming and actual        
+                                     organizations that work       programming and correlate that
+                                     specifically in Egypt and     divergence with the           
+                                     China; annual reports,        preferences of the regime and 
+                                     statements, press releases,   the severity of the regulatory
+                                     etc.                          environment. (2) Examine the  
+                                                                   influence of different forms  
+                                                                   of operational flexibility on 
+                                                                   the menu of programs the INGO 
+                                                                   offers.                       
 -------------------------------------------------------------------------------------------------
 
 Table: Data and methods for each hypothesis {#tbl:methods}
