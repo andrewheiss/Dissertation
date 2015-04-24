@@ -1,3 +1,11 @@
+
+abstract: | 
+	International NGOs have long been instrumental in promoting universal human rights and providing humanitarian relief and assistance. However, the unique political dynamics of authoritarianism shape the programs, advocacy, and services that these INGOs provide in their target countries, potentially leading to changes in programming to accommodate the regulations and restrictions dictators impose on them. As they do with other pseudo-democratic institutions, authoritarian regimes use INGOs and their services for a variety of self-interested reasons, including enhancing their regime's longevity and stability, boosting their international reputation, receiving policy guidance and assistance, or increasing their control over the population.
+
+    Because INGOs are based in foreign countries and are generally free to exit at will, dictators have a limited menu of policy options for controlling the international organizations that operate within their country. Regimes will constrict or expand regulations on INGOs based primarily on domestic political factors, but also in part based on the issues pursued by the INGOs. In turn, INGOs respond to dictators' regulations in a variety of ways, ranging from compliance to outright antagonism. This response is determined in part by the amount of operational and organizational flexibility the INGO has, based on the INGO's ideological leanings, the variety and the quantity of programs the INGO pursues in the country, and the strength of the connections the INGO and other organizations and states.
+
+
+
 At the same time, these improvements have not led to increased democratization (as predicted?) - improvement in services, no improvement in political structure. Authoritarianism appears as established and stable as ever, even in the wake of the so-called Arab Spring
 
 This is because of a new type of authoritarianism - called hybrid, competitive, previously thought of as an exception to the rule - but they're not exceptions—this is the standard form of authoritarianism today. Dictators use pseudo democratic institutions to stay in power. Elections, etc. BUT ALSO, interestingly, INGOs. Show graph from article + my added INGO data.
