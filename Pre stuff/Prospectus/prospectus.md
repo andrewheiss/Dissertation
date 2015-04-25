@@ -278,7 +278,9 @@ Due to the complexity of my argument (and because of the disciplinary norms of p
 
 ## Schedule
 
-TODO: Tentative timeline of the project.
+As already explained, this research project will require intense qualitative and quantitative data collection and analysis, involving multiple languages, interviews, surveys, web scraping, and systematic coding. However, I believe that I will be able to complete all the data collection, analysis, and writing in the next two years.^[Research has found that, on average, married male PhD students complete their degrees 0.32 years faster than single male students and are 75% and 66% more likely to complete their degree by their 4th or 5th year, respectively [@Price:2006]. With the imminent birth of child #4, I believe that this accelerative effect will only intensify.] [@fig:timeline] provides a general overview of my tentative project timeline. For now, it is quite ambitious (as it has me finishing in October 2016), and I fully anticipate that the timeline will get stretched out by several months as I delve into the data collection and analysis. 
+
+![*Very* tentative, hyper accelerated, overly ambitious, sure-to-be stretched out, and incomplete timeline for dissertation research](Figures/timeline.pdf) {#fig:timeline}
 
 
 # References

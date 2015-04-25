@@ -36,9 +36,14 @@ tufte.grid <- data_frame(breaks=seq(floor_date(min(tasks$task.date), unit="month
                                     by="1 month"))
 # geom_hline(data=tufte.grid, aes(yintercept=as.numeric(breaks)), colour="grey90")
 
-ggplot(tasks, aes(x=Task, y=task.date, colour=Project)) + 
-  geom_line(size=6) + 
-  labs(x=NULL, y=NULL) + coord_flip() + 
-  scale_y_date(breaks="1 month", labels=date_format("%b ‘%y")) + 
-  theme_gantt() 
+all.tasks <- tasks %>% filter(date.type=="Start") %>% select(Task)
+x.breaks <- seq(length(all.tasks$Task) + 0.5 - 3, 0, by=-3)
 
+timeline <- ggplot(tasks, aes(x=Task, y=task.date, colour=Project)) + 
+  geom_line(size=6) + 
+  geom_vline(xintercept=x.breaks, colour="grey80", linetype="dotted") + 
+  labs(x=NULL, y=NULL) + coord_flip() + 
+  scale_y_date(breaks="2 months", labels=date_format("%b ‘%y")) + 
+  theme_gantt() + theme(axis.text.x=element_text(angle=45, hjust=1))
+timeline
+ggsave(timeline, filename="../Figures/timeline.pdf", width=)
