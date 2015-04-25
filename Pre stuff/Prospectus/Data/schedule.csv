@@ -1,10 +1,23 @@
-Project,Task,Start,End
-Data collection,Scrape YIO,2015-05-01,2015-06-01
-Data collection,Find all INGO legislation,2015-05-18,2015-08-01
-Data collection,Code INGO restrictions,2015-08-01,2015-10-01
-Data collection,CQMR at Syracuse,2015-06-14,2015-06-27
-Data collection,Develop general INGO survey,2015-05-18,2015-07-01
-Data collection,Administer survey,2015-08-01,2015-10-01
-Data analysis,Model stability and restrictions,2015-10-01,2015-10-14
-Writing,Chapter on formal restrictions,2015-10-15,2015-10-31
-Writing,Chapter on restrictions in cases,2015-10-15,2015-11-15
+"Project","Task","Start","End"
+"Data collection","Scrape YIO","2015-05-01","2015-06-01"
+"Data collection","Use IssueCrawler to expand lists","2015-06-01","2015-06-15"
+"Data collection","Complete INGO databases","2015-07-01","2015-07-15"
+"Data collection","Find all INGO legislation","2015-05-18","2015-09-01"
+"Data collection","Code INGO restrictions","2015-08-01","2015-10-01"
+"Data collection","CQMR at Syracuse","2015-06-14","2015-06-27"
+"Data collection","Develop general INGO survey","2015-05-18","2015-07-01"
+"Data collection","Administer survey","2015-08-01","2015-10-01"
+"Data analysis","Model stability and restrictions","2015-10-01","2015-10-31"
+"Writing","Chapter on formal restrictions (H1)","2015-10-31","2015-12-15"
+"Data collection","Historical INGO restrictions in China",2015-11-01,2016-03-01
+"Data collection","Historical INGO restrictions in Egypt",2015-11-01,2016-03-01
+"Data collection","Select case study INGOs",2015-08-01,2015-08-07
+"Data collection","Research case study INGOs",2015-10-01,2016-04-01
+"Data analysis","Analyze restrictions in China and Egypt",2016-03-01,2016-04-01
+"Data analysis","Analyze INGO activities",2016-04-01,2016-06-01
+"Writing","Chapter on application of restrictions (H2)",2016-04-01,2016-06-15
+"Writing","Chapter on INGO ideal points (H3)",2016-05-01,2016-07-01
+"Writing","Chapter on INGO flexibility (H4)",2016-05-01,2016-07-01
+"Writing","Theory",2016-07-01,2016-08-01
+"Writing","Conclusion",2016-08-01,2016-09-15
+"Writing","Introduction",2016-08-01,2016-09-15
