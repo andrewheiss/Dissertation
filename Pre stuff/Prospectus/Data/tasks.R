@@ -46,4 +46,5 @@ timeline <- ggplot(tasks, aes(x=Task, y=task.date, colour=Project)) +
   scale_y_date(breaks="2 months", labels=date_format("%b ‘%y")) + 
   theme_gantt() + theme(axis.text.x=element_text(angle=45, hjust=1))
 timeline
-ggsave(timeline, filename="../Figures/timeline.pdf", width=)
+ggsave(timeline, filename="../Figures/timeline.pdf", 
+       width=6.5, height=6.5, units="in", device=cairo_pdf)
