@@ -27,3 +27,7 @@ twq15byyeardta.dta
 
 # R stuff
 .Rhistory
+.Rapp.history
+
+# Miscellaneous data
+Data/IssueCrawler*/*
