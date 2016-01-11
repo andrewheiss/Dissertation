@@ -27,7 +27,7 @@ generate output:
     dependencies:
       - $FILENAME.md
     formula: >
-      replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block $CROSSREF -w latex -s -S --latex-engine=xelatex --template=$PREFIX/templates/xelatex.template --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -V chapterstyle=hikma-article -V pagestyle=ath -o $FILENAME.pdf;
+      ./vc | replace_includes $FILENAME.md | pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block $CROSSREF -w latex -s -S --latex-engine=xelatex --template=$PREFIX/templates/xelatex.template --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --bibliography=$BIB_FILE -V chapterstyle=hikma-article -V pagestyle=athgit -V vc -o $FILENAME.pdf;
       mv $FILENAME.pdf Output/$FILENAME.pdf
     output: 
       - Output/$FILENAME.pdf
