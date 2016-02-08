@@ -1,0 +1,396 @@
+# ----------------
+# Load libraries
+# ----------------
+library(dplyr)
+library(tidyr)
+library(readr)
+library(readxl)
+library(haven)
+library(lubridate)
+library(countrycode)
+library(WDI)
+
+# Map libraries
+# You must install geos (http://trac.osgeo.org/geos/) and 
+# gdal (http://www.gdal.org/) first. 
+# Easy to do on OS X: 
+#   brew install geos gdal
+# Then install these packages from source
+#   install.packages(c("rgeos", "rgdal"), type="source")
+library(rgdal)
+library(rgeos)
+library(spdep)
+
+
+# ------------------
+# Useful functions
+# ------------------
+# What it says on the proverbial tin: convert -999 to NA
+fix.999 <- function(x) {
+  ifelse(x == -999, NA, x)
+}
+
+# Calculate the number of years since an election based on a boolean vector 
+# indicating if the running total should be increased
+calc.years.since.comp <- function(x) {
+  rle.x <- rle(x)$lengths
+  as.numeric(unlist(sapply(split(x, rep(seq(along = rle.x), rle.x)), cumsum)))
+}
+
+# Holy crap this is complicated.
+# If a competitive election has happened already, then figure out if the 
+# running total of years since election needs to be increased. This marks years 
+# *before* any competitive election as missing. For example, if country A 
+# doesn't hold an election until 1960, the years from 1945-59 will be NA.
+get.increase <- function(x) {
+  has.been.competitive <- FALSE
+  increase <- logical(length(x))
+  for(i in 1:length(x)) {
+    if(!is.na(x[i]) & x[i] == TRUE) {
+      has.been.competitive <- TRUE
+    } else {
+      increase[i] <- NA
+    }
+    
+    if(has.been.competitive) {
+      if(x[i] == FALSE | is.na(x[i])) {
+        increase[i] <- TRUE
+      } else {
+        increase[i] <- FALSE
+      }
+    }
+  }
+  return(increase)
+}
+
+# Combine every combination of rows from two dataframes
+# Function from http://stackoverflow.com/a/21911221/120898
+expand.grid.df <- function(...) {
+  Reduce(function(...) merge(..., by=NULL), list(...))
+}
+
+# ----------------------------
+# Load all sorts of datasets
+# ----------------------------
+
+# Varieties of Democracy
+# https://v-dem.net/en/
+vdem.raw <- read_csv(file.path(PROJHOME, "Data", "data_raw", "External", "V-Dem", 
+                               "Country-Year, V-Dem + other, CVS/V-Dem-DS-CY+Others-v5.csv"))
+
+# Missing COW codes
+# vdem.raw %>% filter(is.na(COWcode)) %>% select(country_name) %>% unique
+
+# Extract civil society-related variables
+vdem.cso <- vdem.raw %>% select(country_name, country_id, country_text_id, 
+                                year, COWcode, e_polity2, 
+                                v2x_frassoc_thick, v2xcs_ccsi,
+                                starts_with("v2cseeorgs"), 
+                                starts_with("v2csreprss"), 
+                                starts_with("v2cscnsult"),
+                                starts_with("v2csprtcpt"), 
+                                starts_with("v2csgender"), 
+                                starts_with("v2csantimv")) %>%
+  mutate(v2csreprss_ord = factor(v2csreprss_ord, 
+                                 labels=c("Severely", "Substantially", 
+                                          "Moderately", "Weakly", "No"),
+                                 ordered=TRUE),
+         cs_env_sum = v2csreprss + v2cseeorgs)
+
+
+# International Country Risk Guide (ICRG)
+# https://epub.prsgroup.com/list-of-all-variable-definitions
+# http://www.prsgroup.com/wp-content/uploads/2012/11/icrgmethodology.pdf
+# http://library.duke.edu/data/collections/icrg
+icrg <- read_excel(file.path(PROJHOME, "Data", "data_raw", "External", "ICRG",
+                             "3BResearchersDataset2015.xls"), 
+                   sheet="Government Stability", skip=7) %>%
+  gather(year.num, icrg.stability, -Country) %>%
+  mutate(year.num = as.numeric(year.num),
+         year.actual = ymd(paste0(year.num, "-01-01")),
+         icrg.stability = as.numeric(icrg.stability),
+         # Help out countrycode's regex
+         Country = ifelse(Country == "Korea, DPR", "North Korea", Country),
+         # Country variables
+         cowcode = countrycode(Country, "country.name", "cown"),
+         country.name = countrycode(Country, "country.name", "country.name"),
+         iso = countrycode(country.name, "country.name", "iso3c")) %>%
+  # Add unofficial COW codes for these countries
+  mutate(cowcode = ifelse(Country == "Hong Kong", 715, cowcode),
+         cowcode = ifelse(Country == "New Caledonia", 1012, cowcode)) %>%
+  # Deal with Serbia 
+  mutate(cowcode = ifelse(Country == "Serbia *", 345, cowcode),
+         cowcode = ifelse(Country == "Serbia & Montenegro *", 345, cowcode)) %>%
+  # Deal with duplicate COWs (Russia, Germany, and Serbia) where names change
+  # by collapsing all rows and keeping the max value
+  group_by(year.num, cowcode) %>%
+  mutate(icrg.stability = max(icrg.stability, na.rm=TRUE)) %>%
+  filter(!(Country %in% c("Serbia & Montenegro *", "USSR", "West Germany"))) %>%
+  ungroup() %>%
+  mutate(subregion = countrycode(iso, "iso3c", "region"),
+         subregion = ifelse(iso == "TWN", "Eastern Asia", subregion)) %>%
+  group_by(subregion, year.num) %>%
+  mutate(icrg.stability.region = ifelse(!is.na(icrg.stability), 
+                                        mean(icrg.stability, na.rm=TRUE), 
+                                        as.numeric(NA)),
+         num.states.in.region = n()) %>%
+  ungroup()
+
+# ICRG monthly data
+# Capture output because of all the DEFINEDNAME output that read_excel makes
+# See https://github.com/hadley/readxl/issues/82
+capture.output({
+  icrg.monthly.file <- file.path(PROJHOME, "Data", "data_raw", "External", 
+                                 "ICRG", "ICRG_T3B.xls")
+  icrg.monthly.sheet <- "A-GovStab"
+  
+  icrg.monthly.dims <- read_excel(icrg.monthly.file, sheet=icrg.monthly.sheet, skip=5)
+  icrg.monthly <- read_excel(icrg.monthly.file, sheet=icrg.monthly.sheet, skip=5, 
+                             col_types=c("date", 
+                                         rep("numeric", 
+                                             ncol(icrg.monthly.dims) - 1))) %>%
+    slice(3:n()) %>%
+    select(Date = 1, Var.id = Country, everything()) %>%
+    gather(country.name, score, -c(Date, Var.id)) %>%
+    mutate(cowcode = countrycode(country.name, "country.name", "cown"),
+           cowcode = ifelse(country.name == "Hong Kong", 715, cowcode),
+           cowcode = ifelse(country.name == "New Caledonia", 1012, cowcode),
+           cowcode = ifelse(country.name == "Serbia", 345, cowcode),
+           cowcode = ifelse(country.name == "Serbia & Montenegro", 345, cowcode))
+}, file="/dev/null")
+
+
+# Database of Political Institutions 2012
+# http://go.worldbank.org/2EAGGLRZ40
+pol.inst <- read_dta(file.path(PROJHOME, "Data", "data_raw", "External", 
+                               "DPI", "DPI2012.dta")) %>%
+  filter(!countryname %in% c("Turk Cyprus", "PRK")) %>%
+  mutate(yrsoffc = fix.999(yrsoffc), oppfrac = fix.999(oppfrac),
+         opp1seat = fix.999(opp1seat), totalseats = fix.999(totalseats),
+         opp1vote = fix.999(opp1vote),
+         finittrm = factor(ifelse(finittrm == -999, NA, finittrm), 
+                           labels=c("No", "Yes"))) %>%
+  mutate(countryname = ifelse(countryname == "UAE", 
+                              "United Arab Emirates", countryname),
+         countryname = ifelse(countryname == "GDR", 
+                              "German Democratic Republic", countryname),
+         countryname = ifelse(countryname == "S. Africa",
+                              "South Africa", countryname),
+         countryname = ifelse(countryname == "Dom. Rep.",
+                              "Dominican Republic", countryname)) %>%
+  mutate(cow = countrycode(countryname, "country.name", "cown"),
+         year = as.numeric(year)) %>%
+  select(year, cow, yrsoffc, finittrm, 
+         opp1vote, oppfrac, opp1seat, totalseats)
+
+
+# National Elections Across Democracy and Autocracy (NELDA)
+# http://hyde.research.yale.edu/nelda/
+# 
+# TODO: type of most recent election? + time since previous election?
+# True if all elections that year were competitive
+nelda <- read_dta(file.path(PROJHOME, "Data", "data_raw", "External",
+                            "NELDA", "id & q-wide.dta")) %>%
+  mutate(competitive = ifelse(nelda3 == "yes" & nelda4 == "yes" & 
+                                nelda5 == "yes", TRUE, FALSE)) %>%
+  group_by(ccode, year) %>%
+  summarise(all.comp = all(competitive), num.elections = n())
+
+# Years since last competitive election
+nelda.full <- expand.grid(ccode = unique(nelda$ccode),
+                          year = min(nelda$year):max(nelda$year)) %>%
+  arrange(ccode, year) %>%
+  left_join(nelda, by=c("ccode", "year")) %>%
+  group_by(ccode) %>%
+  mutate(years.since.comp = calc.years.since.comp(get.increase(all.comp)),
+         num.elections = ifelse(is.na(num.elections), 0, num.elections))
+
+
+# CIRI Human Rights Data
+# http://www.humanrightsdata.com/
+ciri <- read.csv(file.path(PROJHOME, "Data", "data_raw", "External", "CIRI",
+                           "CIRI Data 1981_2011 2014.04.14.csv")) %>%
+  select(year = YEAR, cowcode = COW, assn = ASSN, physint = PHYSINT) %>%
+  # Handle duplicate COWs like USSR and Yugoslavia where names change
+  group_by(year, cowcode) %>%
+  summarize(assn = max(assn, na.rm=TRUE),
+            physint = max(physint, na.rm=TRUE)) %>%
+  mutate(assn = ifelse(assn < 0, NA, assn),
+         assn = factor(assn, labels=c("Severely restricted",
+                                      "Limited", "Unrestricted"),
+                       ordered=TRUE))
+
+
+# World Bank World Development Indicators (WDI)
+# http://data.worldbank.org/data-catalog/world-development-indicators
+# Use WDI::WDI() to access the data
+wdi.indicators <- c("NY.GDP.PCAP.KD",  # GDP per capita (constant 2005 US$)
+                    "NY.GDP.MKTP.KD",  # GDP (constant 2005 US$)
+                    "SP.POP.TOTL",     # Population, total
+                    "DT.ODA.ALLD.CD")  # Net ODA and official aid received (current US$)
+wdi.countries <- countrycode(na.exclude(unique(icrg$cowcode)), "cown", "iso2c")
+wdi.raw <- WDI(country="all", wdi.indicators, extra=TRUE, start=1981, end=2016)
+
+wdi.clean <- wdi.raw %>%
+  filter(iso2c %in% wdi.countries) %>%
+  rename(gdpcap = NY.GDP.PCAP.KD, gdp = NY.GDP.MKTP.KD, 
+         population = SP.POP.TOTL, oda = DT.ODA.ALLD.CD) %>%
+  mutate(gdpcap.log = log(gdpcap), gdp.log = log(gdp),
+         population.log = log(population)) %>%
+  mutate(gdpcap.log = log(gdpcap), gdp.log = log(gdp),
+         population.log = log(population)) %>%
+  # Ignore negative values of oda
+  mutate(oda.log = sapply(oda, FUN=function(x) ifelse(x < 0, NA, log1p(x)))) %>%
+  mutate(cow = countrycode(iso2c, "iso2c", "cown"),
+         region = factor(region),  # Get rid of unused levels first
+         region = factor(region, labels = 
+                           gsub(" \\(all income levels\\)", "", levels(region)))) %>%
+  select(-c(iso2c, iso3c, country, capital, longitude, latitude, income, lending))
+
+
+# Count of INGO members
+# http://dx.doi.org/10.1017/S0007123412000683
+# Data from Amanda Murdie, "The Ties That Bind: A Network Analysis of Human
+# Rights International Nongovernmental Organizations," *British Journal of
+# Political Science* 44, no. 1 (January 2014): 1–27.
+murdie <- read_dta(file.path(PROJHOME, "Data", "data_raw", 
+                             "External", "Murdie 2014",
+                             "11558_2013_9180_MOESM1_ESM.dta")) %>%
+  mutate(cowcode = as.numeric(cowcode)) %>%
+  select(year, cowcode, countngo)
+
+
+# KOF Index of Globalization
+# http://globalization.kof.ethz.ch/
+capture.output({
+  kof <- read_excel(file.path(PROJHOME, "Data", "data_raw", "External", "KOF",
+                              "globalization_2015_long.xls"), 
+                    sheet="data long", skip=1, na=".") %>%
+    mutate(cowcode = countrycode(code, "iso3c", "cown")) %>%
+    select(cowcode, year, globalization = index) %>%
+    filter(!is.na(cowcode))
+}, file="/dev/null")
+
+
+# Major Episodes of Political Violence, 1946-2014
+# http://www.systemicpeace.org/inscrdata.html
+# mepv <- read_excel(file.path(PROJHOME, "Data", "data_raw", "External",
+#                              "MEPV", "MEPV2012n.xls"),
+#                    sheet="MEPV2012n")
+
+# Data not very useful. There's no movement at all pretty much anywhere, since
+# it requires at least 500 deaths to register an event.
+#
+# ggplot(filter(mepv, COUNTRY == "Egypt"), aes(x=YEAR, y=ACTOTAL)) +
+#   geom_line()
+# ggplot(filter(mepv, COUNTRY == "Egypt"), aes(x=YEAR, y=nAC)) +
+#   geom_line()
+
+
+# Uppsala conflict data
+# http://www.pcr.uu.se/research/ucdp/datasets/generate_your_own_datasets/dynamic_datasets/
+# conflicts <- read_tsv(file.path(PROJHOME, "Data", "data_raw", "External", 
+#                                 "Uppsala", "ywd_dataset.csv")) %>%
+#   mutate(intensity = factor(intensity, 
+#                             levels=c("No", "Minor", "Intermediate", "War"), 
+#                             ordered=TRUE))
+
+
+# Determine which countries are neighbors (share land borders)
+# https://gist.github.com/andrewheiss/926b9d60a26e29f6bf32
+
+# Variables for getting map shapefiles
+map.url <- "http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip"
+map.path <- file.path(PROJHOME, "Data", "data_raw", 
+                      "External", "Natural Earth maps")
+map.zip.name <- basename(map.url)
+map.name <- tools::file_path_sans_ext(map.zip.name)
+
+# Download Natural Earth shapefiles if needed
+if (!file.exists(file.path(map.path, paste0(map.name, ".shp")))) {
+  download.file(url=map.url, file.path(map.path, map.zip.name), "auto")
+  unzip(file.path(map.path, map.zip.name), exdir=map.path)
+  file.remove(file.path(map.path, map.zip.name))
+}
+
+# Load shapefiles
+countries <- readOGR(map.path, map.name)
+
+# Extract the ISO codes and map them to the numeric row names
+country.names <- data_frame(id = row.names(countries@data),
+                            country_iso3 = as.character(countries@data$adm0_a3_is),
+                            neighbor_iso3 = country_iso3)
+
+# Determine which countries are neighbors
+# Adapted from http://stackoverflow.com/a/32318128/120898
+neighbor.list <- poly2nb(countries)
+neighbor.matrix <- nb2mat(neighbor.list, style="B", zero.policy=TRUE)
+colnames(neighbor.matrix) <- rownames(neighbor.matrix)
+
+# Clean up and transform the neighbor matrix
+all.neighbors <- as.data.frame(neighbor.matrix) %>%
+  mutate(country = row.names(.)) %>%  # Convert row names to actual column
+  gather(neighbor, present, -country) %>%  # Convert to long
+  filter(present == 1) %>%  # Only look at cells with a match
+  # Add country names
+  left_join(select(country.names, -neighbor_iso3), by=c("country" = "id")) %>%
+  left_join(select(country.names, -country_iso3), by=c("neighbor" = "id")) %>%
+  filter(country_iso3 != "-99", neighbor_iso3 != "-99") %>%  # Remove missing countries
+  select(contains("iso3"))  # Just get the ISO columns
+
+neighbor.cows <- all.neighbors %>%
+  mutate(country_cow = countrycode(country_iso3, "iso3c", "cown"),
+         neighbor_cow = countrycode(neighbor_iso3, "iso3c", "cown")) %>%
+  # Add COW codes for Hong Kong, Serbia
+  mutate(country_cow = ifelse(country_iso3 == "SRB", 345, country_cow),
+         country_cow = ifelse(country_iso3 == "HKG", 715, country_cow),
+         neighbor_cow = ifelse(neighbor_iso3 == "SRB", 345, neighbor_cow),
+         neighbor_cow = ifelse(neighbor_iso3 == "HKG", 715, neighbor_cow)) %>%
+  filter(complete.cases(.)) %>%
+  select(contains("cow")) %>%
+  unique()
+
+summarize.neighbors <- function(chunk) {
+  df <- icrg %>%
+    filter(year.num == unique(chunk$year.num),
+           cowcode %in% chunk$neighbor_cow) %>%
+    summarise(neighbor.stability.mean = mean(icrg.stability, na.rm=TRUE),
+              neighbor.stability.median = median(icrg.stability, na.rm=TRUE),
+              neighbor.stability.sd = sd(icrg.stability, na.rm=TRUE)) %>%
+    mutate(neighbors.count = nrow(chunk),
+           neighbors.cow = paste(chunk$neighbor_cow, collapse=", "),
+           neighbors.clean = paste(countrycode(chunk$neighbor_cow, "cown", "country.name"),
+                                   collapse=", "),
+           country.clean = countrycode(unique(chunk$country_cow), "cown", "country.name"))
+  return(df)
+}
+
+neighbor.stability <- expand.grid.df(neighbor.cows, 
+                                     data_frame(year.num = 1991:2016)) %>%
+  group_by(country_cow, year.num) %>%
+  do(summarize.neighbors(.)) %>%
+  rename(cowcode = country_cow)
+
+
+# ------------------
+# Merge everything!
+# ------------------
+# TODO: Consolidate extra variables (e.g. there's "Country", "country.name", and "country_name")
+# TODO: What happens when there are no neighbors?
+full.data <- icrg %>% 
+  left_join(vdem.cso, by=c("cowcode" = "COWcode", "year.num" = "year")) %>%
+  left_join(pol.inst, by=c("cowcode" = "cow", "year.num" = "year")) %>%
+  left_join(nelda.full, by=c("cowcode" = "ccode", "year.num" = "year")) %>%
+  left_join(ciri, by=c("cowcode", "year.num" = "year")) %>%
+  left_join(wdi.clean, by=c("cowcode" = "cow", "year.num" = "year")) %>%
+  left_join(murdie, by=c("cowcode", "year.num" = "year")) %>%
+  left_join(kof, by=c("cowcode", "year.num" = "year")) %>%
+  left_join(neighbor.stability, by=c("cowcode", "year.num")) %>%
+  filter(year.num > 1990)
+
+# Save all cleaned data files
+saveRDS(full.data, file.path(PROJHOME, "Data", 
+                             "data_processed", "full_data.rds"))
+
+saveRDS(icrg.monthly, file.path(PROJHOME, "Data",
+                                "data_processed", "icrg_monthly.rds"))
