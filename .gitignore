@@ -38,6 +38,8 @@ Administration/**.pdf
 Administration/**.png
 Administration/**.docx
 Administration/**.pptx
+Administration/**.html
+Administration/**/tex_out/*
 Sandbox/
 vc.tex
 twq15byyeardta.dta
