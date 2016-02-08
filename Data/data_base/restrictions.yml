@@ -1,0 +1,46 @@
+---
+title: De facto and de jure legal restrictions for international NGOs
+filename: Restrictions.ods
+source:
+  - ICNL NGO Law Monitor (http://www.icnl.org/research/monitor/)
+  - Personal research
+tables:
+  - name: De jure restrictions
+    fields:
+      - name: country_name
+        title: Country name
+        type: string
+        description: Country name
+      - name: cowcode
+        title: COW code
+        type: integer
+        description: Correlates of War country code
+      - name: year
+        title: Yes
+        type: string
+        description: Year law was passed
+      - name: short_name
+        title: Law name (short)
+        type: string
+        description: Short name of the law
+      - name: legis_name
+        title: Law name (full)
+        type: string
+        description: Full name of the law
+      - name: restrictiveness
+        title: Level of restrictiveness
+        type: integer
+        description: Level of restrictiveness
+      - name: source
+        title: Source
+        type: string
+        description: Source of legislative data
+      - name: original_link
+        title: Original legislation
+        type: string
+        description: Link to original legislation
+      - name: other
+        title: Other
+        type: string
+        description: Additional annotations
+---

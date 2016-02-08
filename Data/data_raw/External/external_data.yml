@@ -1,0 +1,170 @@
+---
+title: External datasets
+datasets:
+  - name: CIRI
+    title: Cingranelli-Richards (CIRI) Human Rights Data Project
+    author:
+      - name: David L. Cingranelli
+        affiliation: SUNY Binghamton University
+        email: davidc@binghamton.edu
+      - name: David L. Richards
+        affiliation: University of Connecticut
+        email: david.l.richards@uconn.edu
+      - name: K. Chad Clay
+        affiliation: University of Georgia
+        email: kcclay@uga.edu
+    url: http://www.humanrightsdata.com/p/data-documentation.html
+    filename: CIRI/CIRI Data 1981_2011 2014.04.14.csv
+    type: csv
+    description: >-
+        Measures government respect for human rights in 202 countries
+        from 1981–2011
+    citation: >-
+        Cingranelli, David L., David L. Richards, and K. Chad Clay. 2014.
+        "The CIRI Human Rights Dataset." http://www.humanrightsdata.com.
+        Version 2014.04.14.
+
+  - name: DPI
+    title: Database of Political Institutions
+    author:
+      - name: Philip E. Keefer
+        affiliation: World Bank Development Research Group
+        email: Pkeefer@worldbank.org
+    url: http://go.worldbank.org/2EAGGLRZ40
+    filename: DPI/DPI2012.dta
+    type: dta
+    description: >-
+        Measures features of political institutions for 177 countries
+        from 1975–2012
+    citation: >-
+        Beck, Thorsten, George Clarke, Alberto Groff, Philip Keefer, and
+        Patrick Walsh. "New tools in comparative political economy: The
+        Database of Political Institutions." *The World Bank Economic Review*
+        15, no. 1 (2001): 165-176. doi: 10.1093/wber/15.1.165
+
+  - name: ICRG
+    title: International Country Risk Guide
+    author:
+      - name: Political Risk Services (PRS) Group
+    url: http://www.prsgroup.com/about-us/our-two-methodologies/icrg
+    filename:
+      - yearly: ICRG/3BResearchersDataset2015.xls
+        monthly: ICRG/ICRG_T3B.xls
+    type: xls
+    description: >-
+        Measures features and types of risk for 146 countries from 1984–2014
+    notes:
+      - Direct Duke library URL: http://library.duke.edu/data/collections/icrg
+      - Variable definitions: https://epub.prsgroup.com/list-of-all-variable-definitions
+
+  - name: KOF
+    title: KOF Index of Globalization
+    author:
+      - name: Axel Dreher
+        affiliation: Heidelberg University
+        email: axel.dreher@awi.uni-heidelberg.de
+    url: http://globalization.kof.ethz.ch/
+    filename: KOF/globalization_2015_long.xls
+    type: xls
+    description: >-
+        Measures economic, social, and political globalization for
+        185 countries from 1970–2012
+    citation: >-
+        Dreher, Axel. "Does globalization affect growth? Evidence from a
+        new index of globalization." *Applied Economics* 38, no. 10
+        (2006): 1091-1110. doi: 10.1080/00036840500392078
+
+  - name: MEPV
+    title: "Major Episodes of Political Violence, 1946-2014"
+    author:
+      - name: Integrated Network for Societal Conflict Research (INSCR)
+    url: http://www.systemicpeace.org/inscrdata.html
+    filename: MEPV/MEPV2012n.xls
+    type: xls
+    description: >-
+        Counts episodes of political violence in 179 countries from 1946–2012
+
+  - name: Murdie 2014
+    title: >-
+        Replication data for Amanda Murdie, "The Ties That Bind" (2014)
+    author:
+      - name: Amanda Murdie
+        affiliation: University of Missouri
+        email: murdiea@missouri.edu
+    url: http://dx.doi.org/10.1017/S0007123412000683
+    filename: Murdie 2014/11558_2013_9180_MOESM1_ESM.dta
+    type: dta
+    description: >-
+        Used only for the `countngo` variable, which measures the number of
+        people who are members of any INGO in a given country year
+    citation: >-
+        Murdie, Amanda. "The Ties That Bind: A Network Analysis of Human
+        Rights International Nongovernmental Organizations." *British Journal
+        of Political Science* 44, no. 1 (January 2014): 1–27.
+        doi: 10.1017/S0007123412000683
+
+  - name: Natural Earth maps
+    title: Natural Earth 1:50m Cultural Admin 0 – Countries
+    url: http://www.naturalearthdata.com/downloads/50m-cultural-vectors/
+    filename: Natural Earth maps/ne_50m_admin_0_countries.*
+    type: "shp, prj, html, shp, shx"
+    description: |-
+        Shapefiles at 1:50m resolution
+        1:50,000,000
+        1″ = 790 miles
+        1 cm = 500 km
+    notes:
+      - "`Data/clean_merge_data.R` will download and process all these files"
+
+  - name: NELDA
+    title: National Elections Across Democracy and Autocracy (NELDA)
+    author:
+      - name: Susan Hyde
+        affiliation: Yale University
+        email: susan.hyde@yale.edu
+      - name: Nikolay Marinov
+        affiliation: University of Mannheim
+        email: niki.marinov@gmail.com
+    url: http://hyde.research.yale.edu/nelda/
+    filename: "NELDA/id & q-wide.dta"
+    type: dta
+    description: >-
+        Measures features of election events for 164 countries from 1945–2012
+    citation: >-
+        Hyde, Susan D., and Nikolay Marinov. "Which elections can be lost?."
+        *Political Analysis* 20, no. 2 (Spring 2012): 191–210.
+        doi: 10.1093/pan/mpr040
+
+  - name: Uppsala
+    title: "Uppsala Conflict Database, Yearly Dyads dataset"
+    author:
+      - name: Uppsala Conflict Data Program
+    url: http://www.pcr.uu.se/research/ucdp/datasets/generate_your_own_datasets/dynamic_datasets/
+    filename: Uppsala/ywd_dataset.csv
+    type: csv
+    description: >-
+        427 yearly dyads for 97 countries from 1972–2014.
+    citation: >-
+        Uppsala Conflict Data Program (Date of retrieval: yy/mm/dd) UCDP
+        Database: www.ucdp.uu.se/database, Uppsala University.
+
+  - name: V-Dem
+    title: "Varieties of Democracy Country-Year, V-Dem + other"
+    author:
+      - name: Varieties of Democracy (V-Dem) Project
+        affiliation: University of Gothenburg
+        email: contact@v-dem.net
+    url: https://www.v-dem.net/en/data/
+    filename: "V-Dem/Country-Year, V-Dem + other, CVS/V-Dem-DS-CY+Others-v5.csv"
+    type: csv
+    description: >-
+        350+ democracy-related indicators and indexes for 173 countries from 1900–2012
+    citation: >-
+        Coppedge, Michael, John Gerring, Staffan I. Lindberg, Svend-Erik
+        Skaaning, Jan Teorell, David Altman, Michael Bernhard, M. Steven Fish,
+        Adam Glynn, Allen Hicken, Carl Henrik Knutsen, Kyle Marquardt, Kelly
+        McMann, Farhad Miri, Pamela Paxton, Daniel Pemstein, Jeffrey Staton,
+        Eitan Tzelgov, Yi-ting Wang, and Brigitte Zimmerman. 2015. "V-Dem
+        [Country-Year/Country-Date] Dataset v5." Varieties of Democracy
+        (V-Dem) Project.
+---

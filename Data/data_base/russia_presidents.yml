@@ -1,0 +1,19 @@
+---
+title: Russian presidents
+filename: russia_presidents.csv
+source:
+  - "https://en.wikipedia.org/wiki/List_of_presidents_of_Russia"
+fields:
+  - name: Date_start
+    title: Term start date
+    type: date
+    description: First day in office
+  - name: Date_end
+    title: Term end date
+    type: date
+    description: Last day in office
+  - name: president
+    title: President
+    type: string
+    description: Name of the president
+---
