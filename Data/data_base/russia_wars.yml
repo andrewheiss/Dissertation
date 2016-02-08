@@ -1,0 +1,23 @@
+---
+title: Wars Russia has been directly engaged in
+filename: russia_wars.csv
+source:
+  - "https://en.wikipedia.org/wiki/List_of_wars_involving_Russia#Russian_Federation_.281991.E2.80.93present.29"
+fields:
+  - name: Date_start
+    title: War start date
+    type: date
+    description: Date the war officially started
+  - name: Date_end
+    title: War end date
+    type: date
+    description: Date the war officially ended
+  - name: war
+    title: War name
+    type: string
+    description: Name of the war
+  - name: note
+    title: Note
+    type: string
+    description: Extra notes about the war
+---

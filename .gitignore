@@ -1,8 +1,24 @@
 # OS X stuff
 .DS_Store
 
+# R stuff
+.Rhistory
+.Rapp.history
+.Rproj.user
+
+# Sublime Text stuff
+*.sublime-workspace
+
 # Sake stuff
 .shastore
+
+# Data stuff
+Data/data_raw/External/*
+!Data/data_raw/External/external_data.yml
+
+Data/data_raw/IssueCrawler*/*
+
+Data/data_processed/*
 
 # Output
 # See individual Output/.gitignore files
@@ -25,10 +41,3 @@ Administration/**.pptx
 Sandbox/
 vc.tex
 twq15byyeardta.dta
-
-# R stuff
-.Rhistory
-.Rapp.history
-
-# Miscellaneous data
-Data/IssueCrawler*/*

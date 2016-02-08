@@ -1,0 +1,20 @@
+---
+title: Laws regulating civil society in Russia
+filename: russia_laws.csv
+source:
+  - ICNL NGO Law Monitor (http://www.icnl.org/research/monitor/russia.html)
+  - Personal research
+fields:
+  - name: Date
+    title: Date
+    type: date
+    description: Date the law was passed or took effect
+  - name: law
+    title: Law name
+    type: string
+    description: Name of the law
+  - name: note
+    title: Note
+    type: string
+    description: Extra notes about the law
+---

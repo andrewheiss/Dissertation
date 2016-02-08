@@ -1,0 +1,37 @@
+---
+title: Re-registration law effects
+filename: russian_ngo_reregistration.csv
+description: >-
+    Number of registered NGOs in Russia before and after the 1999
+    re-registration deadline imposed by the 1995 Law on Public Associations.
+source: >-
+    Yelena Grishina, "Report on the Violations Committed in the Course of
+    Registration and Re-Registration of Public Associations in the Russian
+    Federation in 1999", *The International Journal of Not-for-Profit Law* 2,
+    no. 4 (June 2000), http://www.icnl.org/research/journal/vol2iss4/art_6.htm
+fields:
+  - name: NGO type
+    title: NGO type
+    type: string
+    description: Type of NGO
+  - name: Before 1999 re-registration deadline
+    title: Before 1999 re-registration deadline
+    type: integer
+    description: Number of NGOs before the 1999 deadline
+  - name: After 1999 re-registration deadline
+    title: After 1999 re-registration deadline
+    type: integer
+    description: Number of NGOs after the 1999 deadline
+  - name: Not re-registered
+    title: Not re-registered
+    type: integer
+    description: Number of NGOs that did not re-register
+  - name: Self-liquidation
+    title: Self-liquidation
+    type: integer
+    description: Number of NGOs that closed themselves down
+  - name: Liquidation suits
+    title: Liquidation suits
+    type: integer
+    description: Number of NGOs that faced government-led liquidation lawsuits
+---
