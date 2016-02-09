@@ -69,6 +69,19 @@ expand.grid.df <- function(...) {
   Reduce(function(...) merge(..., by=NULL), list(...))
 }
 
+
+# The ICRG composite political risk score uses a 0-100 scale with ordinal
+# cutpoints. Removing variables from the score (like external conflict) changes
+# the maximum of the scale and makes the cutpoints incorrect. This function
+# rescales a given variable to a 0-100 scale using the formula:
+#   (x - min(x)) / (max(x) - min(x)) * 100
+# min(x) and max(x) are hardcoded in as 0 and 82 (removing 12 points for
+# external conflict and 6 for democratic accountability)
+icrg.rescale <- function(x, lowest=0, highest=82) {
+  return((x - lowest) / (highest - lowest) * 100)
+}
+
+
 # ----------------------------
 # Load all sorts of datasets
 # ----------------------------
@@ -102,13 +115,37 @@ vdem.cso <- vdem.raw %>% select(country_name, country_id, country_text_id,
 # https://epub.prsgroup.com/list-of-all-variable-definitions
 # http://www.prsgroup.com/wp-content/uploads/2012/11/icrgmethodology.pdf
 # http://library.duke.edu/data/collections/icrg
-icrg <- read_excel(file.path(PROJHOME, "Data", "data_raw", "External", "ICRG",
+icrg.cols <- list(icrg.stability="Government Stability", 
+                  icrg.socioeconomic="Socioeconomic Conditions", 
+                  icrg.investment="Investment Profile", 
+                  icrg.internal="Internal Conflict", 
+                  icrg.external="External Conflict", 
+                  icrg.corruption="Corruption", 
+                  icrg.military="Military in Politics", 
+                  icrg.religion="Religion in Politics", 
+                  icrg.law="Law and Order", 
+                  icrg.ethnic="Ethnic Tensions", 
+                  icrg.accountability="Democratic Accountability", 
+                  icrg.bureau="Bureaucracy Quality")
+
+all.dfs <- list()
+for (i in 1:length(icrg.cols)) {
+  new.name <- as.character(names(icrg.cols[i]))
+
+  df <- read_excel(file.path(PROJHOME, "Data", "data_raw", "External", "ICRG",
                              "3BResearchersDataset2015.xls"), 
-                   sheet="Government Stability", skip=7) %>%
-  gather(year.num, icrg.stability, -Country) %>%
-  mutate(year.num = as.numeric(year.num),
-         year.actual = ymd(paste0(year.num, "-01-01")),
-         icrg.stability = as.numeric(icrg.stability),
+                   sheet=as.character(icrg.cols[i]), skip=7) %>%
+    gather(year.num, score, -Country) %>%
+    mutate(var.name = new.name)
+
+  all.dfs[[new.name]] <- df
+}
+
+icrg.all <- bind_rows(all.dfs) %>%
+  mutate(score = as.numeric(score),
+         year.num = as.numeric(year.num)) %>%
+  spread(var.name, score) %>%
+  mutate(year.actual = ymd(paste0(year.num, "-01-01")),
          # Help out countrycode's regex
          Country = ifelse(Country == "Korea, DPR", "North Korea", Country),
          # Country variables
@@ -124,21 +161,41 @@ icrg <- read_excel(file.path(PROJHOME, "Data", "data_raw", "External", "ICRG",
   # Deal with duplicate COWs (Russia, Germany, and Serbia) where names change
   # by collapsing all rows and keeping the max value
   group_by(year.num, cowcode) %>%
-  mutate(icrg.stability = max(icrg.stability, na.rm=TRUE)) %>%
+  mutate_each(funs(max(., na.rm=TRUE)), starts_with("icrg")) %>%
   filter(!(Country %in% c("Serbia & Montenegro *", "USSR", "West Germany"))) %>%
   ungroup() %>%
   mutate(subregion = countrycode(iso, "iso3c", "region"),
          subregion = ifelse(iso == "TWN", "Eastern Asia", subregion)) %>%
-  group_by(subregion, year.num) %>%
-  mutate(icrg.stability.region = ifelse(!is.na(icrg.stability), 
-                                        mean(icrg.stability, na.rm=TRUE), 
-                                        as.numeric(NA)),
-         num.states.in.region = n()) %>%
-  ungroup()
+  # group_by(subregion, year.num) %>%
+  # mutate(icrg.stability.region = ifelse(!is.na(icrg.stability), 
+  #                                       mean(icrg.stability, na.rm=TRUE), 
+  #                                       as.numeric(NA)),
+  #        num.states.in.region = n()) %>%
+  # ungroup()
+  mutate(icrg.pol.risk = icrg.stability + icrg.socioeconomic + 
+           icrg.investment + icrg.internal + icrg.external + icrg.corruption + 
+           icrg.military + icrg.religion + icrg.law + icrg.ethnic + 
+           icrg.accountability + icrg.bureau,
+         icrg.pol.risk.internal = icrg.stability + icrg.socioeconomic + 
+           icrg.investment + icrg.internal + icrg.corruption + 
+           icrg.military + icrg.religion + icrg.law + icrg.ethnic + icrg.bureau,
+         icrg.pol.risk.internal.scaled = icrg.rescale(icrg.pol.risk.internal),
+         icrg.pol.grade = cut(icrg.pol.risk, 
+                              c(0, 49.99, 59.99, 69.99, 79.99, Inf),
+                              labels=c("Very High", "High", "Moderate", 
+                                       "Low", "Very Low"),
+                              ordered_result=TRUE, include.lowest=TRUE),
+         icrg.pol.grade.internal = cut(icrg.pol.risk.internal.scaled, 
+                                       c(0, 49.99, 59.99, 69.99, 79.99, Inf),
+                                       labels=c("Very High", "High", "Moderate", 
+                                                "Low", "Very Low"),
+                                       ordered_result=TRUE, include.lowest=TRUE))
+
 
 # ICRG monthly data
 # Capture output because of all the DEFINEDNAME output that read_excel makes
 # See https://github.com/hadley/readxl/issues/82
+# TODO: Get all ICRG variables and make risk index
 capture.output({
   icrg.monthly.file <- file.path(PROJHOME, "Data", "data_raw", "External", 
                                  "ICRG", "ICRG_T3B.xls")
@@ -228,7 +285,7 @@ wdi.indicators <- c("NY.GDP.PCAP.KD",  # GDP per capita (constant 2005 US$)
                     "NY.GDP.MKTP.KD",  # GDP (constant 2005 US$)
                     "SP.POP.TOTL",     # Population, total
                     "DT.ODA.ALLD.CD")  # Net ODA and official aid received (current US$)
-wdi.countries <- countrycode(na.exclude(unique(icrg$cowcode)), "cown", "iso2c")
+wdi.countries <- countrycode(na.exclude(unique(icrg.all$cowcode)), "cown", "iso2c")
 wdi.raw <- WDI(country="all", wdi.indicators, extra=TRUE, start=1981, end=2016)
 
 wdi.clean <- wdi.raw %>%
@@ -351,7 +408,7 @@ neighbor.cows <- all.neighbors %>%
   unique()
 
 summarize.neighbors <- function(chunk) {
-  df <- icrg %>%
+  df <- icrg.all %>%
     filter(year.num == unique(chunk$year.num),
            cowcode %in% chunk$neighbor_cow) %>%
     summarise(neighbor.stability.mean = mean(icrg.stability, na.rm=TRUE),
@@ -377,7 +434,7 @@ neighbor.stability <- expand.grid.df(neighbor.cows,
 # ------------------
 # TODO: Consolidate extra variables (e.g. there's "Country", "country.name", and "country_name")
 # TODO: What happens when there are no neighbors?
-full.data <- icrg %>% 
+full.data <- icrg.all %>% 
   left_join(vdem.cso, by=c("cowcode" = "COWcode", "year.num" = "year")) %>%
   left_join(pol.inst, by=c("cowcode" = "cow", "year.num" = "year")) %>%
   left_join(nelda.full, by=c("cowcode" = "ccode", "year.num" = "year")) %>%
