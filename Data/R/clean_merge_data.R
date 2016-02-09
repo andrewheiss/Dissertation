@@ -223,8 +223,8 @@ capture.output({
     df.file <- file.path(PROJHOME, "Data", "data_raw", "External", 
                                    "ICRG", "ICRG_T3B.xls")
   
-    df.dims <- read_excel(icrg.monthly.file, sheet=sheet, skip=5)
-    df <- read_excel(icrg.monthly.file, sheet=sheet, skip=5, 
+    df.dims <- read_excel(df.file, sheet=sheet, skip=5)
+    df <- read_excel(df.file, sheet=sheet, skip=5, 
                      col_types=c("date", rep("numeric", ncol(df.dims) - 1))) %>%
       slice(3:n()) %>%
       select(Date = 1, everything(), -Country) %>%
