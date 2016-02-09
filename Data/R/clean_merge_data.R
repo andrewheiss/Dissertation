@@ -128,6 +128,9 @@ icrg.cols <- list(icrg.stability="Government Stability",
                   icrg.accountability="Democratic Accountability", 
                   icrg.bureau="Bureaucracy Quality")
 
+# Loop through each sheet in the Excel file, convert the sheet to long, and
+# append to all.dfs, which will later be combined into one super long dataframe
+# and spread out to 12 individual variables
 all.dfs <- list()
 for (i in 1:length(icrg.cols)) {
   new.name <- as.character(names(icrg.cols[i]))
