@@ -1,0 +1,60 @@
+---
+title: NGO directories and contact lists
+lists:
+  - name: ddo
+    title: Directory of Development Organizations
+    author:
+      - name: Directory of Development Organizations
+    received_from:
+      - name: Daniel Nielson
+        affiliation: Brigham Young University
+        email: dan_nielson@byu.edu
+    url: http://www.devdir.org
+    filename: ddo.xlsx
+    type: xlsx
+    date_updated: 2015-11-03
+    num_rows_raw: 14824
+    description: >-
+        List of development NGOs that has previously been used in large-scale
+        e-mail surveys conducted by Daniel Nielson and Judith Kelley
+
+  - name: un-icso
+    title: UN Integrated Civil Society Organizations System (iCSO)
+    author:
+      - name: UN Department of Economic and Social Affairs (DESA)
+    url: http://esango.un.org/civilsociety/
+    scrape_repo: https://github.com/andrewheiss/scrape-un-icso
+    filename: un-icso.json
+    type: json
+    date_updated: 2016-02-09
+    num_rows_raw: 27028
+    description: >-
+        Huge list of all NGOs that have registered with the UN's Department of
+        Economic and Social Affairs (DESA)
+
+  - name: yio
+    title: Yearbook of International Organizations (YBIO)
+    author:
+      - name: Union of International Associations (UIA)
+    url: http://www.uia.org/ybio/
+    filename: yio.db
+    type: sqlite
+    date_updated: 2015-08-25
+    num_rows_raw: 9325
+    description: >-
+        Huge list of explicitly international NGOs. INGOs are defined as
+        (1) formal organizations without government representation, (2) that
+        operate in 3+ countries, (3) that have a permanent headquarters, and
+        (4) a governing body (see http://www.uia.org/archive/types-organization/cc).
+
+        This subset contains all organizations in the "Censorship,"
+        "Journalism," "Media," and "Education" subjects. The cleaned database
+        excludes these organizations:
+
+        - Type I: J, H, R, S, T, U
+        - Type II: c, d, e, g, s
+        - Type III: Alumni and Veterans, European Union Bodies, FAO Bodies,
+                    ILO Bodies, NATO Bodies, Parliaments, Political Parties,
+                    Treaties, United Nations Bodies, WHO Bodies, Corporations,
+                    Companies, Intergovernmental Communities
+---
