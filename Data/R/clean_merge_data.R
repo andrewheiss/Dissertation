@@ -198,26 +198,77 @@ icrg.all <- bind_rows(all.dfs) %>%
 # ICRG monthly data
 # Capture output because of all the DEFINEDNAME output that read_excel makes
 # See https://github.com/hadley/readxl/issues/82
-# TODO: Get all ICRG variables and make risk index
+icrg.cols.monthly <- list(icrg.stability="A-GovStab",
+                          icrg.socioeconomic="B-Socioeco",
+                          icrg.investment="C-InvProf",
+                          icrg.internal="D-IntConf",
+                          icrg.external="E-ExtConf",
+                          icrg.corruption="F-Corrupt",
+                          icrg.military="G-Military",
+                          icrg.religion="H-Religious",
+                          icrg.law="I-Law",
+                          icrg.ethnic="J-Ethnic",
+                          icrg.accountability="K-DemoAcct",
+                          icrg.bureau="L-Bureau")
+
+# Loop through each sheet in the Excel file, convert the sheet to long, and
+# append to all.dfs, which will later be combined into one super long dataframe
+# and spread out to 12 individual variables
+all.dfs.monthly <- list()
 capture.output({
-  icrg.monthly.file <- file.path(PROJHOME, "Data", "data_raw", "External", 
-                                 "ICRG", "ICRG_T3B.xls")
-  icrg.monthly.sheet <- "A-GovStab"
+  for (i in 1:length(icrg.cols.monthly)) {
+    new.name <- as.character(names(icrg.cols.monthly[i]))
+    sheet <- as.character(icrg.cols.monthly[i])
+    
+    df.file <- file.path(PROJHOME, "Data", "data_raw", "External", 
+                                   "ICRG", "ICRG_T3B.xls")
   
-  icrg.monthly.dims <- read_excel(icrg.monthly.file, sheet=icrg.monthly.sheet, skip=5)
-  icrg.monthly <- read_excel(icrg.monthly.file, sheet=icrg.monthly.sheet, skip=5, 
-                             col_types=c("date", 
-                                         rep("numeric", 
-                                             ncol(icrg.monthly.dims) - 1))) %>%
-    slice(3:n()) %>%
-    select(Date = 1, Var.id = Country, everything()) %>%
-    gather(country.name, score, -c(Date, Var.id)) %>%
-    mutate(cowcode = countrycode(country.name, "country.name", "cown"),
-           cowcode = ifelse(country.name == "Hong Kong", 715, cowcode),
-           cowcode = ifelse(country.name == "New Caledonia", 1012, cowcode),
-           cowcode = ifelse(country.name == "Serbia", 345, cowcode),
-           cowcode = ifelse(country.name == "Serbia & Montenegro", 345, cowcode))
+    df.dims <- read_excel(icrg.monthly.file, sheet=sheet, skip=5)
+    df <- read_excel(icrg.monthly.file, sheet=sheet, skip=5, 
+                     col_types=c("date", rep("numeric", ncol(df.dims) - 1))) %>%
+      slice(3:n()) %>%
+      select(Date = 1, everything(), -Country) %>%
+      gather(Country, score, -Date) %>%
+      mutate(var.name = new.name)
+    
+    all.dfs.monthly[[new.name]] <- df
+  }
 }, file="/dev/null")
+
+icrg.monthly <- bind_rows(all.dfs.monthly) %>%
+  mutate(score = as.numeric(score),
+         year.num = year(Date),
+         year.actual = ymd(paste0(year.num, "-01-01"))) %>%
+  spread(var.name, score) %>%
+  mutate(# Help out countrycode's regex
+         Country = ifelse(Country == "Korea, DPR", "North Korea", Country),
+         # Country variables
+         cowcode = countrycode(Country, "country.name", "cown"),
+         country.name = countrycode(Country, "country.name", "country.name"),
+         iso = countrycode(country.name, "country.name", "iso3c"),
+         # Manually deal with these edge cases
+         cowcode = ifelse(country.name == "Hong Kong", 715, cowcode),
+         cowcode = ifelse(country.name == "New Caledonia", 1012, cowcode),
+         cowcode = ifelse(country.name == "Serbia", 345, cowcode),
+         cowcode = ifelse(country.name == "Serbia & Montenegro", 345, cowcode)) %>%
+  mutate(icrg.pol.risk = icrg.stability + icrg.socioeconomic + 
+           icrg.investment + icrg.internal + icrg.external + icrg.corruption + 
+           icrg.military + icrg.religion + icrg.law + icrg.ethnic + 
+           icrg.accountability + icrg.bureau,
+         icrg.pol.risk.internal = icrg.stability + icrg.socioeconomic + 
+           icrg.investment + icrg.internal + icrg.corruption + 
+           icrg.military + icrg.religion + icrg.law + icrg.ethnic + icrg.bureau,
+         icrg.pol.risk.internal.scaled = icrg.rescale(icrg.pol.risk.internal),
+         icrg.pol.grade = cut(icrg.pol.risk, 
+                              c(0, 49.99, 59.99, 69.99, 79.99, Inf),
+                              labels=c("Very High", "High", "Moderate", 
+                                       "Low", "Very Low"),
+                              ordered_result=TRUE, include.lowest=TRUE),
+         icrg.pol.grade.internal = cut(icrg.pol.risk.internal.scaled, 
+                                       c(0, 49.99, 59.99, 69.99, 79.99, Inf),
+                                       labels=c("Very High", "High", "Moderate", 
+                                                "Low", "Very Low"),
+                                       ordered_result=TRUE, include.lowest=TRUE))
 
 
 # Database of Political Institutions 2012
