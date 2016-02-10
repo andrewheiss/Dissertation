@@ -76,7 +76,13 @@ yio.orgs.clean <- yio.orgs %>%
 
 yio.orgs.email <- yio.orgs.clean %>%
   select(-fk_contact) %>%
-  filter(!is.na(contact_email))
+  filter(!is.na(contact_email)) %>%
+  # Standardize columns
+  mutate(id.new = paste("yio", id_org, sep="_"),
+         original_list = "YIO") %>%
+  select(id_org = id.new, org_name, email = contact_email, org_url, 
+         country_hq, contact = contact_details, phone = contact_phone,
+         year_founded = founded, subject_dir, url_id)
 
 write_csv(yio.orgs.clean, path=file.path(data.path, "Clean", "yio_clean.csv"))
 write_csv(yio.orgs.email, path=file.path(data.path, "Clean", "yio_emails.csv"))
@@ -106,7 +112,13 @@ ddo.clean <- read_excel(file.path(data.path, "Raw", "ddo_resaved.xlsx"),
          address = str_replace_all(address, fixes))
 
 ddo.emails <- ddo.clean %>%
-  filter(!is.na(email))
+  filter(!is.na(email)) %>%
+  # Standardize columns
+  mutate(id_org = paste("ddo", 1:n(), sep="_"),
+         original_list = "DDO") %>%
+  select(id_org, org_name = full_name, email, org_url = website, 
+         country_hq = country, contact = address, phone = telephone,
+         original_list)
 
 write_csv(ddo.clean, path=file.path(data.path, "Clean", "ddo_clean.csv"))
 write_csv(ddo.emails, path=file.path(data.path, "Clean", "ddo_emails.csv"))
@@ -130,27 +142,40 @@ icso.raw.df <- fromJSON(toJSON(icso.raw.json, auto_unbox=TRUE),
                         simplifyDataFrame=TRUE, flatten=TRUE)
 
 icso.clean <- icso.raw.df %>%
+  # Only select international and regional NGOs
   filter(!(geographic_scope %in% c("Local", "National")),
          !is.na(geographic_scope)) %>%
-  filter(!is.na(hq_email) | !is.na(preferred_email))
+  # Select organizations with at least one e-mail
+  filter(!is.na(hq_email) | !is.na(preferred_email)) %>%
+  # Smaller subset of data for now
+  select(org_id, organizations_name, hq_address, languages, 
+         hq_email, preferred_email, year_established, web_site, 
+         geographic_scope, country_geographical_area_of_activity,
+         number_and_type_of_members, mission_statement) %>%
+  # Convert actual lists to comma-separated lists
+  rowwise() %>%
+  mutate(languages = concat.list(languages),
+         country_geographical_area_of_activity = 
+           concat.list(country_geographical_area_of_activity)) %>%
+  ungroup()
 
 # MAYBE: Check that area of activity is different from HQ address?
 # No. That's unreliable. Plus, in the case of Amnesty Egypt, Chad, Chile, and
 # Australia, they're pseudo-branches of the main Amnesty and still count as
 # INGOs, even though their HQ countries and target countries are the same.
 
-# Combine hq_ and preferred_email into one variable and remove duplicates
 icso.emails <- icso.clean %>%
+  # Combine hq_ and preferred_email into one variable and remove duplicates
   gather(email_type, email, hq_email, preferred_email) %>%
   distinct(email) %>%
-  select(org_id, organizations_name, hq_address, languages, 
-         email, email_type, year_established, web_site, 
-         geographic_scope, country_geographical_area_of_activity,
-         number_and_type_of_members, mission_statement) %>%
-  rowwise() %>%
-  mutate(languages = concat.list(languages),
-         country_geographical_area_of_activity = 
-           concat.list(country_geographical_area_of_activity))
+  # Standardize columns
+  mutate(id_org = paste("icso", 1:n(), sep="_"),
+         original_list = "ICSO") %>%
+  select(id_org, org_name = organizations_name, email, org_url = web_site,
+         country_work = country_geographical_area_of_activity,
+         contact = hq_address, geographic_scope,
+         year_founded = year_established, email_type, url_id = org_id,
+         original_list)
 
 write_csv(icso.emails, path=file.path(data.path, "Clean", "un-icso_emails.csv"))
 
@@ -161,17 +186,27 @@ write_csv(icso.emails, path=file.path(data.path, "Clean", "un-icso_emails.csv"))
 tip.raw <- read_excel(file.path(data.path, "Raw", "tip-ngos.xlsx"),
                       sheet="Main list", na=".")
 
-tip.clean <- tip.raw %>%
+tip.emails <- tip.raw %>%
+  # Remove organizations with dead e-mail addresses
   filter(!str_detect(`Survey status`, "dead")) %>%
-  select(ID, `Organization name`, `Clean name`,
-         Country, ISO3, Region, Website, Description,
-         `Email 1`, `Email 2`, `Email 3`, `Contact email`,
-         `Contact name`)
-
-tip.emails <- tip.clean %>%
+  # Clean and combine e-mails into one column
   rowwise() %>%
   mutate_each(funs(clean.email), contains("mail")) %>%
   gather(email_type, email, contains("mail")) %>%
-  distinct(email)
+  distinct(email) %>%
+  ungroup() %>%
+  # Standardize columns
+  mutate(id.new = paste("tip", ID, sep="_"),
+         original_list = "TIP") %>%
+  select(id_org = id.new, org_name = `Clean name`, email, org_url = Website,
+         country_hq = Country, contact = `Contact name`, phone = Phone,
+         country_hq_iso3 = ISO3, email_type, original_list)
 
 write_csv(tip.emails, path=file.path(data.path, "Clean", "tip-ngos_emails.csv"))
+
+
+# -----------------------------------
+# Combine everything into huge list
+# -----------------------------------
+all.emails <- bind_rows(yio.orgs.email, ddo.emails, icso.emails, tip.emails)
+write_csv(all.emails, path=file.path(data.path, "Clean", "all_emails.csv"))
