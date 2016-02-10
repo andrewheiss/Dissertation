@@ -10,13 +10,21 @@ lists:
         affiliation: Brigham Young University
         email: dan_nielson@byu.edu
     url: http://www.devdir.org
-    filename: ddo.xlsx
+    filename: Raw/ddo_resaved.xlsx
     type: xlsx
     date_updated: 2015-11-03
-    num_rows_raw: 14824
+    num_rows_raw: 14834
     description: >-
         List of development NGOs that has previously been used in large-scale
         e-mail surveys conducted by Daniel Nielson and Judith Kelley
+    manual_changes: >-
+        This was originally a Google spreadsheet that I downloaded as an Excel
+        workbook. Google's conversion isn't perfect, though, and R's
+        readxl::read_excel chokes on it (sheet names and numbers are
+        inexplicably mismatched). Also, there are two columns named "region3",
+        which R's dplyr doesn't like. Thus, I made two manual changes:
+        (1) removed the duplicate "region3" column and (2) resaved as a new
+        xlsx file.
 
   - name: un-icso
     title: UN Integrated Civil Society Organizations System (iCSO)
@@ -24,7 +32,7 @@ lists:
       - name: UN Department of Economic and Social Affairs (DESA)
     url: http://esango.un.org/civilsociety/
     scrape_repo: https://github.com/andrewheiss/scrape-un-icso
-    filename: un-icso.json
+    filename: Raw/un-icso.json
     type: json
     date_updated: 2016-02-09
     num_rows_raw: 27028
@@ -37,7 +45,7 @@ lists:
     author:
       - name: Union of International Associations (UIA)
     url: http://www.uia.org/ybio/
-    filename: yio.db
+    filename: Raw/yio.db
     type: sqlite
     date_updated: 2015-08-25
     num_rows_raw: 9325
