@@ -26,19 +26,35 @@ lists:
         (1) removed the duplicate "region3" column and (2) resaved as a new
         xlsx file.
 
+  - name: tip-ngos
+    title: Global Anti-Human Trafficking (TIP) NGOs
+    author:
+      - name: Judith Kelley
+        affiliation: Duke University
+        email: judith.kelley@duke.edu
+    filename: Raw/tip-ngos.xlsx
+    type: xlsx
+    date_updated: 2016-01-07
+    num_rows_raw: 1421
+    description: >-
+        List of anti-trafficking NGOs used previously in a survey for Judith's
+        book on scorecard diplomacy
+
   - name: un-icso
     title: UN Integrated Civil Society Organizations System (iCSO)
     author:
       - name: UN Department of Economic and Social Affairs (DESA)
     url: http://esango.un.org/civilsociety/
     scrape_repo: https://github.com/andrewheiss/scrape-un-icso
-    filename: Raw/un-icso.json
+    filename: Raw/un-icso-clean.json
     type: json
     date_updated: 2016-02-09
     num_rows_raw: 27028
     description: >-
         Huge list of all NGOs that have registered with the UN's Department of
         Economic and Social Affairs (DESA)
+    changes:
+        Run `Data/Python/fix_un-icso.py` to fix a few errant Unicode characters
 
   - name: yio
     title: Yearbook of International Organizations (YBIO)

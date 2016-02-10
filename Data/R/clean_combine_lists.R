@@ -1,11 +1,45 @@
 library(dplyr)
+library(tidyr)
 library(readr)
 library(readxl)
 library(stringr)
+library(jsonlite)
 
 # Path to data files
 data.path <- file.path(PROJHOME, "Data", "data_raw", "NGO lists")
 
+# ------------------
+# Useful functions
+# ------------------
+# Concatenate a list or vector in a dataframe cell. Use with rowwise():
+#
+# data_frame(x = seq_len(3)) %>% 
+#   mutate(y = replicate(3, c("a", "b", "c"), simplify=FALSE)) %>%
+#   rowwise() %>%
+#   mutate(y1 = concat.list(y))
+#
+concat.list <- function(x) {
+  return(paste(x, collapse=", "))
+}
+
+# Super super crude way to filter out things that aren't e-mail addresses.
+# Remove any string that doesn't have an @ in it.
+#
+# clean.email("asdf")
+# clean.email("asdf@asdf.com")
+# clean.email(NA)
+#
+clean.email <- function(x) {
+  if (is.na(x)) {
+    return(NA_character_)
+  }
+  
+  if (!str_detect(x, "@")) {
+    return(NA_character_)
+  } else {
+    return(x)
+  }
+}
 
 # -----------------------------------------
 # Yearbook of International Organizations
@@ -81,4 +115,63 @@ write_csv(ddo.emails, path=file.path(data.path, "Clean", "ddo_emails.csv"))
 # ---------------------------------------------------------
 # UN Integrated Civil Society Organizations System (iCSO)
 # ---------------------------------------------------------
-icso.path <- file.path(data.path, "Raw", "un-icso.json")
+icso.path <- file.path(data.path, "Raw", "un-icso-clean.json")
+
+# TinyDB names each entry with an index, and jsonlite chokes on named entries,
+# so we have to unname everything
+icso.raw.json <- fromJSON(icso.path)$`_default`
+names(icso.raw.json) <- NULL
+
+# As it stands now, individual strings are saved as one-element lists, not
+# single entries, which makes R's dataframes choke. The easiest way to fix this
+# is to use toJSON(..., auto_unbox=TRUE) and unbox everything. So, convert the
+# parsed list back to JSON back to a list.
+icso.raw.df <- fromJSON(toJSON(icso.raw.json, auto_unbox=TRUE), 
+                        simplifyDataFrame=TRUE, flatten=TRUE)
+
+icso.clean <- icso.raw.df %>%
+  filter(!(geographic_scope %in% c("Local", "National")),
+         !is.na(geographic_scope)) %>%
+  filter(!is.na(hq_email) | !is.na(preferred_email))
+
+# MAYBE: Check that area of activity is different from HQ address?
+# No. That's unreliable. Plus, in the case of Amnesty Egypt, Chad, Chile, and
+# Australia, they're pseudo-branches of the main Amnesty and still count as
+# INGOs, even though their HQ countries and target countries are the same.
+
+# Combine hq_ and preferred_email into one variable and remove duplicates
+icso.emails <- icso.clean %>%
+  gather(email_type, email, hq_email, preferred_email) %>%
+  distinct(email) %>%
+  select(org_id, organizations_name, hq_address, languages, 
+         email, email_type, year_established, web_site, 
+         geographic_scope, country_geographical_area_of_activity,
+         number_and_type_of_members, mission_statement) %>%
+  rowwise() %>%
+  mutate(languages = concat.list(languages),
+         country_geographical_area_of_activity = 
+           concat.list(country_geographical_area_of_activity))
+
+write_csv(icso.emails, path=file.path(data.path, "Clean", "un-icso_emails.csv"))
+
+
+# ------------------------------------
+# Global Anti-Human Trafficking NGOs
+# ------------------------------------
+tip.raw <- read_excel(file.path(data.path, "Raw", "tip-ngos.xlsx"),
+                      sheet="Main list", na=".")
+
+tip.clean <- tip.raw %>%
+  filter(!str_detect(`Survey status`, "dead")) %>%
+  select(ID, `Organization name`, `Clean name`,
+         Country, ISO3, Region, Website, Description,
+         `Email 1`, `Email 2`, `Email 3`, `Contact email`,
+         `Contact name`)
+
+tip.emails <- tip.clean %>%
+  rowwise() %>%
+  mutate_each(funs(clean.email), contains("mail")) %>%
+  gather(email_type, email, contains("mail")) %>%
+  distinct(email)
+
+write_csv(tip.emails, path=file.path(data.path, "Clean", "tip-ngos_emails.csv"))
