@@ -208,5 +208,7 @@ write_csv(tip.emails, path=file.path(data.path, "Clean", "tip-ngos_emails.csv"))
 # -----------------------------------
 # Combine everything into huge list
 # -----------------------------------
-all.emails <- bind_rows(yio.orgs.email, ddo.emails, icso.emails, tip.emails)
+all.emails <- bind_rows(yio.orgs.email, ddo.emails, 
+                        icso.emails, tip.emails) %>%
+  distinct(email)
 write_csv(all.emails, path=file.path(data.path, "Clean", "all_emails.csv"))
