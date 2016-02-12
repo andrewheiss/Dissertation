@@ -205,10 +205,29 @@ tip.emails <- tip.raw %>%
 write_csv(tip.emails, path=file.path(data.path, "Clean", "tip-ngos_emails.csv"))
 
 
+# ----------------------------------------------
+# Arab Institute for Human Rights NGO database
+# ----------------------------------------------
+aihr.raw <- read_csv(file.path(data.path, "Raw", "aihr_clean_final.csv"))
+
+aihr.emails <- aihr.raw %>%
+  # Clear out missing and duplicate rows
+  filter(!is.na(email)) %>%
+  distinct(email) %>%
+  # Standardize columns
+  mutate(id.new = paste("aihr", ngo_id, sep="_"),
+         original_list = "AIHR") %>%
+  select(id_org = id.new, org_name = latin_name, email, org_url = website,
+         country_hq = country.rev, country_hq_iso3 = ISO3,
+         original_list, org_name_arabic = arabic_name)
+
+write_csv(aihr.emails, path=file.path(data.path, "Clean", "aihr_emails.csv"))
+
+
 # -----------------------------------
 # Combine everything into huge list
 # -----------------------------------
 all.emails <- bind_rows(yio.orgs.email, ddo.emails, 
-                        icso.emails, tip.emails) %>%
+                        icso.emails, tip.emails, aihr.emails) %>%
   distinct(email)
 write_csv(all.emails, path=file.path(data.path, "Clean", "all_emails.csv"))

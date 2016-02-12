@@ -1,6 +1,22 @@
 ---
 title: NGO directories and contact lists
 lists:
+  - name: aihr
+    title: Arab Institute of Human Rights NGO directory
+    author:
+      - name: Arab Institute of Human Rights
+    url:
+      - http://www.aihr-iadh.org/
+      - http://www.aihr-resourcescenter.org/
+    scrape_repo: https://github.com/andrewheiss/scrape-aihr
+    filename: Raw/aihr-clean-final.csv
+    type: csv
+    date_updated: 2014-11-10
+    num_rows_raw: 761
+    description: >-
+        List of human rights NGOs that work in the Middle East and North Africa
+        (mostly headquartered in Tunisia)
+
   - name: ddo
     title: Directory of Development Organizations
     author:
