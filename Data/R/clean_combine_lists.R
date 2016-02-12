@@ -208,7 +208,7 @@ write_csv(tip.emails, path=file.path(data.path, "Clean", "tip-ngos_emails.csv"))
 # ----------------------------------------------
 # Arab Institute for Human Rights NGO database
 # ----------------------------------------------
-aihr.raw <- read_csv(file.path(data.path, "Raw", "aihr_clean_final.csv"))
+aihr.raw <- read_csv(file.path(data.path, "Raw", "aihr-clean-final.csv"))
 
 aihr.emails <- aihr.raw %>%
   # Clear out missing and duplicate rows
