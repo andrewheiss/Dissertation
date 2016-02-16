@@ -1,0 +1,21 @@
+Root CAMEO,Description,Quad Class,Quad Class Description
+1,Make Public Statement,0,Neutral
+2,Appeal,0,Neutral
+3,Express Intent to Cooperate,1,Verbal Cooperation
+4,Consult,1,Verbal Cooperation
+5,Engage in Diplomatic Cooperation,1,Verbal Cooperation
+6,Engage in Material Cooperation,2,Material Cooperation
+7,Provide Aid,2,Material Cooperation
+8,Yield,2,Material Cooperation
+9,Investigate,3,Verbal Conflict
+10,Demand,3,Verbal Conflict
+11,Disapprove,3,Verbal Conflict
+12,Reject,3,Verbal Conflict
+13,Threaten,3,Verbal Conflict
+14,Protest,4,Material Conflict
+15,Exhibit Force Posture,4,Material Conflict
+16,Reduce Relations,3,Verbal Conflict
+17,Coerce,4,Material Conflict
+18,Assault,4,Material Conflict
+19,Fight,4,Material Conflict
+20,Use Unconventional Mass Violence,4,Material Conflict
