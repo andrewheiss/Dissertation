@@ -42,6 +42,48 @@ datasets:
         Database of Political Institutions." *The World Bank Economic Review*
         15, no. 1 (2001): 165-176. doi: 10.1093/wber/15.1.165
 
+  - name: ICEWS
+    title: Integrated Conflict Early Warning System
+    author:
+      - name: Defense Advanced Research Projects Agency (DARPA)
+      - name: Office of Naval Research (ONR)
+    url:
+      - event_data: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/28075
+      - dictionaries: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/28118
+    filename:
+      - event_data: ICEWS/study_28075/Data/*.zip|*.tab
+      - dictionaries: ICEWS/study_28118/Data/*.csv
+    type:
+      - event_data: .tab
+      - dictionaries: .csv
+    description: >-
+        Huge database of CAMEO-coded events from 1995–2015 (January)
+    extra_scripts: >-
+        Use Data/Python/fix_icews.py to escape quotes in all the .tab files
+        before using readr::read_tsv to load the data in R.
+    citation: >-
+        Boschee, Elizabeth; Lautenschlager, Jennifer; O'Brien, Sean; Shellman,
+        Steve; Starz, James; Ward, Michael, 2015, "ICEWS Coded Event Data",
+        http://dx.doi.org/10.7910/DVN/28075, Harvard Dataverse, V11.
+    related_data:
+      - name: CAMEO QuadClass categories
+        title: CAMEO QuadClass categories
+        url: http://phoenixdata.org/description
+        filename: ICEWS/cameo_categories.csv
+        type: csv
+        description: >-
+          Aggregates CAMEO codes into four categories: Verbal Cooperation,
+          Material Cooperation, Verbal Conflict, and Material Conflict (with a
+          neutral category too). Based originally on GernerSchrodtYilmaz:2002,
+          but updated later.
+        citation: >-
+          Gerner, Deborah J., Philip A. Schrodt, Ömür Yilmaz, and Rajaa
+          Abu-Jabr. 2002. The Creation of CAMEO (Conflict and Mediation Event
+          Observations): An Event Data Framework for a Post Cold War World.
+          Conference paper. Prepared for the annual meeting of the American
+          Political Science Association, Boston, Massachusetts.
+          http://eventdata.parusanalytics.com/papers.dir/Gerner.APSA.02.pdf.
+
   - name: ICRG
     title: International Country Risk Guide
     author:
