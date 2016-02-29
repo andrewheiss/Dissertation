@@ -462,22 +462,47 @@ neighbor.cows <- all.neighbors %>%
   unique()
 
 summarize.neighbors <- function(chunk) {
-  df <- icrg.all %>%
+  df.chunk <- icrg.all %>%
     filter(year.num == unique(chunk$year.num),
-           cowcode %in% chunk$neighbor_cow) %>%
-    summarise(neighbor.stability.mean = mean(icrg.stability, na.rm=TRUE),
-              neighbor.stability.median = median(icrg.stability, na.rm=TRUE),
-              neighbor.stability.sd = sd(icrg.stability, na.rm=TRUE)) %>%
+           cowcode %in% chunk$neighbor_cow)
+
+  # If there is ICRG data for the given year, summarize it. Otherwise, just 
+  # return a bunch of NAs. Without this if-else check, dplyr 0.4.3 chokes when 
+  # summarizing an empty dataframe with min() and max() (but is inexplicably 
+  # fine with using mean(), median(), and sd(), returning either NaN or NA; min
+  # and max cause a 'segfault: memory not mapped' error)
+  if (nrow(df.chunk) > 0) {
+    df.chunk.summary <- df.chunk %>%
+      summarise(neighbor.stability.mean = mean(icrg.stability, na.rm=TRUE),
+                neighbor.stability.median = median(icrg.stability, na.rm=TRUE),
+                neighbor.stability.sd = sd(icrg.stability, na.rm=TRUE),
+                neighbor.stability.min = min(icrg.stability, na.rm=TRUE),
+                neighbor.stability.max = max(icrg.stability, na.rm=TRUE))
+  } else {
+    df.chunk.summary <- df.chunk %>%
+      summarise(neighbor.stability.mean = NA,
+                neighbor.stability.median = NA,
+                neighbor.stability.sd = NA,
+                neighbor.stability.min = NA,
+                neighbor.stability.max = NA)
+  }
+  
+  df.final <- df.chunk.summary %>%
     mutate(neighbors.count = nrow(chunk),
            neighbors.cow = paste(chunk$neighbor_cow, collapse=", "),
-           neighbors.clean = paste(countrycode(chunk$neighbor_cow, "cown", "country.name"),
+           neighbors.clean = paste(countrycode(chunk$neighbor_cow, "cown", 
+                                               "country.name"),
                                    collapse=", "),
-           country.clean = countrycode(unique(chunk$country_cow), "cown", "country.name"))
-  return(df)
+           country.clean = countrycode(unique(chunk$country_cow), "cown", 
+                                       "country.name"))  
+
+  return(df.final)
 }
 
-neighbor.stability <- expand.grid.df(neighbor.cows, 
-                                     data_frame(year.num = 1991:2016)) %>%
+all.country.years <- expand.grid.df(neighbor.cows, 
+                                    data_frame(year.num = 1991:2016))
+
+neighbor.stability <- all.country.years %>%
   group_by(country_cow, year.num) %>%
   do(summarize.neighbors(.)) %>%
   rename(cowcode = country_cow)
