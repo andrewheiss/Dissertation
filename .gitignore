@@ -23,7 +23,7 @@ Data/data_raw/NGO\ lists/*
 
 Data/data_processed/*
 
-Data/**/**.ods
+Data/**.ods
 Data/**.odb
 Data/**.db
 
