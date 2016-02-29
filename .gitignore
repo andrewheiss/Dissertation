@@ -23,6 +23,10 @@ Data/data_raw/NGO\ lists/*
 
 Data/data_processed/*
 
+Data/**/**.ods
+Data/**.odb
+Data/**.db
+
 # Output
 # See individual Output/.gitignore files
 #
