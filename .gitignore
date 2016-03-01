@@ -27,6 +27,10 @@ Data/**.ods
 Data/**.odb
 Data/**.db
 
+# Analysis
+Analysis/**.html
+!Analysis/html/*.html
+
 # Output
 # See individual Output/.gitignore files
 #
