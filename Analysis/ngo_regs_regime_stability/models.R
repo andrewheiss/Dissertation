@@ -19,6 +19,9 @@ library(Cairo)
 full.data <- readRDS(file.path(PROJHOME, "Data","data_processed",
                                "full_data.rds"))
 
+my.seed <- 1234
+set.seed(my.seed)
+
 
 #' # Variables
 #' 
@@ -124,14 +127,12 @@ summary(model.ext.min.all)
 #' - https://cran.r-project.org/web/packages/rstanarm/vignettes/continuous.html
 
 # library(rstanarm)
-# # Use all possible cores
-# options(mc.cores = parallel::detectCores())
+# options(mc.cores = parallel::detectCores())  # Use all possible cores
 # 
 # model.simple.b <- stan_glm(v2csreprss ~ icrg.stability + e_polity2,
 #                           data=full.data, family=gaussian(),
 #                           prior=cauchy(), prior_intercept=cauchy(),
-#                           seed=1234, adapt_delta=0.999)
+#                           seed=my.seed)
 # print(model.simple.b, digits=2)
-# summary(model.simple.b)
 # plot(model.simple.b, pars=c("icrg.stability", "e_polity2"))
 # pp_check(model.simple.b, check="distributions", overlay=FALSE, nreps=5)
