@@ -1,5 +1,6 @@
 library(magrittr)
 library(dplyr)
+library(tidyr)
 library(readr)
 library(lubridate)
 library(stringr)
@@ -49,7 +50,12 @@ cameo.categories <- read_csv(file.path(PROJHOME, "Data", "data_raw",
                                        "External", "ICEWS", 
                                        "cameo_categories.csv")) %>%
   select(cameo.root = `Root CAMEO`, cameo.description = Description,
-         cameo.category = `Quad Class Description`)
+         cameo.category = `Quad Class Description`) %>%
+  mutate(cameo.category.agg = ifelse(str_detect(cameo.category, "Conflict"), 
+                                     "Conflict",
+                                     ifelse(str_detect(cameo.category, 
+                                                       "Cooperation"), 
+                                            "Cooperation", cameo.category)))
 
 
 # Filter the raw data and merge in CAMEO categories
@@ -67,7 +73,17 @@ events.filtered <- all.events %>%
 
 
 events.aggregated <- events.filtered %>%
-  group_by(`Target Country`, event.year, cameo.category) %>%
+  filter(cameo.category != "Neutral") %>%
+  group_by(`Target Country`, event.year, cameo.category.agg) %>%
   # group_by(`Target Country`, event.year) %>%
-  summarise(num = n(), severity = mean(Intensity))
+  summarise(num = n(), severity = mean(Intensity)) %>%
+  ungroup()
+
+asdf <- events.aggregated %>%
+  gather(variable, value, 
+         -c(`Target Country`, event.year, cameo.category.agg)) %>%
+  unite(temp, cameo.category.agg, variable) %>%
+  spread(temp, value) %>%
+  mutate(net = Cooperation_num - Conflict_num)
+
 
