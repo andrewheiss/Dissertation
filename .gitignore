@@ -31,6 +31,13 @@ Data/**.db
 Analysis/**.html
 !Analysis/html/*.html
 
+# Writing
+Writing/**.pdf
+Writing/**.docx
+Writing/**.html
+Writing/**.tex
+Writing/**/tex_out/*
+
 # Output
 # See individual Output/.gitignore files
 #
