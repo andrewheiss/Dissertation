@@ -16,7 +16,7 @@
 library(ggplot2)
 library(Cairo)
 
-full.data <- readRDS(file.path(PROJHOME, "Data","data_processed",
+full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                                "full_data.rds"))
 
 my.seed <- 1234
@@ -48,13 +48,15 @@ set.seed(my.seed)
 #' Internal stability:
 #' 
 #' - `icrg.stability`: 
+#' - `icrg.pol.risk.internal.scaled`: Political risk rating---external measures
+#'   removed and index rescaled to 0-100 scale
 #' - `yrsoffc`: 
 #' - `years.since.comp`: 
 #' - `opp1vote`: 
 #' 
 #' External stability:
 #' 
-#' - `neighbor.stability.XXX`
+#' - `neighbor.pol.risk.XXX`
 #' 
 #' International reputation: 
 #' 
@@ -76,17 +78,17 @@ set.seed(my.seed)
 #' # Models
 #' 
 #' ## Internal factors only
-model.int.simple <- lm(v2csreprss ~ icrg.stability + e_polity2,
+model.int.simple <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled + e_polity2,
                        data=full.data)
 summary(model.int.simple)
 
-model.int.full <- lm(v2csreprss ~ icrg.stability +
+model.int.full <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
                        yrsoffc + years.since.comp + opp1vote +
                        e_polity2,
                      data=full.data)
 summary(model.int.full)
 
-model.int.all <- lm(v2csreprss ~ icrg.stability +
+model.int.all <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
                       yrsoffc + years.since.comp + opp1vote +
                       e_polity2 +
                       physint + gdpcap.log + population.log +
@@ -96,19 +98,19 @@ summary(model.int.all)
 
 
 #' ## External factors only
-model.ext.simple.min <- lm(v2csreprss ~ neighbor.stability.min + e_polity2,
+model.ext.simple.min <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + e_polity2,
                            data=full.data)
 summary(model.ext.simple.min)
 
-model.ext.simple.med <- lm(v2csreprss ~ neighbor.stability.median + e_polity2,
+model.ext.simple.med <- lm(cs_env_sum.lead ~ neighbor.pol.risk.median + e_polity2,
                            data=full.data)
 summary(model.ext.simple.med)
 
-model.ext.simple.mean <- lm(v2csreprss ~ neighbor.stability.mean + e_polity2,
+model.ext.simple.mean <- lm(cs_env_sum.lead ~ neighbor.pol.risk.mean + e_polity2,
                             data=full.data)
 summary(model.ext.simple.mean)
 
-model.ext.min.all <- lm(v2csreprss ~ neighbor.stability.min + e_polity2 +
+model.ext.min.all <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + e_polity2 +
                           gdpcap.log + population.log +
                           oda.log + countngo + globalization,
                         data=full.data)
@@ -117,6 +119,15 @@ summary(model.ext.min.all)
 
 #' ## International reputation only
 
+#' ## All three at once
+model.everything <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
+                         yrsoffc + years.since.comp + opp1vote +
+                         neighbor.pol.risk.min +
+                         e_polity2 +
+                         physint + gdpcap.log + population.log +
+                         oda.log + countngo + globalization,
+                       data=full.data)
+summary(model.everything)
 
 
 #' # Bayesian tinkering
@@ -129,7 +140,7 @@ summary(model.ext.min.all)
 # library(rstanarm)
 # options(mc.cores = parallel::detectCores())  # Use all possible cores
 # 
-# model.simple.b <- stan_glm(v2csreprss ~ icrg.stability + e_polity2,
+# model.simple.b <- stan_glm(cs_env_sum.lead ~ icrg.stability + e_polity2,
 #                           data=full.data, family=gaussian(),
 #                           prior=cauchy(), prior_intercept=cauchy(),
 #                           seed=my.seed)
