@@ -108,7 +108,18 @@ vdem.cso <- vdem.raw %>% select(country_name, country_id, country_text_id,
                                  labels=c("Severely", "Substantially", 
                                           "Moderately", "Weakly", "No"),
                                  ordered=TRUE),
-         cs_env_sum = v2csreprss + v2cseeorgs)
+         cs_env_sum = v2csreprss + v2cseeorgs,
+         polity_ord = cut(e_polity2, breaks=c(-Inf, -6, 5, Inf),
+                          labels=c("Autocracy", "Anocracy", "Democracy"),
+                          ordered_result=TRUE),
+         polity_ord2 = cut(e_polity2, breaks=c(-Inf, 0, Inf),
+                           labels=c("Autocracy", "Democracy"),
+                           ordered_result=TRUE)) %>%
+  group_by(COWcode) %>%
+  mutate(v2csreprss_ord.lead = lead(v2csreprss_ord),
+         v2csreprss.lead = lead(v2csreprss),
+         v2cseeorgs.lead = lead(v2cseeorgs),
+         cs_env_sum.lead = lead(cs_env_sum))
 
 
 # International Country Risk Guide (ICRG)
@@ -464,7 +475,8 @@ neighbor.cows <- all.neighbors %>%
 summarize.neighbors <- function(chunk) {
   df.chunk <- icrg.all %>%
     filter(year.num == unique(chunk$year.num),
-           cowcode %in% chunk$neighbor_cow)
+           cowcode %in% chunk$neighbor_cow) %>%
+    select(icrg.stability, icrg.pol.risk.internal.scaled)
 
   # If there is ICRG data for the given year, summarize it. Otherwise, just 
   # return a bunch of NAs. Without this if-else check, dplyr 0.4.3 chokes when 
@@ -477,14 +489,24 @@ summarize.neighbors <- function(chunk) {
                 neighbor.stability.median = median(icrg.stability, na.rm=TRUE),
                 neighbor.stability.sd = sd(icrg.stability, na.rm=TRUE),
                 neighbor.stability.min = min(icrg.stability, na.rm=TRUE),
-                neighbor.stability.max = max(icrg.stability, na.rm=TRUE))
+                neighbor.stability.max = max(icrg.stability, na.rm=TRUE),
+                neighbor.pol.risk.mean = mean(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+                neighbor.pol.risk.median = median(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+                neighbor.pol.risk.sd = sd(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+                neighbor.pol.risk.min = min(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+                neighbor.pol.risk.max = max(icrg.pol.risk.internal.scaled, na.rm=TRUE))
   } else {
     df.chunk.summary <- df.chunk %>%
       summarise(neighbor.stability.mean = NA,
                 neighbor.stability.median = NA,
                 neighbor.stability.sd = NA,
                 neighbor.stability.min = NA,
-                neighbor.stability.max = NA)
+                neighbor.stability.max = NA,
+                neighbor.pol.risk.mean = NA,
+                neighbor.pol.risk.median = NA,
+                neighbor.pol.risk.sd = NA,
+                neighbor.pol.risk.min = NA,
+                neighbor.pol.risk.max = NA)
   }
   
   df.final <- df.chunk.summary %>%
