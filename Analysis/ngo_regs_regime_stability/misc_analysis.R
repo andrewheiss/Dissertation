@@ -74,6 +74,41 @@ fig.save.cairo(plot.csre.top.bottom, filename="1-csre-top-bottom",
                width=5, height=2.5)
 
 
+#' # Visualizing basic correlation between regime type and CSRE
+#' 
+#' Regime type and CSRE are quite correlated
+plot.data <- full.data %>%
+  select(cs_env_sum, uds_mean, e_polity2) %>% 
+  na.omit()
+
+plot.data %>%
+  summarise_each(funs(cor(., plot.data$cs_env_sum)), -cs_env_sum)
+
+#' You can see that visually too
+plot.polity <- ggplot(plot.data, aes(x=e_polity2, y=cs_env_sum)) + 
+  geom_vline(xintercept=0, colour="#EA2E49", size=0.5) +
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
+  labs(x="Polity IV score", 
+       y="Civil society regulatory environment\n(CSRE)") +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  theme_ath()
+
+plot.uds <- ggplot(plot.data, aes(x=uds_mean, y=cs_env_sum)) + 
+  geom_vline(xintercept=0, colour="#EA2E49", size=0.5) +
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") +
+  labs(x="Mean UDS score", y=NULL) +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  theme_ath()
+
+plot.regime.csre <- arrangeGrob(plot.polity, plot.uds, nrow=1)
+grid::grid.draw(plot.regime.csre)
+
+fig.save.cairo(plot.regime.csre, filename="1-regime-csre", 
+               width=5, height=2)
+
+
 #' # Understanding and visualizing ICRG
 #' 
 #' Conceptualizing the political risk measure is a little tricky. Showing a few
