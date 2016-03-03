@@ -530,6 +530,19 @@ neighbor.stability <- all.country.years %>%
   rename(cowcode = country_cow)
 
 
+# Unified Democracy Scores (UDS)
+# http://www.unified-democracy-scores.org/
+uds.url <- "http://www.unified-democracy-scores.org/files/20140312/z/uds_summary.csv.gz"
+uds.tmp <- paste0(tempdir(), basename(uds.url))
+download.file(uds.url, uds.tmp, method="internal")
+
+uds <- read_csv(uds.tmp) %>%
+  filter(year > 1989) %>%
+  rename(uds_mean = mean, uds_sd = sd, uds_median = median,
+         uds_pct025 = pct025, uds_pct975 = pct975) %>%
+  select(-country)
+
+
 # ------------------
 # Merge everything!
 # ------------------
@@ -544,6 +557,7 @@ full.data <- icrg.all %>%
   left_join(murdie, by=c("cowcode", "year.num" = "year")) %>%
   left_join(kof, by=c("cowcode", "year.num" = "year")) %>%
   left_join(neighbor.stability, by=c("cowcode", "year.num")) %>%
+  left_join(uds, by=c("cowcode", "year.num" = "year")) %>%
   filter(year.num > 1990)
 
 # Save all cleaned data files
