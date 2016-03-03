@@ -179,7 +179,9 @@ icrg.all <- bind_rows(all.dfs) %>%
   filter(!(Country %in% c("Serbia & Montenegro *", "USSR", "West Germany"))) %>%
   ungroup() %>%
   mutate(subregion = countrycode(iso, "iso3c", "region"),
-         subregion = ifelse(iso == "TWN", "Eastern Asia", subregion)) %>%
+         subregion = ifelse(iso == "TWN", "Eastern Asia", subregion),
+         region = countrycode(iso, "iso3c", "continent"),
+         region = ifelse(iso == "TWN", "Asia", region)) %>%
   # group_by(subregion, year.num) %>%
   # mutate(icrg.stability.region = ifelse(!is.na(icrg.stability), 
   #                                       mean(icrg.stability, na.rm=TRUE), 
@@ -204,6 +206,23 @@ icrg.all <- bind_rows(all.dfs) %>%
                                        labels=c("Very High", "High", "Moderate", 
                                                 "Low", "Very Low"),
                                        ordered_result=TRUE, include.lowest=TRUE))
+
+icrg.global <- icrg.all %>%
+  group_by(year.num) %>%
+  summarise(icrg.pol.risk.global = mean(icrg.pol.risk, na.rm=TRUE))
+
+icrg.regional <- icrg.all %>%
+  group_by(year.num, region) %>%
+  summarise(icrg.pol.risk.regional = mean(icrg.pol.risk, na.rm=TRUE))
+
+icrg.subregional <- icrg.all %>%
+  group_by(year.num, subregion) %>%
+  summarise(icrg.pol.risk.subregional = mean(icrg.pol.risk, na.rm=TRUE))
+
+icrg.all.with.aggregates <- icrg.all %>%
+  left_join(icrg.global, by="year.num") %>%
+  left_join(icrg.regional, by=c("year.num", "region")) %>%
+  left_join(icrg.subregional, by=c("year.num", "subregion"))
 
 
 # ICRG monthly data
@@ -548,7 +567,7 @@ uds <- read_csv(uds.tmp) %>%
 # ------------------
 # TODO: Consolidate extra variables (e.g. there's "Country", "country.name", and "country_name")
 # TODO: What happens when there are no neighbors?
-full.data <- icrg.all %>% 
+full.data <- icrg.all.with.aggregates %>% 
   left_join(vdem.cso, by=c("cowcode" = "COWcode", "year.num" = "year")) %>%
   left_join(pol.inst, by=c("cowcode" = "cow", "year.num" = "year")) %>%
   left_join(nelda.full, by=c("cowcode" = "ccode", "year.num" = "year")) %>%
