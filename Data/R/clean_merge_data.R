@@ -428,6 +428,61 @@ capture.output({
 #   geom_line()
 
 
+# Coups d'Etat, 1946-2014
+# http://www.systemicpeace.org/inscrdata.html
+coups <- read_excel(file.path(PROJHOME, "Data", "data_raw", "External",
+                              "Coups", "CSPCoupsAnnual2014.xls"),
+                    sheet="Sheet1") %>%
+  filter(year > 1989) %>%
+  mutate(coups.success = scoup1,
+         coups.success.bin = coups.success > 0,
+         coups.activity = scoup1 + atcoup2 + pcoup3 + apcoup4,
+         coups.activity.bin = coups.activity > 0) %>%
+  select(ccode, year, starts_with("coups"))
+
+# Global instances of coups
+# http://www.jonathanmpowell.com/coup-detat-dataset.html
+coup.url <- "http://www.uky.edu/~clthyn2/coup_data/powell_thyne_ccode_year.txt"
+coups.new <- read_tsv(coup.url) %>%
+  filter(year > 1989) %>%
+  mutate(cowcode = ccode,  # ccode is the Gleditsch/Ward code
+         cowcode = ifelse(ccode == 340, 345, cowcode)) %>%
+  mutate(coups.success.bin = coup1 == 2 | coup2 == 2 | coup3 == 2 | coup4 == 2,
+         coups.activity.bin = coup1 > 0 | coup2 > 0 | coup3 > 0 | coup4 > 0) %>%
+  select(cowcode, year, starts_with("coups")) %>%
+  mutate(subregion = countrycode(cowcode, "cown", "region"),
+         subregion = ifelse(cowcode == 713, "Eastern Asia", subregion),
+         subregion = ifelse(cowcode == 345, "Eastern Europe", subregion),
+         region = countrycode(cowcode, "cown", "continent"),
+         region = ifelse(cowcode == 713, "Asia", region),
+         region = ifelse(cowcode == 345, "Europe", region))
+
+coups.global <- coups.new %>%
+  group_by(year) %>%
+  summarise(coups.success.global = sum(coups.success.bin, na.rm=TRUE),
+            coups.activity.global = sum(coups.activity.bin, na.rm=TRUE))
+
+coups.regional <- coups.new %>%
+  group_by(year, region) %>%
+  summarise(coups.success.regional = sum(coups.success.bin, na.rm=TRUE),
+            coups.activity.regional = sum(coups.activity.bin, na.rm=TRUE))
+
+coups.subregional <- coups.new %>%
+  group_by(year, subregion) %>%
+  summarise(coups.success.subregional = sum(coups.success.bin, na.rm=TRUE),
+            coups.activity.subregional = sum(coups.activity.bin, na.rm=TRUE))
+
+coups.final <- coups.new %>%
+  left_join(coups.global, by="year") %>%
+  left_join(coups.regional, by=c("year", "region")) %>%
+  left_join(coups.subregional, by=c("year", "subregion"))
+
+# Gleditsch/Ward codes, for reference
+# ward.ccode <- read_tsv("http://privatewww.essex.ac.uk/~ksg/data/iisystem.dat",
+#                        col_names=c("ward.code", "iso.ish", "country.name",
+#                                    "country.start", "country.end"))
+
+
 # Uppsala conflict data
 # http://www.pcr.uu.se/research/ucdp/datasets/generate_your_own_datasets/dynamic_datasets/
 # conflicts <- read_tsv(file.path(PROJHOME, "Data", "data_raw", "External", 
@@ -491,11 +546,12 @@ neighbor.cows <- all.neighbors %>%
   select(contains("cow")) %>%
   unique()
 
-summarize.neighbors <- function(chunk) {
-  df.chunk <- icrg.all %>%
+summarize.neighbors <- function(chunk, df) {
+  df.chunk <- df %>%
     filter(year.num == unique(chunk$year.num),
            cowcode %in% chunk$neighbor_cow) %>%
-    select(icrg.stability, icrg.pol.risk.internal.scaled)
+    select(icrg.stability, icrg.pol.risk.internal.scaled,
+           starts_with("coups"))
 
   # If there is ICRG data for the given year, summarize it. Otherwise, just 
   # return a bunch of NAs. Without this if-else check, dplyr 0.4.3 chokes when 
@@ -513,7 +569,11 @@ summarize.neighbors <- function(chunk) {
                 neighbor.pol.risk.median = median(icrg.pol.risk.internal.scaled, na.rm=TRUE),
                 neighbor.pol.risk.sd = sd(icrg.pol.risk.internal.scaled, na.rm=TRUE),
                 neighbor.pol.risk.min = min(icrg.pol.risk.internal.scaled, na.rm=TRUE),
-                neighbor.pol.risk.max = max(icrg.pol.risk.internal.scaled, na.rm=TRUE))
+                neighbor.pol.risk.max = max(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+                neighbor.coups = sum(coups.success.bin, na.rm=TRUE),
+                neighbor.coups.bin = neighbor.coups > 0,
+                neighbor.coup.activity = sum(coups.activity.bin, na.rm=TRUE),
+                neighbor.coups.activity.bin = neighbor.coup.activity > 0)
   } else {
     df.chunk.summary <- df.chunk %>%
       summarise(neighbor.stability.mean = NA,
@@ -525,7 +585,11 @@ summarize.neighbors <- function(chunk) {
                 neighbor.pol.risk.median = NA,
                 neighbor.pol.risk.sd = NA,
                 neighbor.pol.risk.min = NA,
-                neighbor.pol.risk.max = NA)
+                neighbor.pol.risk.max = NA,
+                neighbor.coups = NA,
+                neighbor.coups.bin = NA,
+                neighbor.coup.activity = NA,
+                neighbor.coups.activity.bin = NA)
   }
   
   df.final <- df.chunk.summary %>%
@@ -543,9 +607,13 @@ summarize.neighbors <- function(chunk) {
 all.country.years <- expand.grid.df(neighbor.cows, 
                                     data_frame(year.num = 1991:2016))
 
+# Add coups to ICRG so coup attempts can also be neighborized
+icrg.all.with.aggregates.coups <- icrg.all.with.aggregates %>%
+  left_join(coups.new, by=c("cowcode", "year.num" = "year"))
+
 neighbor.stability <- all.country.years %>%
   group_by(country_cow, year.num) %>%
-  do(summarize.neighbors(.)) %>%
+  do(summarize.neighbors(., icrg.all.with.aggregates.coups)) %>%
   rename(cowcode = country_cow)
 
 
@@ -577,6 +645,7 @@ full.data <- icrg.all.with.aggregates %>%
   left_join(kof, by=c("cowcode", "year.num" = "year")) %>%
   left_join(neighbor.stability, by=c("cowcode", "year.num")) %>%
   left_join(uds, by=c("cowcode", "year.num" = "year")) %>%
+  left_join(coups.final, by=c("cowcode", "year.num" = "year")) %>%
   filter(year.num > 1990)
 
 # Save all cleaned data files
