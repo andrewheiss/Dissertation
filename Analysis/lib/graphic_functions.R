@@ -17,6 +17,7 @@ theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
           legend.title = element_text(size=rel(0.8)),
           legend.key.size=unit(.7, "line"),
           legend.key = element_blank(),
+          legend.margin = unit(0.1, "lines"),
           strip.text = element_text(size=rel(1), family="Source Sans Pro Semibold"),
           strip.background = element_rect(fill="#ffffff", colour=NA))
   ret
