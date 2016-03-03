@@ -18,6 +18,10 @@
 				"*.sublime-workspace",
 				"Icon?"
 			],
+            "folder_exclude_patterns":
+            [
+                "Data/data_raw",
+            ],
 			"path": "."
 		}
 	]
