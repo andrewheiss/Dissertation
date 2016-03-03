@@ -15,7 +15,10 @@
 #' # Load libraries and data
 library(magrittr)
 library(dplyr)
+library(tidyr)
+library(broom)
 library(ggplot2)
+library(gridExtra)
 library(Cairo)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
@@ -157,3 +160,87 @@ plot.icrg.examples
 
 fig.save.cairo(plot.icrg.examples, filename="1-icrg-examples", 
                width=5, height=3)
+
+
+#' # ICRG across regime type
+#' 
+#' Are autocracies necessarily more unstable than democracies? They are more
+#' volatile, as shown above with `risk.stats` summaries…
+plot.data <- full.data %>%
+  group_by(polity_ord2, year.actual) %>%
+  summarise(icrg = mean(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+            icrg.sd = sd(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+            icrg.se = icrg.sd / sqrt(n()),
+            icrg.upper = icrg + (qnorm(0.975) * icrg.se),
+            icrg.lower = icrg + (qnorm(0.025) * icrg.se)) %>%
+  na.omit() %>%
+  ungroup() %>%
+  mutate(polity_ord2 = factor(polity_ord2, levels=c("Democracy", "Autocracy"),
+                              labels=c("Democracies    ", "Autocracies")))
+
+plot.icrg.regime <- ggplot(plot.data, aes(x=year.actual, y=icrg, 
+                                          colour=polity_ord2)) + 
+  geom_ribbon(aes(ymin=icrg.lower, ymax=icrg.upper, fill=polity_ord2), 
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) + 
+  labs(x=NULL, y="Mean internal political risk (ICRG)") + 
+  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
+  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  theme_ath()
+plot.icrg.regime
+
+fig.save.cairo(plot.icrg.regime, filename="1-icrg-regime", 
+               width=5, height=3)
+
+#' Check if the difference in means is significant in each year
+year.diffs <- full.data %>%
+  select(polity_ord2, year.num, icrg.pol.risk.internal.scaled) %>%
+  na.omit() %>%
+  group_by(year.num) %>%
+  do(tidy(t.test(icrg.pol.risk.internal.scaled ~ polity_ord2, data=.)))
+
+year.diffs %>% select(1:6) %>% print(n=nrow(.))
+#' Yup. They are.
+#' 
+
+
+#' # Other authoritarian stability variables and CSRE
+#' 
+#' All three variables seem moderately correlated with the CSRE
+plot.data <- full.data %>%
+  select(cs_env_sum, yrsoffc, years.since.comp, opp1vote) %>% 
+  na.omit()
+
+plot.data %>%
+  summarise_each(funs(cor(., plot.data$cs_env_sum)), -cs_env_sum)
+
+#' Plot the correlations
+plot.yrs.offc <- ggplot(plot.data, aes(x=yrsoffc, y=cs_env_sum)) + 
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
+  labs(x="Years executive has been in office", 
+       y="Civil society regulatory environment\n(CSRE)") +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  theme_ath()
+
+plot.yrs.since.comp <- ggplot(plot.data, 
+                              aes(x=years.since.comp, y=cs_env_sum)) + 
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") +
+  labs(x="Years since a competitive election", y=NULL) +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  theme_ath()
+
+plot.opp.vote <- ggplot(plot.data, aes(x=opp1vote, y=cs_env_sum)) + 
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") +
+  labs(x="Vote share for largest opposition party", y=NULL) +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  theme_ath()
+
+plot.auth.vars <- arrangeGrob(plot.yrs.offc, plot.yrs.since.comp, 
+                              plot.opp.vote, nrow=1)
+grid::grid.draw(plot.auth.vars)
+
+fig.save.cairo(plot.auth.vars, filename="1-auth-vars", 
+               width=6, height=2)
