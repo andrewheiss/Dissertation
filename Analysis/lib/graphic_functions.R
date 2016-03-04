@@ -41,7 +41,7 @@ fig.save.cairo <- function(fig, filepath=file.path(PROJHOME, "Output", "figures"
          width=width, height=height, units=units, type="cairo", dpi=300, ...)
 }
 
-fig.coef <- function(model) {
+fig.coef <- function(model, title=NULL, ylab=NULL, legend=TRUE) {
   # Convert model to a tidy dataframe for plotting
   plot.data <- model %>%
     map_df(tidy, .id="model.name") %>%
@@ -60,10 +60,17 @@ fig.coef <- function(model) {
     geom_hline(yintercept=0, colour="#8C2318", alpha=0.6, size=1) + 
     geom_pointrange(aes(ymin=ymin, ymax=ymax), size=.5, 
                     position=position_dodge(width=.5)) + 
-    scale_colour_manual(values=c("#BEDB3A", "#441152"), name="",
-                        guide=guide_legend(reverse=TRUE)) +
-    labs(x=NULL, y="Coefficient") + 
+    labs(x=NULL, y=ylab, title=title) + 
     coord_flip() + 
     theme_ath()
+  
+  if (legend) {
+    coef.plot <- coef.plot + 
+      scale_colour_manual(values=c("#BEDB3A", "#441152"), name="",
+                          guide=guide_legend(reverse=TRUE))
+  } else {
+    coef.plot <- coef.plot + 
+      scale_colour_manual(values=c("#BEDB3A", "#441152"), guide=FALSE)
+  }
   coef.plot
 }
