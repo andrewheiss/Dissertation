@@ -627,6 +627,9 @@ uds <- read_csv(uds.tmp) %>%
   filter(year > 1989) %>%
   rename(uds_mean = mean, uds_sd = sd, uds_median = median,
          uds_pct025 = pct025, uds_pct975 = pct975) %>%
+  mutate(uds_ord = cut(uds_mean, breaks=c(-Inf, 0, Inf),
+                       labels=c("Autocracy", "Democracy"),
+                       ordered_result=TRUE)) %>%
   select(-country)
 
 
