@@ -13,8 +13,13 @@
 #' ---
 
 #' # Load libraries and data
+library(magrittr)
+library(dplyr)
+library(purrr)
+library(broom)
 library(ggplot2)
 library(Cairo)
+library(stargazer)
 
 full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                                "full_data.rds"))
@@ -77,49 +82,191 @@ set.seed(my.seed)
 
 #' # Models
 #' 
-#' ## Internal factors only
-model.int.simple <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled + e_polity2,
-                       data=full.data)
-summary(model.int.simple)
+#' ## Internal factors
+#' 
+#' ### Just internal political risk
+model.int.simple <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled,
+           data=.))
 
-model.int.full <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
-                       yrsoffc + years.since.comp + opp1vote +
-                       e_polity2,
-                     data=full.data)
-summary(model.int.full)
+#+ results='asis'
+stargazer(model.int.simple, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.simple),
+          omit="factor\\(year", 
+          add.lines=list(c("Year fixed effects",
+                           rep("No", 2))))
 
-model.int.all <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
-                      yrsoffc + years.since.comp + opp1vote +
-                      e_polity2 +
-                      physint + gdpcap.log + population.log +
-                      oda.log + countngo + globalization,
-                    data=full.data)
-summary(model.int.all)
+#' ### All internal variables
+model.int.full <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
+             yrsoffc + years.since.comp + opp1vote + as.factor(year.num),
+           data=.))
+
+#+ results='asis'
+stargazer(model.int.full, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.full),
+          omit="factor\\(year",
+          add.lines=list(c("Year fixed effects",
+                           rep("Yes", 2))))
+
+#' ### All internal variables + controls
+model.int.all <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
+             yrsoffc + years.since.comp + opp1vote +
+             physint + gdpcap.log + population.log +
+             oda.log + countngo + globalization + as.factor(year.num),
+           data=.))
+
+#+ results='asis'
+stargazer(model.int.all, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.all),
+          omit="factor\\(year", 
+          add.lines=list(c("Year fixed effects",
+                           rep("Yes", 2))))
 
 
-#' ## External factors only
-model.ext.simple.min <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + e_polity2,
-                           data=full.data)
-summary(model.ext.simple.min)
+#' ### All models (to LaTeX)
+all.models <- c(model.int.simple, model.int.full, model.int.all)
 
-model.ext.simple.med <- lm(cs_env_sum.lead ~ neighbor.pol.risk.median + e_polity2,
-                           data=full.data)
-summary(model.ext.simple.med)
+coef.labs <- c("Internal political risk (ICRG)", "Years executive in office", 
+               "Years since competitive election", "Opposition vote share",
+               "Physical integrity rights", "GDP per capita (log)", 
+               "Population (log)", "Foreign aid (log)", 
+               "Number of INGO members", "Globalization")
+extra.lines <- list(c("Year fixed effects",
+                      c(rep("No", 2), rep("Yes", 4))))
 
-model.ext.simple.mean <- lm(cs_env_sum.lead ~ neighbor.pol.risk.mean + e_polity2,
-                            data=full.data)
-summary(model.ext.simple.mean)
+capture.output({
+  stargazer(all.models, type="latex", 
+            out=file.path(PROJHOME, "Output", "tables", "1-internal-models-all.tex"),
+            covariate.labels=coef.labs,
+            dep.var.caption="Civil society regulatory environment (CSRE) in following year",
+            dep.var.labels.include=FALSE,
+            column.labels=names(all.models),
+            omit="factor\\(year", no.space=TRUE,
+            add.lines=extra.lines)
+}, file="/dev/null")
 
-model.ext.min.all <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + e_polity2 +
-                          gdpcap.log + population.log +
-                          oda.log + countngo + globalization,
-                        data=full.data)
-summary(model.ext.min.all)
+
+#' ## External factors
+#' 
+#' ### Just neighbors
+model.ext.neighbors <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
+             neighbor.coups.activity.bin,
+           data=.))
+
+#+ results='asis'
+stargazer(model.ext.neighbors, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.simple),
+          omit="factor\\(year", 
+          add.lines=list(c("Year fixed effects",
+                           rep("No", 2))))
+
+#' ### Neighbors and subregion
+model.ext.neighbors.subregion <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
+             icrg.pol.risk.subregional +
+             neighbor.coups.activity.bin + 
+             coups.activity.subregional,
+           data=.))
+
+#+ results='asis'
+stargazer(model.ext.neighbors.subregion, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.simple),
+          omit="factor\\(year", 
+          add.lines=list(c("Year fixed effects",
+                           rep("No", 2))))
+
+#' ### Neighbors and region
+model.ext.neighbors.region <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
+             icrg.pol.risk.regional +
+             neighbor.coups.activity.bin + 
+             coups.activity.regional,
+           data=.))
+
+#+ results='asis'
+stargazer(model.ext.neighbors.region, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.simple),
+          omit="factor\\(year", 
+          add.lines=list(c("Year fixed effects",
+                           rep("No", 2))))
 
 
-#' ## International reputation only
+#' ### Neighbors and subregion + controls
+model.ext.neighbors.subregion.ctrl <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
+             icrg.pol.risk.subregional +
+             neighbor.coups.activity.bin + 
+             coups.activity.subregional + 
+             gdpcap.log + population.log + oda.log + 
+             countngo + globalization + as.factor(year.num),
+           data=.))
 
-#' ## All three at once
+#+ results='asis'
+stargazer(model.ext.neighbors.subregion.ctrl, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.simple),
+          omit="factor\\(year", 
+          add.lines=list(c("Year fixed effects",
+                           rep("Yes", 2))))
+
+
+#' ### All models (to LaTeX)
+all.models <- c(model.ext.neighbors, model.ext.neighbors.region, 
+                model.ext.neighbors.subregion,
+                model.ext.neighbors.subregion.ctrl)
+
+coef.labs <- c("Lowest political risk in all neighboring countries", 
+               "Average political risk in subregion", 
+               "Average political risk in region",
+               "Coup activity in neighboring countries (binary)",
+               "Coup activity in subregion (binary)",
+               "Coup activity in region (binary)",
+               "GDP per capita (log)", 
+               "Population (log)", "Foreign aid (log)", 
+               "Number of INGO members", "Globalization")
+extra.lines <- list(c("Year fixed effects",
+                      c(rep("No", 6), rep("Yes", 2))))
+
+capture.output({
+  stargazer(all.models, type="latex", 
+            out=file.path(PROJHOME, "Output", "tables", "1-external-models-all.tex"),
+            covariate.labels=coef.labs,
+            dep.var.caption="Civil society regulatory environment (CSRE) in following year",
+            dep.var.labels.include=FALSE,
+            column.labels=names(all.models),
+            omit="factor\\(year", no.space=TRUE,
+            add.lines=extra.lines)
+}, file="/dev/null")
+
+
+#' ## International reputation
+
+
+
+#' ## All three at once?
 model.everything <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
                          yrsoffc + years.since.comp + opp1vote +
                          neighbor.pol.risk.min +
