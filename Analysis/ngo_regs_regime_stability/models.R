@@ -18,8 +18,11 @@ library(dplyr)
 library(purrr)
 library(broom)
 library(ggplot2)
+library(gridExtra)
 library(Cairo)
 library(stargazer)
+
+source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
 full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                                "full_data.rds"))
@@ -80,9 +83,9 @@ set.seed(my.seed)
 #' [vdem13]: https://www.v-dem.net/media/filer_public/47/2e/472eec11-830f-4578-9a09-d9f8d43cee3a/v-dem_working_paper_2015_13_edited.pdf
 
 
-#' # Models
+#' # Internal factors
 #' 
-#' ## Internal factors
+#' ## Actual models
 #' 
 #' ### Just internal political risk
 model.int.simple <- full.data %>%
@@ -156,8 +159,108 @@ capture.output({
             add.lines=extra.lines)
 }, file="/dev/null")
 
+#' ## Model plots
+#' 
+#' ### Coefficient plot
+plot.int <- arrangeGrob(fig.coef(model.int.simple, "Simple", legend=FALSE), 
+                        fig.coef(model.int.full, "Full", legend=FALSE), 
+                        fig.coef(model.int.all, "Full + controls", ylab="Coefficient"), 
+                        heights=c(1.5/10, 2.5/10, 6/10), ncol=1)
+grid::grid.draw(plot.int)
 
-#' ## External factors
+fig.save.cairo(plot.int, filename="1-coefs-int", 
+               width=6, height=6)
+
+
+#' ### CSRE across range of ICRG risk
+new.data.icrg <- model.int.all %>%
+  map_df("model", .id="regime.type") %>%
+  group_by(regime.type) %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, icrg.pol.risk.internal.scaled)) %>%
+  right_join(data_frame(icrg.pol.risk.internal.scaled = 
+                          seq(0, 100, by=0.1), index = 1),
+             by="index") %>% 
+  select(-index)
+
+# When mapping augment onto the new data, it makes predictions for both types
+# of regimes, which isn't necessary (i.e. no need to use the democracy model
+# on hypothetical data intended for the autocracy model), so only keep rows
+# where the model matches the hypothetical data
+plot.predict <- model.int.all %>% 
+  map_df(~ augment(., newdata=new.data.icrg), .id="regime.type.pred") %>%
+  filter(regime.type == regime.type.pred) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit),
+         regime.type = factor(regime.type, 
+                              levels=c("Democracy", "Autocracy"), 
+                              labels=c("Democracies    ", "Autocracies"),  
+                              ordered=TRUE))
+
+plot.icrg.int.pred <- ggplot(plot.predict, aes(x=icrg.pol.risk.internal.scaled, 
+                                               y=pred, colour=regime.type)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) + 
+  labs(x="Internal political risk (ICRG)", y="Predicted CSRE") + 
+  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
+  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  theme_ath()
+plot.icrg.int.pred
+
+fig.save.cairo(plot.icrg.int.pred, filename="1-icrg-int-pred", 
+               width=5, height=3)
+
+
+#' ### CSRE across years executive has been in office
+new.data.yrsoffc <- model.int.all %>%
+  map_df("model", .id="regime.type") %>%
+  group_by(regime.type) %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, icrg.pol.risk.internal.scaled, yrsoffc)) %>%
+  right_join(expand.grid(icrg.pol.risk.internal.scaled = seq(0, 100, by=0.1), 
+                         yrsoffc = c(2, 20),
+                         index = 1, stringsAsFactors=FALSE),
+             by="index") %>% 
+  select(-index)
+
+plot.predict <- model.int.all %>% 
+  map_df(~ augment(., newdata=new.data.yrsoffc), .id="regime.type.pred") %>%
+  filter(regime.type == regime.type.pred) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit),
+         regime.type = factor(regime.type, 
+                              levels=c("Democracy", "Autocracy"), 
+                              labels=c("Democracies    ", "Autocracies"), 
+                              ordered=TRUE),
+         yrsoffc.clean = factor(yrsoffc, labels=paste(unique(yrsoffc), 
+                                                      "years since election")))
+
+plot.icrg.yrs.int.pred <- ggplot(plot.predict, 
+                                 aes(x=icrg.pol.risk.internal.scaled, 
+                                     y=pred, colour=regime.type)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) + 
+  labs(x="Internal political risk (ICRG)", y="Predicted CSRE") + 
+  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
+  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  theme_ath() + facet_wrap(~ yrsoffc.clean)
+plot.icrg.yrs.int.pred
+
+fig.save.cairo(plot.icrg.yrs.int.pred, filename="1-icrg-yrs-int-pred", 
+               width=5, height=3)
+
+
+#' # External factors
+#' 
+#' ## Actual models
 #' 
 #' ### Just neighbors
 model.ext.neighbors <- full.data %>%
@@ -253,7 +356,7 @@ extra.lines <- list(c("Year fixed effects",
 capture.output({
   stargazer(all.models, type="latex", 
             out=file.path(PROJHOME, "Output", "tables", "1-external-models-all.tex"),
-            covariate.labels=coef.labs,
+            # covariate.labels=coef.labs,
             dep.var.caption="Civil society regulatory environment (CSRE) in following year",
             dep.var.labels.include=FALSE,
             column.labels=names(all.models),
@@ -261,28 +364,94 @@ capture.output({
             add.lines=extra.lines)
 }, file="/dev/null")
 
+#' ## Model plots
+#' 
+#' ### Coefficient plot
+plot.ext <- arrangeGrob(fig.coef(model.ext.neighbors, 
+                                 "Neighbors", legend=FALSE), 
+                        fig.coef(model.ext.neighbors.subregion, 
+                                 "Subregion", legend=FALSE), 
+                        fig.coef(model.ext.neighbors.subregion.ctrl, 
+                                 "Subregion + controls", ylab="Coefficient"), 
+                        heights=c(2/10, 2.5/10, 5.5/10), ncol=1)
+grid::grid.draw(plot.ext)
 
-#' ## International reputation
+fig.save.cairo(plot.ext, filename="1-coefs-ext", 
+               width=6, height=6)
 
 
+#' ### CSRE across neighbor stability and coups in region
+new.data.ext <- model.ext.neighbors.subregion.ctrl %>%
+  map_df("model", .id="regime.type") %>%
+  group_by(regime.type) %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         neighbor.coups.activity.bin = FALSE,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, neighbor.pol.risk.min,
+            coups.activity.subregional)) %>%
+  right_join(expand.grid(neighbor.pol.risk.min = seq(0, 100, by=0.1), 
+                         coups.activity.subregional = c(0, 2),
+                         index = 1),
+             by="index") %>% 
+  select(-index)
 
-#' ## All three at once?
-model.everything <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
-                         yrsoffc + years.since.comp + opp1vote +
-                         neighbor.pol.risk.min +
-                         e_polity2 +
-                         physint + gdpcap.log + population.log +
-                         oda.log + countngo + globalization,
-                       data=full.data)
-summary(model.everything)
+plot.predict <- model.ext.neighbors.subregion.ctrl %>% 
+  map_df(~ augment(., newdata=new.data.ext), .id="regime.type.pred") %>%
+  filter(regime.type == regime.type.pred) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit),
+         regime.type = factor(regime.type, 
+                              levels=c("Democracy", "Autocracy"), 
+                              labels=c("Democracies    ", "Autocracies"), 
+                              ordered=TRUE),
+         coup.in.region = factor(coups.activity.subregional, 
+                                 labels=c("No coup activity in subregion", 
+                                          "Moderate coup activity in subregion")))
+
+plot.neighbor.coup.pred <- ggplot(plot.predict, 
+                                 aes(x=neighbor.pol.risk.min, 
+                                     y=pred, colour=regime.type)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) + 
+  labs(x="Minimum political risk in neighboring countries (ICRG)", 
+       y="Predicted CSRE") + 
+  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
+  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  theme_ath() + facet_wrap(~ coup.in.region)
+plot.neighbor.coup.pred
+
+fig.save.cairo(plot.neighbor.coup.pred, filename="1-icrg-neighbor-coup-ext-pred", 
+               width=5, height=3)
+
+#' # Reputational factors
+#' 
+#' ## Actual models
+
+# Stuff here
 
 
-#' # Bayesian tinkering
+#' # All three factors at once?
+# model.everything <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
+#                          yrsoffc + years.since.comp + opp1vote +
+#                          neighbor.pol.risk.min +
+#                          e_polity2 +
+#                          physint + gdpcap.log + population.log +
+#                          oda.log + countngo + globalization,
+#                        data=full.data)
+# summary(model.everything)
+
+
+#' # Bayesian tinkering?
 #' 
 #' See:
 #' 
 #' - https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html
 #' - https://cran.r-project.org/web/packages/rstanarm/vignettes/continuous.html
+#' 
+#' Good, solid, interpretable results, but craaaaazy slow
 
 # library(rstanarm)
 # options(mc.cores = parallel::detectCores())  # Use all possible cores
