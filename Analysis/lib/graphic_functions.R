@@ -1,28 +1,12 @@
 library(dplyr)
 library(tidyr)
 library(stringr)
+library(readr)
 library(ggplot2)
 
-coef.names <- data_frame(term = c("icrg.pol.risk.internal.scaled", 
-                                  "yrsoffc", 
-                                  "years.since.comp",
-                                  "opp1vote", 
-                                  "physint",
-                                  "gdpcap.log",
-                                  "population.log",
-                                  "oda.log",
-                                  "countngo",
-                                  "globalization"),
-                         clean.name = c("Internal political risk (ICRG)",
-                                        "Years executive in office", 
-                                        "Years since competitive election",
-                                        "Opposition vote share",
-                                        "Physical integrity rights", 
-                                        "GDP per capita (log)", 
-                                        "Population (log)", 
-                                        "Foreign aid (log)", 
-                                        "Number of INGO members", 
-                                        "Globalization"))
+coef.names <- read_csv(file.path(PROJHOME, "Analysis", 
+                                 "ngo_regs_regime_stability", 
+                                 "coef_names.csv"))
 
 theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
   update_geom_defaults("bar", list(fill = "grey30"))
