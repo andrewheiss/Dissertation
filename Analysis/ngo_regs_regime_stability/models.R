@@ -24,6 +24,8 @@ library(Cairo)
 library(stargazer)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
+col.auth <- "#441152"
+col.dem <- "#BEDB3A"
 
 full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                                "full_data.rds"))
@@ -207,8 +209,8 @@ plot.icrg.int.pred <- ggplot(plot.predict, aes(x=icrg.pol.risk.internal.scaled,
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x="Internal political risk (ICRG)", y="Predicted CSRE") + 
-  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
-  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
+  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
   theme_ath()
 plot.icrg.int.pred
 
@@ -250,8 +252,8 @@ plot.icrg.yrs.int.pred <- ggplot(plot.predict,
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x="Internal political risk (ICRG)", y="Predicted CSRE") + 
-  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
-  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
+  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
   theme_ath() + facet_wrap(~ yrsoffc.clean)
 plot.icrg.yrs.int.pred
 
@@ -419,8 +421,8 @@ plot.neighbor.coup.pred <- ggplot(plot.predict,
   geom_line(size=1.5) + 
   labs(x="Minimum political risk in neighboring countries (ICRG)", 
        y="Predicted CSRE") + 
-  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
-  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
+  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
   theme_ath() + facet_wrap(~ coup.in.region)
 plot.neighbor.coup.pred
 
@@ -472,6 +474,8 @@ model.shame.full.ctrl <- full.data %>%
   split(.$polity_ord2) %>%
   map(~ lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
              icews.pct.shame + 
+             icews.conflict.severity.abs.ingos +
+             icews.pct.shame.ingos +
              icrg.pol.risk.regional +
              gdpcap.log + population.log +
              oda.log + countngo + globalization + as.factor(year.num),
@@ -558,8 +562,8 @@ plot.shame.severity.pred <- ggplot(plot.predict,
   geom_line(size=1.5) + 
   labs(x="Average severity of conflictual events", 
        y="Predicted CSRE") + 
-  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
-  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
+  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
   theme_ath() 
 plot.shame.severity.pred
 
@@ -574,7 +578,7 @@ new.data.shame <- model.shame.full.ctrl %>%
   mutate(year.num = 2005,
          index = 1) %>%
   select(-c(cs_env_sum.lead, icews.pct.shame)) %>%
-  right_join(data_frame(icews.pct.shame = seq(0, 0.75, by=0.05), 
+  right_join(data_frame(icews.pct.shame = seq(0, 0.6, by=0.05), 
                         index = 1),
              by="index") %>% 
   select(-index)
@@ -598,8 +602,8 @@ plot.shame.pct.pred <- ggplot(plot.predict,
   geom_line(size=1.5) + 
   labs(x="Percent of all events that are conflictual", 
        y="Predicted CSRE") + 
-  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
-  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
+  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
   scale_x_continuous(labels=percent) +
   theme_ath() 
 plot.shame.pct.pred
