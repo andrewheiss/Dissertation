@@ -356,7 +356,7 @@ extra.lines <- list(c("Year fixed effects",
 capture.output({
   stargazer(all.models, type="latex", 
             out=file.path(PROJHOME, "Output", "tables", "1-external-models-all.tex"),
-            # covariate.labels=coef.labs,
+            covariate.labels=coef.labs,
             dep.var.caption="Civil society regulatory environment (CSRE) in following year",
             dep.var.labels.include=FALSE,
             column.labels=names(all.models),
