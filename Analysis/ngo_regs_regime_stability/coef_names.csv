@@ -16,3 +16,5 @@ neighbor.coups.activity.bin,Coup activity in neighboring countries (binary)
 neighbor.coups.activity.binTRUE,Coup activity in neighboring countries (binary)
 coups.activity.subregional,Coup activity in subregion (binary)
 coups.activity.regional,Coup activity in region (binary)
+icews.conflict.severity.abs,Severity of conflictual events
+icews.pct.shame,Percent of all events that are conflictual

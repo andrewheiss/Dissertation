@@ -18,6 +18,7 @@ library(dplyr)
 library(purrr)
 library(broom)
 library(ggplot2)
+library(scales)
 library(gridExtra)
 library(Cairo)
 library(stargazer)
@@ -426,22 +427,185 @@ plot.neighbor.coup.pred
 fig.save.cairo(plot.neighbor.coup.pred, filename="1-icrg-neighbor-coup-ext-pred", 
                width=5, height=3)
 
-#' # Reputational factors
+
+#' # Shaming and diplomatic conflict factors
 #' 
 #' ## Actual models
+#' 
+#' ### Just severity and shame percent
+model.shame.simple <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
+             icews.pct.shame + 
+             as.factor(year.num),
+           data=.))
 
-# Stuff here
+#+ results='asis'
+stargazer(model.shame.simple, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.all),
+          omit="factor\\(year", 
+          add.lines=list(c("Year fixed effects",
+                           rep("Yes", 2))))
 
+#' ### Severity and shame and regional instability
+model.shame.regional <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
+             icews.pct.shame + 
+             icrg.pol.risk.regional +
+             as.factor(year.num),
+           data=.))
 
-#' # All three factors at once?
-# model.everything <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
-#                          yrsoffc + years.since.comp + opp1vote +
-#                          neighbor.pol.risk.min +
-#                          e_polity2 +
-#                          physint + gdpcap.log + population.log +
-#                          oda.log + countngo + globalization,
-#                        data=full.data)
-# summary(model.everything)
+#+ results='asis'
+stargazer(model.shame.regional, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.all),
+          omit="factor\\(year", 
+          add.lines=list(c("Year fixed effects",
+                           rep("Yes", 2))))
+
+#' ### All shaming variables + controls
+model.shame.full.ctrl <- full.data %>%
+  split(.$polity_ord2) %>%
+  map(~ lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
+             icews.pct.shame + 
+             icrg.pol.risk.regional +
+             gdpcap.log + population.log +
+             oda.log + countngo + globalization + as.factor(year.num),
+           data=.))
+
+#+ results='asis'
+stargazer(model.shame.full.ctrl, type="html", 
+          dep.var.caption="CSRE",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          column.labels=names(model.int.all),
+          omit="factor\\(year", 
+          add.lines=list(c("Year fixed effects",
+                           rep("Yes", 2))))
+
+#' ### All models (to LaTeX)
+all.models <- c(model.shame.simple, model.shame.regional, 
+                model.shame.full.ctrl)
+
+coef.labs <- c("Severity of conflictual events",
+               "Percent of all events that are conflictual", 
+               "Average political risk in region",
+               "GDP per capita (log)", 
+               "Population (log)", "Foreign aid (log)", 
+               "Number of INGO members", "Globalization")
+extra.lines <- list(c("Year fixed effects",
+                      c(rep("Yes", 6))))
+
+capture.output({
+  stargazer(all.models, type="latex", 
+            out=file.path(PROJHOME, "Output", "tables", "1-shaming-models-all.tex"),
+            covariate.labels=coef.labs,
+            dep.var.caption="Civil society regulatory environment (CSRE) in following year",
+            dep.var.labels.include=FALSE,
+            column.labels=names(all.models),
+            omit="factor\\(year", no.space=TRUE,
+            add.lines=extra.lines)
+}, file="/dev/null")
+
+#' ## Model plots
+#' 
+#' ### Coefficient plot
+plot.shame <- arrangeGrob(fig.coef(model.shame.simple, 
+                                   "Severity and conflict", legend=FALSE), 
+                          fig.coef(model.shame.regional, 
+                                   "Severity, conflict, and regional instability", 
+                                   legend=FALSE), 
+                          fig.coef(model.shame.full.ctrl, 
+                                   "All controls", ylab="Coefficient"), 
+                          heights=c(2/10, 2.5/10, 5.5/10), ncol=1)
+grid::grid.draw(plot.shame)
+
+fig.save.cairo(plot.shame, filename="1-coefs-shame", 
+               width=6, height=6)
+
+#' ### CSRE across severity of events
+new.data.severity <- model.shame.full.ctrl %>%
+  map_df("model", .id="regime.type") %>%
+  group_by(regime.type) %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, icews.conflict.severity.abs)) %>%
+  right_join(data_frame(icews.conflict.severity.abs = seq(0, 10, by=0.1), 
+                        index = 1),
+             by="index") %>% 
+  select(-index)
+
+plot.predict <- model.shame.full.ctrl %>% 
+  map_df(~ augment(., newdata=new.data.severity), .id="regime.type.pred") %>%
+  filter(regime.type == regime.type.pred) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit),
+         regime.type = factor(regime.type, 
+                              levels=c("Democracy", "Autocracy"), 
+                              labels=c("Democracies    ", "Autocracies"), 
+                              ordered=TRUE))
+
+plot.shame.severity.pred <- ggplot(plot.predict, 
+                                   aes(x=icews.conflict.severity.abs, 
+                                       y=pred, colour=regime.type)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) + 
+  labs(x="Average severity of conflictual events", 
+       y="Predicted CSRE") + 
+  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
+  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  theme_ath() 
+plot.shame.severity.pred
+
+fig.save.cairo(plot.shame.severity.pred, filename="1-shame-severity-pred", 
+               width=5, height=3)
+
+#' ### CSRE across percent of conflictual events
+new.data.shame <- model.shame.full.ctrl %>%
+  map_df("model", .id="regime.type") %>%
+  group_by(regime.type) %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, icews.pct.shame)) %>%
+  right_join(data_frame(icews.pct.shame = seq(0, 0.75, by=0.05), 
+                        index = 1),
+             by="index") %>% 
+  select(-index)
+
+plot.predict <- model.shame.full.ctrl %>% 
+  map_df(~ augment(., newdata=new.data.shame), .id="regime.type.pred") %>%
+  filter(regime.type == regime.type.pred) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit),
+         regime.type = factor(regime.type, 
+                              levels=c("Democracy", "Autocracy"), 
+                              labels=c("Democracies    ", "Autocracies"), 
+                              ordered=TRUE))
+
+plot.shame.pct.pred <- ggplot(plot.predict, 
+                              aes(x=icews.pct.shame, 
+                                  y=pred, colour=regime.type)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) + 
+  labs(x="Percent of all events that are conflictual", 
+       y="Predicted CSRE") + 
+  scale_colour_manual(values=c("#BEDB3A", "#441152"), name=NULL) +
+  scale_fill_manual(values=c("#BEDB3A", "#441152"), name=NULL, guide=FALSE) +
+  scale_x_continuous(labels=percent) +
+  theme_ath() 
+plot.shame.pct.pred
+
+fig.save.cairo(plot.shame.pct.pred, filename="1-shame-pct-pred", 
+               width=5, height=3)
 
 
 #' # Bayesian tinkering?
