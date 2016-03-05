@@ -633,6 +633,12 @@ uds <- read_csv(uds.tmp) %>%
   select(-country)
 
 
+# ICEWS aggregated conflictual/cooperative event data
+# Preprocessed with ./Data/R/icews.R
+icews <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                           "icews_aggregated.Rds"))
+
+
 # ------------------
 # Merge everything!
 # ------------------
@@ -649,6 +655,7 @@ full.data <- icrg.all.with.aggregates %>%
   left_join(neighbor.stability, by=c("cowcode", "year.num")) %>%
   left_join(uds, by=c("cowcode", "year.num" = "year")) %>%
   left_join(coups.final, by=c("cowcode", "year.num" = "year")) %>%
+  left_join(icews, by=c("year.num" = "event.year", "cowcode")) %>%
   filter(year.num > 1990)
 
 # Save all cleaned data files

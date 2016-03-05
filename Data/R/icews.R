@@ -5,6 +5,7 @@ library(readr)
 library(lubridate)
 library(stringr)
 library(ggplot2)
+library(countrycode)
 
 
 #-----------------------
@@ -31,14 +32,14 @@ all.events <- list.files(clean.files.dir) %>%
   bind_rows
 
 # Check that there aren't any gaps in coverage by plotting daily event counts
-plot.data <- all.events %>%
-  group_by(`Event Date`) %>%
-  summarize(Count = n())
-
-ggplot(plot.data, aes(x=`Event Date`, y=Count)) + 
-  geom_bar(stat="identity") + 
-  labs(title="All ICEWS events") + 
-  theme_light(10)
+# plot.data <- all.events %>%
+#   group_by(`Event Date`) %>%
+#   summarize(Count = n())
+# 
+# ggplot(plot.data, aes(x=`Event Date`, y=Count)) + 
+#   geom_bar(stat="identity") + 
+#   labs(title="All ICEWS events") + 
+#   theme_light(10)
 
 
 # Load CAMEO QuadClass categories
@@ -79,11 +80,22 @@ events.aggregated <- events.filtered %>%
   summarise(num = n(), severity = mean(Intensity)) %>%
   ungroup()
 
-asdf <- events.aggregated %>%
+events.conflict.coop <- events.aggregated %>%
   gather(variable, value, 
          -c(`Target Country`, event.year, cameo.category.agg)) %>%
   unite(temp, cameo.category.agg, variable) %>%
   spread(temp, value) %>%
-  mutate(net = Cooperation_num - Conflict_num)
+  mutate(icews.num.events = Cooperation_num + Conflict_num,
+         icews.net.num = Cooperation_num - Conflict_num,
+         icews.pct.shame = Conflict_num / (icews.num.events),
+         icews.net.severity = Cooperation_severity - Conflict_severity,
+         icews.conflict.severity.abs = abs(Conflict_severity),
+         cowcode = countrycode(`Target Country`, "country.name", "cown"),
+         cowcode = ifelse(`Target Country` == "Serbia", 345, cowcode),
+         cowcode = ifelse(`Target Country` == "Hong Kong", 715, cowcode)) %>%
+  filter(icews.num.events > 50) %>% 
+  select(-`Target Country`)
 
-
+saveRDS(events.conflict.coop, 
+        file=file.path(PROJHOME, "Data", "data_processed",
+                       "icews_aggregated.Rds"))
