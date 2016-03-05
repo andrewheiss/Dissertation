@@ -16,6 +16,7 @@
 library(magrittr)
 library(dplyr)
 library(tidyr)
+library(purrr)
 library(broom)
 library(ggplot2)
 library(gridExtra)
@@ -26,6 +27,8 @@ source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                                "full_data.rds"))
 
+my.seed <- 1234
+set.seed(my.seed)
 
 #' # General data summary
 #' 
@@ -243,4 +246,95 @@ plot.auth.vars <- arrangeGrob(plot.yrs.offc, plot.yrs.since.comp,
 grid::grid.draw(plot.auth.vars)
 
 fig.save.cairo(plot.auth.vars, filename="1-auth-vars", 
+               width=6, height=2)
+
+
+#' # Neighboring and regional ICRG risk
+#' 
+#' Example of Kenya's neighborhood in 2012
+kenya.neighbors <- full.data %>%
+  filter(year.num == 2012, cowcode == 501) %>%
+  mutate(neighbors.cow = strsplit(neighbors.cow, ",")) %>%
+  select(neighbors.cow) %>% unlist %>% map_dbl(as.numeric)
+
+full.data %>%
+  filter(year.num == 2012, cowcode %in% kenya.neighbors) %>%
+  select(Country, icrg.pol.risk.internal.scaled)
+
+
+#' # Visualize neighbor and subregional instability
+plot.data <- full.data %>%
+  select(cs_env_sum, neighbor.pol.risk.min, icrg.pol.risk.subregional)
+
+#' Plot the correlations
+plot.neighbor.risk <- ggplot(plot.data, aes(x=neighbor.pol.risk.min, 
+                                            y=cs_env_sum)) + 
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
+  labs(x="Minimum political risk in neighboring country", 
+       y="Civil society regulatory environment\n(CSRE)") +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  theme_ath()
+
+plot.subregion.risk <- ggplot(plot.data, aes(x=icrg.pol.risk.subregional, 
+                                             y=cs_env_sum)) + 
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
+  labs(x="Mean political risk in subregion", 
+       y=NULL) +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  theme_ath()
+
+plot.ext.vars <- arrangeGrob(plot.neighbor.risk, plot.subregion.risk, nrow=1)
+grid::grid.draw(plot.ext.vars)
+
+fig.save.cairo(plot.ext.vars, filename="1-ext-risk-vars", 
+               width=6, height=2)
+
+#' The two external risk variables are fairly correlated though
+cor(plot.data$icrg.pol.risk.subregional, 
+    plot.data$neighbor.pol.risk.min, use="complete.obs")
+
+plot.risk.cor <- ggplot(plot.data, aes(x=icrg.pol.risk.subregional, 
+                                       y=neighbor.pol.risk.min)) + 
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
+  labs(x="Mean political risk in subregion", 
+       y="Minimum political risk in neighboring country") +
+  theme_ath()
+plot.risk.cor
+
+#' # Visualize coups
+plot.data <- full.data %>%
+  select(cs_env_sum, neighbor.coups.activity.bin, coups.activity.subregional) %>%
+  na.omit %>%
+  mutate(neighbor.coups.activity.bin = factor(neighbor.coups.activity.bin, 
+                                              labels=c("No coup activity",
+                                                       "Coup activity")),
+         coups.activity.subregional = factor(coups.activity.subregional))
+
+plot.coups.neighbor <- ggplot(plot.data, aes(x=neighbor.coups.activity.bin, 
+                                             y=cs_env_sum)) + 
+  geom_violin() +
+  geom_point(size=0.15, alpha=0.15, position="jitter") +
+  geom_point(stat="summary", fun.y="mean", size=2) +
+  labs(x="Coup activity in neighboring countries", 
+       y="Civil society regulatory environment\n(CSRE)") +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  theme_ath()
+
+plot.coups.subregion <- ggplot(plot.data, aes(x=coups.activity.subregional, 
+                                              y=cs_env_sum)) + 
+  geom_violin() +
+  geom_point(size=0.15, alpha=0.15, position="jitter") +
+  geom_point(stat="summary", fun.y="mean", size=2) +
+  labs(x="Coup attemps in subregion", 
+       y=NULL) +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  theme_ath()
+
+plot.coup.vars <- arrangeGrob(plot.coups.neighbor, plot.coups.subregion, nrow=1)
+grid::grid.draw(plot.coup.vars)
+
+fig.save.cairo(plot.coup.vars, filename="1-ext-coup-vars", 
                width=6, height=2)
