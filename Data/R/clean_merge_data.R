@@ -638,6 +638,9 @@ uds <- read_csv(uds.tmp) %>%
 icews <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                            "icews_aggregated.Rds"))
 
+icews.ingos <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                                 "icews_aggregated_ingos.Rds"))
+
 
 # ------------------
 # Merge everything!
@@ -656,6 +659,7 @@ full.data <- icrg.all.with.aggregates %>%
   left_join(uds, by=c("cowcode", "year.num" = "year")) %>%
   left_join(coups.final, by=c("cowcode", "year.num" = "year")) %>%
   left_join(icews, by=c("year.num" = "event.year", "cowcode")) %>%
+  left_join(icews.ingos, by=c("year.num" = "event.year", "cowcode")) %>%
   filter(year.num > 1990)
 
 # Save all cleaned data files

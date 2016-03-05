@@ -72,7 +72,6 @@ events.filtered <- all.events %>%
   # Other miscellaneous variables
   mutate(event.year = year(`Event Date`))
 
-
 events.aggregated <- events.filtered %>%
   filter(cameo.category != "Neutral") %>%
   group_by(`Target Country`, event.year, cameo.category.agg) %>%
@@ -84,7 +83,7 @@ events.conflict.coop <- events.aggregated %>%
   gather(variable, value, 
          -c(`Target Country`, event.year, cameo.category.agg)) %>%
   unite(temp, cameo.category.agg, variable) %>%
-  spread(temp, value) %>%
+  spread(temp, value, fill=0) %>%
   mutate(icews.num.events = Cooperation_num + Conflict_num,
          icews.net.num = Cooperation_num - Conflict_num,
          icews.pct.shame = Conflict_num / (icews.num.events),
@@ -96,6 +95,50 @@ events.conflict.coop <- events.aggregated %>%
   filter(icews.num.events > 50) %>% 
   select(-`Target Country`)
 
+# INGO conflictual/cooperative events
+events.filtered.ingos <- all.events %>%
+  # Only interstate events
+  filter(`Source Country` != `Target Country`) %>%
+  # Only INGOs targeting state actors
+  filter(str_detect(`Source Sectors`, "Nongovernmental Organization \\(International\\)"),
+         str_detect(`Target Sectors`, "Government|Military")) %>%
+  # Categorize CAMEO roots
+  mutate(cameo.root = as.integer(str_sub(`CAMEO Code`, 1, 2))) %>%
+  left_join(cameo.categories, by="cameo.root") %>%
+  # Other miscellaneous variables
+  mutate(event.year = year(`Event Date`))
+
+events.aggregated.ingos <- events.filtered.ingos %>%
+  filter(cameo.category != "Neutral") %>%
+  group_by(`Target Country`, event.year, cameo.category.agg) %>%
+  summarise(num = n(), severity = mean(Intensity)) %>%
+  ungroup()
+
+events.conflict.coop.ingos <- events.aggregated.ingos %>%
+  gather(variable, value, 
+         -c(`Target Country`, event.year, cameo.category.agg)) %>%
+  unite(temp, cameo.category.agg, variable) %>%
+  spread(temp, value, fill=0) %>%
+  mutate(icews.num.events.ingos = Cooperation_num + Conflict_num,
+         icews.net.num.ingos = Cooperation_num - Conflict_num,
+         icews.pct.shame.ingos = Conflict_num / (icews.num.events.ingos),
+         icews.net.severity.ingos = Cooperation_severity - Conflict_severity,
+         icews.conflict.severity.abs.ingos = abs(Conflict_severity),
+         cowcode = countrycode(`Target Country`, "country.name", "cown"),
+         cowcode = ifelse(`Target Country` == "Serbia", 345, cowcode),
+         cowcode = ifelse(`Target Country` == "Hong Kong", 715, cowcode)) %>%
+  rename(Cooperation_num.ingos = Cooperation_num, 
+         Cooperation_severity.ingos = Cooperation_severity,
+         Conflict_num.ingos = Conflict_num,
+         Conflict_severity.ingos = Conflict_severity) %>%
+  select(-`Target Country`)
+
+
+# Save aggregated data
 saveRDS(events.conflict.coop, 
         file=file.path(PROJHOME, "Data", "data_processed",
                        "icews_aggregated.Rds"))
+
+saveRDS(events.conflict.coop.ingos, 
+        file=file.path(PROJHOME, "Data", "data_processed",
+                       "icews_aggregated_ingos.Rds"))
