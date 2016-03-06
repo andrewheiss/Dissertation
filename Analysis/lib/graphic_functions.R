@@ -8,6 +8,9 @@ coef.names <- read_csv(file.path(PROJHOME, "Analysis",
                                  "ngo_regs_regime_stability", 
                                  "coef_names.csv"))
 
+col.auth <- "#441152"
+col.dem <- "#BEDB3A"
+
 theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
   update_geom_defaults("bar", list(fill = "grey30"))
   update_geom_defaults("line", list(colour = "grey30"))

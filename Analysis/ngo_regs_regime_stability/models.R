@@ -24,8 +24,6 @@ library(Cairo)
 library(stargazer)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
-col.auth <- "#441152"
-col.dem <- "#BEDB3A"
 
 full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                                "full_data.rds"))
