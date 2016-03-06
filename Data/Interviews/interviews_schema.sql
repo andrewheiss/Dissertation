@@ -8,6 +8,11 @@ PRAGMA foreign_keys = ON;
 #
 # See other options at http://ch-werner.de/sqliteodbc/html/index.html
 
+# Additionally, LibreOffice will complain about parameter errors when using
+# subforms linked to tables that use foreign keys. To fix these errors, go to
+# Edit > Database > Advanced Settings… and make sure "Replace named parameters
+# with ?" is checked
+
 CREATE TABLE IF NOT EXISTS "organizations" (
   "id_org" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   "org_inserted" date NOT NULL DEFAULT(CURRENT_TIMESTAMP),
