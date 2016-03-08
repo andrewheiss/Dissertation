@@ -3,7 +3,7 @@ library(tidyr)
 library(readr)
 library(lubridate)
 library(ggplot2)
-library(gridExtra)
+library(gtable)
 library(ggrepel)
 library(scales)
 library(Cairo)
@@ -96,7 +96,7 @@ plot.misc <- ggplot() +
 plot.laws <- ggplot(laws, aes(x=Date, y=0)) + 
   geom_point(size=3) +
   geom_text_repel(data=laws, aes(x=Date, y=0, label=law), 
-            size=3, point.padding=unit(0.5, "lines"),
+            size=2.5, point.padding=unit(0.5, "lines"),
             box.padding=unit(0.75, "lines"),
             family="Source Sans Pro Semibold") + 
   coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31"))) +
@@ -106,12 +106,19 @@ plot.laws <- ggplot(laws, aes(x=Date, y=0)) +
         panel.grid.minor.y=element_blank(),
         axis.text.y=element_blank())
 
-plot.timeline <- arrangeGrob(rbind(ggplotGrob(plot.laws),
-                                   ggplotGrob(plot.csre),
-                                   ggplotGrob(plot.icrg.internal),
-                                   ggplotGrob(plot.icrg.external),
-                                   ggplotGrob(plot.shaming),
-                                   ggplotGrob(plot.misc)))
+# Combine all the plots (wihout gridExtra! Yay gtable!)
+plot.timeline <- rbind(ggplotGrob(plot.laws),
+                       ggplotGrob(plot.csre),
+                       ggplotGrob(plot.icrg.internal),
+                       ggplotGrob(plot.icrg.external),
+                       ggplotGrob(plot.shaming),
+                       ggplotGrob(plot.misc))
+
+# Adjust panel sizes
+# via http://stackoverflow.com/a/24333504/120898
+panels <- plot.timeline$layout$t[grep("panel", plot.timeline$layout$name)]
+plot.timeline$heights[panels] <- lapply(c(0.5, 1, 1, 1, 1, 0.25), unit, "null")
+
 grid::grid.draw(plot.timeline)
 
 fig.save.cairo(plot.timeline, filename="1-russia-timeline", 
