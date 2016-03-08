@@ -283,7 +283,7 @@ stargazer(model.ext.neighbors, type="html",
 model.ext.neighbors.subregion <- full.data %>%
   split(.$polity_ord2) %>%
   map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-             icrg.pol.risk.subregional +
+             icrg.pol.risk.subregional.loo +
              neighbor.coups.activity.bin + 
              coups.activity.subregional,
            data=.))
@@ -301,7 +301,7 @@ stargazer(model.ext.neighbors.subregion, type="html",
 model.ext.neighbors.region <- full.data %>%
   split(.$polity_ord2) %>%
   map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-             icrg.pol.risk.regional +
+             icrg.pol.risk.regional.loo +
              neighbor.coups.activity.bin + 
              coups.activity.regional,
            data=.))
@@ -320,7 +320,7 @@ stargazer(model.ext.neighbors.region, type="html",
 model.ext.neighbors.subregion.ctrl <- full.data %>%
   split(.$polity_ord2) %>%
   map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-             icrg.pol.risk.subregional +
+             icrg.pol.risk.subregional.loo +
              neighbor.coups.activity.bin + 
              coups.activity.subregional + 
              gdpcap.log + population.log + oda.log + 
@@ -389,9 +389,9 @@ new.data.ext <- model.ext.neighbors.subregion.ctrl %>%
   mutate(year.num = 2005,
          neighbor.coups.activity.bin = FALSE,
          index = 1) %>%
-  select(-c(cs_env_sum.lead, neighbor.pol.risk.min,
+  select(-c(cs_env_sum.lead, icrg.pol.risk.subregional.loo,
             coups.activity.subregional)) %>%
-  right_join(expand.grid(neighbor.pol.risk.min = seq(0, 100, by=0.1), 
+  right_join(expand.grid(icrg.pol.risk.subregional.loo = seq(0, 100, by=0.1), 
                          coups.activity.subregional = c(0, 2),
                          index = 1),
              by="index") %>% 
@@ -411,20 +411,20 @@ plot.predict <- model.ext.neighbors.subregion.ctrl %>%
                                  labels=c("No coup activity in subregion", 
                                           "Moderate coup activity in subregion")))
 
-plot.neighbor.coup.pred <- ggplot(plot.predict, 
-                                 aes(x=neighbor.pol.risk.min, 
-                                     y=pred, colour=regime.type)) + 
+plot.subregion.coup.pred <- ggplot(plot.predict, 
+                                   aes(x=icrg.pol.risk.subregional.loo, 
+                                       y=pred, colour=regime.type)) + 
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
-  labs(x="Minimum political risk in neighboring countries (ICRG)", 
+  labs(x="Average political risk in subregion (ICRG)", 
        y="Predicted CSRE") + 
   scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
   scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
   theme_ath() + facet_wrap(~ coup.in.region)
-plot.neighbor.coup.pred
+plot.subregion.coup.pred
 
-fig.save.cairo(plot.neighbor.coup.pred, filename="1-icrg-neighbor-coup-ext-pred", 
+fig.save.cairo(plot.subregion.coup.pred, filename="1-icrg-subregion-coup-ext-pred", 
                width=5, height=3)
 
 
@@ -454,7 +454,7 @@ model.shame.regional <- full.data %>%
   split(.$polity_ord2) %>%
   map(~ lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
              icews.pct.shame + 
-             icrg.pol.risk.regional +
+             icrg.pol.risk.regional.loo +
              as.factor(year.num),
            data=.))
 
@@ -474,7 +474,7 @@ model.shame.full.ctrl <- full.data %>%
              icews.pct.shame + 
              icews.conflict.severity.abs.ingos +
              icews.pct.shame.ingos +
-             icrg.pol.risk.regional +
+             icrg.pol.risk.regional.loo +
              gdpcap.log + population.log +
              oda.log + countngo + globalization + as.factor(year.num),
            data=.))

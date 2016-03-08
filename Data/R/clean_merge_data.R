@@ -207,6 +207,7 @@ icrg.all <- bind_rows(all.dfs) %>%
                                                 "Low", "Very Low"),
                                        ordered_result=TRUE, include.lowest=TRUE))
 
+
 icrg.global <- icrg.all %>%
   group_by(year.num) %>%
   summarise(icrg.pol.risk.global = mean(icrg.pol.risk, na.rm=TRUE))
@@ -219,7 +220,23 @@ icrg.subregional <- icrg.all %>%
   group_by(year.num, subregion) %>%
   summarise(icrg.pol.risk.subregional = mean(icrg.pol.risk, na.rm=TRUE))
 
+# Get the group mean excluding the value of the current row by recalculating
+# the mean: sum all the values in the group, subtract the current value, and
+# divide by the group size minus 1
+# Via http://stackoverflow.com/q/35858876/120898
+# (loo = leave one out)
+icrg.loo <- icrg.all %>%
+  group_by(year.num, region) %>%
+  mutate(icrg.pol.risk.regional.loo = (sum(icrg.pol.risk, na.rm=TRUE) -
+                                         icrg.pol.risk) / (n() - 1)) %>%
+  group_by(year.num, subregion) %>%
+  mutate(icrg.pol.risk.subregional.loo = (sum(icrg.pol.risk, na.rm=TRUE) -
+                                            icrg.pol.risk) / (n() - 1)) %>%
+  ungroup() %>%
+  select(year.num, cowcode, contains("loo"))
+
 icrg.all.with.aggregates <- icrg.all %>%
+  left_join(icrg.loo, by=c("year.num", "cowcode")) %>%
   left_join(icrg.global, by="year.num") %>%
   left_join(icrg.regional, by=c("year.num", "region")) %>%
   left_join(icrg.subregional, by=c("year.num", "subregion"))

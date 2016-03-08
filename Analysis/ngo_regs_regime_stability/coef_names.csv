@@ -10,8 +10,8 @@ oda.log,Foreign aid (log)
 countngo,Number of INGO members
 globalization,Globalization
 neighbor.pol.risk.min,Lowest political risk in all neighboring countries
-icrg.pol.risk.subregional,Average political risk in subregion
-icrg.pol.risk.regional,Average political risk in region
+icrg.pol.risk.subregional.loo,Average political risk in subregion
+icrg.pol.risk.regional.loo,Average political risk in region
 neighbor.coups.activity.bin,Coup activity in neighboring countries (binary)
 neighbor.coups.activity.binTRUE,Coup activity in neighboring countries (binary)
 coups.activity.subregional,Coup activity in subregion (binary)
