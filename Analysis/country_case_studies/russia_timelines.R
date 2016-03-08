@@ -3,7 +3,15 @@ library(tidyr)
 library(readr)
 library(lubridate)
 library(ggplot2)
+library(gridExtra)
+library(ggrepel)
+library(scales)
 library(Cairo)
+
+source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
+
+my.seed <- 1234
+set.seed(my.seed)
 
 
 # Load data
@@ -13,13 +21,14 @@ full.data <- readRDS(file.path(PROJHOME, "Data",
                                "data_processed", "full_data.rds"))
 
 icrg.russia <- icrg.monthly %>%
-  filter(cowcode == 365, !is.na(icrg.stability))
+  filter(cowcode == 365, !is.na(icrg.pol.risk.internal.scaled))
 
-cs.russia <- full.data %>%
+russia.data <- full.data %>%
   filter(cowcode == 365)
 
 laws <- read_csv(file.path(PROJHOME, "Data", "data_base", 
                            "russia_laws.csv")) %>%
+  filter(include_plot == 1) %>%
   mutate(Date = ymd(Date)) %>%
   arrange(Date)
 
@@ -36,107 +45,74 @@ presidents <- read_csv(file.path(PROJHOME, "Data", "data_base",
   mutate(president = factor(president, levels=unique(president), ordered=TRUE))
 
 
-# Plot timelines
-p.icrg.stability <- ggplot() + 
-  geom_rect(data=wars, aes(x=NULL, y=NULL, xmin=Date_start, xmax=Date_end, 
-                           ymin=0, ymax=12, fill=war), alpha=0.3) + 
+#' # Plot timelines
+plot.csre <- ggplot(russia.data, aes(x=year.actual, y=cs_env_sum)) + 
+  geom_line(size=1) + 
+  labs(x=NULL, y="CSRE") + 
+  coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31"))) +
+  theme_ath()
+
+plot.icrg.internal <- ggplot(icrg.russia, 
+                             aes(x=Date, y=icrg.pol.risk.internal.scaled)) +
+  geom_line(size=1) + 
+  labs(x=NULL, y="Internal political risk") + 
+  coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31"))) +
+  theme_ath()
+
+plot.icrg.external <- ggplot(russia.data, aes(x=year.actual, 
+                                              y=icrg.pol.risk.subregional.loo)) +
+  geom_line(size=1) + 
+  labs(x=NULL, y="Mean subregional political risk") + 
+  coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31"))) +
+  theme_ath()
+
+plot.shaming <- ggplot(russia.data, aes(x=year.actual, y=icews.pct.shame)) +
+  geom_line(size=1) + 
+  labs(x=NULL, y="Mean subregional political risk") + 
+  coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31"))) +
+  scale_y_continuous(labels=percent) +
+  theme_ath()
+
+plot.misc <- ggplot() +
   geom_segment(data=presidents, aes(x=Date_start, xend=Date_end, 
-                                    y=12.5, yend=12.5, colour=president), size=2) + 
-  geom_vline(data=laws, aes(xintercept=as.numeric(Date)), colour="grey50") + 
-  geom_line(data=icrg.russia, aes(x=Date, y=icrg.stability), colour="#6A4A3C", size=1) + 
-  geom_text(data=laws, aes(x=Date, y=0, label=law), 
-            angle=90, hjust="left", vjust=-0.5, size=3,
-            family="Source Sans Pro Semibold") + 
-  coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31")),
-                  ylim=c(0, 12.5)) +
-  scale_y_continuous(breaks=seq(0, 12, 2)) + 
+                                    y=0.5, yend=0.5, colour=president), size=5) +
+  geom_rect(data=wars, aes(x=NULL, y=NULL, xmin=Date_start, xmax=Date_end, 
+                           ymin=0, ymax=0.3, fill=war)) + 
   scale_colour_manual(values=c("#EB6742", "#CC333F", "#00A0B0"), name=NULL) + 
   scale_fill_manual(values=c("#E41A1C", "#377EB8", "#4DAF4A", 
                              "#984EA3", "#FF7F00", "#FFFF33"), name=NULL) + 
+  coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31"))) +
   guides(colour=guide_legend(order=1),
          fill=guide_legend(order=2)) +
-  labs(x=NULL, y="ICRG government stability") +
-  theme_light(base_family="Source Sans Pro Light") + 
+  labs(x=NULL, y="Presidents and wars") +
+  theme_ath() +
   theme(legend.position="bottom", 
-        plot.title=element_text(family="Source Sans Pro Semibold"),
-        panel.grid.minor=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank(),
         legend.key.size=unit(0.65, "lines"),
-        legend.key=element_blank(), legend.margin=unit(0.25, "lines"))
-p.icrg.stability
+        legend.key=element_blank(), legend.margin=unit(0.25, "lines"),
+        axis.text.y=element_blank())
 
-ggsave(p.icrg.stability, filename=file.path(PROJHOME, "Output", "figures",
-                                            "russia_timeline_icrg_stability.pdf"),
-       width=8, height=6, units="in", device=cairo_pdf)
-ggsave(p.icrg.stability, filename=file.path(PROJHOME, "Output", "figures",
-                                            "russia_timeline_icrg_stability.png"), 
-       width=8, height=6, units="in", type="cairo", dpi=300)
-
-
-p.icrg.risk <- ggplot() + 
-  geom_rect(data=wars, aes(x=NULL, y=NULL, xmin=Date_start, xmax=Date_end, 
-                           ymin=0, ymax=100, fill=war), alpha=0.3) + 
-  geom_segment(data=presidents, aes(x=Date_start, xend=Date_end, 
-                                    y=100.5, yend=100.5, colour=president), size=2) + 
-  geom_vline(data=laws, aes(xintercept=as.numeric(Date)), colour="grey50") + 
-  geom_line(data=icrg.russia, aes(x=Date, y=icrg.pol.risk), colour="#6A4A3C", size=1) + 
-  geom_text(data=laws, aes(x=Date, y=0, label=law), 
-            angle=90, hjust="left", vjust=-0.5, size=3,
+plot.laws <- ggplot(laws, aes(x=Date, y=0)) + 
+  geom_point(size=3) +
+  geom_text_repel(data=laws, aes(x=Date, y=0, label=law), 
+            size=3, point.padding=unit(0.5, "lines"),
+            box.padding=unit(0.75, "lines"),
             family="Source Sans Pro Semibold") + 
-  coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31")),
-                  ylim=c(0, 100)) +
-  scale_colour_manual(values=c("#EB6742", "#CC333F", "#00A0B0"), name=NULL) + 
-  scale_fill_manual(values=c("#E41A1C", "#377EB8", "#4DAF4A", 
-                             "#984EA3", "#FF7F00", "#FFFF33"), name=NULL) + 
-  guides(colour=guide_legend(order=1),
-         fill=guide_legend(order=2)) +
-  labs(x=NULL, y="ICRG political risk") +
-  theme_light(base_family="Source Sans Pro Light") + 
-  theme(legend.position="bottom", 
-        plot.title=element_text(family="Source Sans Pro Semibold"),
-        panel.grid.minor=element_blank(),
-        legend.key.size=unit(0.65, "lines"),
-        legend.key=element_blank(), legend.margin=unit(0.25, "lines"))
-p.icrg.risk
+  coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31"))) +
+  labs(x=NULL, y=NULL) +
+  theme_ath() + 
+  theme(panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank(),
+        axis.text.y=element_blank())
 
-ggsave(p.icrg.risk, filename=file.path(PROJHOME, "Output", "figures",
-                                       "russia_timeline_icrg_risk.pdf"),
-       width=8, height=6, units="in", device=cairo_pdf)
-ggsave(p.icrg.risk, filename=file.path(PROJHOME, "Output", "figures",
-                                       "russia_timeline_icrg_risk.png"), 
-       width=8, height=6, units="in", type="cairo", dpi=300)
+plot.timeline <- arrangeGrob(rbind(ggplotGrob(plot.laws),
+                                   ggplotGrob(plot.csre),
+                                   ggplotGrob(plot.icrg.internal),
+                                   ggplotGrob(plot.icrg.external),
+                                   ggplotGrob(plot.shaming),
+                                   ggplotGrob(plot.misc)))
+grid::grid.draw(plot.timeline)
 
-
-p.cs.env <- ggplot() + 
-  geom_rect(data=wars, aes(x=NULL, y=NULL, xmin=Date_start, xmax=Date_end, 
-                           ymin=-1, ymax=3, fill=war), alpha=0.3) + 
-  geom_segment(data=presidents, aes(x=Date_start, xend=Date_end, 
-                                    y=3.25, yend=3.25, colour=president), size=2) + 
-  geom_vline(data=laws, aes(xintercept=as.numeric(Date)), colour="grey50") + 
-  geom_hline(yintercept=0, colour="grey50") +
-  geom_line(data=cs.russia, aes(x=year.actual, y=cs_env_sum), colour="#6A4A3C", size=1) + 
-  geom_text(data=laws, aes(x=Date, y=-1, label=law), 
-            angle=90, hjust="left", vjust=-0.5, size=3,
-            family="Source Sans Pro Semibold") + 
-  coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31")),
-                  ylim=c(-1, 3.5)) +
-  scale_colour_manual(values=c("#EB6742", "#CC333F", "#00A0B0"), name=NULL) + 
-  scale_fill_manual(values=c("#E41A1C", "#377EB8", "#4DAF4A", 
-                             "#984EA3", "#FF7F00", "#FFFF33"), name=NULL) + 
-  guides(colour=guide_legend(order=1),
-         fill=guide_legend(order=2)) +
-  labs(x=NULL, y="Civil society environment index") +
-  theme_light(base_family="Source Sans Pro Light") + 
-  theme(legend.position="bottom", 
-        plot.title=element_text(family="Source Sans Pro Semibold"),
-        panel.grid.minor=element_blank(),
-        legend.key.size=unit(0.65, "lines"),
-        legend.key=element_blank(), legend.margin=unit(0.25, "lines"))
-p.cs.env
-
-ggsave(p.cs.env, filename=file.path(PROJHOME, "Output", "figures",
-                                    "russia_timeline_cs_index.pdf"),
-       width=8, height=6, units="in", device=cairo_pdf)
-ggsave(p.cs.env, filename=file.path(PROJHOME, "Output", "figures",
-                                    "russia_timeline_cs_index.png"), 
-       width=8, height=6, units="in", type="cairo", dpi=300)
-
+fig.save.cairo(plot.timeline, filename="1-russia-timeline", 
+               width=6, height=7)
