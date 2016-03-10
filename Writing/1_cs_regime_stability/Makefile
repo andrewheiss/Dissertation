@@ -53,7 +53,7 @@ CSL = american-political-science-association
 #   * bibstyle-chicago-notes
 #   * bibstyle-chicago-authordate
 #   * bibstyle-apa
-TEX_REF = bibstyle-chicago-notes
+TEX_REF = bibstyle-chicago-authordate
 TEX_DIR = tex_out
 
 # Cross reference options
