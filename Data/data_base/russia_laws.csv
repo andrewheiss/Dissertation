@@ -1,7 +1,7 @@
-Date,law,note,include_plot
-1995-01-01,Law on Public Associations,,1
-1997-09-26,Law on the Freedom of Conscience and Religious Organizations,http://www.legislationline.org/documents/id/17909,0
-1999-07-01,NGO Re-registration deadline,,1
-2006-01-10,Federal Law No. 18-FZ,,1
-2012-07-20,Foreign Agents Law,,1
-2015-05-19,Undesirable Organizations Law,,1
+Date,law,note,include_plot,plot_y,plot_h
+1995-01-01,Law on Public Associations,,1,2,left
+1997-09-26,Law on the Freedom of Conscience and Religious Organizations,http://www.legislationline.org/documents/id/17909,0,,
+1999-07-01,NGO Re-registration deadline,,1,1,center
+2006-01-10,Federal Law No. 18-FZ,,1,1.5,center
+2012-07-20,Foreign Agents Law,,1,1,center
+2015-05-19,Undesirable Organizations Law,,1,2,right
