@@ -38,6 +38,9 @@ Writing/**.html
 Writing/**.tex
 Writing/**/tex_out/*
 
+# Graphics
+Graphics/*
+
 # Output
 # See individual Output/.gitignore files
 #
