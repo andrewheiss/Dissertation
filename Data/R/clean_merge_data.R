@@ -492,7 +492,15 @@ coups.subregional <- coups.new %>%
 coups.final <- coups.new %>%
   left_join(coups.global, by="year") %>%
   left_join(coups.regional, by=c("year", "region")) %>%
-  left_join(coups.subregional, by=c("year", "subregion"))
+  left_join(coups.subregional, by=c("year", "subregion")) %>%
+  mutate(coups.success.regional = 
+           coups.success.regional - coups.success.bin,
+         coups.activity.regional = 
+           coups.activity.regional - coups.activity.bin,
+         coups.success.subregional = 
+           coups.success.subregional - coups.success.bin,
+         coups.activity.subregional = 
+           coups.activity.subregional - coups.activity.bin)
 
 # Gleditsch/Ward codes, for reference
 # ward.ccode <- read_tsv("http://privatewww.essex.ac.uk/~ksg/data/iisystem.dat",
