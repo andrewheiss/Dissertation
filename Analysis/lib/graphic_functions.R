@@ -44,7 +44,7 @@ fig.save.cairo <- function(fig, filepath=file.path(PROJHOME, "Output", "figures"
          width=width, height=height, units=units, type="cairo", dpi=300, ...)
 }
 
-fig.coef <- function(model, title=NULL, ylab=NULL, legend=TRUE) {
+fig.coef <- function(model, title=NULL, ylab=NULL, legend=TRUE, space.below=FALSE) {
   # Convert model to a tidy dataframe for plotting
   plot.data <- model %>%
     map_df(tidy, .id="model.name") %>%
@@ -74,6 +74,13 @@ fig.coef <- function(model, title=NULL, ylab=NULL, legend=TRUE) {
   } else {
     coef.plot <- coef.plot + 
       scale_colour_manual(values=c("#BEDB3A", "#441152"), guide=FALSE)
+  }
+  
+  if (space.below) {
+    new.margins <- theme_ath()$plot.margin
+    new.margins[3] <- 25
+    
+    coef.plot <- coef.plot + theme(plot.margin = new.margins)
   }
   coef.plot
 }
