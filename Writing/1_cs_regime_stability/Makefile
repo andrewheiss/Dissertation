@@ -120,7 +120,7 @@ bib:	$(BIB)
 
 %.pdf:	%.md
 	@echo "$(WARN_COLOR)Converting Markdown to PDF using hikma-article template...$(NO_COLOR)"
-	replace_includes $< | replace_reference_title | \
+	./vc; replace_includes $< | replace_reference_title | \
 	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S \
 		$(CROSSREF) \
 		--default-image-extension=pdf \
@@ -130,14 +130,15 @@ bib:	$(BIB)
 		--csl=$(PREFIX)/csl/$(CSL).csl \
 		--bibliography=$(BIB_FILE) \
 		-V chapterstyle=hikma-article \
-		-V pagestyle=ath \
+		-V pagestyle=athgit \
+		-V vc \
 		--base-header-level=2 \
 	-o $@
 	@echo "$(OK_COLOR)All done!$(NO_COLOR)"
 
 %.tex:	%.md
 	@echo "$(WARN_COLOR)Converting Markdown to TeX using hikma-article template...$(NO_COLOR)"
-	replace_includes $< | \
+	./vc; replace_includes $< | \
 	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S \
 		$(CROSSREF) \
 		--default-image-extension=pdf \
@@ -147,7 +148,8 @@ bib:	$(BIB)
 		-V $(TEX_REF) \
 		--bibliography=$(BIB_FILE) \
 		-V chapterstyle=hikma-article \
-		-V pagestyle=ath \
+		-V pagestyle=athgit \
+		-V vc \
 		--base-header-level=2 \
 	-o $@
 	@echo "$(WARN_COLOR)...converting TeX to PDF with latexmk (prepare for lots of output)...$(NO_COLOR)"

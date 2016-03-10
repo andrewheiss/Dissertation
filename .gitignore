@@ -37,6 +37,7 @@ Writing/**.docx
 Writing/**.html
 Writing/**.tex
 Writing/**/tex_out/*
+Writing/**/vc*
 
 # Graphics
 Graphics/*
