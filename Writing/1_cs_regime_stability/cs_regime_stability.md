@@ -291,13 +291,9 @@ Events leading to the 2012 Foreign Agents and 2015 Undesirable Organizations law
 
 # Conclusion
 
-Civil society, both domestic and international, acts as an institution within authoritarian regimes, and dictators must balance them carefully to remain in power.
+Civil society, both domestic and international, acts as an institution within authoritarian regimes, and accordingly, is one of the many institutional challengers that dictators must control and balance to remain in power. In an effort to curb the potential destabilizing risks associated with foreign organizations, autocrats limit civil society through legislation and regulations, and the severity and restrictiveness of this regulatory environment is a function of a regime's internal stability and political risk, the level of risk and conflict in neighboring countries, and international condemnation and shaming of a regime's actions.
 
-{Stuff here}
-
-Quantitative measures show some small effect
-
-Qualitative story of Russia helps bolster the theory, shows how it works when applied not in aggregate
+The statistical models presented in this paper provide mixed support for each of these factors, indicating that internal, external, and reputational concerns can drive a dictator's decision to repress and limit civil society activity in general. Unfortunately, due to the nature of the data, this analysis does not distinguish between the regulatory environment for domestic and international NGOs. Tracing the development of INGO regulations in Russia, however, bolsters the theory, adds nuance that was not captured by the statistical models, and provides additional evidence for the theory.
 
 
 # Appendix
