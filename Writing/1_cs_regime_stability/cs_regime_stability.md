@@ -7,6 +7,7 @@ author:
 date: March 10, 2016
 published: Draft for ISA 2016. Please do not cite without permission.
 reference-section-title: References
+git-repo: https://github.com/andrewheiss/Dissertation
 ...
 
 > *So let this be a weapon hanging on the wall and that never fires.*
