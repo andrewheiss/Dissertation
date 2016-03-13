@@ -107,14 +107,8 @@ To this end, I will test my theory of INGO behavior by conducting an online glob
 
 Instead of selecting a random sample from this large list, I will send each organization two invitations to complete the survey, spaced a week apart. I do not sample the list because I have designed the survey to be fairly open ended, using several of free response questions to get details of these organizations' experiences. That is, I am less interested in using the results in rigorous statistical analysis requiring sufficient inferential power—rather, I plan to analyze the results with more qualitative methods, using computer-assisted methods to identify themes and trends in the responses. I also do not sample the list because it is impossible to distinguish between domestic and international NGOs. While the Yearbook of International Organizations follows a strict definition of international NGO, many of the other directors I used do not, resulting in hundreds (and possibly thousands) of NGOs that only work within their home country. I filter these organizations out using the survey—if a respondent indicates they work primarily in the country they are based in, the survey ends early.
 
-**Finish, fix, rewrite this ¶**: I designed the survey to identify four general aspects of an INGO's organizational culture and experiences working in foreign countries, first asking questions to describe the government restrictions they have faced while working abroad, followed by a series of questions to better understand the INGO's organizational culture (i.e. what are its core mission, vision, and values; how does its programming reflect those principles; etc.). I then ask questions to investigate how the organization had adapted to restrictions in the country it works in, … blah blah
+The survey includes a series of questions designed to identify the aspects of an INGO's organizational culture that correspond to my theory. In general, I ask respondents to (1) define their organization's core mission, vision, and values, and discuss how their programming reflects those principles, (2) explain the organization's flexibility (i.e. how it raises funds, how it collaborates with other organizations, etc.), and (3) describe and discuss the government restrictions they have faced while working abroad. Ultimately, I will be able to use these results to test each of the three mechanisms and determine how, why, and when INGOs shift their core values, become more flexible and instrumental, or attempt to induce the government to change its preferences. 
 
-Ultimately, I will be able to use these results to test each of the three mechanisms and determine how, why, and when INGOs shift their core values, become more flexible and instrumental, or attempt to induce the government to change its preferences. 
-
-
-# Conclusion
-
-**Finish this tomorrow**
 
 [^1]:	http://www.theguardian.com/global-development-professionals-network/2014/aug/12/china-ngo-government-civil-society
 
