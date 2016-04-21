@@ -88,8 +88,15 @@ icrg.rescale <- function(x, lowest=0, highest=82) {
 
 # Varieties of Democracy
 # https://v-dem.net/en/
-vdem.raw <- read_csv(file.path(PROJHOME, "Data", "data_raw", "External", "V-Dem", 
-                               "Country-Year, V-Dem + other, CVS/V-Dem-DS-CY+Others-v5.csv"))
+# V-Dem v5
+# vdem.raw.old <- read_csv(file.path(PROJHOME, "Data", "data_raw", "External",
+#                                "V-Dem", "v5", "Country-Year, V-Dem + other, CVS",
+#                                "V-Dem-DS-CY+Others-v5.csv"))
+# V-Dem v6 is semicolon-delimited
+vdem.raw <- read_csv2(file.path(PROJHOME, "Data", "data_raw", "External",
+                                "V-Dem", "v6", "V-Dem-DS-CY+Others-v6.csv"))
+# vdem.raw <- read_stata(file.path(PROJHOME, "Data", "data_raw", "External", 
+#                                  "V-Dem", "v6", "V-Dem-DS-CY+Others-v6.dta"))
 
 # Missing COW codes
 # vdem.raw %>% filter(is.na(COWcode)) %>% select(country_name) %>% unique
@@ -672,20 +679,21 @@ icews.ingos <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 # ------------------
 # TODO: Consolidate extra variables (e.g. there's "Country", "country.name", and "country_name")
 # TODO: What happens when there are no neighbors?
-full.data <- icrg.all.with.aggregates %>% 
-  left_join(vdem.cso, by=c("cowcode" = "COWcode", "year.num" = "year")) %>%
-  left_join(pol.inst, by=c("cowcode" = "cow", "year.num" = "year")) %>%
-  left_join(nelda.full, by=c("cowcode" = "ccode", "year.num" = "year")) %>%
-  left_join(ciri, by=c("cowcode", "year.num" = "year")) %>%
-  left_join(wdi.clean, by=c("cowcode" = "cow", "year.num" = "year")) %>%
-  left_join(murdie, by=c("cowcode", "year.num" = "year")) %>%
-  left_join(kof, by=c("cowcode", "year.num" = "year")) %>%
-  left_join(neighbor.stability, by=c("cowcode", "year.num")) %>%
-  left_join(uds, by=c("cowcode", "year.num" = "year")) %>%
-  left_join(coups.final, by=c("cowcode", "year.num" = "year")) %>%
-  left_join(icews, by=c("year.num" = "event.year", "cowcode")) %>%
-  left_join(icews.ingos, by=c("year.num" = "event.year", "cowcode")) %>%
-  filter(year.num > 1990)
+full.data <- vdem.cso %>%
+  rename(cowcode = COWcode) %>%
+  left_join(icrg.all.with.aggregates, by=c("cowcode", "year" = "year.num")) %>%
+  left_join(pol.inst, by=c("cowcode" = "cow", "year")) %>%
+  left_join(nelda.full, by=c("cowcode" = "ccode", "year")) %>%
+  left_join(ciri, by=c("cowcode", "year")) %>%
+  left_join(wdi.clean, by=c("cowcode" = "cow","year")) %>%
+  left_join(murdie, by=c("cowcode", "year")) %>%
+  left_join(kof, by=c("cowcode", "year")) %>%
+  left_join(neighbor.stability, by=c("cowcode", "year" = "year.num")) %>%
+  left_join(uds, by=c("cowcode", "year")) %>%
+  left_join(coups.final, by=c("cowcode", "year")) %>%
+  left_join(icews, by=c("year" = "event.year", "cowcode")) %>%
+  left_join(icews.ingos, by=c("year" = "event.year", "cowcode")) %>%
+  filter(year > 1990)
 
 # Save all cleaned data files
 saveRDS(full.data, file.path(PROJHOME, "Data", 
