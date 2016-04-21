@@ -14,20 +14,21 @@ all.emails.final <- all.emails.raw %>%
   filter(!(id_org %in% duplicates.to.ignore)) %>%
   mutate(org_name_email = ifelse(is.na(org_name), "your organization", org_name))
 
-all.emails.final %>%
-  write_csv(path=file.path(PROJHOME, "Data", "Survey", "list", "final_list.csv"),
-            na="")
+# all.emails.final %>%
+#   write_csv(path=file.path(PROJHOME, "Data", "Survey", "list", "final_list.csv"),
+#             na="")
 
 set.seed(1234)
 first.round <- all.emails.final %>%
   sample_n(100)
 
 first.round %>%
-  write_csv(path=file.path(PROJHOME, "Data", "Survey", "list", "first_round_raw.csv"),
+  write_csv(path=file.path(PROJHOME, "Data", "Survey", "list", 
+                           "groups", "first_round_raw.csv"),
             na="")
 
 first.round <- read_csv(file.path(PROJHOME, "Data", "Survey", 
-                                  "list", "first_round_done.csv"))
+                                  "list", "groups", "first_round_done.csv"))
 first.round.ids <- first.round$id_org
 
 set.seed(1234)
@@ -36,11 +37,12 @@ round.2 <- all.emails.final %>%
   sample_n(1000)
 
 round.2 %>%
-  write_csv(path=file.path(PROJHOME, "Data", "Survey", "list", "round_2_raw.csv"),
+  write_csv(path=file.path(PROJHOME, "Data", "Survey", "list", 
+                           "groups", "round_2_raw.csv"),
             na="")
 
 round.2 <- read_csv(file.path(PROJHOME, "Data", "Survey", 
-                              "list", "round_2_done.csv"))
+                              "list", "groups", "round_2_done.csv"))
 round.2.ids <- round.2$id_org
 
 set.seed(1234)
@@ -49,10 +51,11 @@ round.3 <- all.emails.final %>%
   sample_n(1000)
 
 round.3 %>%
-  write_csv(path=file.path(PROJHOME, "Data", "Survey", "list", "round_3_raw.csv"),
+  write_csv(path=file.path(PROJHOME, "Data", "Survey", "list", 
+                           "groups", "round_3_raw.csv"),
             na="")
 round.3 <- read_csv(file.path(PROJHOME, "Data", "Survey", 
-                              "list", "round_3_done.csv"))
+                              "list", "groups", "round_3_done.csv"))
 round.3.ids <- round.3$id_org
 
 # -----------------------------------------------------------------------------
@@ -96,3 +99,17 @@ all.emails.final.assigned %>%
   write_csv(path=file.path(PROJHOME, "Data", "Survey", "list",
                            "final_list_assigned_WILL_BE_OVERWRITTEN.csv"),
             na="")
+
+# Save individual group lists
+writer <- function(df) {
+  filename <- paste0("round_", unique(df$group), "_raw.csv")
+  readr::write_csv(df, path=file.path(PROJHOME, "Data", "Survey", "list", 
+                                      "groups", filename),
+                   na="")
+  return(df)
+}
+
+all.emails.final.assigned %>%
+  select(id_org, org_name_email, email, group) %>%
+  group_by(group) %>%
+  do(writer(.))
