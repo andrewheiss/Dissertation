@@ -64,7 +64,9 @@ def send_email(org, deadline, subject, body=' ', log=True):
 
     # Message details
     message.set_subject(subject)
+    # Set both HTML and text for a multipart message
     message.set_html(body)
+    message.set_text(body)
 
     # Send this puppy
     # result = ''
