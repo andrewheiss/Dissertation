@@ -81,8 +81,11 @@ def send_email(org, deadline, subject, body=' ', log=True):
 
 if __name__ == '__main__':
     email_orgs = get_emails('list/round_3_raw.csv')
+    # email_orgs = [{'id_org': 1, 'email': 'andrewheiss@gmail.com',
+    #                'org_name_email': 'Testing this thing'}]
 
     for i, org in enumerate(email_orgs):
+        # send_email(org, deadline, subject, log=False)
         logger.info('Dealing with row {0}.'.format(i + 1))
         if i > 0:
             wait = abs(gauss(wait_mu, wait_sd))
