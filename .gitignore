@@ -1,18 +1,59 @@
+# ------------
 # OS X stuff
+# ------------
 .DS_Store
 
-# R stuff
+
+# --------------
+# Binary files
+# --------------
+**.pdf
+**.png
+**.doc*
+**.ppt*
+**.html
+**.indd
+**.ai
+
+
+# -------------------
+# Development stuff
+# -------------------
+# ---
+# R
+# ---
 .Rhistory
 .Rapp.history
 .Rproj.user
 
-# Sublime Text stuff
+# --------
+# Python
+# --------
+**__pycache__*
+
+# --------------
+# Sublime Text
+# --------------
 *.sublime-workspace
 
-# Sake stuff
+# ---------------
+# Make and sake
+# ---------------
 .shastore
 
-# Data stuff
+
+# ----------------------------------------
+# --------------------
+# Data-related stuff
+# --------------------
+# ----------------------------------------
+# ------
+# Data
+# ------
+Data/**.ods
+Data/**.odb
+Data/**.db
+
 Data/data_raw/External/*
 !Data/data_raw/External/external_data.yml
 
@@ -23,25 +64,34 @@ Data/data_raw/NGO\ lists/*
 
 Data/data_processed/*
 
-Data/**.ods
-Data/**.odb
-Data/**.db
+# ----------------
+# Protected data
+# ----------------
+Protected/*
 
+# --------
+# Survey
+# --------
+Data/Survey/mail_config.py
+Data/Survey/Branding/*
+Data/Survey/list/*
+Data/Survey/*.log
+
+
+# ----------------------------------------
+# -----------------------
+# Writing-related stuff
+# -----------------------
+# ----------------------------------------
+# ----------
 # Analysis
+# ----------
 Analysis/**.html
 !Analysis/html/*.html
 
+# ---------
 # Writing
-Writing/**.pdf
-Writing/**.docx
-Writing/**.html
-Writing/**.tex
-Writing/**/tex_out/*
-Writing/**/vc*
-
-# Graphics
-Graphics/*
-
+# ---------
 # Output
 # See individual Output/.gitignore files
 #
@@ -49,17 +99,23 @@ Graphics/*
 #   **/Output/*
 # But adding this doesn't:
 #   !**/Output/.gitignore
+Writing/**.tex
+Writing/**/tex_out/*
+Writing/**/vc*
 
-# Miscellaneous
+# ----------
+# Graphics
+# ----------
+Graphics/*
+
+
+# ----------------------------------------
+# ---------------------
+# Miscellaneous stuff
+# ---------------------
+# ----------------------------------------
 Pre stuff/Comprehensive exam/Reading list/Examples/
 Pre stuff/Comprehensive exam/Writing/Figures/Originals/
-Pre stuff/**.pdf
-Pre stuff/**.png
-Pre stuff/**.docx
-Administration/**.pdf
-Administration/**.png
-Administration/**.docx
-Administration/**.pptx
 Administration/**.html
 Administration/**/tex_out/*
 Sandbox/
