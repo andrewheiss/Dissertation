@@ -44,7 +44,7 @@ def get_emails(filename):
     logger.info('E-mail addresses loaded from {0}.'.format(filename))
     return orgs_to_email
 
-def send_email(org, deadline, subject, body=' '):
+def send_email(org, deadline, subject, body=' ', log=True):
     # Connect to API and initialize message
     client = sendgrid.SendGridClient(mail_config.API_KEY)
     message = sendgrid.Mail()
@@ -69,9 +69,12 @@ def send_email(org, deadline, subject, body=' '):
     # Send this puppy
     # result = ''
     result = client.send(message)
-    logger.info('Message sent to {0} ({1}: {2}). Response: {3}.'
-                .format(org['email'], org['id_org'],
-                        org['org_name_email'], result))
+    if log:
+        logger.info('Message sent to {0} ({1}: {2}). Response: {3}.'
+                    .format(org['email'], org['id_org'],
+                            org['org_name_email'], result))
+    else:
+        print(result)
 
 
 if __name__ == '__main__':
