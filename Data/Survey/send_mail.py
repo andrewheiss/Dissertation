@@ -10,7 +10,7 @@ from time import sleep
 # ------------------
 # E-mail variables
 # ------------------
-deadline = 'April 27, 2016'
+deadline = 'April 28, 2016'
 subject = 'Help with research about international NGOs'
 body = ' '
 
@@ -80,7 +80,7 @@ def send_email(org, deadline, subject, body=' ', log=True):
 
 
 if __name__ == '__main__':
-    email_orgs = get_emails('list/round_3_raw.csv')
+    email_orgs = get_emails('list/groups/round_6_clean.csv')
     # email_orgs = [{'id_org': 1, 'email': 'andrewheiss@gmail.com',
     #                'org_name_email': 'Testing this thing'}]
 
