@@ -1,18 +1,7 @@
 -- Enable foreign keys
 PRAGMA foreign_keys = ON;
 
--- Enable foreign key support in the ODBC connection by adding this key:value
--- pair in the DSN configuration:
---
--- FKSupport: true
---
--- See other options at http://ch-werner.de/sqliteodbc/html/index.html
-
--- Additionally, LibreOffice will complain about parameter errors when using
--- subforms linked to tables that use foreign keys. To fix these errors, go to
--- Edit > Database > Advanced Settings… and make sure "Replace named parameters
--- with ?" is checked
-
+-- Create tables
 CREATE TABLE IF NOT EXISTS "full_list" (
   "index_org" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   "id_org" text COLLATE NOCASE NOT NULL,
@@ -76,3 +65,9 @@ CREATE TABLE IF NOT EXISTS "contacts" (
   "contact_notes" text COLLATE NOCASE,
   FOREIGN KEY (fk_org) REFERENCES "full_list" (index_org) ON DELETE CASCADE
 );
+
+-- Create views
+CREATE VIEW search_list AS
+SELECT index_org, id_org, "group", org_name_email, email, country_hq, org_url
+FROM full_list
+ORDER BY "group", index_org
