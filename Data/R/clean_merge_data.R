@@ -694,7 +694,8 @@ full.data <- vdem.cso %>%
   left_join(coups.final, by=c("cowcode", "year")) %>%
   left_join(icews, by=c("year" = "event.year", "cowcode")) %>%
   left_join(icews.ingos, by=c("year" = "event.year", "cowcode")) %>%
-  filter(year > 1990)
+  filter(year > 1990) %>%
+  rename(year.num = year)
 
 # Save all cleaned data files
 write_feather(full.data,
