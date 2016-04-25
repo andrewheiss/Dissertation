@@ -17,6 +17,7 @@ library(magrittr)
 library(dplyr)
 library(purrr)
 library(broom)
+library(feather)
 library(ggplot2)
 library(scales)
 library(gridExtra)
@@ -25,8 +26,12 @@ library(stargazer)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
-full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
-                               "full_data.rds"))
+full.data.orig <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                               "full_data copy.rds"))
+
+full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                               "full_data.feather"))
+
 
 my.seed <- 1234
 set.seed(my.seed)
