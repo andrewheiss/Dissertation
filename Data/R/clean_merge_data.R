@@ -6,6 +6,7 @@ library(tidyr)
 library(readr)
 library(readxl)
 library(haven)
+library(feather)
 library(lubridate)
 library(countrycode)
 library(WDI)
@@ -667,11 +668,11 @@ uds <- read_csv(uds.tmp) %>%
 
 # ICEWS aggregated conflictual/cooperative event data
 # Preprocessed with ./Data/R/icews.R
-icews <- readRDS(file.path(PROJHOME, "Data", "data_processed",
-                           "icews_aggregated.Rds"))
+icews <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                                "icews_aggregated.feather"))
 
-icews.ingos <- readRDS(file.path(PROJHOME, "Data", "data_processed",
-                                 "icews_aggregated_ingos.Rds"))
+icews.ingos <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                                      "icews_aggregated_ingos.feather"))
 
 
 # ------------------
@@ -696,8 +697,10 @@ full.data <- vdem.cso %>%
   filter(year > 1990)
 
 # Save all cleaned data files
-saveRDS(full.data, file.path(PROJHOME, "Data", 
-                             "data_processed", "full_data.rds"))
+write_feather(full.data,
+              file.path(PROJHOME, "Data", 
+                        "data_processed", "full_data.feather"))
 
-saveRDS(icrg.monthly, file.path(PROJHOME, "Data",
-                                "data_processed", "icrg_monthly.rds"))
+write_feather(icrg.monthly, 
+              file.path(PROJHOME, "Data", 
+                        "data_processed", "icrg_monthly.feather"))

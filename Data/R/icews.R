@@ -2,6 +2,7 @@ library(magrittr)
 library(dplyr)
 library(tidyr)
 library(readr)
+library(feather)
 library(lubridate)
 library(stringr)
 library(ggplot2)
@@ -135,10 +136,10 @@ events.conflict.coop.ingos <- events.aggregated.ingos %>%
 
 
 # Save aggregated data
-saveRDS(events.conflict.coop, 
-        file=file.path(PROJHOME, "Data", "data_processed",
-                       "icews_aggregated.Rds"))
+write_feather(events.conflict.coop,
+              file.path(PROJHOME, "Data", "data_processed",
+                        "icews_aggregated.feather"))
 
-saveRDS(events.conflict.coop.ingos, 
-        file=file.path(PROJHOME, "Data", "data_processed",
-                       "icews_aggregated_ingos.Rds"))
+write_feather(events.conflict.coop.ingos, 
+              file.path(PROJHOME, "Data", "data_processed",
+                        "icews_aggregated_ingos.feather"))
