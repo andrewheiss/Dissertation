@@ -1,0 +1,17 @@
+gwf.unified,gwf.simple,gwf.binary
+democracy,democracy,democracy
+provisional,other,
+foreign-occupied,other,
+warlord,other,
+not-independent,other,
+warlord/foreign-occupied,other,
+personal,autocracy,autocracy
+party-personal,autocracy,autocracy
+military,autocracy,autocracy
+military-personal,autocracy,autocracy
+party,autocracy,autocracy
+indirect military,autocracy,autocracy
+party-military,autocracy,autocracy
+oligarchy,autocracy,autocracy
+party-military-personal,autocracy,autocracy
+monarchy,autocracy,autocracy

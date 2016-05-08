@@ -31,6 +31,11 @@ fix.999 <- function(x) {
   ifelse(x == -999, NA, x)
 }
 
+# Same. Convert "NA" to NA
+fix.NA <- function(x) {
+  ifelse(x == "NA", NA, x)
+}
+
 # Calculate the number of years since an election based on a boolean vector 
 # indicating if the running total should be increased
 calc.years.since.comp <- function(x) {
@@ -675,6 +680,30 @@ icews.ingos <- read_feather(file.path(PROJHOME, "Data", "data_processed",
                                       "icews_aggregated_ingos.feather"))
 
 
+# GWF Autocratic regimes
+# http://sites.psu.edu/dictators/
+gwf <- read_stata(file.path(PROJHOME, "Data", "data_raw", 
+                            "External", "GWF Autocratic Regimes",
+                            "GWF_AllPoliticalRegimes.dta")) %>%
+  mutate_each(funs(fix.NA), gwf_casename, gwf_country, gwf_regimetype, 
+              gwf_next, gwf_prior, gwf_nonautocracy) %>%
+  mutate(gwf.unified = ifelse(is.na(gwf_regimetype),
+                              gwf_nonautocracy, gwf_regimetype))
+
+regime.types.simple <- read_csv(file.path(PROJHOME, "Data", "data_base",
+                                          "gwf_simplified.csv"))
+
+gwf.simplified <- gwf %>%
+  left_join(regime.types.simple, by="gwf.unified") %>%
+  select(cowcode, year, gwf.unified, gwf.simple, gwf.binary) %>%
+  mutate(gwf.simple = factor(gwf.simple,
+                             levels=c("autocracy", "democracy", "other"),
+                             labels=c("Autocracy", "Democracy", "Other")),
+         gwf.binary = factor(gwf.binary,
+                             levels=c("autocracy", "democracy"),
+                             labels=c("Autocracy", "Democracy")))
+
+
 # ------------------
 # Merge everything!
 # ------------------
@@ -694,6 +723,7 @@ full.data <- vdem.cso %>%
   left_join(coups.final, by=c("cowcode", "year")) %>%
   left_join(icews, by=c("year" = "event.year", "cowcode")) %>%
   left_join(icews.ingos, by=c("year" = "event.year", "cowcode")) %>%
+  left_join(gwf.simplified, by=c("cowcode", "year")) %>%
   filter(year > 1990) %>%
   rename(year.num = year)
 
