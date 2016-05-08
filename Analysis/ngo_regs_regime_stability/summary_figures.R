@@ -1,11 +1,12 @@
 library(dplyr)
+library(feather)
 library(ggplot2)
 library(gridExtra)
 library(Cairo)
 
 # Load data
-full.data <- readRDS(file.path(PROJHOME, "Data","data_processed",
-                               "full_data.rds"))
+full.data <- read_feather(file.path(PROJHOME, "Data","data_processed",
+                                    "full_data.feather"))
 
 # Plot specific cases
 plot.data <- full.data %>%
@@ -16,9 +17,10 @@ plot.data <- full.data %>%
 fig.points <- ggplot(plot.data, aes(x=year.num, y=cs_env_sum, 
                                     colour=country_name)) + 
   geom_line(size=1.5) + 
-  coord_cartesian(xlim=c(1995, 2012)) + 
+  coord_cartesian(xlim=c(1995, 2015)) + 
   labs(x=NULL, y="Civil society legal environment index",
-       title="Civil society legal environment\n(index of measurement model point estimates)") +
+       title="Civil society legal environment",
+       subtitle="Index of measurement model point estimates") +
   scale_color_manual(values=c("#EA2E49", "#441152", "#29968B"), name=NULL) + 
   theme_light(7, base_family="Source Sans Pro") + 
   theme(legend.position="bottom", legend.key.size=unit(0.65, "lines"),
@@ -28,9 +30,10 @@ fig.points <- ggplot(plot.data, aes(x=year.num, y=cs_env_sum,
 fig.ord <- ggplot(plot.data, aes(x=year.num, y=v2csreprss_ord,
                                  colour=country_name)) + 
   geom_line(aes(group=1), size=1.5) +
-  coord_cartesian(xlim=c(1995, 2012)) + 
+  coord_cartesian(xlim=c(1995, 2015)) + 
   labs(x=NULL, y=NULL,
-       title="Civil society repression\n(ordinal measure)") +
+       title="Civil society repression",
+       subtitle="Ordinal measure") +
   scale_color_manual(values=c("#EA2E49", "#441152", "#29968B"), 
                      name=NULL, guide=FALSE) + 
   theme_light(7, base_family="Source Sans Pro") + 
