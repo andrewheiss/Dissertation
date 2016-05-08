@@ -3,6 +3,7 @@ library(tidyr)
 library(stringr)
 library(readr)
 library(ggplot2)
+library(ggstance)
 
 coef.names <- read_csv(file.path(PROJHOME, "Analysis", 
                                  "ngo_regs_regime_stability", 
@@ -44,36 +45,44 @@ fig.save.cairo <- function(fig, filepath=file.path(PROJHOME, "Output", "figures"
          width=width, height=height, units=units, type="cairo", dpi=300, ...)
 }
 
-fig.coef <- function(model, title=NULL, ylab=NULL, legend=TRUE, space.below=FALSE) {
+fig.coef <- function(models, title=NULL, xlab=NULL, legend=TRUE, space.below=FALSE, var.order=NULL) {
   # Convert model to a tidy dataframe for plotting
-  plot.data <- model %>%
+  plot.data <- models %>%
     map_df(tidy, .id="model.name") %>%
     filter(term != "(Intercept)",
            !str_detect(term, "as\\.factor")) %>%
-    mutate(ymin = estimate + (qnorm(0.025) * std.error),
-           ymax = estimate + (qnorm(0.975) * std.error)) %>%
+    mutate(xmin = estimate + (qnorm(0.025) * std.error),
+           xmax = estimate + (qnorm(0.975) * std.error)) %>%
     left_join(coef.names, by="term") %>%
-    mutate(clean.name = factor(clean.name, levels=rev(unique(clean.name)),
-                               ordered=TRUE),
-           sub.model = factor(model.name, levels=c("Democracy", "Autocracy"),
-                              labels=c("Democracies", "Autocracies    "),
-                              ordered=TRUE))
+    mutate(model.name = factor(model.name, levels=rev(unique(model.name)),
+                               ordered=TRUE))
   
-  coef.plot <- ggplot(plot.data, aes(x=clean.name, y=estimate, colour=sub.model)) + 
-    geom_hline(yintercept=0, colour="#8C2318", alpha=0.6, size=1) + 
-    geom_pointrange(aes(ymin=ymin, ymax=ymax), size=.5, 
-                    position=position_dodge(width=.5)) + 
-    labs(x=NULL, y=ylab, title=title) + 
-    coord_flip() + 
+  if (!is.null(var.order)) {
+    plot.data <- plot.data %>%
+      mutate(term = factor(term, levels=var.order, ordered=TRUE)) %>%
+      arrange(term) %>%
+      mutate(clean.name = factor(clean.name, levels=rev(unique(clean.name)),
+                                 ordered=TRUE))
+  } else {
+    plot.data <- plot.data %>%
+      mutate(clean.name = factor(clean.name, levels=rev(unique(clean.name)),
+                                 ordered=TRUE))
+  }
+  
+  coef.plot <- ggplot(plot.data, aes(y=clean.name, x=estimate, colour=model.name)) + 
+    geom_vline(xintercept=0, colour="#8C2318", alpha=0.6, size=1) + 
+    geom_pointrangeh(aes(xmin=xmin, xmax=xmax), size=.5, 
+                     position=position_dodge(width=.7)) + 
+    labs(y=NULL, x=xlab, title=title) + 
     theme_ath()
   
   if (legend) {
     coef.plot <- coef.plot + 
-      scale_colour_manual(values=c("#BEDB3A", "#441152"), name="",
+      scale_colour_manual(values=c("#004259", "#FC7300", "#BFDB3B"), name="",
                           guide=guide_legend(reverse=TRUE))
   } else {
     coef.plot <- coef.plot + 
-      scale_colour_manual(values=c("#BEDB3A", "#441152"), guide=FALSE)
+      scale_colour_manual(values=c("#004259", "#FC7300", "#BFDB3B"), guide=FALSE)
   }
   
   if (space.below) {

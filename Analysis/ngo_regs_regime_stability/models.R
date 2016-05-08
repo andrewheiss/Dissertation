@@ -26,12 +26,8 @@ library(stargazer)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
-full.data.orig <- readRDS(file.path(PROJHOME, "Data", "data_processed",
-                               "full_data copy.rds"))
-
 full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
                                "full_data.feather"))
-
 
 my.seed <- 1234
 set.seed(my.seed)
@@ -94,10 +90,8 @@ set.seed(my.seed)
 #' ## Actual models
 #' 
 #' ### Just internal political risk
-model.int.simple <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled,
-           data=.))
+model.int.simple <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled,
+                       data=filter(full.data, gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.int.simple, type="html", 
@@ -109,11 +103,9 @@ stargazer(model.int.simple, type="html",
                            rep("No", 2))))
 
 #' ### All internal variables
-model.int.full <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
-             yrsoffc + years.since.comp + opp1vote + as.factor(year.num),
-           data=.))
+model.int.full <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
+                       yrsoffc + years.since.comp + opp1vote + as.factor(year.num),
+                     data=filter(full.data, gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.int.full, type="html", 
@@ -125,13 +117,11 @@ stargazer(model.int.full, type="html",
                            rep("Yes", 2))))
 
 #' ### All internal variables + controls
-model.int.all <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
-             yrsoffc + years.since.comp + opp1vote +
-             physint + gdpcap.log + population.log +
-             oda.log + countngo + globalization + as.factor(year.num),
-           data=.))
+model.int.all <- lm(cs_env_sum.lead ~ icrg.pol.risk.internal.scaled +
+                      yrsoffc + years.since.comp + opp1vote +
+                      physint + gdpcap.log + population.log +
+                      oda.log + countngo + globalization + as.factor(year.num),
+                    data=filter(full.data, gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.int.all, type="html", 
@@ -144,7 +134,8 @@ stargazer(model.int.all, type="html",
 
 
 #' ### All models (to LaTeX)
-all.models <- c(model.int.simple, model.int.full, model.int.all)
+models.int <- list("Simple" = model.int.simple, "Full" = model.int.full,
+                   "Full + controls" = model.int.all)
 
 coef.labs <- c("Internal political risk (ICRG)", "Years executive in office", 
                "Years since competitive election", "Opposition vote share",
@@ -155,14 +146,15 @@ extra.lines <- list(c("Year fixed effects",
                       c(rep("No", 2), rep("Yes", 4))))
 
 capture.output({
-  stargazer(all.models, type="latex", font.size="tiny",
+  stargazer(models.int,
+            type="latex", font.size="tiny",
             out=file.path(PROJHOME, "Output", "tables", "1-internal-models-all.tex"),
             covariate.labels=coef.labs,
             title="Internal determinants of restrictions on the civil society regulatory environment",
             label="models-internal",
             dep.var.caption="Civil society regulatory environment (CSRE) in following year",
             dep.var.labels.include=FALSE,
-            column.labels=names(all.models),
+            column.labels=names(models.int),
             omit="factor\\(year", no.space=TRUE,
             add.lines=extra.lines)
 }, file="/dev/null")
@@ -170,20 +162,15 @@ capture.output({
 #' ## Model plots
 #' 
 #' ### Coefficient plot
-plot.int <- arrangeGrob(fig.coef(model.int.simple, "Simple", legend=FALSE, space.below=TRUE), 
-                        fig.coef(model.int.full, "Full", legend=FALSE, space.below=TRUE), 
-                        fig.coef(model.int.all, "Full + controls", ylab="Coefficient"), 
-                        heights=c(1.5/10, 2.5/10, 6/10), ncol=1)
-grid::grid.draw(plot.int)
+plot.int <- fig.coef(models.int, xlab="Civil society regulatory environment (CSRE)")
+plot.int
 
 fig.save.cairo(plot.int, filename="1-coefs-int", 
-               width=6, height=7)
+               width=6, height=3)
 
 
 #' ### CSRE across range of ICRG risk
-new.data.icrg <- model.int.all %>%
-  map_df("model", .id="regime.type") %>%
-  group_by(regime.type) %>%
+new.data.icrg <- model.int.all$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          index = 1) %>%
@@ -198,24 +185,19 @@ new.data.icrg <- model.int.all %>%
 # on hypothetical data intended for the autocracy model), so only keep rows
 # where the model matches the hypothetical data
 plot.predict <- model.int.all %>% 
-  map_df(~ augment(., newdata=new.data.icrg), .id="regime.type.pred") %>%
-  filter(regime.type == regime.type.pred) %>%
+  augment(newdata=new.data.icrg) %>%
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
-         pred.upper = pred + (qnorm(0.975) * .se.fit),
-         regime.type = factor(regime.type, 
-                              levels=c("Democracy", "Autocracy"), 
-                              labels=c("Democracies    ", "Autocracies"),  
-                              ordered=TRUE))
+         pred.upper = pred + (qnorm(0.975) * .se.fit))
 
 plot.icrg.int.pred <- ggplot(plot.predict, aes(x=icrg.pol.risk.internal.scaled, 
-                                               y=pred, colour=regime.type)) + 
-  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+                                               y=pred)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x="Internal political risk (ICRG)", y="Predicted CSRE") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
+  scale_colour_manual(values=c(col.auth), name=NULL) +
+  scale_fill_manual(values=c(col.auth), name=NULL, guide=FALSE) +
   theme_ath()
 plot.icrg.int.pred
 
@@ -224,42 +206,35 @@ fig.save.cairo(plot.icrg.int.pred, filename="1-icrg-int-pred",
 
 
 #' ### CSRE across years executive has been in office
-new.data.yrsoffc <- model.int.all %>%
-  map_df("model", .id="regime.type") %>%
-  group_by(regime.type) %>%
+new.data.yrsoffc <- model.int.all$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          index = 1) %>%
   select(-c(cs_env_sum.lead, icrg.pol.risk.internal.scaled, yrsoffc)) %>%
   right_join(expand.grid(icrg.pol.risk.internal.scaled = seq(0, 100, by=0.1), 
-                         yrsoffc = c(2, 20),
+                         yrsoffc = c(2, 30),
                          index = 1, stringsAsFactors=FALSE),
              by="index") %>% 
   select(-index)
 
 plot.predict <- model.int.all %>% 
-  map_df(~ augment(., newdata=new.data.yrsoffc), .id="regime.type.pred") %>%
-  filter(regime.type == regime.type.pred) %>%
+  augment(newdata=new.data.yrsoffc) %>%
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
          pred.upper = pred + (qnorm(0.975) * .se.fit),
-         regime.type = factor(regime.type, 
-                              levels=c("Democracy", "Autocracy"), 
-                              labels=c("Democracies    ", "Autocracies"), 
-                              ordered=TRUE),
          yrsoffc.clean = factor(yrsoffc, labels=paste(unique(yrsoffc), 
-                                                      "years since election")))
+                                                      "years in office")))
 
 plot.icrg.yrs.int.pred <- ggplot(plot.predict, 
                                  aes(x=icrg.pol.risk.internal.scaled, 
-                                     y=pred, colour=regime.type)) + 
-  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+                                     y=pred, colour=yrsoffc.clean)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=yrsoffc.clean), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x="Internal political risk (ICRG)", y="Predicted CSRE") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
-  theme_ath() + facet_wrap(~ yrsoffc.clean)
+  scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
+  scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
+  theme_ath()
 plot.icrg.yrs.int.pred
 
 fig.save.cairo(plot.icrg.yrs.int.pred, filename="1-icrg-yrs-int-pred", 
@@ -271,11 +246,9 @@ fig.save.cairo(plot.icrg.yrs.int.pred, filename="1-icrg-yrs-int-pred",
 #' ## Actual models
 #' 
 #' ### Just neighbors
-model.ext.neighbors <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-             neighbor.coups.activity.bin,
-           data=.))
+model.ext.neighbors <-lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
+                           neighbor.coups.activity.bin,
+                         data=filter(full.data, gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.ext.neighbors, type="html", 
@@ -287,13 +260,12 @@ stargazer(model.ext.neighbors, type="html",
                            rep("No", 2))))
 
 #' ### Neighbors and subregion
-model.ext.neighbors.subregion <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-             icrg.pol.risk.subregional.loo +
-             neighbor.coups.activity.bin + 
-             coups.activity.subregional,
-           data=.))
+model.ext.neighbors.subregion <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
+                                      icrg.pol.risk.subregional.loo +
+                                      neighbor.coups.activity.bin + 
+                                      coups.activity.subregional,
+                                    data=filter(full.data, 
+                                                gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.ext.neighbors.subregion, type="html", 
@@ -305,13 +277,12 @@ stargazer(model.ext.neighbors.subregion, type="html",
                            rep("No", 2))))
 
 #' ### Neighbors and region
-model.ext.neighbors.region <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-             icrg.pol.risk.regional.loo +
-             neighbor.coups.activity.bin + 
-             coups.activity.regional,
-           data=.))
+model.ext.neighbors.region <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
+                                   icrg.pol.risk.regional.loo +
+                                   neighbor.coups.activity.bin + 
+                                   coups.activity.regional,
+                                 data=filter(full.data, 
+                                             gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.ext.neighbors.region, type="html", 
@@ -324,15 +295,14 @@ stargazer(model.ext.neighbors.region, type="html",
 
 
 #' ### Neighbors and subregion + controls
-model.ext.neighbors.subregion.ctrl <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-             icrg.pol.risk.subregional.loo +
-             neighbor.coups.activity.bin + 
-             coups.activity.subregional + 
-             gdpcap.log + population.log + oda.log + 
-             countngo + globalization + as.factor(year.num),
-           data=.))
+model.ext.neighbors.subregion.ctrl <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
+                                           icrg.pol.risk.subregional.loo +
+                                           neighbor.coups.activity.bin + 
+                                           coups.activity.subregional + 
+                                           gdpcap.log + population.log + oda.log + 
+                                           countngo + globalization + as.factor(year.num),
+                                         data=filter(full.data, 
+                                                     gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.ext.neighbors.subregion.ctrl, type="html", 
@@ -345,9 +315,9 @@ stargazer(model.ext.neighbors.subregion.ctrl, type="html",
 
 
 #' ### All models (to LaTeX)
-all.models <- c(model.ext.neighbors, model.ext.neighbors.region, 
-                model.ext.neighbors.subregion,
-                model.ext.neighbors.subregion.ctrl)
+models.ext <- list("Neighbors" = model.ext.neighbors,
+                   "Subregion" = model.ext.neighbors.subregion,
+                   "Subregion + controls" = model.ext.neighbors.subregion.ctrl)
 
 coef.labs <- c("Lowest political risk in all neighboring countries", 
                "Average political risk in subregion", 
@@ -362,14 +332,15 @@ extra.lines <- list(c("Year fixed effects",
                       c(rep("No", 6), rep("Yes", 2))))
 
 capture.output({
-  stargazer(all.models, type="latex", font.size="tiny",
+  stargazer(models.ext,
+            type="latex", font.size="tiny",
             out=file.path(PROJHOME, "Output", "tables", "1-external-models-all.tex"),
             covariate.labels=coef.labs,
             title="External determinants of restrictions on the civil society regulatory environment",
             label="models-external",
             dep.var.caption="Civil society regulatory environment (CSRE) in following year",
             dep.var.labels.include=FALSE,
-            column.labels=names(all.models),
+            column.labels=names(models.ext),
             omit="factor\\(year", no.space=TRUE,
             add.lines=extra.lines)
 }, file="/dev/null")
@@ -377,23 +348,15 @@ capture.output({
 #' ## Model plots
 #' 
 #' ### Coefficient plot
-plot.ext <- arrangeGrob(fig.coef(model.ext.neighbors, 
-                                 "Neighbors", legend=FALSE, space.below=TRUE), 
-                        fig.coef(model.ext.neighbors.subregion, 
-                                 "Subregion", legend=FALSE, space.below=TRUE), 
-                        fig.coef(model.ext.neighbors.subregion.ctrl, 
-                                 "Subregion + controls", ylab="Coefficient"), 
-                        heights=c(2/10, 2.5/10, 5.5/10), ncol=1)
-grid::grid.draw(plot.ext)
+plot.ext <- fig.coef(models.ext, xlab="Civil society regulatory environment (CSRE)")
+plot.ext
 
 fig.save.cairo(plot.ext, filename="1-coefs-ext", 
-               width=6, height=7)
+               width=6, height=3)
 
 
 #' ### CSRE across neighbor stability and coups in region
-new.data.ext <- model.ext.neighbors.subregion.ctrl %>%
-  map_df("model", .id="regime.type") %>%
-  group_by(regime.type) %>%
+new.data.ext <- model.ext.neighbors.subregion.ctrl$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          neighbor.coups.activity.bin = FALSE,
@@ -407,30 +370,25 @@ new.data.ext <- model.ext.neighbors.subregion.ctrl %>%
   select(-index)
 
 plot.predict <- model.ext.neighbors.subregion.ctrl %>% 
-  map_df(~ augment(., newdata=new.data.ext), .id="regime.type.pred") %>%
-  filter(regime.type == regime.type.pred) %>%
+  augment(newdata=new.data.ext) %>%
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
          pred.upper = pred + (qnorm(0.975) * .se.fit),
-         regime.type = factor(regime.type, 
-                              levels=c("Democracy", "Autocracy"), 
-                              labels=c("Democracies    ", "Autocracies"), 
-                              ordered=TRUE),
          coup.in.region = factor(coups.activity.subregional, 
                                  labels=c("No coup activity in subregion", 
                                           "Moderate coup activity in subregion")))
 
 plot.subregion.coup.pred <- ggplot(plot.predict, 
                                    aes(x=icrg.pol.risk.subregional.loo, 
-                                       y=pred, colour=regime.type)) + 
-  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+                                       y=pred, colour=coup.in.region)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=coup.in.region), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x="Average political risk in subregion (ICRG)", 
        y="Predicted CSRE") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
-  theme_ath() + facet_wrap(~ coup.in.region)
+  scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
+  scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
+  theme_ath()
 plot.subregion.coup.pred
 
 fig.save.cairo(plot.subregion.coup.pred, filename="1-icrg-subregion-coup-ext-pred", 
@@ -442,12 +400,10 @@ fig.save.cairo(plot.subregion.coup.pred, filename="1-icrg-subregion-coup-ext-pre
 #' ## Actual models
 #' 
 #' ### Just severity and shame percent
-model.shame.simple <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
-             icews.pct.shame + 
-             as.factor(year.num),
-           data=.))
+model.shame.simple <- lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
+                           icews.pct.shame + 
+                           as.factor(year.num),
+                         data=filter(full.data, gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.shame.simple, type="html", 
@@ -459,13 +415,11 @@ stargazer(model.shame.simple, type="html",
                            rep("Yes", 2))))
 
 #' ### Severity and shame and regional instability
-model.shame.regional <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
-             icews.pct.shame + 
-             icrg.pol.risk.regional.loo +
-             as.factor(year.num),
-           data=.))
+model.shame.regional <- lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
+                             icews.pct.shame + 
+                             icrg.pol.risk.regional.loo +
+                             as.factor(year.num),
+                           data=filter(full.data, gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.shame.regional, type="html", 
@@ -477,14 +431,12 @@ stargazer(model.shame.regional, type="html",
                            rep("Yes", 2))))
 
 #' ### All shaming variables + controls (interstate)
-model.shame.full.ctrl.state <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
-             icews.pct.shame + 
-             icrg.pol.risk.regional.loo +
-             gdpcap.log + population.log +
-             oda.log + countngo + globalization + as.factor(year.num),
-           data=.))
+model.shame.full.ctrl.state <- lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
+                                    icews.pct.shame + 
+                                    icrg.pol.risk.regional.loo +
+                                    gdpcap.log + population.log +
+                                    oda.log + countngo + globalization + as.factor(year.num),
+                                  data=filter(full.data, gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.shame.full.ctrl.state, type="html", 
@@ -496,14 +448,12 @@ stargazer(model.shame.full.ctrl.state, type="html",
                            rep("Yes", 2))))
 
 #' ### All shaming variables + controls (INGOs)
-model.shame.full.ctrl.ingos <- full.data %>%
-  split(.$polity_ord2) %>%
-  map(~ lm(cs_env_sum.lead ~ icews.conflict.severity.abs.ingos +
-             icews.pct.shame.ingos +
-             icrg.pol.risk.regional.loo +
-             gdpcap.log + population.log +
-             oda.log + countngo + globalization + as.factor(year.num),
-           data=.))
+model.shame.full.ctrl.ingos <- lm(cs_env_sum.lead ~ icews.conflict.severity.abs.ingos +
+                                    icews.pct.shame.ingos +
+                                    icrg.pol.risk.regional.loo +
+                                    gdpcap.log + population.log +
+                                    oda.log + countngo + globalization + as.factor(year.num),
+                                  data=filter(full.data, gwf.binary == "Autocracy"))
 
 #+ results='asis'
 stargazer(model.shame.full.ctrl.ingos, type="html", 
@@ -516,8 +466,9 @@ stargazer(model.shame.full.ctrl.ingos, type="html",
 
 
 #' ### All models (to LaTeX)
-all.models <- c(model.shame.simple, model.shame.regional, 
-                model.shame.full.ctrl.state, model.shame.full.ctrl.ingos)
+models.shame <- list("Severity, conflict, and regional instability" = model.shame.regional,
+                     "All controls (interstate)" = model.shame.full.ctrl.state,
+                     "All controls (INGOs)" = model.shame.full.ctrl.ingos)
 
 coef.labs <- c("Severity of conflictual events (interstate)",
                "Percent of all events that are conflictual (interstate)", 
@@ -531,14 +482,15 @@ extra.lines <- list(c("Year fixed effects",
                       c(rep("Yes", 8))))
 
 capture.output({
-  stargazer(all.models, type="latex", font.size="tiny",
+  stargazer(models.shame, 
+            type="latex", font.size="tiny",
             out=file.path(PROJHOME, "Output", "tables", "1-shaming-models-all.tex"),
             covariate.labels=coef.labs,
             title="Reputational determinants of restrictions on the civil society regulatory environment",
             label="models-reputational",
             dep.var.caption="Civil society regulatory environment (CSRE) in following year",
             dep.var.labels.include=FALSE,
-            column.labels=names(all.models),
+            column.labels=names(models.shame),
             omit="factor\\(year", no.space=TRUE,
             add.lines=extra.lines)
 }, file="/dev/null")
@@ -546,24 +498,22 @@ capture.output({
 #' ## Model plots
 #' 
 #' ### Coefficient plot
-plot.shame <- arrangeGrob(fig.coef(model.shame.regional, 
-                                   "Severity, conflict, and regional instability", 
-                                   legend=FALSE, space.below=TRUE), 
-                          fig.coef(model.shame.full.ctrl.state, 
-                                   "All controls (interstate)", legend=FALSE,
-                                   space.below=TRUE),
-                          fig.coef(model.shame.full.ctrl.ingos, 
-                                   "All controls (INGOs)", ylab="Coefficient"),
-                          heights=c(20/100, 35/100, 45/100), ncol=1)
-grid::grid.draw(plot.shame)
+shame.var.order <- c("icews.conflict.severity.abs", "icews.pct.shame", 
+                     "icews.conflict.severity.abs.ingos", "icews.pct.shame.ingos", 
+                     "icrg.pol.risk.regional.loo", "icews.conflict.severity.abs", 
+                     "icews.pct.shame", "icrg.pol.risk.regional.loo", "gdpcap.log", 
+                     "population.log", "oda.log", "countngo", "globalization")
+
+plot.shame <- fig.coef(models.shame, xlab="Civil society regulatory environment (CSRE)",
+                       var.order=shame.var.order)
+plot.shame
 
 fig.save.cairo(plot.shame, filename="1-coefs-shame", 
-               width=6, height=7)
+               width=6, height=3)
+
 
 #' ### CSRE across severity of events
-new.data.severity <- model.shame.full.ctrl.state %>%
-  map_df("model", .id="regime.type") %>%
-  group_by(regime.type) %>%
+new.data.severity <- model.shame.full.ctrl.state$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          index = 1) %>%
@@ -574,20 +524,15 @@ new.data.severity <- model.shame.full.ctrl.state %>%
   select(-index)
 
 plot.predict <- model.shame.full.ctrl.state %>% 
-  map_df(~ augment(., newdata=new.data.severity), .id="regime.type.pred") %>%
-  filter(regime.type == regime.type.pred) %>%
+  augment(newdata=new.data.severity) %>%
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
-         pred.upper = pred + (qnorm(0.975) * .se.fit),
-         regime.type = factor(regime.type, 
-                              levels=c("Democracy", "Autocracy"), 
-                              labels=c("Democracies    ", "Autocracies"), 
-                              ordered=TRUE))
+         pred.upper = pred + (qnorm(0.975) * .se.fit))
 
 plot.shame.severity.pred <- ggplot(plot.predict, 
                                    aes(x=icews.conflict.severity.abs, 
-                                       y=pred, colour=regime.type)) + 
-  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+                                       y=pred)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x="Average severity of conflictual events", 
@@ -601,9 +546,7 @@ fig.save.cairo(plot.shame.severity.pred, filename="1-shame-severity-pred",
                width=5, height=3)
 
 #' ### CSRE across percent of conflictual events
-new.data.shame.state <- model.shame.full.ctrl.state %>%
-  map_df("model", .id="regime.type") %>%
-  group_by(regime.type) %>%
+new.data.shame.state <- model.shame.full.ctrl.state$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          index = 1) %>%
@@ -614,21 +557,14 @@ new.data.shame.state <- model.shame.full.ctrl.state %>%
   select(-index)
 
 plot.predict.state <- model.shame.full.ctrl.state %>% 
-  map_df(~ augment(., newdata=new.data.shame.state), .id="regime.type.pred") %>%
-  filter(regime.type == regime.type.pred) %>%
+  augment(newdata=new.data.shame.state) %>%
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
-         pred.upper = pred + (qnorm(0.975) * .se.fit),
-         regime.type = factor(regime.type, 
-                              levels=c("Democracy", "Autocracy"), 
-                              labels=c("Democracies    ", "Autocracies"), 
-                              ordered=TRUE)) %>%
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
   mutate(actor = "Interstate",
          pct.shame = icews.pct.shame)
 
-new.data.shame.ingos <- model.shame.full.ctrl.ingos %>%
-  map_df("model", .id="regime.type") %>%
-  group_by(regime.type) %>%
+new.data.shame.ingos <- model.shame.full.ctrl.ingos$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          index = 1) %>%
@@ -639,15 +575,10 @@ new.data.shame.ingos <- model.shame.full.ctrl.ingos %>%
   select(-index)
 
 plot.predict.ingos <- model.shame.full.ctrl.ingos %>% 
-  map_df(~ augment(., newdata=new.data.shame.ingos), .id="regime.type.pred") %>%
-  filter(regime.type == regime.type.pred) %>%
+  augment(., newdata=new.data.shame.ingos) %>%
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
-         pred.upper = pred + (qnorm(0.975) * .se.fit),
-         regime.type = factor(regime.type, 
-                              levels=c("Democracy", "Autocracy"), 
-                              labels=c("Democracies    ", "Autocracies"), 
-                              ordered=TRUE)) %>%
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
   mutate(actor = "INGO-based",
          pct.shame = icews.pct.shame.ingos)
 
@@ -656,16 +587,16 @@ plot.predict <- bind_rows(plot.predict.state, plot.predict.ingos) %>%
 
 plot.shame.pct.pred <- ggplot(plot.predict, 
                               aes(x=pct.shame, 
-                                  y=pred, colour=regime.type)) + 
-  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=regime.type), 
+                                  y=pred, colour=actor)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=actor), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x="Percent of events that are conflictual", 
        y="Predicted CSRE") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
+  scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
+  scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
   scale_x_continuous(labels=percent) +
-  theme_ath() + facet_wrap(~ actor, ncol=2)
+  theme_ath()
 plot.shame.pct.pred
 
 fig.save.cairo(plot.shame.pct.pred, filename="1-shame-pct-pred", 

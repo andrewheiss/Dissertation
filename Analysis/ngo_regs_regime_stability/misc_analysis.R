@@ -15,18 +15,20 @@
 #' # Load libraries and data
 library(magrittr)
 library(dplyr)
+library(feather)
 library(tidyr)
 library(purrr)
 library(broom)
 library(ggplot2)
+library(ggstance)
 library(gridExtra)
 library(scales)
 library(Cairo)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
-full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
-                               "full_data.rds"))
+full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                                    "full_data.feather"))
 
 my.seed <- 1234
 set.seed(my.seed)
@@ -68,6 +70,10 @@ cs.plot.all %>%
 cs.plot.all %>% 
   left_join(select(full.data, Country, polity_ord2), by="Country") %>%
   group_by(polity_ord2) %>% summarise(index.change.avg = mean(env.mean))
+
+cs.plot.all %>% 
+  left_join(select(full.data, Country, gwf.binary), by="Country") %>%
+  group_by(gwf.binary) %>% summarise(index.change.avg = mean(env.mean))
 
 plot.csre.top.bottom <- ggplot(cs.plot, aes(x=Country, y=env.mean)) +
   geom_point(size=2) + 
@@ -115,6 +121,23 @@ grid::grid.draw(plot.regime.csre)
 fig.save.cairo(plot.regime.csre, filename="1-regime-csre", 
                width=5, height=2)
 
+# GWF regime type and Polity/UDS and CSRE
+gwf.summary <- full.data %>%
+  group_by(gwf.binary) %>%
+  summarise(env.avg = mean(cs_env_sum),
+            env.sd = sd(cs_env_sum),
+            env.se = env.sd / sqrt(n()),
+            env.upper = env.avg + (qnorm(0.975) * env.se),
+            env.lower = env.avg + (qnorm(0.025) * env.se)) %>%
+  na.omit
+
+plot.gwf.csre <- ggplot(gwf.summary, aes(y=gwf.binary, x=env.avg)) + 
+  geom_pointrangeh(aes(xmin=env.lower, xmax=env.upper), size=0.5) +
+  geom_point(data=full.data, aes(x=cs_env_sum), alpha=0.025, size=0.25) +
+  labs(x="Civil society regulatory environment\n(CSRE)", y=NULL) +
+  theme_ath()
+plot.gwf.csre
+
 
 #' # Understanding and visualizing ICRG
 #' 
@@ -140,6 +163,10 @@ risk.stats %>%
 risk.stats %>% 
   left_join(select(full.data, Country, polity_ord2), by="Country") %>%
   group_by(polity_ord2) %>% summarise(index.change.avg = mean(index.change))
+
+risk.stats %>% 
+  left_join(select(full.data, Country, gwf.binary), by="Country") %>%
+  group_by(gwf.binary) %>% summarise(index.change.avg = mean(index.change))
 
 
 #' Visualize changes:
@@ -171,7 +198,7 @@ fig.save.cairo(plot.icrg.examples, filename="1-icrg-examples",
 #' Are autocracies necessarily more unstable than democracies? They are more
 #' volatile, as shown above with `risk.stats` summaries…
 plot.data <- full.data %>%
-  group_by(polity_ord2, year.actual) %>%
+  group_by(gwf.binary, year.actual) %>%
   summarise(icrg = mean(icrg.pol.risk.internal.scaled, na.rm=TRUE),
             icrg.sd = sd(icrg.pol.risk.internal.scaled, na.rm=TRUE),
             icrg.se = icrg.sd / sqrt(n()),
@@ -179,12 +206,12 @@ plot.data <- full.data %>%
             icrg.lower = icrg + (qnorm(0.025) * icrg.se)) %>%
   na.omit() %>%
   ungroup() %>%
-  mutate(polity_ord2 = factor(polity_ord2, levels=c("Democracy", "Autocracy"),
-                              labels=c("Democracies    ", "Autocracies")))
+  mutate(gwf.binary = factor(gwf.binary, levels=c("Democracy", "Autocracy"),
+                             labels=c("Democracies    ", "Autocracies")))
 
 plot.icrg.regime <- ggplot(plot.data, aes(x=year.actual, y=icrg, 
-                                          colour=polity_ord2)) + 
-  geom_ribbon(aes(ymin=icrg.lower, ymax=icrg.upper, fill=polity_ord2), 
+                                          colour=gwf.binary)) + 
+  geom_ribbon(aes(ymin=icrg.lower, ymax=icrg.upper, fill=gwf.binary), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x=NULL, y="Mean internal political risk (ICRG)") + 
@@ -198,10 +225,10 @@ fig.save.cairo(plot.icrg.regime, filename="1-icrg-regime",
 
 #' Check if the difference in means is significant in each year
 year.diffs <- full.data %>%
-  select(polity_ord2, year.num, icrg.pol.risk.internal.scaled) %>%
+  select(gwf.binary, year.num, icrg.pol.risk.internal.scaled) %>%
   na.omit() %>%
   group_by(year.num) %>%
-  do(tidy(t.test(icrg.pol.risk.internal.scaled ~ polity_ord2, data=.)))
+  do(tidy(t.test(icrg.pol.risk.internal.scaled ~ gwf.binary, data=.)))
 
 year.diffs %>% select(1:6) %>% print(n=nrow(.))
 #' Yup. They are.
@@ -343,11 +370,11 @@ fig.save.cairo(plot.coup.vars, filename="1-ext-coup-vars",
 
 #' # Event data visualization
 plot.data <- full.data %>%
-  select(Country, year.num, year.actual, polity_ord2,
+  select(Country, year.num, year.actual, gwf.binary,
          icews.conflict.severity.abs, icews.pct.shame,
          icews.conflict.severity.abs.ingos, icews.pct.shame.ingos) %>%
   na.omit %>%
-  group_by(year.actual, polity_ord2) %>%
+  group_by(year.actual, gwf.binary) %>%
   summarise(shame = mean(icews.pct.shame),
             shame.sd = sd(icews.pct.shame, na.rm=TRUE),
             shame.se = shame.sd / sqrt(n()),
@@ -368,13 +395,13 @@ plot.data <- full.data %>%
             severity.ingo.se = severity.ingo.sd / sqrt(n()),
             severity.ingo.upper = severity.ingo + (qnorm(0.975) * severity.ingo.se),
             severity.ingo.lower = severity.ingo + (qnorm(0.025) * severity.ingo.se)) %>%
-  mutate(polity_ord2 = factor(polity_ord2, levels=c("Democracy", "Autocracy"),
-                              labels=c("Democracies    ", "Autocracies")))
+  mutate(gwf.binary = factor(gwf.binary, levels=c("Democracy", "Autocracy"),
+                             labels=c("Democracies    ", "Autocracies")))
 
 #' ## Interstate shame percent and severity
 plot.states.shame <- ggplot(plot.data, aes(x=year.actual, y=shame, 
-                                           colour=polity_ord2)) + 
-  geom_ribbon(aes(ymin=shame.lower, ymax=shame.upper, fill=polity_ord2), 
+                                           colour=gwf.binary)) + 
+  geom_ribbon(aes(ymin=shame.lower, ymax=shame.upper, fill=gwf.binary), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) +
   labs(x=NULL, y="Mean percent of all interstate\nevents that are conflictual") + 
@@ -384,8 +411,8 @@ plot.states.shame <- ggplot(plot.data, aes(x=year.actual, y=shame,
   theme_ath()
 
 plot.states.severity <- ggplot(plot.data, aes(x=year.actual, y=severity, 
-                                              colour=polity_ord2)) + 
-  geom_ribbon(aes(ymin=severity.lower, ymax=severity.upper, fill=polity_ord2), 
+                                              colour=gwf.binary)) + 
+  geom_ribbon(aes(ymin=severity.lower, ymax=severity.upper, fill=gwf.binary), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x=NULL, y="Mean intensity of\ninterstate conflictual events") + 
@@ -402,10 +429,10 @@ fig.save.cairo(plot.events.states, filename="1-events-states",
 
 #' Check if the difference in average shame percent is significant in each year
 year.diffs <- full.data %>%
-  select(polity_ord2, year.num, icews.conflict.severity.abs) %>%
+  select(gwf.binary, year.num, icews.conflict.severity.abs) %>%
   na.omit() %>%
   group_by(year.num) %>%
-  do(tidy(t.test(icews.conflict.severity.abs ~ polity_ord2, data=.)))
+  do(tidy(t.test(icews.conflict.severity.abs ~ gwf.binary, data=.)))
 
 year.diffs %>% select(1:6) %>% print(n=nrow(.))
 #' Nope, not really.
@@ -413,10 +440,10 @@ year.diffs %>% select(1:6) %>% print(n=nrow(.))
 
 #' Check if the difference in average severity is significant in each year
 year.diffs <- full.data %>%
-  select(polity_ord2, year.num, icews.pct.shame) %>%
+  select(gwf.binary, year.num, icews.pct.shame) %>%
   na.omit() %>%
   group_by(year.num) %>%
-  do(tidy(t.test(icews.pct.shame ~ polity_ord2, data=.)))
+  do(tidy(t.test(icews.pct.shame ~ gwf.binary, data=.)))
 
 year.diffs %>% select(1:6) %>% print(n=nrow(.))
 #' Again, nope.
@@ -424,8 +451,8 @@ year.diffs %>% select(1:6) %>% print(n=nrow(.))
 
 #' ## INGO shaming percent and severity
 plot.ingos.shame <- ggplot(plot.data, aes(x=year.actual, y=shame.ingo, 
-                                          colour=polity_ord2)) + 
-  geom_ribbon(aes(ymin=shame.ingo.lower, ymax=shame.ingo.upper, fill=polity_ord2), 
+                                          colour=gwf.binary)) + 
+  geom_ribbon(aes(ymin=shame.ingo.lower, ymax=shame.ingo.upper, fill=gwf.binary), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) +
   labs(x=NULL, y="Mean percent of all INGO-state\nevents that are conflictual") + 
@@ -435,8 +462,8 @@ plot.ingos.shame <- ggplot(plot.data, aes(x=year.actual, y=shame.ingo,
   theme_ath()
 
 plot.ingos.severity <- ggplot(plot.data, aes(x=year.actual, y=severity.ingo, 
-                                             colour=polity_ord2)) + 
-  geom_ribbon(aes(ymin=severity.ingo.lower, ymax=severity.ingo.upper, fill=polity_ord2), 
+                                             colour=gwf.binary)) + 
+  geom_ribbon(aes(ymin=severity.ingo.lower, ymax=severity.ingo.upper, fill=gwf.binary), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x=NULL, y="Mean intensity of\nINGO-state conflictual events") + 
@@ -453,10 +480,10 @@ fig.save.cairo(plot.events.ingos, filename="1-events-ingos",
 
 #' Check if the difference in average shame percent is significant in each year
 year.diffs <- full.data %>%
-  select(polity_ord2, year.num, icews.conflict.severity.abs.ingos) %>%
+  select(gwf.binary, year.num, icews.conflict.severity.abs.ingos) %>%
   na.omit() %>%
   group_by(year.num) %>%
-  do(tidy(t.test(icews.conflict.severity.abs.ingos ~ polity_ord2, data=.)))
+  do(tidy(t.test(icews.conflict.severity.abs.ingos ~ gwf.binary, data=.)))
 
 year.diffs %>% select(1:6) %>% print(n=nrow(.))
 #' Nope.
@@ -464,10 +491,10 @@ year.diffs %>% select(1:6) %>% print(n=nrow(.))
 
 #' Check if the difference in average severity is significant in each year
 year.diffs <- full.data %>%
-  select(polity_ord2, year.num, icews.pct.shame.ingos) %>%
+  select(gwf.binary, year.num, icews.pct.shame.ingos) %>%
   na.omit() %>%
   group_by(year.num) %>%
-  do(tidy(t.test(icews.pct.shame.ingos ~ polity_ord2, data=.)))
+  do(tidy(t.test(icews.pct.shame.ingos ~ gwf.binary, data=.)))
 
 year.diffs %>% select(1:6) %>% print(n=nrow(.))
 #' Nope.
