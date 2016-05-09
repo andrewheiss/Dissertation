@@ -198,6 +198,7 @@ plot.icrg.int.pred <- ggplot(plot.predict, aes(x=icrg.pol.risk.internal.scaled,
   labs(x="Internal political risk (ICRG)", y="Predicted CSRE") + 
   scale_colour_manual(values=c(col.auth), name=NULL) +
   scale_fill_manual(values=c(col.auth), name=NULL, guide=FALSE) +
+  coord_cartesian(ylim=c(-4, 4)) +
   theme_ath()
 plot.icrg.int.pred
 
@@ -234,12 +235,21 @@ plot.icrg.yrs.int.pred <- ggplot(plot.predict,
   labs(x="Internal political risk (ICRG)", y="Predicted CSRE") + 
   scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
   scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
+  coord_cartesian(ylim=c(-4, 4)) +
   theme_ath()
 plot.icrg.yrs.int.pred
 
 fig.save.cairo(plot.icrg.yrs.int.pred, filename="1-icrg-yrs-int-pred", 
                width=5, height=3)
 
+#' ### Both predictions together
+plot.icrg.int.pred.both <- arrangeGrob(plot.icrg.int.pred, 
+                                       plot.icrg.yrs.int.pred,
+                                       nrow=1)
+grid::grid.draw(plot.icrg.int.pred.both)
+
+fig.save.cairo(plot.icrg.int.pred.both, filename="1-icrg-yrs-int-pred-both", 
+               width=5, height=2.5)
 
 #' # External factors
 #' 
@@ -392,7 +402,7 @@ plot.subregion.coup.pred <- ggplot(plot.predict,
 plot.subregion.coup.pred
 
 fig.save.cairo(plot.subregion.coup.pred, filename="1-icrg-subregion-coup-ext-pred", 
-               width=5, height=3)
+               width=5, height=2.5)
 
 
 #' # Shaming and diplomatic conflict factors
@@ -513,7 +523,7 @@ fig.save.cairo(plot.shame, filename="1-coefs-shame",
 
 
 #' ### CSRE across severity of events
-new.data.severity <- model.shame.full.ctrl.state$model %>%
+new.data.severity.state <- model.shame.full.ctrl.state$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          index = 1) %>%
@@ -523,27 +533,50 @@ new.data.severity <- model.shame.full.ctrl.state$model %>%
              by="index") %>% 
   select(-index)
 
-plot.predict <- model.shame.full.ctrl.state %>% 
-  augment(newdata=new.data.severity) %>%
+plot.predict.state <- model.shame.full.ctrl.state %>% 
+  augment(newdata=new.data.severity.state) %>%
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
-         pred.upper = pred + (qnorm(0.975) * .se.fit))
+         pred.upper = pred + (qnorm(0.975) * .se.fit),
+         actor = "Interstate") %>%
+  rename(severity = icews.conflict.severity.abs)
+
+new.data.severity.ingo <- model.shame.full.ctrl.ingos$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, icews.conflict.severity.abs.ingos)) %>%
+  right_join(data_frame(icews.conflict.severity.abs.ingos = seq(0, 10, by=0.1), 
+                        index = 1),
+             by="index") %>% 
+  select(-index)
+
+plot.predict.ingo <- model.shame.full.ctrl.ingos %>% 
+  augment(newdata=new.data.severity.ingo) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit),
+         actor = "INGO-based") %>%
+  rename(severity = icews.conflict.severity.abs.ingos)
+
+plot.predict <- bind_rows(plot.predict.state, plot.predict.ingo) %>%
+  mutate(actor = factor(actor, levels=c("Interstate", "INGO-based"), ordered=TRUE))
 
 plot.shame.severity.pred <- ggplot(plot.predict, 
-                                   aes(x=icews.conflict.severity.abs, 
-                                       y=pred)) + 
-  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper), 
+                                   aes(x=severity, y=pred, colour=actor)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=actor), 
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) + 
   labs(x="Average severity of conflictual events", 
        y="Predicted CSRE") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
+  scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
+  scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
   theme_ath() 
 plot.shame.severity.pred
 
 fig.save.cairo(plot.shame.severity.pred, filename="1-shame-severity-pred", 
-               width=5, height=3)
+               width=5, height=2.5)
+
 
 #' ### CSRE across percent of conflictual events
 new.data.shame.state <- model.shame.full.ctrl.state$model %>%

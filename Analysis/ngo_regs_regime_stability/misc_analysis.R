@@ -105,6 +105,7 @@ plot.polity <- ggplot(plot.data, aes(x=e_polity2, y=cs_env_sum)) +
   labs(x="Polity IV score", 
        y="Civil society regulatory environment\n(CSRE)") +
   scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  coord_cartesian(ylim=c(-6, 6)) +
   theme_ath()
 
 plot.uds <- ggplot(plot.data, aes(x=uds_mean, y=cs_env_sum)) + 
@@ -113,13 +114,8 @@ plot.uds <- ggplot(plot.data, aes(x=uds_mean, y=cs_env_sum)) +
   geom_smooth(method="lm", se=TRUE, colour="#014358") +
   labs(x="Mean UDS score", y=NULL) +
   scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  coord_cartesian(ylim=c(-6, 6)) +
   theme_ath()
-
-plot.regime.csre <- arrangeGrob(plot.polity, plot.uds, nrow=1)
-grid::grid.draw(plot.regime.csre)
-
-fig.save.cairo(plot.regime.csre, filename="1-regime-csre", 
-               width=5, height=2)
 
 # GWF regime type and Polity/UDS and CSRE
 gwf.summary <- full.data %>%
@@ -131,12 +127,19 @@ gwf.summary <- full.data %>%
             env.lower = env.avg + (qnorm(0.025) * env.se)) %>%
   na.omit
 
-plot.gwf.csre <- ggplot(gwf.summary, aes(y=gwf.binary, x=env.avg)) + 
-  geom_pointrangeh(aes(xmin=env.lower, xmax=env.upper), size=0.5) +
-  geom_point(data=full.data, aes(x=cs_env_sum), alpha=0.025, size=0.25) +
-  labs(x="Civil society regulatory environment\n(CSRE)", y=NULL) +
+plot.gwf.csre <- ggplot(gwf.summary, aes(x=gwf.binary, y=env.avg)) + 
+  geom_pointrange(aes(ymin=env.lower, ymax=env.upper), size=0.5) +
+  geom_point(data=full.data, aes(y=cs_env_sum), size=0.25, alpha=0.05) +
+  labs(y=NULL, x="Geddes et al. categorization") +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  coord_cartesian(ylim=c(-6, 6)) +
   theme_ath()
-plot.gwf.csre
+
+plot.regime.csre <- arrangeGrob(plot.polity, plot.uds, plot.gwf.csre, nrow=1)
+grid::grid.draw(plot.regime.csre)
+
+fig.save.cairo(plot.regime.csre, filename="1-regime-csre", 
+               width=5, height=2)
 
 
 #' # Understanding and visualizing ICRG
@@ -185,12 +188,13 @@ plot.icrg.examples <- ggplot(example.stability,
                                  colour=country.plot)) + 
   geom_line(size=1.5) + 
   labs(x=NULL, y="Internal political risk (ICRG)") + 
+  coord_cartesian(xlim=ymd(c("2000-01-01", "2015-01-01"))) +
   scale_colour_manual(values=c("#014358", "#FD7401", "#BEDB3A"), name=NULL) +
   theme_ath()
 plot.icrg.examples
 
 fig.save.cairo(plot.icrg.examples, filename="1-icrg-examples", 
-               width=5, height=3)
+               width=5, height=2)
 
 
 #' # ICRG across regime type
@@ -275,6 +279,42 @@ grid::grid.draw(plot.auth.vars)
 
 fig.save.cairo(plot.auth.vars, filename="1-auth-vars", 
                width=6, height=2)
+
+#' ## ICRG stability and competition
+plot.data <- full.data %>%
+  select(icrg.pol.risk.internal.scaled, yrsoffc, years.since.comp, opp1vote) %>% 
+  na.omit()
+
+plot.data %>%
+  summarise_each(funs(cor(., plot.data$icrg.pol.risk.internal.scaled)),
+                 -icrg.pol.risk.internal.scaled)
+
+plot.yrs.offc <- ggplot(plot.data, aes(x=yrsoffc, y=icrg.pol.risk.internal.scaled)) + 
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
+  labs(x="Years executive has been in office", 
+       y="ICRG") +
+  scale_y_continuous(breaks=seq(-0, 100, 20)) +
+  theme_ath()
+
+plot.yrs.since.comp <- ggplot(plot.data, 
+                              aes(x=years.since.comp, y=icrg.pol.risk.internal.scaled)) + 
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") +
+  labs(x="Years since a competitive election", y=NULL) +
+  scale_y_continuous(breaks=seq(-0, 100, 20)) +
+  theme_ath()
+
+plot.opp.vote <- ggplot(plot.data, aes(x=opp1vote, y=icrg.pol.risk.internal.scaled)) + 
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") +
+  labs(x="Vote share for largest opposition party", y=NULL) +
+  scale_y_continuous(breaks=seq(-0, 100, 20)) +
+  theme_ath()
+
+plot.auth.vars <- arrangeGrob(plot.yrs.offc, plot.yrs.since.comp, 
+                              plot.opp.vote, nrow=1)
+grid::grid.draw(plot.auth.vars)
 
 
 #' # Neighboring and regional ICRG risk
