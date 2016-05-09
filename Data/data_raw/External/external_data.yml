@@ -197,7 +197,7 @@ datasets:
         affiliation: University of Gothenburg
         email: contact@v-dem.net
     url: https://www.v-dem.net/en/data/
-    filename: "V-Dem/Country-Year, V-Dem + other, CVS/V-Dem-DS-CY+Others-v5.csv"
+    filename: "V-Dem/v6/V-Dem-DS-CY+Others-v6.csv"
     type: csv
     description: >-
         350+ democracy-related indicators and indexes for 173 countries from 1900–2012
@@ -206,7 +206,7 @@ datasets:
         Skaaning, Jan Teorell, David Altman, Michael Bernhard, M. Steven Fish,
         Adam Glynn, Allen Hicken, Carl Henrik Knutsen, Kyle Marquardt, Kelly
         McMann, Farhad Miri, Pamela Paxton, Daniel Pemstein, Jeffrey Staton,
-        Eitan Tzelgov, Yi-ting Wang, and Brigitte Zimmerman. 2015. "V-Dem
-        [Country-Year/Country-Date] Dataset v5." Varieties of Democracy
+        Eitan Tzelgov, Yi-ting Wang, and Brigitte Zimmerman. 2016. "V-Dem
+        [Country-Year/Country-Date] Dataset v6." Varieties of Democracy
         (V-Dem) Project.
 ---
