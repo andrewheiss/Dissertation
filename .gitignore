@@ -79,6 +79,9 @@ Data/Survey/Branding/*
 Data/Survey/list/*
 Data/Survey/suppressions/*
 Data/Survey/*.log
+Data/Survey/sql_csvs/*
+Data/Survey/raw_data/*
+Data/Survey/output/*
 !Data/Survey/templates/*.html
 
 
