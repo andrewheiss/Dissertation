@@ -1,6 +1,7 @@
 library(dplyr)
 library(readr)
 library(feather)
+library(readODS)
 
 countries <- read_feather(file.path(PROJHOME, "Data", "Survey", "output",
                                     "survey_countries.feather"))
@@ -62,10 +63,12 @@ db.email <- src_sqlite(path=file.path(PROJHOME, "Data", "Survey", "list",
 email.full <- tbl(db.email, "full_list") %>% collect()
 completed <- tbl(db.email, "survey_completed") %>% collect()
 
-unknown.completed <- c("R_1oA250tKpKvZZeW", "R_1Kyc9UBAFa8zIOE", "R_3qNL7uZ5gkeqykd", "R_1JWode0p5e0IGn6", "R_aY33zkGNKQxKUeh", "R_2ydDp0ToXr9xpXN", "R_3qeXqHoJbHAJV7T", "R_9zQxb03X6UT81Wh", "R_3qlpCKseYkkTO5s", "R_ABz6acut27BE0xz", "R_3I4677WoGBOmW4Q", "R_1I3H1V2bIjObFUm", "R_50YS1E8qFvzh5yt")
+unknown.completed <- read_ods(file.path(PROJHOME, "Data", "Survey", 
+                                        "sql_csvs", "sql_queries.ods"),
+                              sheet="unknown_completed")
 
 responses.to.be.matched <- responses.matching.completed %>%
-  filter(!(ResponseID %in% c(completed$qualtrics_id, unknown.completed)))
+  filter(!(ResponseID %in% c(completed$qualtrics_id, unknown.completed$qualtrics_id)))
 
 write_csv(responses.to.be.matched,
           file.path(PROJHOME, "Data", "Survey", "output",
