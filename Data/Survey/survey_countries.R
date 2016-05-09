@@ -3,6 +3,7 @@ library(tidyr)        # For more magic dataframe manipulation
 library(countrycode)  # Standardize countries
 library(rvest)        # Scrape stuff from the web
 library(pander)       # Markdown
+library(feather)      # For passing data between R scripts
 
 # World Bank countries
 wb.countries.raw <- read_html("http://data.worldbank.org/country") %>%
@@ -16,9 +17,9 @@ wb.countries.clean <- wb.countries.raw %>%
   gather(key, `Country name`, everything()) %>%
   select(-key) %>%
   mutate(ISO3 = countrycode(`Country name`, "country.name", "iso3c"),
-         `COW code` = countrycode(ISO3, "iso3c", "cown"),
-         `Qualtrics ID` = 1:n()) %>%
-  filter(!is.na(ISO3))
+         `COW code` = countrycode(ISO3, "iso3c", "cown")) %>%
+  filter(!is.na(ISO3)) %>%
+  mutate(`Qualtrics ID` = 1:n())
 wb.countries.clean
 
 # Nice Markdown table
@@ -32,3 +33,8 @@ gsub("\\.", "\\\\.", paste(wb.countries.clean$`Country name`, collapse="|")) %>%
 # Plain text list of countries for Qualtrics
 cat(paste0(wb.countries.clean$`Country name`, collapse="\n"),
     file=file.path(PROJHOME, "Data", "Survey", "output", "survey_countries.txt"))
+
+# Save as feather
+write_feather(wb.countries.clean,
+              path=file.path(PROJHOME, "Data", "Survey", "output",
+                             "survey_countries.feather"))
