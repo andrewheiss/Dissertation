@@ -1,2 +1,7 @@
+# SendGrid stuff
 API_KEY = ''
 TEMPLATE_ID = ''
+
+# Mailgun stuff
+MG_API_KEY = ''
+MG_DOMAIN = ''

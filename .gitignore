@@ -79,6 +79,7 @@ Data/Survey/Branding/*
 Data/Survey/list/*
 Data/Survey/suppressions/*
 Data/Survey/*.log
+!Data/Survey/templates/*.html
 
 
 # ----------------------------------------
