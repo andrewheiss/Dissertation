@@ -209,4 +209,47 @@ datasets:
         Eitan Tzelgov, Yi-ting Wang, and Brigitte Zimmerman. 2016. "V-Dem
         [Country-Year/Country-Date] Dataset v6." Varieties of Democracy
         (V-Dem) Project.
+
+  - name: Autocratic regime data
+    title: "Autocratic Breakdown and Regime Transitions"
+    author:
+      - name: Barbara Geddes
+        affiliation: UCLA
+        email: geddes@ucla.edu
+      - name: Joseph Wright
+        affiliation: Pennsylvania State University
+        email: josephGwright@gmail.com
+      - name: Erica Frantz
+        affiliation: Michigan State University
+        email: ericaemilyfrantz@yahoo.com
+    url: http://sites.psu.edu/dictators/
+    filename: "GWF Autocratic Regimes/GWF_AllPoliticalRegimes.dta"
+    type: dta
+    description: >-
+      Regime type data for 154 countries from 1946–2010
+    citation: >-
+      Geddes, Barbara, Joseph Wright, and Erica Frantz. 2014. "Autocratic
+      Breakdown and Regime Transitions: A New Data Set." *Perspectives on
+      Politics* 12, no. 2 (June): 313–31. doi:10.1017/S1537592714000851.
+
+  - name: DCJW NGO laws
+    title: "NGO Laws"
+    author:
+      - name: Darin Christensen
+        affiliation: Stanford University
+        email: darin.christensen@gmail.com
+      - name:  Jeremy M. Weinstein
+        affiliation: Stanford University
+        email: jweinst@stanford.edu
+    url: https://darinchristensen.github.io/Data/DCJW_NGO_Laws.xlsx
+    filename: "DCJW NGO Laws/DCJW_NGO_Laws"
+    type: xlsx
+    description: >-
+      Collection of all laws related to general associational rights and
+      barriers to entry, funding, and advocacy for NGOs in 98 countries
+      from 1909–2012
+    citation: >-
+      Christensen, Darin, and Jeremy M. Weinstein. 2013. "Defunding Dissent:
+      Restrictions on Aid to NGOs." *Journal of Democracy 24, no. 2 (April):
+      77–91. doi:10.1353/jod.2013.0026.
 ---
