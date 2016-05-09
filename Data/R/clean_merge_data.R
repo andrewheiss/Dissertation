@@ -682,6 +682,7 @@ icews.ingos <- read_feather(file.path(PROJHOME, "Data", "data_processed",
 
 # GWF Autocratic regimes
 # http://sites.psu.edu/dictators/
+# This is included in V-Dem, but only `gwf_regimetype` and `gwf_nonautocracy`
 gwf <- read_stata(file.path(PROJHOME, "Data", "data_raw", 
                             "External", "GWF Autocratic Regimes",
                             "GWF_AllPoliticalRegimes.dta")) %>%
@@ -702,6 +703,18 @@ gwf.simplified <- gwf %>%
          gwf.binary = factor(gwf.binary,
                              levels=c("autocracy", "democracy"),
                              labels=c("Autocracy", "Democracy")))
+
+
+# Christensen and Weinstein NGO laws
+dcjw.raw <- read_excel(file.path(PROJHOME, "Data", "data_raw",
+                                 "External", "DCJW NGO Laws", 
+                                 "DCJW_NGO_Laws.xlsx"))
+
+dcjw.years <- dcjw.raw[,1:50] %>%
+  summarise_each(funs(year.min = min(., na.rm=TRUE),
+                      year.max = max(., na.rm=TRUE)),
+                 ends_with("year")) %>%
+  gather(key, value)
 
 
 # ------------------
