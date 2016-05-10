@@ -1,4 +1,5 @@
 library(dplyr)
+library(tidyr)
 library(readr)
 library(stringr)
 
@@ -191,45 +192,57 @@ wants.to.call <- read_ods(file.path(PROJHOME, "Data", "Survey",
                                     "sql_csvs", "sql_queries.ods"),
                           sheet="wants_to_call")
 
+contact.so.else  <- read_ods(file.path(PROJHOME, "Data", "Survey", 
+                                       "sql_csvs", "sql_queries.ods"),
+                             sheet="contact_someone_else")
+
+# Super clean e-mails from Email Hippo
+hippo.raw <- read_csv(file=file.path(PROJHOME, "Data", "Survey",
+                                     "suppressions", "hippo_check.csv"))
+
+hippo.clean <- hippo.raw %>% filter(Status == "Ok")
 
 # Filter out Mailgun unsubscribes and bounces
-mg.unsubs <- read_csv(file.path(PROJHOME, "Data", "Survey",
-                                "suppressions", "mg_unsubscribes.csv"))
+# mg.unsubs <- read_csv(file.path(PROJHOME, "Data", "Survey",
+#                                 "suppressions", "mg_unsubscribes.csv"))
+# 
+# mg.bounces <- read_csv(file.path(PROJHOME, "Data", "Survey",
+#                                  "suppressions", "mg_bounces.csv"))
+# 
+# unsub.sql <- mg.unsubs %>%
+#   left_join(select(email.full, index_org, email), by="email") %>%
+#   filter(!is.na(index_org)) %>%
+#   filter(!(index_org %in% removed$fk_org)) %>%
+#   mutate(remove = 1, remove_notes = "Unsubscribed") %>%
+#   select(fk_org = index_org, remove, remove_notes)
+# 
+# write_csv(unsub.sql,
+#           file.path(PROJHOME, "Data", "Survey",
+#                     "sql_csvs", "mg_unsubscribes.csv"))
+# 
+# bounces.sql <- mg.bounces %>%
+#   left_join(select(email.full, index_org, email), by="email") %>%
+#   filter(!is.na(index_org)) %>%
+#   filter(!(index_org %in% bounced$fk_org)) %>%
+#   mutate(hard_bounce = 1, email_dead = 0, email_bounce = 0) %>%
+#   select(fk_org = index_org, hard_bounce, email_dead, email_bounce)
+# 
+# write_csv(bounces.sql,
+#           file.path(PROJHOME, "Data", "Survey",
+#                     "sql_csvs", "mg_bounces.csv"))
 
-mg.bounces <- read_csv(file.path(PROJHOME, "Data", "Survey",
-                                 "suppressions", "mg_bounces.csv"))
 
-unsub.sql <- mg.unsubs %>%
-  left_join(select(email.full, index_org, email), by="email") %>%
-  filter(!is.na(index_org)) %>%
-  filter(!(index_org %in% removed$fk_org)) %>%
-  mutate(remove = 1, remove_notes = "Unsubscribed") %>%
-  select(fk_org = index_org, remove, remove_notes)
-
-write_csv(unsub.sql,
-          file.path(PROJHOME, "Data", "Survey",
-                    "sql_csvs", "mg_unsubscribes.csv"))
-
-bounces.sql <- mg.bounces %>%
-  left_join(select(email.full, index_org, email), by="email") %>%
-  filter(!is.na(index_org)) %>%
-  filter(!(index_org %in% bounced$fk_org)) %>%
-  mutate(hard_bounce = 1, email_dead = 0, email_bounce = 0) %>%
-  select(fk_org = index_org, hard_bounce, email_dead, email_bounce)
-
-write_csv(bounces.sql,
-          file.path(PROJHOME, "Data", "Survey",
-                    "sql_csvs", "mg_bounces.csv"))
-
-
-ids.to.skip <- c(removed$fk_org, bounced$fk_org, completed$fk_org, wants.to.call$index_org)
+ids.to.skip <- c(removed$fk_org, bounced$fk_org, completed$fk_org,
+                 wants.to.call$index_org, contact.so.else$fk_org)
 
 reminders <- email.full %>%
   filter(!(index_org %in% ids.to.skip)) %>%
-  filter(group %in% as.character(1:9)) %>%
+  filter(index_org %in% ids.clean) %>%
+  filter(group %in% as.character(10:28)) %>%
   mutate(email = strsplit(as.character(email), ",")) %>%
   unnest(email) %>%
   select(index_org, id_org, org_name_email, email, group)
+
 
 # Check these at Email Hippo
 #
@@ -239,18 +252,18 @@ reminders <- email.full %>%
 #       $          $
 #       $$$$$$$$$$$$
 #
-write_csv(reminders, path="~/Desktop/early_groups.csv")
-
-
-# Filter out dead addresses
-hippo.early <- read_csv(file=file.path(PROJHOME, "Data", "Survey",
-                                       "suppressions", "hippo_early_groups.csv"))
- 
-hippo.clean <- hippo.early %>% filter(Status == "Ok")
-
-reminders.1.8 <- reminders %>%
-  filter(index_org %in% hippo.clean$index_org) %>%
-  filter(group %in% as.character(1:8))
+# write_csv(reminders, path="~/Desktop/early_groups.csv")
+# 
+# 
+# # Filter out dead addresses
+# hippo.early <- read_csv(file=file.path(PROJHOME, "Data", "Survey",
+#                                        "suppressions", "hippo_early_groups.csv"))
+#  
+# hippo.clean <- hippo.early %>% filter(Status == "Ok")
+# 
+# reminders.1.8 <- reminders %>%
+#   filter(index_org %in% hippo.clean$index_org) %>%
+#   filter(group %in% as.character(1:8))
 
 
 # Save individual group lists
@@ -262,6 +275,6 @@ writer <- function(df) {
   return(df)
 }
 
-reminders.1.8 %>%
+reminders %>%
   group_by(group) %>%
   do(writer(.))
