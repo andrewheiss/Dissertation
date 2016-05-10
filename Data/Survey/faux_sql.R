@@ -176,6 +176,7 @@ write_csv(to.send, path=file.path(PROJHOME, "Data", "Survey", "list",
 # write_csv(hippo.clean, "~/Desktop/round_9_clean_hippo_clean.csv")
 
 
+
 # ------------------------
 # 1st round of reminders
 # ------------------------
@@ -186,9 +187,42 @@ removed <- tbl(db.email, "remove") %>% collect()
 bounced <- tbl(db.email, "bounces") %>% collect()
 completed <- tbl(db.email, "survey_completed") %>% collect()
 
-wants.to.call <- c("25907", "20653", "20558", "19362", "727", "22348", "26229", "19737", "329", "22767", "24060", "2122", "24904", "19868", "18664", "18606", "6993", "24892", "18556", "18437", "20202", "18244", "17770", "17876", "20368", "18894", "24338", "83")
+wants.to.call <- read_ods(file.path(PROJHOME, "Data", "Survey", 
+                                    "sql_csvs", "sql_queries.ods"),
+                          sheet="wants_to_call")
 
-ids.to.skip <- c(removed$fk_org, bounced$fk_org, completed$fk_org, wants.to.call)
+
+# Filter out Mailgun unsubscribes and bounces
+mg.unsubs <- read_csv(file.path(PROJHOME, "Data", "Survey",
+                                "suppressions", "mg_unsubscribes.csv"))
+
+mg.bounces <- read_csv(file.path(PROJHOME, "Data", "Survey",
+                                 "suppressions", "mg_bounces.csv"))
+
+unsub.sql <- mg.unsubs %>%
+  left_join(select(email.full, index_org, email), by="email") %>%
+  filter(!is.na(index_org)) %>%
+  filter(!(index_org %in% removed$fk_org)) %>%
+  mutate(remove = 1, remove_notes = "Unsubscribed") %>%
+  select(fk_org = index_org, remove, remove_notes)
+
+write_csv(unsub.sql,
+          file.path(PROJHOME, "Data", "Survey",
+                    "sql_csvs", "mg_unsubscribes.csv"))
+
+bounces.sql <- mg.bounces %>%
+  left_join(select(email.full, index_org, email), by="email") %>%
+  filter(!is.na(index_org)) %>%
+  filter(!(index_org %in% bounced$fk_org)) %>%
+  mutate(hard_bounce = 1, email_dead = 0, email_bounce = 0) %>%
+  select(fk_org = index_org, hard_bounce, email_dead, email_bounce)
+
+write_csv(bounces.sql,
+          file.path(PROJHOME, "Data", "Survey",
+                    "sql_csvs", "mg_bounces.csv"))
+
+
+ids.to.skip <- c(removed$fk_org, bounced$fk_org, completed$fk_org, wants.to.call$index_org)
 
 reminders <- email.full %>%
   filter(!(index_org %in% ids.to.skip)) %>%
