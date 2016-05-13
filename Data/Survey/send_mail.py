@@ -11,7 +11,7 @@ from time import sleep
 # ------------------
 # E-mail variables
 # ------------------
-deadline = 'May 10, 2016'
+deadline = 'May 18, 2016'
 subject = 'Help with research about international NGOs'
 
 wait_mu = 0.25
@@ -120,7 +120,7 @@ def send_email_mg(org, deadline, subject, body=' ', log=True):
 
 
 if __name__ == '__main__':
-    # email_orgs = get_emails('list/groups_reminders/group_8_clean.csv')
+    # email_orgs = get_emails('list/groups_reminders/group_28_clean.csv')
     # email_orgs = [{'id_org': 1, 'email': 'andrew.heiss@duke.edu',
     #                'org_name_email': 'Amnesty International'}]
 
