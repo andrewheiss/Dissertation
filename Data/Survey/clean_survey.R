@@ -167,9 +167,11 @@ stop.continue <- c("Answer questions about another country",
                    "Continue with survey's final questions")
 
 
+# ----------------------------------------------------------
 # -----------------------------
 # Load, munge, and clean data
 # -----------------------------
+# ----------------------------------------------------------
 # Load raw data
 survey.v1 <- read_qualtrics(file.path(PROJHOME, "Data", "Survey", "raw_data", 
                                       "INGOs_and_government_regulations.csv"),
@@ -180,7 +182,11 @@ survey.v2 <- read_qualtrics(file.path(PROJHOME, "Data", "Survey", "raw_data",
                             file.path(PROJHOME, "Data", "Survey", "raw_data", 
                                       "v2cols.csv"))
 
+
+# -------------------------
 # Organization-level data
+# -------------------------
+# Original version of the survey
 survey.v1.orgs <- survey.v1 %>%
   magrittr::set_colnames(gsub("#", "zzz", colnames(.))) %>%
   select(-starts_with("Q4")) %>%
@@ -274,10 +280,72 @@ survey.v1.orgs <- survey.v1 %>%
   #
   # Q5.x block
   mutate(Q5.2 = yes.no(Q5.2),
-         Q5.3 = yes.no(Q5.3))
+         Q5.3 = yes.no(Q5.3)) %>%
+  mutate(survey = "First")
+
+# Final version of the survey
+survey.v2.orgs <- survey.v2 %>%
+  magrittr::set_colnames(gsub("#", "zzz", colnames(.))) %>%
+  select(-starts_with("Q4")) %>%
+  select(-c(ResponseSet, IPAddress, starts_with("Recipient"), 
+            ExternalDataReference, starts_with("Location"))) %>%
+  # Metadata
+  mutate(survey.duration = EndDate - StartDate,
+         Q1.1 = yes.no(Q1.1)) %>%
+  #
+  # Q2.x block
+  left_join(rename(countries, Q2.2_country = `Country name`, Q2.2_iso3 = ISO3,
+                   Q2.2_cow = `COW code`), 
+            by=c("Q2.2" = "Qualtrics ID")) %>%
+  mutate(Q2.3 = factor(Q2.3, levels=1:6, labels=position.in.org),
+         Q2.4 = yes.no(Q2.4)) %>%
+  unite(Q2.5, starts_with("Q2.5"), sep=",") %>%
+  # Match values from unite() with column names, then remove NAs from resulting
+  # list, then convert text list into actual list
+  mutate(Q2.5 = stri_split(map_chr(Q2.5, match_collapse), regex=","),
+         Q2.5_count = map(Q2.5, length_na),
+         Q2.5_name = map(Q2.5, match_country_id, id="name"),
+         Q2.5_iso3 = map(Q2.5, match_country_id, id="iso3"),
+         Q2.5_cow = map(Q2.5, match_country_id, id="cow")) %>%
+  #
+  # Q3.x block
+  unite(Q3.1, starts_with("Q3.1_"), -Q3.1_9_TEXT, sep=",") %>%
+  rename(Q3.1_other_TEXT = Q3.1_9_TEXT) %>%
+  mutate(Q3.1 = stri_split(map_chr(Q3.1, match_collapse), regex=","),
+         Q3.1_value = map(Q3.1, assign_value, values=issues),
+         Q3.2 = factor(Q3.2, levels=1:9, labels=issues)) %>%
+  rename(Q3.3_aid = Q3.3zzz1_1, Q3.3_education = Q3.3zzz1_2,
+         Q3.3_mobilize = Q3.3zzz1_3, Q3.3_advocacy = Q3.3zzz1_4,
+         Q3.3_monitor = Q3.3zzz1_5,
+         Q3.3_aid_TEXT = Q3.3zzz2_1_1_TEXT, Q3.3_education_TEXT = Q3.3zzz2_2_1_TEXT,
+         Q3.3_mobilize_TEXT = Q3.3zzz2_3_1_TEXT, Q3.3_advocacy_TEXT = Q3.3zzz2_4_1_TEXT,
+         Q3.3_monitor_TEXT = Q3.3zzz2_5_1_TEXT) %>%
+  # Convert answers to factors
+  mutate_each(funs(factor(., levels=1:7, labels=always.never.dk)),
+              c(Q3.3_aid, Q3.3_education, Q3.3_mobilize, 
+                Q3.3_advocacy, Q3.3_monitor)) %>%
+  unite(Q3.6, starts_with("Q3.6_"), -Q3.6_5_TEXT, sep=",") %>%
+  mutate(Q3.6 = stri_split(map_chr(Q3.6, match_collapse), regex=","),
+         Q3.6_value = map(Q3.6, assign_value, values=collaboration)) %>%
+  rename(Q3.6_other_TEXT = Q3.6_5_TEXT) %>%
+  rename(Q3.8_individual = Q3.8_1, Q3.8_corporate = Q3.8_2,
+         Q3.8_foundation = Q3.8_3, Q3.8_home_govt = Q3.8_4,
+         Q3.8_host_govt = Q3.8_5, Q3.8_other = Q3.8_6,
+         Q3.8_other_TEXT = Q3.8_6_TEXT) %>%
+  mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
+              c(Q3.8_individual, Q3.8_corporate, Q3.8_foundation, 
+                Q3.8_home_govt, Q3.8_host_govt, Q3.8_other)) %>%
+  #
+  # Q5.x block
+  mutate(Q5.2 = yes.no(Q5.2),
+         Q5.3 = yes.no(Q5.3)) %>%
+  mutate(survey = "Final")
 
 
+# --------------------
 # Country-level data
+# --------------------
+# Original version of the survey
 survey.v1.countries <- survey.v1 %>%
   magrittr::set_colnames(gsub("#", "zzz", colnames(.))) %>%
   select(ResponseID, starts_with("Q4")) %>%
@@ -396,8 +464,108 @@ survey.v1.countries <- survey.v1 %>%
   mutate(Q4.22 = yes.no.dk(Q4.22),
          Q4.23 = yes.no.dk(Q4.23),
          Q4.24 = factor(Q4.24, levels=1:2, labels=stop.continue)) %>%
-  select(ResponseID, loop.number, starts_with("Q4.1_"), Q4.2, Q4.3, Q4.3_value,
-         Q4.4, starts_with("Q4.5"), starts_with("Q4.6"), starts_with("Q4.7"),
-         starts_with("Q4.8"), Q4.9, Q4.10, Q4.11, Q4.12, Q4.13, Q4.14,
-         starts_with("Q4.15"), starts_with("Q4.16"), Q4.17, Q4.18, Q4.19,
-         Q4.20, starts_with("Q4.21"), Q4.22, Q4.23, Q4.24)
+  mutate(survey = "First")
+
+
+# Final version of the survey
+survey.v2.countries <- survey.v2 %>%
+  magrittr::set_colnames(gsub("#", "zzz", colnames(.))) %>%
+  select(ResponseID, starts_with("Q4")) %>%
+  #
+  # Split all Q4* columns into a key and value column
+  gather(key, value, starts_with("Q4")) %>%
+  #
+  # Split the key column into two parts: question number and loop number.
+  # Each column follows this pattern: Q4.2(1), Q4.3_1(2), etc., so the regex 
+  # captures both parts: (Q4.2, 1), (Q4.3_1, 2), etc.
+  extract(key, c("question", "loop.number"),
+          c("(Q4.+)\\((\\d+)\\)")) %>%
+  #
+  # Make columns for each of the questions
+  spread(question, value) %>%
+  filter(!is.empty.loop(.)) %>%
+  #
+  # Clean up columns
+  mutate(loop.number = as.numeric(loop.number),
+         Q4.1_name = match_country_id(as.numeric(Q4.1), "name"),
+         Q4.1_iso3 = match_country_id(as.numeric(Q4.1), "iso3"),
+         Q4.1_cow = match_country_id(as.numeric(Q4.1), "cow")) %>%
+  select(-Q4.1) %>%
+  mutate(Q4.2 = factor(Q4.2, levels=1:5, labels=how.long)) %>%
+  unite(Q4.3, starts_with("Q4.3_"), sep=",") %>%
+  mutate(Q4.3 = stri_split(map_chr(Q4.3, match_collapse), regex=","),
+         Q4.3_value = map(Q4.3, assign_value, values=what.do)) %>%
+  mutate(Q4.4 = yes.no.dk(Q4.4),
+         Q4.5 = factor(Q4.5, levels=1:7, labels=how.often)) %>%
+  unite(Q4.6, starts_with("Q4.6"), -Q4.6_7_TEXT, sep=",") %>%
+  mutate(Q4.6 = stri_split(map_chr(Q4.6, match_collapse), regex=","),
+         Q4.6_value = map(Q4.6, assign_value, values=govt.officials)) %>%
+  rename(Q4.6_other_TEXT = Q4.6_7_TEXT) %>%
+  mutate(Q4.7 = factor(Q4.7, levels=1:9, labels=govt.officials),
+         Q4.8 = factor(Q4.8, levels=1:7, labels=how.often),
+         Q4.9 = yes.no.dk(Q4.9),
+         Q4.11 = factor(Q4.11, levels=1:7, labels=pos.neg),
+         Q4.13 = factor(Q4.13, levels=1:6, labels=familiar),
+         Q4.14 = factor(Q4.14, levels=1:6, labels=how.often.short)) %>%
+  unite(Q4.15, starts_with("Q4.15_"),-Q4.15_5_TEXT, sep=",") %>%
+  mutate(Q4.15 = stri_split(map_chr(Q4.15, match_collapse), regex=","),
+         Q4.15_value = map(Q4.15, assign_value, values=how.find.out)) %>%
+  rename(Q4.15_other_TEXT = Q4.15_5_TEXT) %>%
+  rename(Q4.16_registration = Q4.16_1, Q4.16_operations = Q4.16_2,
+         Q4.16_speech = Q4.16_3, Q4.16_communications = Q4.16_4,
+         Q4.16_assembly = Q4.16_5, Q4.16_resources = Q4.16_6,
+         Q4.16_registration_TEXT = Q4.16a, Q4.16_operations_TEXT = Q4.16b,
+         Q4.16_speech_TEXT = Q4.16c, Q4.16_communications_TEXT = Q4.16d,
+         Q4.16_assembly_TEXT = Q4.16e, Q4.16_resources_TEXT = Q4.16f) %>%
+  mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
+              c(Q4.16_registration, Q4.16_operations, Q4.16_speech, 
+                Q4.16_communications, Q4.16_assembly, Q4.16_resources)) %>%
+  mutate(Q4.17 = factor(Q4.17, levels=1:6, labels=restricted),
+         Q4.19 = yes.no.dk(Q4.19)) %>%
+  rename(Q4.21_funding = Q4.21_1, Q4.21_issues = Q4.21_2,
+         Q4.21_comm_govt = Q4.21_3, Q4.21_comm_donors = Q4.21_4,
+         Q4.21_locations = Q4.21_5, Q4.21_country_office = Q4.21_6,
+         Q4.21_local_staff = Q4.21_7, Q4.21_foreign_staff = Q4.21_8,
+         Q4.21_funding_TEXT = Q4.21a, Q4.21_issues_TEXT = Q4.21b,
+         Q4.21_comm_govt_TEXT = Q4.21c, Q4.21_comm_donors_TEXT = Q4.21d,
+         Q4.21_locations_TEXT = Q4.21e, Q4.21_country_office_TEXT = Q4.21f,
+         Q4.21_local_staff_TEXT = Q4.21g, Q4.21_foreign_staff_TEXT = Q4.21h) %>%
+  mutate_each(funs(factor(., levels=1:4, labels=yndk.na)),
+              c(Q4.21_funding, Q4.21_issues, Q4.21_comm_govt, 
+                Q4.21_comm_donors, Q4.21_locations, Q4.21_country_office,
+                Q4.21_local_staff, Q4.21_foreign_staff)) %>%
+  mutate(Q4.22 = yes.no.dk(Q4.22),
+         Q4.23 = yes.no.dk(Q4.23),
+         Q4.24 = factor(Q4.24, levels=1:2, labels=stop.continue)) %>%
+  mutate(survey = "Final")
+
+
+# ----------------------------
+# Final combined survey data
+# ----------------------------
+survey.orgs <- survey.v1.orgs %>%
+  bind_rows(survey.v2.orgs) %>%
+  filter(Q2.4 == "Yes") %>%
+  # TODO: Handle incomplete surveys somehow—some have useful information...
+  # filter(Finished == 1) %>%
+  select(ResponseID, StartDate, EndDate, Finished, Status, 
+         survey, survey.duration, Q1.1, Q2.1, Q2.2, starts_with("Q2.2_"), 
+         starts_with("Q2.3"), Q2.4, Q2.4, starts_with("Q2.5"), 
+         starts_with("Q3"), starts_with("Q5"), Q6.1, Q7.1)
+
+survey.countries <- survey.v1.countries %>%
+  bind_rows(survey.v2.countries) %>%
+  select(ResponseID, loop.number, survey, starts_with("Q4.1_"), Q4.2, Q4.3, 
+         Q4.3_value, Q4.4, starts_with("Q4.5"), starts_with("Q4.6"), 
+         starts_with("Q4.7"), starts_with("Q4.8"), Q4.9, Q4.10, Q4.11, Q4.12, 
+         Q4.13, Q4.14, starts_with("Q4.15"), starts_with("Q4.16"), Q4.17, 
+         Q4.18, Q4.19, Q4.20, starts_with("Q4.21"), Q4.22, Q4.23, Q4.24)
+
+# Not using feather because it can't handle list columns yet
+saveRDS(survey.orgs, 
+        file=file.path(PROJHOME, "Data", "data_processed", 
+                       "survey.orgs.rds"))
+
+saveRDS(survey.countries, 
+        file=file.path(PROJHOME, "Data", "data_processed", 
+                       "survey.countries.rds"))
