@@ -564,8 +564,8 @@ survey.countries <- survey.v1.countries %>%
 # Not using feather because it can't handle list columns yet
 saveRDS(survey.orgs, 
         file=file.path(PROJHOME, "Data", "data_processed", 
-                       "survey.orgs.rds"))
+                       "survey_orgs.rds"))
 
 saveRDS(survey.countries, 
         file=file.path(PROJHOME, "Data", "data_processed", 
-                       "survey.countries.rds"))
+                       "survey_countries.rds"))
