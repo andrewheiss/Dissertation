@@ -22,7 +22,11 @@ library(stringr)
 library(yaml)
 library(purrr)
 library(pander)
+library(ggplot2)
+library(ggrepel)
 library(scales)
+library(lubridate)
+library(plotly)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -49,6 +53,7 @@ email.full <- tbl(db.email, "full_list") %>% collect() %>%
 removed <- tbl(db.email, "remove") %>% collect()
 bounced.raw <- tbl(db.email, "bounces") %>% collect()
 completed <- tbl(db.email, "survey_completed") %>% collect()
+sending.groups <- tbl(db.email, "groups") %>% collect()
 
 email.by.db <- email.full %>%
   group_by(db) %>%
@@ -237,6 +242,67 @@ absorption.rate <- (EI - BB.NET) / EI
 #' number of reminders sent and their form (email, letter, IVR call, or
 #' personal call), and the use of any incentive [@CallegaroDiSogra:2008, 1026].
 #' 
+invited.groups.summary <- email.full %>%
+  filter(!(index_org %in% dead.and.bounced$fk_org)) %>%
+  mutate(id_group = as.integer(group)) %>%
+  group_by(id_group) %>%
+  summarise(num.in.group = n())
+
+sending.groups.summary <- sending.groups %>%
+  left_join(invited.groups.summary, by="id_group") %>%
+  # Because I stupidly didn't include a final reminder column, I put the
+  # timestamp of the final reminder in the notes column. This extracts the
+  # timestamp with a regex.
+  mutate(email_final_reminder = 
+           str_extract(notes, "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}")) %>%
+  mutate_each(funs(ymd_hms), starts_with("email")) %>%
+  gather(email_type, email_date, starts_with("email"))
+
+
+make_range <- function(x) {
+  if (length(x) == 1) {
+    return(paste("Group", as.character(x)))
+  } else {
+    return(paste0("Groups ", min(x), "-", max(x)))
+  }
+}
+
+sending.groups.plot <- sending.groups.summary %>%
+  mutate(email_day = ceiling_date(email_date, unit="day")) %>%
+  filter(!is.na(email_day)) %>%
+  group_by(email_day, email_type) %>%
+  summarise(emails_sent = sum(num.in.group),
+            group_names = make_range(id_group)) %>%
+  ungroup() %>%
+  mutate(total = cumsum(emails_sent),
+         email_type = factor(email_type, 
+                             levels=c("email_invitation", "email_reminder", 
+                                      "email_final_reminder"),
+                             label=c("Invitation  ", "Reminder  ", "Final reminder"),
+                             ordered=TRUE))
+
+plot.timeline <- ggplot(sending.groups.plot, aes(x=email_day, y=total)) +
+  geom_step(size=0.5, colour="grey50") + 
+  scale_y_continuous(labels=comma) +
+  scale_x_datetime(date_labels="%B %e", date_breaks="1 week") +
+  guides(fill=FALSE, colour=guide_legend(title=NULL)) +
+  labs(x=NULL, y="Approximate total number of emails") +
+  theme_light()
+
+plot.timeline.static <- plot.timeline + 
+  geom_point(aes(color=email_type)) + 
+  geom_label_repel(aes(label=group_names, fill=email_type),
+                   size=2.5, colour="white") +
+  theme(legend.position="bottom", 
+        legend.key.size=unit(0.65, "lines"),
+        legend.key=element_blank(),
+        panel.grid.minor=element_blank())
+
+plot.timeline.interactive <- plot.timeline +
+  geom_point(aes(color=email_type, text=group_names))
+
+ggplotly(plot.timeline.interactive)
+
 
 #' # References
 #' 
