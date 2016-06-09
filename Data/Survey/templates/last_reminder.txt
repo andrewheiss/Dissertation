@@ -3,23 +3,21 @@ Hello,
 I'm a doctoral student at Duke University in the United States and I am
 conducting a research project about international NGOs and the laws and
 regulations of the countries they work in. A while ago, I invited you to
-participate in a global survey of international NGOs. Several hundred NGOs
-have participated so far, but *your participation would be very valuable.*
+participate in a global survey of international NGOs. Unfortunately there was a
+minor error in the survey that prevented many organizations from participating
+(which I have since fixed), so I am inviting you **one final time** to
+participate. Several hundred NGOs have responded so far, but *your
+participation would be very valuable.*
+
+You can access the survey at https://www.ingoresearch.org/ or
+https://duke.qualtrics.com/SE/?SID=SV_abHCZewmEEJZLZb. I would be so grateful
+if you could complete the survey by **{1}**.
 
 The survey is about 15 minutes long and lets you share your insights about the
 work {0} has done internationally and its relationship with the governments of
 the countries it works in. If you are interested, I'll share a summary of the
 results with you once the survey is complete. All your responses will remain
 anonymous.
-
-You can access the survey at https://www.ingoresearch.org/ or
-https://duke.qualtrics.com/SE/?SID=SV_abHCZewmEEJZLZb. I would be so grateful
-if you could complete the survey by **{1}**.
-
-If you don't like taking surveys, or if you would rather speak via phone or
-Skype, I would love to talk with you to learn more about your organization's
-experiences. Reply to this e-mail and we can schedule a one-on-one conversation
-if you have time.
 
 If you feel unqualified to answer the survey questions, could you please let me
 know if there is a particular person in your office who would be willing to
@@ -36,8 +34,7 @@ www.andrewheiss.com  | @andrewheiss
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-You should only receive a few more e-mails from me regarding this survey: one
-initial invitation and two reminders later.
+This is the final e-mail you'll receive from me. Best of luck in your work!
 
 If you want to be officially removed from this list of NGOs click here:
 %unsubscribe_url%

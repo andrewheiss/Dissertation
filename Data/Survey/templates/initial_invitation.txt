@@ -36,8 +36,8 @@ www.andrewheiss.com  | @andrewheiss
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-You should only receive two e-mails from me regarding this survey: one initial
-invitation and one reminder a week later.
+You should only receive a few more e-mails from me regarding this survey: one
+initial invitation and two reminders later.
 
 If you want to be officially removed from this list of NGOs click here:
 %unsubscribe_url%
