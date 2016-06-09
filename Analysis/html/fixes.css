@@ -14,6 +14,12 @@ pre {
     font-size: 75%;
 }
 
+blockquote {
+    font-size: 1em;
+    margin-left: 4em;
+    margin-right: 4em;
+}
+
 .back-to-top {
     width: 150px;
     position: fixed;
