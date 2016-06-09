@@ -14,7 +14,7 @@
 #' csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
 #' ...
 
-#' ## Load and process all data
+#' # Load and process all data
 #+ message=FALSE
 library(dplyr)
 library(tidyr)
@@ -34,18 +34,9 @@ panderOptions('keep.line.breaks', TRUE)
 panderOptions('table.style', 'multiline')
 panderOptions('table.alignment.default', 'left')
 
-# Load YAML metadata for survey lists
-raw.lists <- yaml.load_file(file.path(PROJHOME, "data", "data_raw",
-                                      "NGO lists", "ngo_lists.yml"),
-                            as.named.list=TRUE)
 
-# Convert to nice dataframe with purrr::map_df()
-list.details <- seq(1:length(raw.lists$lists)) %>%
-  map_df(function(x) raw.lists$lists[[x]][c("title", 'name',
-                                            "num_rows_raw", "description")]) %>%
-  arrange(desc(num_rows_raw))
-
-#' Load data from tracking database
+#' ## Dead addresses, domains, and bounces
+# Load data from tracking database
 db.email <- src_sqlite(path=file.path(PROJHOME, "Data", "Survey", "list", 
                                       "final_list.db"))
 email.full <- tbl(db.email, "full_list") %>% collect() %>%
@@ -59,8 +50,6 @@ email.by.db <- email.full %>%
   group_by(db) %>%
   summarise(num.apparently.valid = n())
 
-
-#' Dead addresses, domains, and bounces
 dead.searches <- paste(c("Hippo", "Invalid", "Dead", "weird opt"), collapse="|")
 dead <- removed %>%
   filter(str_detect(remove_notes, regex(dead.searches, ignore_case=TRUE))) %>%
@@ -81,7 +70,19 @@ dead.and.bounced.by.db <- dead.and.bounced %>%
   group_by(db) %>%
   summarise(num.dead.bounced = n())
 
-#' Summarize response rates from each database
+
+#' ## Summarize response rates from each database
+# Load YAML metadata for survey lists
+raw.lists <- yaml.load_file(file.path(PROJHOME, "data", "data_raw",
+                                      "NGO lists", "ngo_lists.yml"),
+                            as.named.list=TRUE)
+
+# Convert to nice dataframe with purrr::map_df()
+list.details <- seq(1:length(raw.lists$lists)) %>%
+  map_df(function(x) raw.lists$lists[[x]][c("title", 'name',
+                                            "num_rows_raw", "description")]) %>%
+  arrange(desc(num_rows_raw))
+
 response.summary <- list.details %>%
   left_join(email.by.db, by=c("name" = "db")) %>%
   left_join(dead.and.bounced.by.db, by=c("name" = "db")) %>%
@@ -103,18 +104,15 @@ response.summary.display <- response.summary.with.total %>%
   mutate_each(funs(comma), starts_with("num")) %>%
   mutate_each(funs(percent), starts_with("perc"))
 
-
-#' ## From raw lists to workable, usable lists
-#' 
 #' Full technical details of how I ran the survey are available at my [research
 #' notebook](https://notebook.andrewheiss.com/project/diss-ingos-in-autocracies/survey-technical-details/).
 #' 
-#' The complete database of NGOs to receive a survey invitation came from `r
-#' length(raw.lists$lists)` different sources. After collecting the details of
-#' each organization listed at each source, I cleaned the raw lists by removing
-#' all organizations without valid e-mail addresses and by attempting to filter
-#' out obviously domestic NGOs. I filtered out domestic NGOs either by not
-#' collecting them in the first place (in the case of the Yearbook of
+#' The complete database of NGOs to receive a survey invitation came from 
+#' `r length(raw.lists$lists)` different sources. After collecting the details
+#' of each organization listed at each source, I cleaned the raw lists by 
+#' removing all organizations without valid e-mail addresses and by attempting 
+#' to filter out obviously domestic NGOs. I filtered out domestic NGOs either 
+#' by not collecting them in the first place (in the case of the Yearbook of
 #' International Organizations), or using information from the database to
 #' identify them. For example, the UN iCSCO database includes a field for an
 #' organization's geographic scope: local, national, regional, and
@@ -130,7 +128,56 @@ response.summary.display <- response.summary.with.total %>%
 #+ results="asis"
 pandoc.table(response.summary.display)
 
+#' ## Figure out partials, incompletes, completes
+#' 
+#' Determine the best cutoff point for partially answered questions based on
+#' the number of questions answered.
+#' 
+# Load full survey data (minus the Q4\* loop for simplicity)
+survey.orgs.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                     "survey_orgs_all.rds"))
 
+# Load cleaned, country-based survey data (*with* the Q4\* loop)
+survey.clean.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                      "survey_clean_all.rds"))
+
+#' What was the minimum number of questions answered by an INGO that finished
+#' the survey?
+#' 
+complete.ingos <- survey.orgs.all %>%
+  filter(Finished == 1, Q2.4 == "Yes") %>%
+  # Count of Q* questions answered
+  mutate(num.answered = rowSums(!is.na(select(., starts_with("Q")))))
+
+min(complete.ingos$num.answered)
+
+#' Thus, my rough cut-off point for partials = 20.
+#'
+#' But, joining survey.orgs.all to survey.countries.all filters out all
+#' respondents who did not answer anything in the loop of country questions.
+#' That's not a problem, though, since the minimum number of questions answered
+#' by one of these partials is higher than 20:
+#' 
+partials <- survey.clean.all %>%
+  filter(Finished == 0) %>%
+  mutate(num.answered = rowSums(!is.na(select(., starts_with("Q"))))) %>%
+  filter(num.answered >= 20)
+
+min(partials$num.answered)
+
+#' So, I count any respondent that answered at least one question in the loop
+#' of country questions. Doing so means that (1) they made it far enough into
+#' the survey, and (2) shared *something* about how they relate to the
+#' governments they work in. It's also a more conservative cutoff than simply
+#' choosing a 20-question minimum arbitrarily.
+#'
+#' Thus, there are this many valid partial responses:
+#' 
+length(unique(partials$ResponseID))
+
+
+#' # Survey meta-metrics
+#' 
 #' ## Absorption rate
 #' 
 #' > The absorption rate [measures] the ability of the survey company to manage
@@ -142,14 +189,14 @@ pandoc.table(response.summary.display)
 #' $$
 #' 
 
-EI <- response.summary.total$num.invited
+EI <- response.summary.total$num.apparently.valid
 BB.NET <- response.summary.total$num.dead.bounced
 
 absorption.rate <- (EI - BB.NET) / EI
 
-#' - EI = e-mail invitations sent (`r comma(EI)`)
-#' - BB = bounced (`r comma(BB.NET)`)
-#' - NET = network undeliverable (included in `BB`)
+#' - EI = e-mail invitations sent: `r comma(EI)`
+#' - BB = bounced: `r comma(BB.NET)`
+#' - NET = network undeliverable: included in `BB`
 #' - **Absorption rate:** `r percent(absorption.rate)`
 #' 
 
@@ -166,12 +213,30 @@ absorption.rate <- (EI - BB.NET) / EI
 #' \frac{BO}{I + P + BO}
 #' $$
 #' 
-#' - BO = number of surveys broken off by my definition (i.e. incomplete and 
-#'   not partial)
-#' - I = complete
-#' - P = partial
-#' 
 
+# Only consider the organizations that were not screened out
+survey.orgs.ingos <- survey.orgs.all %>%
+  filter(Q2.4 == "Yes")
+
+BO <- survey.orgs.ingos %>%
+  filter(!(ResponseID %in% unique(c(partials$ResponseID,
+                                    survey.clean.all$ResponseID)))) %>%
+  select(ResponseID) %>% unique() %>% nrow() %>% unlist()
+
+I.survey <- survey.clean.all %>%
+  filter(Finished == 1) %>% select(ResponseID) %>% 
+  unique() %>% nrow() %>% unlist()
+
+P.survey <- length(unique(partials$ResponseID))
+
+break.off.rate <- BO / (I.survey + P.survey + BO)
+
+#' - BO = number of surveys broken off (i.e. incomplete and 
+#'   not partial): `r comma(BO)`
+#' - I = complete: `r comma(I.survey)`
+#' - P = partial: `r comma(P.survey)`
+#' - **Break-off rate:** `r percent(break.off.rate)` 
+#' 
 
 #' ## Completion rate (participation rate)
 #'
@@ -189,11 +254,28 @@ absorption.rate <- (EI - BB.NET) / EI
 #' \frac{I + P}{(I + P) + (R + NC + O)}
 #' $$
 #' 
-#' - I = complete
-#' - P = partial
-#' - R = refusal and break off
-#' - NC = non-contact
-#' - O = other
+
+# Number who refused (i.e. explicitly did not give consent)
+R.survey <- survey.orgs.all %>%
+  select(Q6.1) %>%
+  filter(!is.na(Q6.1)) %>%
+  nrow() %>% unlist()
+
+#' Non-contact is impossible to determine, since I don't know how many
+#' organizations self-screened without taking the survey or e-mailing me. So,
+#' this participation rate is not accurate, but no participation rate ever is.
+NC <- response.summary.total$num.invited - nrow(survey.orgs.all)
+
+participation.rate <- (I.survey + P.survey) / 
+  (I.survey + P.survey + BO + R.survey + NC)
+
+#' - I = complete: `r comma(I.survey)`
+#' - P = partial: `r comma(P.survey)`
+#' - R = refusal and break-off: `r comma(BO)` (break-off) and 
+#'   `r comma(R.survey)` (refusal)
+#' - NC = non-contact: `r comma(NC)`
+#' - O = other: None
+#' - **Participation rate**: `r percent(participation.rate)`
 #' 
 
 
@@ -212,9 +294,25 @@ absorption.rate <- (EI - BB.NET) / EI
 #' \frac{SCQ + SCNQ}{INV}
 #' $$
 #' 
-#' - SCQ = screening completed and qualified
-#' - SCNQ = screening completed and not qualified (i.e. screened out)
-#' - INV = survey invitations sent out
+
+SCQ <- survey.orgs.all %>%
+  filter(Q2.4 == "Yes") %>%
+  select(ResponseID) %>%
+  unique() %>% nrow() %>% unlist()
+
+SCNQ <- survey.orgs.all %>%
+  filter(Q2.4 == "No") %>%
+  select(ResponseID) %>%
+  unique() %>% nrow() %>% unlist()
+
+INV <- response.summary.total$num.invited
+
+screening.completion.rate <- (SCQ + SCNQ) / INV
+
+#' - SCQ = screening completed and qualified: `r comma(SCQ)`
+#' - SCNQ = screening completed and not qualified (i.e. screened out): `r comma(SCNQ)`
+#' - INV = survey invitations sent out: `r comma(INV)`
+#' - **Study-specific screening completion rate**: `r percent(screening.completion.rate)`
 #' 
 
 
@@ -227,11 +325,15 @@ absorption.rate <- (EI - BB.NET) / EI
 #' [@CallegaroDiSogra:2008, 1023].
 #' 
 #' $$
-#' \frac{SCQ}{SCQ - SCNQ}
+#' \frac{SCQ}{SCQ + SCNQ}
 #' $$
 #' 
-#' - SCQ = screening completed and qualified
-#' - SCNQ = screening completed and not qualified (i.e. screened out)
+
+study.eligibility.rate <- SCQ / (SCQ + SCNQ)
+
+#' - SCQ = screening completed and qualified: `r comma(SCQ)`
+#' - SCNQ = screening completed and not qualified (i.e. screened out): `r comma(SCNQ)`
+#' - **Study-specific eligibility rate**: `r percent(study.eligibility.rate)`
 #' 
 
 
