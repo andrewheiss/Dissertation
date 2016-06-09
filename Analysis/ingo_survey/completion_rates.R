@@ -10,6 +10,7 @@
 #'     theme: cosmo
 #'     includes:
 #'       after_body: ../html/jump.html
+#'     keep_md: yes
 #' bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
 #' csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
 #' ...
@@ -448,6 +449,7 @@ plot.responses.timeline.interactive <- plot.responses.timeline +
              size=0.5)
 
 ggplotly(plot.responses.timeline.interactive)
+
 
 #' # References
 #' 
