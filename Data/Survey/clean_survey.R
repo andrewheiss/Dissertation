@@ -8,6 +8,7 @@ library(feather)
 # TODO: Replace Greenland with Anguilla
 # TODO: Replace Aruba with Kosovo
 # TODO: Replace Cayman Islands with Taiwan
+# TODO: Remove R_12564WimpZZKn5A
 
 
 # ------------------
@@ -543,18 +544,31 @@ survey.v2.countries <- survey.v2 %>%
 # ----------------------------
 # Final combined survey data
 # ----------------------------
-survey.orgs <- survey.v1.orgs %>%
-  bind_rows(survey.v2.orgs) %>%
+survey.orgs.all <- survey.v1.orgs %>%
+  bind_rows(survey.v2.orgs) 
+
+survey.countries.all <- survey.v1.countries %>%
+  bind_rows(survey.v2.countries) 
+
+survey.clean.all <- survey.countries.all %>%
+  left_join(survey.orgs.all, by=c("ResponseID", "survey"))
+
+partials <- survey.clean.all %>%
+  filter(Finished == 0)
+
+# Create clean dataframes with complete and valid partial responses
+survey.orgs <- survey.orgs.all %>%
+  # Only INGOs
   filter(Q2.4 == "Yes") %>%
-  # TODO: Handle incomplete surveys somehow—some have useful information...
-  # filter(Finished == 1) %>%
+  # Completes and valid partials
+  filter(Finished == 1 | ResponseID %in% unique(partials$ResponseID)) %>%
   select(ResponseID, StartDate, EndDate, Finished, Status, 
          survey, survey.duration, Q1.1, Q2.1, Q2.2, starts_with("Q2.2_"), 
          starts_with("Q2.3"), Q2.4, Q2.4, starts_with("Q2.5"), 
          starts_with("Q3"), starts_with("Q5"), Q6.1, Q7.1)
 
-survey.countries <- survey.v1.countries %>%
-  bind_rows(survey.v2.countries) %>%
+survey.countries <- survey.countries.all %>%
+  filter(ResponseID %in% survey.orgs$ResponseID) %>%
   select(ResponseID, loop.number, survey, starts_with("Q4.1_"), Q4.2, Q4.3, 
          Q4.3_value, Q4.4, starts_with("Q4.5"), starts_with("Q4.6"), 
          starts_with("Q4.7"), starts_with("Q4.8"), Q4.9, Q4.10, Q4.11, Q4.12, 
@@ -562,6 +576,14 @@ survey.countries <- survey.v1.countries %>%
          Q4.18, Q4.19, Q4.20, starts_with("Q4.21"), Q4.22, Q4.23, Q4.24)
 
 # Not using feather because it can't handle list columns yet
+saveRDS(survey.orgs.all,
+        file=file.path(PROJHOME, "Data", "data_processed",
+                       "survey_orgs_all.rds"))
+
+saveRDS(survey.clean.all,
+        file=file.path(PROJHOME, "Data", "data_processed",
+                       "survey_clean_all.rds"))
+
 saveRDS(survey.orgs, 
         file=file.path(PROJHOME, "Data", "data_processed", 
                        "survey_orgs.rds"))
