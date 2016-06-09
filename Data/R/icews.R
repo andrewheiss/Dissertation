@@ -37,9 +37,9 @@ all.events <- list.files(clean.files.dir) %>%
 #   group_by(`Event Date`) %>%
 #   summarize(Count = n())
 # 
-# ggplot(plot.data, aes(x=`Event Date`, y=Count)) + 
-#   geom_bar(stat="identity") + 
-#   labs(title="All ICEWS events") + 
+# ggplot(plot.data, aes(x=`Event Date`, y=Count)) +
+#   geom_bar(stat="identity") +
+#   labs(title="All ICEWS events") +
 #   theme_light(10)
 
 
@@ -59,6 +59,22 @@ cameo.categories <- read_csv(file.path(PROJHOME, "Data", "data_raw",
                                                        "Cooperation"), 
                                             "Cooperation", cameo.category)))
 
+# Global protests
+protests <- all.events %>%
+  filter(str_detect(`CAMEO Code`, "14\\d+"))
+
+protests.egypt <- protests %>%
+  filter(Country == "Egypt") %>%
+  filter(`Source Country` == Country)
+
+plot.data <- protests.egypt %>%
+  group_by(`Event Date`) %>%
+  summarize(Count = n())
+
+ggplot(plot.data, aes(x=`Event Date`, y=Count)) +
+  geom_bar(stat="identity") +
+  labs(title="Protests in Egypt") +
+  theme_light(10)
 
 # Filter the raw data and merge in CAMEO categories
 events.filtered <- all.events %>%
