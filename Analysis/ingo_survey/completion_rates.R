@@ -337,13 +337,14 @@ study.eligibility.rate <- SCQ / (SCQ + SCNQ)
 #' 
 
 
-#' ## Other details
+#' # Other details
 #' 
 #' > In addition to these rates, we also believe that it is the best practice
 #' to report the length of the field period with its start and close dates, the
 #' number of reminders sent and their form (email, letter, IVR call, or
 #' personal call), and the use of any incentive [@CallegaroDiSogra:2008, 1026].
 #' 
+#' ## Timeline of e-mail invitations
 invited.groups.summary <- email.full %>%
   filter(!(index_org %in% dead.and.bounced$fk_org)) %>%
   mutate(id_group = as.integer(group)) %>%
@@ -405,6 +406,48 @@ plot.timeline.interactive <- plot.timeline +
 
 ggplotly(plot.timeline.interactive)
 
+
+#' ## Timeline of survey responses
+survey.orgs <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                 "survey_orgs.rds"))
+
+survey.time.plot <- survey.orgs %>%
+  select(EndDate) %>%
+  arrange(EndDate) %>%
+  mutate(done = 1,
+         num.completed.cum = cumsum(done))
+
+plot.responses.timeline <- ggplot() + 
+  geom_step(data=survey.time.plot,
+            aes(x=EndDate, y=num.completed.cum),
+            size=0.5, colour="grey50") + 
+  scale_y_continuous(labels=comma) +
+  scale_x_datetime(date_labels="%B %e", date_breaks="1 week") +
+  guides(fill=FALSE, colour=guide_legend(title=NULL)) +
+  labs(x=NULL, y="Cumulative number of responses") +
+  theme_light()
+
+plot.responses.timeline.static <- plot.responses.timeline +
+  geom_vline(data=sending.groups.plot, 
+             aes(xintercept=as.numeric(email_day), 
+                 colour=email_type),
+             size=0.5) + 
+  geom_label_repel(data=sending.groups.plot,
+                   aes(x=email_day, y=400, 
+                       label=group_names, fill=email_type),
+                   size=2.5, colour="white") +
+  theme(legend.position="bottom", 
+        legend.key.size=unit(0.65, "lines"),
+        legend.key=element_blank(),
+        panel.grid.minor=element_blank())
+
+plot.responses.timeline.interactive <- plot.responses.timeline +
+  geom_vline(data=sending.groups.plot, 
+             aes(xintercept=as.numeric(email_day), 
+                 colour=email_type, text=group_names),
+             size=0.5)
+
+ggplotly(plot.responses.timeline.interactive)
 
 #' # References
 #' 
