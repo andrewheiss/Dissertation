@@ -53,7 +53,7 @@ plot.csre <- ggplot(russia.data, aes(x=year.actual, y=cs_env_sum)) +
   theme_ath()
 
 plot.icrg.internal <- ggplot(icrg.russia, 
-                             aes(x=Date, y=icrg.pol.risk.internal.scaled)) +
+                             aes(x=ymd(Date), y=icrg.pol.risk.internal.scaled)) +
   geom_line(size=1) + 
   geom_vline(data=laws, aes(xintercept=as.numeric(Date)),
              size=0.5, colour="grey50", linetype="dotted") +
@@ -61,7 +61,7 @@ plot.icrg.internal <- ggplot(icrg.russia,
   coord_cartesian(xlim=ymd(c("1995-01-01", "2015-12-31"))) +
   theme_ath()
 
-plot.icrg.external <- ggplot(russia.data, aes(x=year.actual, 
+plot.icrg.external <- ggplot(russia.data, aes(x=ymd(year.actual), 
                                               y=icrg.pol.risk.subregional.loo)) +
   geom_line(size=1) + 
   geom_vline(data=laws, aes(xintercept=as.numeric(Date)),
@@ -102,7 +102,7 @@ plot.misc <- ggplot() +
         axis.text=element_blank())
 
 plot.laws <- ggplot(laws, aes(x=Date, y=0)) + 
-  geom_segment(aes(x=Date, xend=Date, y=0, yend=plot_y), 
+  geom_segment(aes(x=ymd(Date), xend=ymd(Date), y=0, yend=plot_y), 
                size=0.5, colour="grey30") +
   geom_label(data=laws,
             aes(x=Date, y=plot_y, label=law, hjust=plot_h),
@@ -129,7 +129,7 @@ plot.timeline <- rbind(ggplotGrob(plot.laws),
 # Adjust panel sizes
 # via http://stackoverflow.com/a/24333504/120898
 panels <- plot.timeline$layout$t[grep("panel", plot.timeline$layout$name)]
-plot.timeline$heights[panels] <- lapply(c(0.9, 1, 1, 1, 1, 0.15), unit, "null")
+plot.timeline$heights[panels] <- unit(c(0.9, 1, 1, 1, 1, 0.15), "null")
 
 grid::grid.draw(plot.timeline)
 
