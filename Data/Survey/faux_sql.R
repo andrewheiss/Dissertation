@@ -2,6 +2,7 @@ library(dplyr)
 library(tidyr)
 library(readr)
 library(stringr)
+library(readODS)
 
 
 # ----------------------------------------------------------
@@ -200,7 +201,13 @@ contact.so.else  <- read_ods(file.path(PROJHOME, "Data", "Survey",
 hippo.raw <- read_csv(file=file.path(PROJHOME, "Data", "Survey",
                                      "suppressions", "hippo_check.csv"))
 
-hippo.clean <- hippo.raw %>% filter(Status == "Ok")
+hippo.early <- read_csv(file=file.path(PROJHOME, "Data", "Survey",
+                                       "suppressions", "hippo_early_groups.csv"))
+
+hippo.clean <- bind_rows(hippo.raw, hippo.early) %>% 
+  filter(Status == "Ok")
+ids.clean <- hippo.clean$index_org
+
 
 # Filter out Mailgun unsubscribes and bounces
 # mg.unsubs <- read_csv(file.path(PROJHOME, "Data", "Survey",
@@ -238,7 +245,7 @@ ids.to.skip <- c(removed$fk_org, bounced$fk_org, completed$fk_org,
 reminders <- email.full %>%
   filter(!(index_org %in% ids.to.skip)) %>%
   filter(index_org %in% ids.clean) %>%
-  filter(group %in% as.character(10:28)) %>%
+  filter(group %in% as.character(9)) %>%
   mutate(email = strsplit(as.character(email), ",")) %>%
   unnest(email) %>%
   select(index_org, id_org, org_name_email, email, group)
@@ -258,7 +265,7 @@ reminders <- email.full %>%
 # # Filter out dead addresses
 # hippo.early <- read_csv(file=file.path(PROJHOME, "Data", "Survey",
 #                                        "suppressions", "hippo_early_groups.csv"))
-#  
+# 
 # hippo.clean <- hippo.early %>% filter(Status == "Ok")
 # 
 # reminders.1.8 <- reminders %>%
