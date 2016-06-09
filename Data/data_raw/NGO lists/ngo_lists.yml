@@ -42,7 +42,7 @@ lists:
         (1) removed the duplicate "region3" column and (2) resaved as a new
         xlsx file.
 
-  - name: tip-ngos
+  - name: tip
     title: Global Anti-Human Trafficking (TIP) NGOs
     author:
       - name: Judith Kelley
@@ -56,7 +56,7 @@ lists:
         List of anti-trafficking NGOs used previously in a survey for Judith's
         book on scorecard diplomacy
 
-  - name: un-icso
+  - name: icso
     title: UN Integrated Civil Society Organizations System (iCSO)
     author:
       - name: UN Department of Economic and Social Affairs (DESA)
