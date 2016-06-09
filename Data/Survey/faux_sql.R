@@ -143,11 +143,11 @@ write_csv(to.send, path=file.path(PROJHOME, "Data", "Survey", "list",
 
 # # Email Hippo
 # hippo <- read_csv(file=file.path(PROJHOME, "Data", "Survey",
-#                                  "suppressions", "hippo_check.csv"))
+#                                  "suppressions", "hippo_early_groups.csv"))
 # 
 # hippo.dead <- hippo %>%
 #   filter(Status == "Bad") %>%
-#   filter(AdditionalStatusInfo != "MailboxDoesNotExist") 
+#   filter(AdditionalStatusInfo != "MailboxDoesNotExist")
 # 
 # ids.to.remove.hippo.dead <- email.full %>%
 #   filter(index_org %in% hippo.dead$index_org) %>%
@@ -157,11 +157,11 @@ write_csv(to.send, path=file.path(PROJHOME, "Data", "Survey", "list",
 # hippo.sql.dead <- ids.to.remove.hippo.dead %>%
 #   mutate(remove = 1, remove_notes = "Hippo: domain dead") %>%
 #   select(fk_org = index_org, remove, remove_notes)
-# write_csv(hippo.sql.dead, "~/Desktop/mail_cleaning/hippo_domain_dead.csv")
+# write_csv(hippo.sql.dead, "~/Desktop/hippo_domain_dead.csv")
 # 
 # hippo.email.dead <- hippo %>%
 #   filter(Status == "Bad") %>%
-#   filter(AdditionalStatusInfo == "MailboxDoesNotExist") 
+#   filter(AdditionalStatusInfo == "MailboxDoesNotExist")
 # 
 # ids.to.remove.hippo.email.dead <- email.full %>%
 #   filter(index_org %in% hippo.email.dead$index_org) %>%
@@ -171,7 +171,7 @@ write_csv(to.send, path=file.path(PROJHOME, "Data", "Survey", "list",
 # hippo.sql.dead.email <- ids.to.remove.hippo.email.dead %>%
 #   mutate(remove = 1, remove_notes = "Hippo: e-mail doesn't exist") %>%
 #   select(fk_org = index_org, remove, remove_notes)
-# write_csv(hippo.sql.dead.email, "~/Desktop/mail_cleaning/hippo_email_dead.csv")
+# write_csv(hippo.sql.dead.email, "~/Desktop/hippo_email_dead.csv")
 
 # hippo.clean <- hippo %>%
 #   filter(Status != "Bad")
