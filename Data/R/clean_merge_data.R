@@ -655,6 +655,110 @@ neighbor.stability <- all.country.years %>%
   rename(cowcode = country_cow)
 
 
+# Distances
+# Load and tidy all distance data generated with PROJHOME/Data/R/get_distances.R
+distance.folder <- file.path(PROJHOME, "Data", "data_processed", "distances")
+
+read_distances <- function(type, year) {
+  stopifnot(year >= 1990, year <= 2012)
+  stopifnot(type %in% c("capital", "cent", "min"))
+  
+  # Read in the RDS file for the type and year
+  matrix.raw <- readRDS(file.path(distance.folder, 
+                                  paste0(type, "_", year, "-01-01.rds")))
+  
+  # Convert distance matrix to long dataframe
+  df.clean <- as.data.frame(matrix.raw) %>%
+    mutate(cowcode = rownames(.)) %>%
+    gather(cowcode.other, distance, -cowcode) %>%
+    # Set inverted diagonal 0s to 0, real 0s to 1 
+    mutate(distance.inv = ifelse(cowcode == cowcode.other & distance == 0, 0,
+                                 ifelse(cowcode != cowcode.other & distance == 0, 1,
+                                        1 / distance))) %>%
+    mutate(type = type, year = year) %>%
+    mutate_each(funs(as.numeric), starts_with("cowcode")) %>%
+    # Mark if country is within 900 km
+    mutate(is.rough.neighbor = distance < 900) %>%
+    # Standardize inverted distances so that all rows within a country add to 1
+    # so that it can be used in weighted.mean.
+    # This is the same as calculating the row sum of the matrix
+    group_by(cowcode) %>%
+    mutate(distance.std = distance.inv / sum(distance.inv)) %>%
+    ungroup()
+  
+  return(df.clean)
+}
+
+
+# Load and combine all distance matrices
+all.distances <- expand.grid(year = 1991:2012,
+                             type = c("capital", "cent", "min"),
+                             stringsAsFactors=FALSE) %>%
+  rowwise() %>% do(read_distances(.$type, .$year)) %>% ungroup()
+
+
+# Because it's not possible to do use separate summarise_each() calls in a
+# dplyr chain, we have to make two separate summary dataframes and join them
+# later.
+#
+# Define the continuous and binary vars to be summarized neighborly/distancely
+vars.to.summarize.cont <- c("icrg.stability", "icrg.internal", "icrg.pol.risk")
+vars.to.summarize.bin <- c("coups.success.bin", "coups.activity.bin")
+
+# Make a dataframe with just those variables
+vars.to.summarize.df <- icrg.all.with.aggregates.coups %>%
+  select(cowcode, year.num, 
+         one_of(vars.to.summarize.cont, vars.to.summarize.bin)) %>%
+  filter(year.num > 1990)
+
+# Dataframe of distance-related variables, such as neighbor status and 
+# distance weights
+distances.to.summarize <- all.distances %>%
+  left_join(vars.to.summarize.df, by=c("cowcode.other" = "cowcode",
+                                       "year" = "year.num")) %>%
+  filter(cowcode != cowcode.other)
+
+# Get average of variables weighted by distance
+vars.weighted <- distances.to.summarize %>%
+  group_by(year, cowcode, type) %>%
+  summarise_each(funs(wt = weighted.mean(., distance.std, na.rm=TRUE)),
+                 one_of(vars.to.summarize.cont))
+
+# Get summaries of continuous variables in countries that are rough neighbors
+vars.neighbors.cont <- distances.to.summarize %>%
+  filter(is.rough.neighbor == TRUE) %>%
+  group_by(year, cowcode, type) %>%
+  summarise_each(funs(n_nb = n(),
+                      min_nb = min(., na.rm=TRUE),
+                      max_nb = max(., na.rm=TRUE),
+                      mean_nb = mean(., na.rm=TRUE),
+                      sd_nb = sd(., na.rm=TRUE),
+                      median_nb = min(., na.rm=TRUE)),
+                 one_of(vars.to.summarize.cont)) %>%
+  ungroup()
+
+# Get counts of binary variables in countries that are rough neighbors
+vars.neighbors.bin <- distances.to.summarize %>%
+  filter(is.rough.neighbor == TRUE) %>%
+  group_by(year, cowcode, type) %>%
+  summarise_each(funs(sum_nb = sum(., na.rm=TRUE)),
+                 one_of(vars.to.summarize.bin))
+
+# Join all distance-related dataframes together
+vars.distance <- distances.to.summarize %>%
+  tidyr::expand(year, cowcode, type) %>%  # All possible combinations 
+  left_join(vars.weighted, by=c("year", "cowcode", "type")) %>%
+  left_join(vars.neighbors.cont, by=c("year", "cowcode", "type")) %>%
+  left_join(vars.neighbors.bin, by=c("year", "cowcode", "type"))
+
+# Minimum distance seems to capture proximity the best, since centroid and
+# capital distance are biased against large countries (i.e. the US has no
+# neighbors because everything is so far away from Kansas (centroid) and DC
+# (capital))
+vars.distance.min <- vars.distance %>%
+  filter(type == "min") %>% select(-type)
+
+
 # Unified Democracy Scores (UDS)
 # http://www.unified-democracy-scores.org/
 uds.url <- "http://www.unified-democracy-scores.org/files/20140312/z/uds_summary.csv.gz"
@@ -724,6 +828,7 @@ dcjw.years <- dcjw.raw[,1:50] %>%
 # TODO: What happens when there are no neighbors?
 full.data <- vdem.cso %>%
   rename(cowcode = COWcode) %>%
+  left_join(vars.distance.min, by=c("year", "cowcode")) %>%
   left_join(icrg.all.with.aggregates, by=c("cowcode", "year" = "year.num")) %>%
   left_join(pol.inst, by=c("cowcode" = "cow", "year")) %>%
   left_join(nelda.full, by=c("cowcode" = "ccode", "year")) %>%
