@@ -806,7 +806,11 @@ gwf.simplified <- gwf %>%
                              labels=c("Autocracy", "Democracy", "Other")),
          gwf.binary = factor(gwf.binary,
                              levels=c("autocracy", "democracy"),
-                             labels=c("Autocracy", "Democracy")))
+                             labels=c("Autocracy", "Democracy"))) %>%
+  filter(year > 1990) %>%
+  group_by(cowcode) %>%
+  mutate(gwf.ever.autocracy = any(gwf.binary == "Autocracy")) %>%
+  ungroup()
 
 
 # Christensen and Weinstein NGO laws
