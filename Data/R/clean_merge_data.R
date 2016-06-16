@@ -10,6 +10,7 @@ library(feather)
 library(lubridate)
 library(countrycode)
 library(WDI)
+library(testthat)
 
 # Map libraries
 # You must install geos (http://trac.osgeo.org/geos/) and 
@@ -944,6 +945,9 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   left_join(icews.ingos, by=c("year" = "event.year", "cowcode")) %>%
   left_join(gwf.simplified, by=c("cowcode", "year")) %>%
   rename(year.num = year)
+
+# Make sure the joining didn't add any extra rows
+expect_equal(nrow(full.data), nrow(tidyr::expand(vdem.cso, year, cowcode)))
 
 # Save all cleaned data files
 write_feather(full.data,
