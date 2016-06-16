@@ -91,26 +91,74 @@ icrg.rescale <- function(x, lowest=0, highest=82) {
 # ----------------------------
 # Load all sorts of datasets
 # ----------------------------
+# Gleditsch Ward codes
+gw.states <- read_tsv("http://privatewww.essex.ac.uk/~ksg/data/iisystem.dat",
+                      col_names = c("gwcode", "cowc", "country",
+                                    "date.start", "date.end"),
+                      locale = locale(encoding="windows-1252"))
+gw.microstates <- read_tsv("http://privatewww.essex.ac.uk/~ksg/data/microstatessystem.dat",
+                           col_names = c("gwcode", "cowc", "country",
+                                         "date.start", "date.end"),
+                           locale = locale(encoding="windows-1252"))
+
+gw.codes <- bind_rows(gw.states, gw.microstates) %>%
+  mutate(date.start = dmy(date.start), date.end = dmy(date.end)) %>%
+  mutate(iso2 = countrycode(gwcode, "cown", "iso2c"),
+         iso3 = countrycode(gwcode, "cown", "iso3c")) %>%
+  mutate(iso2 = case_when(
+           .$gwcode == 340 ~ "RS",
+           .$gwcode == 347 ~ "XK",
+           .$gwcode == 678 ~ "YE",
+           TRUE ~ .$iso2),
+         iso3 = case_when(
+           .$gwcode == 340 ~ "SRB",
+           .$gwcode == 347 ~ "XKX",
+           .$gwcode == 678 ~ "YEM",
+           TRUE ~ .$iso3)) %>%
+  mutate(iso2 = ifelse(is.na(iso2), 
+                       countrycode(country, "country.name", "iso2c"), iso2),
+         iso3 = ifelse(is.na(iso3), 
+                       countrycode(country, "country.name", "iso3c"), iso3)) %>%
+  # Get rid of old, tiny, and non-statey states
+  filter(!is.na(iso2))
+
+gw.lookup <- gw.codes %>%
+  select(gwcode, country) %>%
+  group_by(gwcode) %>%
+  slice(n()) %>%  # Get the most recent country definition
+  ungroup()
+
+# Gleditsch and Ward do not include a bunch of countries, so I create my own
+# codes for relevant countries that appear in other datasets:
+#
+#   - Somaliland: 521
+#   - Palestine (West Bank): 667
+#   - Palestine (Gaza): 668
+#   - Palestine (both): 669
+#   - Hong Kong: 715
+#
+# Also, following Gleditsch and Ward, I treat Serbia as 340 and Serbia &
+# Montenegro as a continuation of Yugoslavia, or 345.
+
 
 # Varieties of Democracy
 # https://v-dem.net/en/
-# V-Dem v5
-# vdem.raw.old <- read_csv(file.path(PROJHOME, "Data", "data_raw", "External",
-#                                "V-Dem", "v5", "Country-Year, V-Dem + other, CVS",
-#                                "V-Dem-DS-CY+Others-v5.csv"))
 # V-Dem v6 is semicolon-delimited
 vdem.raw <- read_csv2(file.path(PROJHOME, "Data", "data_raw", "External",
-                                "V-Dem", "v6", "V-Dem-DS-CY+Others-v6.csv"))
-# vdem.raw <- read_stata(file.path(PROJHOME, "Data", "data_raw", "External", 
-#                                  "V-Dem", "v6", "V-Dem-DS-CY+Others-v6.dta"))
+                                "V-Dem", "v6", "V-Dem-DS-CY+Others-v6.csv")) %>%
+  # Missing COW codes
+  mutate(COWcode = case_when(
+    .$country_text_id == "SML" ~ as.integer(521),
+    .$country_text_id == "PSE" ~ as.integer(667),
+    .$country_text_id == "PSG" ~ as.integer(668),
+    TRUE ~ .$COWcode))
 
-# Missing COW codes
+# COW issues
 # vdem.raw %>% filter(is.na(COWcode)) %>% select(country_name) %>% unique
 
 # Extract civil society-related variables
-vdem.cso <- vdem.raw %>% select(country_name, country_id, country_text_id, 
-                                year, COWcode, e_polity2, 
-                                v2x_frassoc_thick, v2xcs_ccsi,
+vdem.cso <- vdem.raw %>% select(country_name, year, cowcode = COWcode, 
+                                e_polity2, v2x_frassoc_thick, v2xcs_ccsi,
                                 starts_with("v2cseeorgs"), 
                                 starts_with("v2csreprss"), 
                                 starts_with("v2cscnsult"),
@@ -128,11 +176,13 @@ vdem.cso <- vdem.raw %>% select(country_name, country_id, country_text_id,
          polity_ord2 = cut(e_polity2, breaks=c(-Inf, 0, Inf),
                            labels=c("Autocracy", "Democracy"),
                            ordered_result=TRUE)) %>%
-  group_by(COWcode) %>%
+  group_by(cowcode) %>%
   mutate(v2csreprss_ord.lead = lead(v2csreprss_ord),
          v2csreprss.lead = lead(v2csreprss),
          v2cseeorgs.lead = lead(v2cseeorgs),
-         cs_env_sum.lead = lead(cs_env_sum))
+         cs_env_sum.lead = lead(cs_env_sum)) %>%
+  ungroup() %>%
+  filter(year > 1990)  # ICRG starts at 1991, so only include data after then
 
 
 # International Country Risk Guide (ICRG)
@@ -180,11 +230,15 @@ icrg.all <- bind_rows(all.dfs) %>%
          country.name = countrycode(Country, "country.name", "country.name"),
          iso = countrycode(country.name, "country.name", "iso3c")) %>%
   # Add unofficial COW codes for these countries
-  mutate(cowcode = ifelse(Country == "Hong Kong", 715, cowcode),
-         cowcode = ifelse(Country == "New Caledonia", 1012, cowcode)) %>%
-  # Deal with Serbia 
-  mutate(cowcode = ifelse(Country == "Serbia *", 345, cowcode),
-         cowcode = ifelse(Country == "Serbia & Montenegro *", 345, cowcode)) %>%
+  mutate(cowcode = case_when(
+    .$Country == "Hong Kong" ~ as.integer(715),
+    .$Country == "New Caledonia" ~ as.integer(1012),
+    .$Country == "Serbia *" ~ as.integer(340),
+    .$Country == "Serbia & Montenegro *" ~ as.integer(345),
+    TRUE ~ .$cowcode)) %>%
+  mutate(country.name = ifelse(Country == "Serbia & Montenegro *",
+                               "Yugoslavia", country.name),
+         iso = ifelse(Country == "Serbia & Montenegro *", "YUG", iso)) %>%
   # Deal with duplicate COWs (Russia, Germany, and Serbia) where names change
   # by collapsing all rows and keeping the max value
   group_by(year.num, cowcode) %>%
@@ -192,9 +246,19 @@ icrg.all <- bind_rows(all.dfs) %>%
   filter(!(Country %in% c("Serbia & Montenegro *", "USSR", "West Germany"))) %>%
   ungroup() %>%
   mutate(subregion = countrycode(iso, "iso3c", "region"),
-         subregion = ifelse(iso == "TWN", "Eastern Asia", subregion),
-         region = countrycode(iso, "iso3c", "continent"),
-         region = ifelse(iso == "TWN", "Asia", region)) %>%
+         region = countrycode(iso, "iso3c", "continent")) %>%
+  mutate(subregion = case_when(
+           .$iso == "TWN" ~ "Eastern Asia",
+           .$iso == "CSK" ~ "Eastern Europe",
+           .$iso == "DDR" ~ "Western Europe",
+           TRUE ~ .$subregion
+         ),
+         region = case_when(
+           .$iso == "TWN" ~ "Asia",
+           .$iso == "CSK" ~ "Europe",
+           .$iso == "DDR" ~ "Europe",
+           TRUE ~ .$region
+         )) %>%
   # group_by(subregion, year.num) %>%
   # mutate(icrg.stability.region = ifelse(!is.na(icrg.stability), 
   #                                       mean(icrg.stability, na.rm=TRUE), 
@@ -305,12 +369,17 @@ icrg.monthly <- bind_rows(all.dfs.monthly) %>%
          # Country variables
          cowcode = countrycode(Country, "country.name", "cown"),
          country.name = countrycode(Country, "country.name", "country.name"),
-         iso = countrycode(country.name, "country.name", "iso3c"),
-         # Manually deal with these edge cases
-         cowcode = ifelse(country.name == "Hong Kong", 715, cowcode),
-         cowcode = ifelse(country.name == "New Caledonia", 1012, cowcode),
-         cowcode = ifelse(country.name == "Serbia", 345, cowcode),
-         cowcode = ifelse(country.name == "Serbia & Montenegro", 345, cowcode)) %>%
+         iso = countrycode(country.name, "country.name", "iso3c")) %>%
+  # Add unofficial COW codes for these countries
+  mutate(cowcode = case_when(
+    .$Country == "Hong Kong" ~ as.integer(715),
+    .$Country == "New Caledonia" ~ as.integer(1012),
+    .$Country == "Serbia" ~ as.integer(340),
+    .$Country == "Serbia & Montenegro" ~ as.integer(345),
+    TRUE ~ .$cowcode)) %>%
+  mutate(country.name = ifelse(Country == "Serbia & Montenegro",
+                               "Yugoslavia", country.name),
+         iso = ifelse(Country == "Serbia & Montenegro", "YUG", iso)) %>%
   mutate(icrg.pol.risk = icrg.stability + icrg.socioeconomic + 
            icrg.investment + icrg.internal + icrg.external + icrg.corruption + 
            icrg.military + icrg.religion + icrg.law + icrg.ethnic + 
@@ -341,17 +410,15 @@ pol.inst <- read_dta(file.path(PROJHOME, "Data", "data_raw", "External",
          opp1vote = fix.999(opp1vote),
          finittrm = factor(ifelse(finittrm == -999, NA, finittrm), 
                            labels=c("No", "Yes"))) %>%
-  mutate(countryname = ifelse(countryname == "UAE", 
-                              "United Arab Emirates", countryname),
-         countryname = ifelse(countryname == "GDR", 
-                              "German Democratic Republic", countryname),
-         countryname = ifelse(countryname == "S. Africa",
-                              "South Africa", countryname),
-         countryname = ifelse(countryname == "Dom. Rep.",
-                              "Dominican Republic", countryname)) %>%
+  mutate(countryname = case_when(
+    .$countryname == "UAE" ~ "United Arab Emirates",
+    .$countryname == "GDR" ~ "German Democratic Republic",
+    .$countryname == "S. Africa" ~ "South Africa",
+    .$countryname == "Dom. Rep." ~ "Dominican Republic",
+    TRUE ~ .$countryname)) %>%
   mutate(cow = countrycode(countryname, "country.name", "cown"),
          year = as.numeric(year)) %>%
-  select(year, cow, yrsoffc, finittrm, 
+  select(year, cow, yrsoffc, finittrm,
          opp1vote, oppfrac, opp1seat, totalseats)
 
 
@@ -381,6 +448,11 @@ nelda.full <- expand.grid(ccode = unique(nelda$ccode),
 # http://www.humanrightsdata.com/
 ciri <- read.csv(file.path(PROJHOME, "Data", "data_raw", "External", "CIRI",
                            "CIRI Data 1981_2011 2014.04.14.csv")) %>%
+  mutate(COW = case_when(
+    .$CTRY == "Kosovo" ~ as.integer(347),
+    .$CTRY == "Montenegro" ~ as.integer(341),
+    .$CTRY == "Serbia" ~ as.integer(340),
+    TRUE ~ .$COW)) %>%
   select(year = YEAR, cowcode = COW, assn = ASSN, physint = PHYSINT) %>%
   # Handle duplicate COWs like USSR and Yugoslavia where names change
   group_by(year, cowcode) %>%
@@ -399,8 +471,8 @@ wdi.indicators <- c("NY.GDP.PCAP.KD",  # GDP per capita (constant 2005 US$)
                     "NY.GDP.MKTP.KD",  # GDP (constant 2005 US$)
                     "SP.POP.TOTL",     # Population, total
                     "DT.ODA.ALLD.CD")  # Net ODA and official aid received (current US$)
-wdi.countries <- countrycode(na.exclude(unique(icrg.all$cowcode)), "cown", "iso2c")
-wdi.raw <- WDI(country="all", wdi.indicators, extra=TRUE, start=1981, end=2016)
+wdi.countries <- unique(gw.codes$iso2)
+wdi.raw <- WDI(country="all", wdi.indicators, extra=TRUE, start=1990, end=2016)
 
 wdi.clean <- wdi.raw %>%
   filter(iso2c %in% wdi.countries) %>%
@@ -416,6 +488,11 @@ wdi.clean <- wdi.raw %>%
          region = factor(region),  # Get rid of unused levels first
          region = factor(region, labels = 
                            gsub(" \\(all income levels\\)", "", levels(region)))) %>%
+  mutate(cow = case_when(
+    .$country == "Serbia" ~ as.integer(340),
+    .$country == "Kosovo" ~ as.integer(347),
+    TRUE ~ .$cow
+  )) %>%
   select(-c(iso2c, iso3c, country, capital, longitude, latitude, income, lending))
 
 
@@ -428,7 +505,16 @@ murdie <- read_dta(file.path(PROJHOME, "Data", "data_raw",
                              "External", "Murdie 2014",
                              "11558_2013_9180_MOESM1_ESM.dta")) %>%
   mutate(cowcode = as.numeric(cowcode)) %>%
-  select(year, cowcode, countngo)
+  mutate(cowcode = case_when(
+    .$ctry == "Serbia" ~ as.integer(340),
+    .$ctry == "Montenegro" ~ as.integer(341),
+    .$ctry == "Kosovo" ~ as.integer(347),
+    TRUE ~ as.integer(.$cowcode)
+  )) %>%
+  filter(cowcode != 1, cowcode <= 990) %>%
+  select(year, cowcode, countngo) %>%
+  group_by(cowcode, year) %>%
+  slice(1) %>% ungroup()
 
 
 # KOF Index of Globalization
@@ -437,7 +523,12 @@ capture.output({
   kof <- read_excel(file.path(PROJHOME, "Data", "data_raw", "External", "KOF",
                               "globalization_2015_long.xls"), 
                     sheet="data long", skip=1, na=".") %>%
-    mutate(cowcode = countrycode(code, "iso3c", "cown")) %>%
+    mutate(cowcode = countrycode(country, "country.name", "cown")) %>%
+    mutate(cowcode = case_when(
+      .$country == "Serbia" ~ as.integer(340),
+      .$country == "West Bank and Gaza" ~ as.integer(669),
+      TRUE ~ as.integer(.$cowcode)
+    )) %>%
     select(cowcode, year, globalization = index) %>%
     filter(!is.na(cowcode))
 }, file="/dev/null")
@@ -475,17 +566,26 @@ coups <- read_excel(file.path(PROJHOME, "Data", "data_raw", "External",
 coup.url <- "http://www.uky.edu/~clthyn2/coup_data/powell_thyne_ccode_year.txt"
 coups.new <- read_tsv(coup.url) %>%
   filter(year > 1989) %>%
-  mutate(cowcode = ccode,  # ccode is the Gleditsch/Ward code
-         cowcode = ifelse(ccode == 340, 345, cowcode)) %>%
+  mutate(cowcode = ccode) %>%  # ccode is the Gleditsch/Ward code
   mutate(coups.success.bin = coup1 == 2 | coup2 == 2 | coup3 == 2 | coup4 == 2,
          coups.activity.bin = coup1 > 0 | coup2 > 0 | coup3 > 0 | coup4 > 0) %>%
   select(cowcode, year, starts_with("coups")) %>%
-  mutate(subregion = countrycode(cowcode, "cown", "region"),
-         subregion = ifelse(cowcode == 713, "Eastern Asia", subregion),
-         subregion = ifelse(cowcode == 345, "Eastern Europe", subregion),
-         region = countrycode(cowcode, "cown", "continent"),
-         region = ifelse(cowcode == 713, "Asia", region),
-         region = ifelse(cowcode == 345, "Europe", region))
+  mutate(region = countrycode(cowcode, "cown", "continent"),
+         subregion = countrycode(cowcode, "cown", "region")) %>%
+  mutate(subregion = case_when(
+           .$cowcode == 260 ~ "Western Europe",  # GFR (West)
+           .$cowcode == 265 ~ "Eastern Europe",  # GDR (East)
+           .$cowcode == 315 ~ "Eastern Europe",  # Czechoslovakia
+           .$cowcode == 345 ~ "Eastern Europe",  # Yugoslavia
+           .$cowcode == 678 ~ "Western Asia",    # Yemen (North)
+           .$cowcode == 680 ~ "Western Asia",    # Yemen (South)
+           .$cowcode == 713 ~ "Eastern Asia",    # Taiwan
+           TRUE ~ .$subregion), 
+         region = case_when(
+           .$cowcode %in% c(260, 265, 315, 345) ~ "Europe",
+           .$cowcode %in% c(678, 680, 713) ~ "Asia",
+           TRUE ~ .$region
+         ))
 
 coups.global <- coups.new %>%
   group_by(year) %>%
@@ -514,11 +614,6 @@ coups.final <- coups.new %>%
            coups.success.subregional - coups.success.bin,
          coups.activity.subregional = 
            coups.activity.subregional - coups.activity.bin)
-
-# Gleditsch/Ward codes, for reference
-# ward.ccode <- read_tsv("http://privatewww.essex.ac.uk/~ksg/data/iisystem.dat",
-#                        col_names=c("ward.code", "iso.ish", "country.name",
-#                                    "country.start", "country.end"))
 
 
 # Uppsala conflict data
@@ -576,9 +671,9 @@ neighbor.cows <- all.neighbors %>%
   mutate(country_cow = countrycode(country_iso3, "iso3c", "cown"),
          neighbor_cow = countrycode(neighbor_iso3, "iso3c", "cown")) %>%
   # Add COW codes for Hong Kong, Serbia
-  mutate(country_cow = ifelse(country_iso3 == "SRB", 345, country_cow),
+  mutate(country_cow = ifelse(country_iso3 == "SRB", 340, country_cow),
          country_cow = ifelse(country_iso3 == "HKG", 715, country_cow),
-         neighbor_cow = ifelse(neighbor_iso3 == "SRB", 345, neighbor_cow),
+         neighbor_cow = ifelse(neighbor_iso3 == "SRB", 340, neighbor_cow),
          neighbor_cow = ifelse(neighbor_iso3 == "HKG", 715, neighbor_cow)) %>%
   filter(complete.cases(.)) %>%
   select(contains("cow")) %>%
@@ -660,7 +755,7 @@ neighbor.stability <- all.country.years %>%
 distance.folder <- file.path(PROJHOME, "Data", "data_processed", "distances")
 
 read_distances <- function(type, year) {
-  stopifnot(year >= 1990, year <= 2012)
+  stopifnot(year >= 1990, year <= 2015)
   stopifnot(type %in% c("capital", "cent", "min"))
   
   # Read in the RDS file for the type and year
@@ -684,18 +779,18 @@ read_distances <- function(type, year) {
     # This is the same as calculating the row sum of the matrix
     group_by(cowcode) %>%
     mutate(distance.std = distance.inv / sum(distance.inv)) %>%
-    ungroup()
+    ungroup() %>%
+    left_join(gw.lookup, by=c("cowcode" = "gwcode"))
   
   return(df.clean)
 }
 
 
 # Load and combine all distance matrices
-all.distances <- expand.grid(year = 1991:2012,
+all.distances <- expand.grid(year = 1991:2015,
                              type = c("capital", "cent", "min"),
                              stringsAsFactors=FALSE) %>%
   rowwise() %>% do(read_distances(.$type, .$year)) %>% ungroup()
-
 
 # Because it's not possible to do use separate summarise_each() calls in a
 # dplyr chain, we have to make two separate summary dataframes and join them
@@ -829,9 +924,11 @@ dcjw.years <- dcjw.raw[,1:50] %>%
 # Merge everything!
 # ------------------
 # TODO: Consolidate extra variables (e.g. there's "Country", "country.name", and "country_name")
-# TODO: What happens when there are no neighbors?
-full.data <- vdem.cso %>%
-  rename(cowcode = COWcode) %>%
+
+# Create panel based on all countries in V-Dem from 1990 to present
+full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
+  # Join *everything* to the empty panel
+  left_join(vdem.cso, by=c("year", "cowcode")) %>%
   left_join(vars.distance.min, by=c("year", "cowcode")) %>%
   left_join(icrg.all.with.aggregates, by=c("cowcode", "year" = "year.num")) %>%
   left_join(pol.inst, by=c("cowcode" = "cow", "year")) %>%
@@ -846,7 +943,6 @@ full.data <- vdem.cso %>%
   left_join(icews, by=c("year" = "event.year", "cowcode")) %>%
   left_join(icews.ingos, by=c("year" = "event.year", "cowcode")) %>%
   left_join(gwf.simplified, by=c("cowcode", "year")) %>%
-  filter(year > 1990) %>%
   rename(year.num = year)
 
 # Save all cleaned data files
