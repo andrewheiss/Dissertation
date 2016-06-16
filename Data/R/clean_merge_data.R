@@ -903,9 +903,17 @@ gwf.simplified <- gwf %>%
          gwf.binary = factor(gwf.binary,
                              levels=c("autocracy", "democracy"),
                              labels=c("Autocracy", "Democracy"))) %>%
-  filter(year > 1990) %>%
+  filter(year > 1990) 
+
+# GWF data only goes to 2010, but V-Dem goes to 2015. 
+# Extend the gwf.ever.autocracy variable to include 2015 by creating a skeleton
+# panel of all cowcodes and years + 2011:2015, joining gwf.simplified, and then
+# creating gwf.ever.autocracy
+gwf.simplfied.extended <- expand.grid(cowcode = unique(gwf.simplified$cowcode), 
+                                      year = 1991:2015) %>%
+  left_join(gwf.simplified, by=c("cowcode", "year")) %>%
   group_by(cowcode) %>%
-  mutate(gwf.ever.autocracy = any(gwf.binary == "Autocracy")) %>%
+  mutate(gwf.ever.autocracy = any(gwf.binary == "Autocracy", na.rm=TRUE)) %>%
   ungroup()
 
 
@@ -943,7 +951,7 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   left_join(coups.final, by=c("cowcode", "year")) %>%
   left_join(icews, by=c("year" = "event.year", "cowcode")) %>%
   left_join(icews.ingos, by=c("year" = "event.year", "cowcode")) %>%
-  left_join(gwf.simplified, by=c("cowcode", "year")) %>%
+  left_join(gwf.simplfied.extended, by=c("cowcode", "year")) %>%
   rename(year.num = year)
 
 # Make sure the joining didn't add any extra rows
