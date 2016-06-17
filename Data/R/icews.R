@@ -301,6 +301,11 @@ write_feather(full.icews.panel,
               file.path(PROJHOME, "Data", "data_processed",
                         "icews_panel.feather"))
 
+# And EOI data
+write_feather(eois.yearly,
+              file.path(PROJHOME, "Data", "data_processed",
+                        "icews_eois.feather"))
+
 # ---------
 # Sandbox
 # ---------
