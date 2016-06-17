@@ -85,7 +85,7 @@ set.seed(my.seed)
 #' [vdem13]: https://www.v-dem.net/media/filer_public/47/2e/472eec11-830f-4578-9a09-d9f8d43cee3a/v-dem_working_paper_2015_13_edited.pdf
 
 
-#' # Simple preliminary large-N analysis (LNA)
+#' Simple preliminary large-N analysis (LNA)
 autocracies <- filter(full.data, gwf.ever.autocracy) %>%
   mutate(case.study = cowcode %in% c(710, 651, 365)) %>%
   mutate_each(funs(. * 100), contains("pct"))
@@ -99,32 +99,91 @@ autocracies <- filter(full.data, gwf.ever.autocracy) %>%
 #   ICEWS EOIs: 2000-2014
 # Shaming:
 #   ICEWS: 1995-2015
-lna.full <- lm(cs_env_sum.lead ~ 
-                 # Internal (low is bad; high is good)
-                 icrg.stability + icrg.internal +
-                 yrsoffc + years.since.comp + opp1vote +
-                 #
-                 # External
-                 # TODO: Consistent wt vs nb variables? Or justification for
-                 # them being different?
-                 protests.violent.pct.all_wt +
-                 protests.nonviolent.pct.all_wt +
-                 icrg.pol.risk_mean_nb + coups.activity.bin_sum_nb + 
-                 any.crisis_pct_mean_nb +
-                 # any.crisis_pct_wt +
-                 # insurgency_pct_mean_nb +
-                 #
-                 # Shaming
-                 # TODO: Deal with proper normalized or weighted values
-                 # shaming.states.pct.govt +
-                 # shaming.ingos.pct.ingo +
-                 shaming.states.pct.all +
-                 shaming.ingos.pct.all +
-                 #
-                 # Minimal controls
-                 as.factor(year.num), 
-               data=autocracies)
-summary(lna.full)
+
+lna.internal.simple <- lm(cs_env_sum.lead ~ 
+                            # Internal (low is bad; high is good)
+                            icrg.stability + icrg.internal + 
+                            year.factor,
+                          data=autocracies)
+summary(lna.internal.simple)
+
+lna.internal.full <- lm(cs_env_sum.lead ~ 
+                          icrg.stability + icrg.internal + 
+                          yrsoffc + years.since.comp + opp1vote +
+                          year.factor,
+                        data=autocracies)
+summary(lna.internal.full)
+
+lna.external.simple <- lm(cs_env_sum.lead ~ 
+                            icrg.pol.risk_mean_nb +
+                            year.factor,
+                          data=autocracies)
+summary(lna.external.simple)
+
+lna.external.full <- lm(cs_env_sum.lead ~ 
+                          # TODO: Consistent wt vs nb variables? Or 
+                          # justification for them being different?
+                          icrg.pol.risk_mean_nb + 
+                          coups.activity.bin_sum_nb +
+                          any.crisis_pct_mean_nb +
+                          protests.violent.pct.all_wt +
+                          protests.nonviolent.pct.all_wt +
+                          year.factor,
+                        data=autocracies)
+summary(lna.external.full)
+
+lna.shame.simple <- lm(cs_env_sum.lead ~
+                         # TODO: Deal with proper normalized or weighted values
+                         # shaming.states.pct.govt +
+                         # shaming.ingos.pct.ingo +
+                         shaming.states.pct.all +
+                         shaming.ingos.pct.all +
+                         year.factor,
+                       data=autocracies)
+summary(lna.shame.simple)
+
+lna.all.simple <- lm(cs_env_sum.lead ~ 
+                        icrg.stability + icrg.internal +
+                        icrg.pol.risk_mean_nb +
+                        shaming.states.pct.all +
+                        shaming.ingos.pct.all + 
+                        year.factor,
+                      data=autocracies)
+summary(lna.all.simple)
+
+lna.all.full <- lm(cs_env_sum.lead ~ 
+                     # Internal
+                     icrg.stability + icrg.internal + 
+                     yrsoffc + years.since.comp + opp1vote +
+                     # External
+                     # any.crisis_pct_wt +
+                     # insurgency_pct_mean_nb +
+                     icrg.pol.risk_mean_nb + 
+                     coups.activity.bin_sum_nb +
+                     any.crisis_pct_mean_nb +
+                     protests.violent.pct.all_wt +
+                     protests.nonviolent.pct.all_wt +
+                     # Shaming
+                     shaming.states.pct.all +
+                     shaming.ingos.pct.all +
+                     # Minimal controls
+                     year.factor,
+                   data=autocracies)
+summary(lna.all.full)
+                                 
+
+stargazer(lna.internal.simple, lna.internal.full,
+          lna.external.simple, lna.external.full,
+          lna.shame.simple, lna.all.simple, lna.all.full,
+          type="html",
+          dep.var.caption="CSRE in following year",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          # column.labels=NA,
+          omit="year\\.factor",
+          add.lines=list(c("Year fixed effects",
+                           rep("Yes", 7))),
+          out=file.path("~/Desktop/all.html")
+          )
 
 # ggplot(autocracies, aes(x=shaming.ingos.pct.all, y=cs_env_sum.lead)) +
 #   geom_point(aes(text=paste(country_name, year.num), colour=case.study)) +
