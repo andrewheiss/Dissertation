@@ -140,6 +140,7 @@ gw.lookup <- gw.codes %>%
 #
 # Also, following Gleditsch and Ward, I treat Serbia as 340 and Serbia &
 # Montenegro as a continuation of Yugoslavia, or 345.
+# http://privatewww.essex.ac.uk/~ksg/data/iisyst_casedesc.pdf
 
 
 # Varieties of Democracy
