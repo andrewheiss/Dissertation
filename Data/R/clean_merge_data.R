@@ -617,6 +617,15 @@ coups.final <- coups.new %>%
          coups.activity.subregional = 
            coups.activity.subregional - coups.activity.bin)
 
+# ICEWS protest and shaming data
+# Preprocessed with ./Data/R/icews.R
+icews <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                                "icews_panel.feather"))
+
+# ICEWS events of interest (EOI) data
+# Preprocessed with ./Data/R/icews.R
+icews.eois <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                                     "icews_eois.feather"))
 
 # Uppsala conflict data
 # http://www.pcr.uu.se/research/ucdp/datasets/generate_your_own_datasets/dynamic_datasets/
@@ -752,7 +761,7 @@ neighbor.stability <- all.country.years %>%
   rename(cowcode = country_cow)
 
 
-# Distances
+# Distances with CShapes (more accurate than the strict neighbor definition)
 # Load and tidy all distance data generated with PROJHOME/Data/R/get_distances.R
 distance.folder <- file.path(PROJHOME, "Data", "data_processed", "distances")
 
@@ -799,11 +808,24 @@ all.distances <- expand.grid(year = 1991:2015,
 # later.
 #
 # Define the continuous and binary vars to be summarized neighborly/distancely
-vars.to.summarize.cont <- c("icrg.stability", "icrg.internal", "icrg.pol.risk")
+vars.to.summarize.cont <- c("icrg.stability", "icrg.internal", "icrg.pol.risk",
+                            "protests.all", "protests.all.log",
+                            "protests.violent", "protests.violent.log",
+                            "protests.nonviolent", "protests.nonviolent.log",
+                            "protests.all.pct.all", "protests.violent.pct.all",
+                            "protests.nonviolent.pct.all",
+                            "any.crisis_pct", "domestic.political.crisis_pct",
+                            "ethnic.religious.violence_pct", 
+                            "international.conflict_pct",
+                            "insurgency_pct", "rebellion_pct")
 vars.to.summarize.bin <- c("coups.success.bin", "coups.activity.bin")
 
 # Make a dataframe with just those variables
-vars.to.summarize.df <- icrg.all.with.aggregates.coups %>%
+vars.to.summarize.df <- icrg.all.with.aggregates %>%
+  left_join(select(coups.new, -c(region, subregion)), 
+            by=c("cowcode", "year.num" = "year")) %>%
+  left_join(icews, by=c("cowcode", "year.num" = "event.year")) %>%
+  left_join(icews.eois, by=c("cowcode" = "ccode", "year.num" = "year")) %>%
   select(cowcode, year.num, 
          one_of(vars.to.summarize.cont, vars.to.summarize.bin)) %>%
   filter(year.num > 1990)
@@ -870,15 +892,6 @@ uds <- read_csv(uds.tmp) %>%
                        labels=c("Autocracy", "Democracy"),
                        ordered_result=TRUE)) %>%
   select(-country)
-
-
-# ICEWS aggregated conflictual/cooperative event data
-# Preprocessed with ./Data/R/icews.R
-icews <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                "icews_aggregated.feather"))
-
-icews.ingos <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                      "icews_aggregated_ingos.feather"))
 
 
 # GWF Autocratic regimes
@@ -951,7 +964,7 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   left_join(uds, by=c("cowcode", "year")) %>%
   left_join(coups.final, by=c("cowcode", "year")) %>%
   left_join(icews, by=c("year" = "event.year", "cowcode")) %>%
-  left_join(icews.ingos, by=c("year" = "event.year", "cowcode")) %>%
+  left_join(icews.eois, by=c("cowcode" = "ccode", "year")) %>%
   left_join(gwf.simplfied.extended, by=c("cowcode", "year")) %>%
   rename(year.num = year)
 
