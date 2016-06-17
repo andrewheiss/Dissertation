@@ -85,6 +85,53 @@ set.seed(my.seed)
 #' [vdem13]: https://www.v-dem.net/media/filer_public/47/2e/472eec11-830f-4578-9a09-d9f8d43cee3a/v-dem_working_paper_2015_13_edited.pdf
 
 
+#' # Simple preliminary large-N analysis (LNA)
+autocracies <- filter(full.data, gwf.ever.autocracy) %>%
+  mutate(case.study = cowcode %in% c(710, 651, 365)) %>%
+  mutate_each(funs(. * 100), contains("pct"))
+
+# Duration of variables
+# Internal:
+#   ICRG: 1991-2014
+# External:
+#   ICRG: 1991-2014
+#   ICEWS: 1995-2015
+#   ICEWS EOIs: 2000-2014
+# Shaming:
+#   ICEWS: 1995-2015
+lna.full <- lm(cs_env_sum.lead ~ 
+                 # Internal (low is bad; high is good)
+                 icrg.stability + icrg.internal +
+                 yrsoffc + years.since.comp + opp1vote +
+                 #
+                 # External
+                 # TODO: Consistent wt vs nb variables? Or justification for
+                 # them being different?
+                 protests.violent.pct.all_wt +
+                 protests.nonviolent.pct.all_wt +
+                 icrg.pol.risk_mean_nb + coups.activity.bin_sum_nb + 
+                 any.crisis_pct_mean_nb +
+                 # any.crisis_pct_wt +
+                 # insurgency_pct_mean_nb +
+                 #
+                 # Shaming
+                 # TODO: Deal with proper normalized or weighted values
+                 # shaming.states.pct.govt +
+                 # shaming.ingos.pct.ingo +
+                 shaming.states.pct.all +
+                 shaming.ingos.pct.all +
+                 #
+                 # Minimal controls
+                 as.factor(year.num), 
+               data=autocracies)
+summary(lna.full)
+
+# ggplot(autocracies, aes(x=shaming.ingos.pct.all, y=cs_env_sum.lead)) +
+#   geom_point(aes(text=paste(country_name, year.num), colour=case.study)) +
+#   geom_smooth() #+ facet_wrap(~ case.study)
+# plotly::ggplotly()
+
+
 #' # Internal factors
 #' 
 #' ## Actual models
