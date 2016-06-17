@@ -966,7 +966,8 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   left_join(icews, by=c("year" = "event.year", "cowcode")) %>%
   left_join(icews.eois, by=c("cowcode" = "ccode", "year")) %>%
   left_join(gwf.simplfied.extended, by=c("cowcode", "year")) %>%
-  rename(year.num = year)
+  rename(year.num = year) %>%
+  mutate(year.factor = factor(year.num))
 
 # Make sure the joining didn't add any extra rows
 expect_equal(nrow(full.data), nrow(tidyr::expand(vdem.cso, year, cowcode)))
