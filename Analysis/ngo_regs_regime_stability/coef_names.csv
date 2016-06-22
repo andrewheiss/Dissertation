@@ -20,3 +20,14 @@ icews.conflict.severity.abs,Severity of conflictual events (interstate)
 icews.pct.shame,Percent of all events that are conflictual (interstate)
 icews.conflict.severity.abs.ingos,Severity of conflictual events (INGOs)
 icews.pct.shame.ingos,Percent of all events that are conflictual (INGOs)
+icrg.stability,Internal stability (ICRG)
+icrg.internal,Internal conflict (ICRG)
+coups.activity.bin_sum_nb,Coup activity in neighboring countries (binary)
+any.crisis_pct_mean_nb,Average time in crisis in neighboring countries (% of a year)
+protests.violent.pct.all_wt,"Violent protests, weighted by distance (% of all events)"
+protests.nonviolent.pct.all_wt,"Nonviolent protests, weighted by distance (% of all events)"
+icrg.pol.risk_mean_nb,Average political risk in neighboring countries (ICRG)
+shaming.states.pct.all,Government-based shaming reports (% of all events)
+shaming.ingos.pct.all,INGO-based shaming reports (% of all events)
+protests.violent.std_wt,"Violent protests, weighted by distance (relative within country)"
+protests.nonviolent.std_wt,"Nonviolent protests, weighted by distance (relative within country)"
