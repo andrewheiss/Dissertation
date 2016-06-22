@@ -1,5 +1,7 @@
 library(dplyr)
 library(tidyr)
+library(purrr)
+library(broom)
 library(stringr)
 library(readr)
 library(ggplot2)
@@ -53,7 +55,7 @@ fig.coef <- function(models, title=NULL, xlab=NULL, legend=TRUE, space.below=FAL
   plot.data <- models %>%
     map_df(tidy, .id="model.name") %>%
     filter(term != "(Intercept)",
-           !str_detect(term, "as\\.factor")) %>%
+           !str_detect(term, "\\.factor")) %>%
     mutate(xmin = estimate + (qnorm(0.025) * std.error),
            xmax = estimate + (qnorm(0.975) * std.error)) %>%
     left_join(coef.names, by="term") %>%
