@@ -262,6 +262,17 @@ expect_equal(nrow(shaming.by.country.panel),
 
 
 # Full panel of everything with NAs zeroed out
+#
+# Standardize the counts of events in each country over time to a roughly 1-5
+# scale. This shows how normal/not normal a year is. A 1 indicates that a
+# country experienced fewer events in that year than what they typically see,
+# while a 5 means that it experienced more (a lot more). 
+# Thanks to Shahryar Minhas for this idea.
+#
+standardize_country_events <- function(x) {
+  return(as.numeric(scale(x) + abs(min(scale(x))) + 1))
+}
+
 full.icews.panel <- baseline.panel %>%
   rename(cowcode = cowcode.target) %>%
   left_join(protests.by.country.panel, by=c("cowcode", "event.year")) %>%
@@ -294,7 +305,14 @@ full.icews.panel <- baseline.panel %>%
          shaming.states.pct.all = shaming.events.states / all.events.target,
          shaming.ingos.pct.all = shaming.events.ingos / all.events.target) %>%
   # Convert NaNs to 0
-  mutate_each(funs(ifelse(is.nan(.), 0, .)), -c(cowcode, event.year))
+  mutate_each(funs(ifelse(is.nan(.), 0, .)), -c(cowcode, event.year)) %>%
+  # Standardize number of events in each country
+  group_by(cowcode) %>%
+  mutate(protests.all.std = standardize_country_events(protests.all),
+         protests.violent.std = standardize_country_events(protests.violent),
+         protests.nonviolent.std = standardize_country_events(protests.nonviolent)) %>%
+  ungroup()
+
 
 # Save full panel data
 write_feather(full.icews.panel,
