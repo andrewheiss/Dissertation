@@ -126,6 +126,12 @@ lna.internal.full <- lm(cs_env_sum.lead ~
                           as.factor(year.num),
                         data=autocracies)
 
+lna.internal.alt <- lm(cs_env_sum.lead ~ 
+                         icrg.pol.risk.internal.scaled + 
+                         yrsoffc + years.since.comp + opp1vote +
+                         as.factor(year.num),
+                       data=autocracies)
+
 #+ results='asis'
 stargazer(lna.internal.simple, lna.internal.full, 
           type="html", 
@@ -150,16 +156,16 @@ fig.save.cairo(coef.plot.int, filename="1-coefs-lna-int",
 #' ### Models
 #' 
 lna.external.simple <- lm(cs_env_sum.lead ~ 
-                            icrg.pol.risk_mean_nb +
+                             icrg.pol.risk_wt +
                             as.factor(year.num),
                           data=autocracies)
 
 lna.external.full <- lm(cs_env_sum.lead ~ 
                           # TODO: Consistent wt vs nb variables? Or 
                           # justification for them being different?
-                          icrg.pol.risk_mean_nb + 
-                          coups.activity.bin_sum_nb +
+                          icrg.pol.risk_wt + 
                           any.crisis_pct_mean_nb +
+                          coups.activity.bin_sum_nb +
                           protests.violent.std_wt +
                           protests.nonviolent.std_wt +
                           as.factor(year.num),
@@ -173,6 +179,7 @@ stargazer(lna.external.simple, lna.external.full,
           omit="\\.factor",
           add.lines=list(c("Year fixed effects",
                            rep("Yes", 2))))
+
 
 #' ### Coefficient plot
 #' 
@@ -235,8 +242,8 @@ lna.all.full <- lm(cs_env_sum.lead ~
                      # any.crisis_pct_wt +
                      # insurgency_pct_mean_nb +
                      icrg.pol.risk_mean_nb + 
-                     coups.activity.bin_sum_nb +
                      any.crisis_pct_mean_nb +
+                     coups.activity.bin_sum_nb +
                      protests.violent.std_wt +
                      protests.nonviolent.std_wt +
                      # Shaming
@@ -255,8 +262,8 @@ var.labs <-  c(
   "Average political risk in neighboring countries (ICRG)",
   "Government-based shaming reports (% of all events)",
   "INGO-based shaming reports (% of all events)",
-  "Coup activity in neighboring countries (binary)",
   "Average time in crisis in neighboring countries (% of a year)",
+  "Coup activity in neighboring countries (binary)",
   "Violent protests, weighted by distance (relative within country)",
   "Nonviolent protests, weighted by distance (relative within country)"
 )
@@ -298,9 +305,11 @@ new.data.int.stability <- lna.internal.full$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          index = 1) %>%
-  select(-c(cs_env_sum.lead, icrg.stability)) %>%
-  right_join(data_frame(icrg.stability =
-                          seq(0, 12, by=0.1), index = 1),
+  select(-c(cs_env_sum.lead, icrg.stability, yrsoffc)) %>%
+  right_join(expand.grid(icrg.stability =
+                           seq(0, 12, by=0.1),
+                         yrsoffc = c(2, 30),
+                         index = 1),
              by="index") %>%
   select(-index)
 
@@ -308,9 +317,11 @@ new.data.int.conflict <- lna.internal.full$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          index = 1) %>%
-  select(-c(cs_env_sum.lead, icrg.internal)) %>%
-  right_join(data_frame(icrg.internal =
-                          seq(0, 12, by=0.1), index = 1),
+  select(-c(cs_env_sum.lead, icrg.internal, yrsoffc)) %>%
+  right_join(expand.grid(icrg.internal =
+                           seq(0, 12, by=0.1), 
+                         yrsoffc = c(2, 30),
+                         index = 1),
              by="index") %>%
   select(-index)
 
@@ -327,7 +338,9 @@ plot.predict.conflict <- lna.internal.full %>%
 plot.predict <- bind_rows(plot.predict.stability, plot.predict.conflict) %>%
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
-         pred.upper = pred + (qnorm(0.975) * .se.fit))
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
+  mutate(yrsoffc = factor(yrsoffc, levels=c(2, 30), 
+                          labels=paste(c(2, 30), "years in office")))
 
 plot.icrg.int.pred <- ggplot(plot.predict, 
                              aes(x=val.to.plot, y=pred, 
@@ -335,11 +348,12 @@ plot.icrg.int.pred <- ggplot(plot.predict,
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) +
-  labs(x="ICRG score", y="Predicted CSRE") +
+  labs(x="ICRG score", y="Predicted CSRE in following year") +
   scale_colour_manual(values=c(col.auth, col.dem), name=NULL) +
   scale_fill_manual(values=c(col.auth, col.dem), name=NULL, guide=FALSE) +
   coord_cartesian(ylim=c(-4, 4)) +
-  theme_ath()
+  theme_ath() + 
+  facet_wrap(~ yrsoffc)
 plot.icrg.int.pred
 
 fig.save.cairo(plot.icrg.int.pred, filename="1-icrg-int-pred",
@@ -372,7 +386,7 @@ plot.icrg.yrs.int.pred <- ggplot(plot.predict.yrsoffc,
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=yrsoffc.clean),
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) +
-  labs(x="Internal stability (ICRG)", y="Predicted CSRE") +
+  labs(x="Internal stability (ICRG)", y="Predicted CSRE in following year") +
   scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
   scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
   coord_cartesian(ylim=c(-4, 4)) +
@@ -392,156 +406,44 @@ fig.save.cairo(plot.icrg.int.pred.both, filename="1-icrg-yrs-int-pred-both",
                width=5, height=2.5)
 
  
-# #' # External factors
-# #' 
-# #' ## Actual models
-# #' 
-# #' ### Just neighbors
-# model.ext.neighbors <-lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-#                            neighbor.coups.activity.bin,
-#                          data=filter(full.data, gwf.binary == "Autocracy"))
-# 
-# #+ results='asis'
-# stargazer(model.ext.neighbors, type="html", 
-#           dep.var.caption="CSRE",
-#           dep.var.labels.include=FALSE, no.space=TRUE,
-#           column.labels=names(model.int.simple),
-#           omit="factor\\(year", 
-#           add.lines=list(c("Year fixed effects",
-#                            rep("No", 2))))
-# 
-# #' ### Neighbors and subregion
-# model.ext.neighbors.subregion <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-#                                       icrg.pol.risk.subregional.loo +
-#                                       neighbor.coups.activity.bin + 
-#                                       coups.activity.subregional,
-#                                     data=filter(full.data, 
-#                                                 gwf.binary == "Autocracy"))
-# 
-# #+ results='asis'
-# stargazer(model.ext.neighbors.subregion, type="html", 
-#           dep.var.caption="CSRE",
-#           dep.var.labels.include=FALSE, no.space=TRUE,
-#           column.labels=names(model.int.simple),
-#           omit="factor\\(year", 
-#           add.lines=list(c("Year fixed effects",
-#                            rep("No", 2))))
-# 
-# #' ### Neighbors and region
-# model.ext.neighbors.region <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-#                                    icrg.pol.risk.regional.loo +
-#                                    neighbor.coups.activity.bin + 
-#                                    coups.activity.regional,
-#                                  data=filter(full.data, 
-#                                              gwf.binary == "Autocracy"))
-# 
-# #+ results='asis'
-# stargazer(model.ext.neighbors.region, type="html", 
-#           dep.var.caption="CSRE",
-#           dep.var.labels.include=FALSE, no.space=TRUE,
-#           column.labels=names(model.int.simple),
-#           omit="factor\\(year", 
-#           add.lines=list(c("Year fixed effects",
-#                            rep("No", 2))))
-# 
-# 
-# #' ### Neighbors and subregion + controls
-# model.ext.neighbors.subregion.ctrl <- lm(cs_env_sum.lead ~ neighbor.pol.risk.min + 
-#                                            icrg.pol.risk.subregional.loo +
-#                                            neighbor.coups.activity.bin + 
-#                                            coups.activity.subregional + 
-#                                            gdpcap.log + population.log + oda.log + 
-#                                            countngo + globalization + as.factor(year.num),
-#                                          data=filter(full.data, 
-#                                                      gwf.binary == "Autocracy"))
-# 
-# #+ results='asis'
-# stargazer(model.ext.neighbors.subregion.ctrl, type="html", 
-#           dep.var.caption="CSRE",
-#           dep.var.labels.include=FALSE, no.space=TRUE,
-#           column.labels=names(model.int.simple),
-#           omit="factor\\(year", 
-#           add.lines=list(c("Year fixed effects",
-#                            rep("Yes", 2))))
-# 
-# 
-# #' ### All models (to LaTeX)
-# models.ext <- list("Neighbors" = model.ext.neighbors,
-#                    "Subregion" = model.ext.neighbors.subregion,
-#                    "Subregion + controls" = model.ext.neighbors.subregion.ctrl)
-# 
-# coef.labs <- c("Lowest political risk in all neighboring countries", 
-#                "Average political risk in subregion", 
-#                "Average political risk in region",
-#                "Coup activity in neighboring countries (binary)",
-#                "Coup activity in subregion (binary)",
-#                "Coup activity in region (binary)",
-#                "GDP per capita (log)", 
-#                "Population (log)", "Foreign aid (log)", 
-#                "Number of INGO members", "Globalization")
-# extra.lines <- list(c("Year fixed effects",
-#                       c(rep("No", 6), rep("Yes", 2))))
-# 
-# capture.output({
-#   stargazer(models.ext,
-#             type="latex", font.size="tiny",
-#             out=file.path(PROJHOME, "Output", "tables", "1-external-models-all.tex"),
-#             covariate.labels=coef.labs,
-#             title="External determinants of restrictions on the civil society regulatory environment",
-#             label="models-external",
-#             dep.var.caption="Civil society regulatory environment (CSRE) in following year",
-#             dep.var.labels.include=FALSE,
-#             column.labels=names(models.ext),
-#             omit="factor\\(year", no.space=TRUE,
-#             add.lines=extra.lines)
-# }, file="/dev/null")
-# 
-# #' ## Model plots
-# #' 
-# #' ### Coefficient plot
-# plot.ext <- fig.coef(models.ext, xlab="Civil society regulatory environment (CSRE)")
-# plot.ext
-# 
-# fig.save.cairo(plot.ext, filename="1-coefs-ext", 
-#                width=6, height=3)
-# 
-# 
-# #' ### CSRE across neighbor stability and coups in region
-# new.data.ext <- model.ext.neighbors.subregion.ctrl$model %>%
-#   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
-#   mutate(year.num = 2005,
-#          neighbor.coups.activity.bin = FALSE,
-#          index = 1) %>%
-#   select(-c(cs_env_sum.lead, icrg.pol.risk.subregional.loo,
-#             coups.activity.subregional)) %>%
-#   right_join(expand.grid(icrg.pol.risk.subregional.loo = seq(0, 100, by=0.1), 
-#                          coups.activity.subregional = c(0, 2),
-#                          index = 1),
-#              by="index") %>% 
-#   select(-index)
-# 
-# plot.predict <- model.ext.neighbors.subregion.ctrl %>% 
-#   augment(newdata=new.data.ext) %>%
-#   mutate(pred = .fitted,
-#          pred.lower = pred + (qnorm(0.025) * .se.fit),
-#          pred.upper = pred + (qnorm(0.975) * .se.fit),
-#          coup.in.region = factor(coups.activity.subregional, 
-#                                  labels=c("No coup activity in subregion", 
-#                                           "Moderate coup activity in subregion")))
-# 
-# plot.subregion.coup.pred <- ggplot(plot.predict, 
-#                                    aes(x=icrg.pol.risk.subregional.loo, 
-#                                        y=pred, colour=coup.in.region)) + 
-#   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=coup.in.region), 
-#               alpha=0.3, colour=NA) +
-#   geom_line(size=1.5) + 
-#   labs(x="Average political risk in subregion (ICRG)", 
-#        y="Predicted CSRE") + 
-#   scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
-#   scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
-#   theme_ath()
-# plot.subregion.coup.pred
-# 
+#' ### CSRE across neighbor stability and coups in region
+new.data.ext <- lna.external.full$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, protests.nonviolent.std_wt,
+            icrg.pol.risk_wt)) %>%
+  right_join(expand.grid(protests.nonviolent.std_wt = c(1, 2.5, 5),
+                         icrg.pol.risk_wt = seq(40, 100, by=1),
+                         index=1),
+             by="index") %>%
+  select(-index)
+
+plot.predict.ext.icrg.protests <- lna.external.full %>%
+  augment(newdata=new.data.ext) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit),
+         protests = factor(protests.nonviolent.std_wt, levels=c(1, 2.5, 5),
+                           labels=c("Much fewer than normal (1)", "Normal (2.5)", 
+                                    "Much more than normal (5)"))) %>%
+  # Remove confidence intervals for normal levels of protests
+  mutate(pred.lower = ifelse(protests.nonviolent.std_wt == 2.5, NA, pred.lower),
+         pred.upper = ifelse(protests.nonviolent.std_wt == 2.5, NA, pred.upper))
+
+plot.ext.icrg.nonviolent <- ggplot(plot.predict.ext.icrg.protests, 
+                                   aes(x=icrg.pol.risk_wt, y=pred,
+                                       colour=protests)) + 
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=protests),
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) +
+  labs(x="Average political risk in neighboring countries (ICRG)",
+       y="Predicted CSRE in following year") + 
+  scale_colour_manual(values=c("#004259", "grey50", "#4A0A3D"), name=NULL) +
+  scale_fill_manual(values=c("#004259", "grey50" ,"#4A0A3D"), name=NULL, guide=FALSE) +
+  theme_ath()
+plot.ext.icrg.nonviolent
+
 # fig.save.cairo(plot.subregion.coup.pred, filename="1-icrg-subregion-coup-ext-pred", 
 #                width=5, height=2.5)
 # 

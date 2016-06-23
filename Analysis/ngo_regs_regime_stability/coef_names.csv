@@ -31,3 +31,4 @@ shaming.states.pct.all,Government-based shaming reports (% of all events)
 shaming.ingos.pct.all,INGO-based shaming reports (% of all events)
 protests.violent.std_wt,"Violent protests, weighted by distance (relative within country)"
 protests.nonviolent.std_wt,"Nonviolent protests, weighted by distance (relative within country)"
+icrg.pol.risk_wt,"Average political risk, weighted by distance (ICRG)"
