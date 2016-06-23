@@ -261,7 +261,7 @@ stargazer(lna.shame.simple, lna.all.simple, lna.all.full,
 
 #' ### Coefficient plot
 #' 
-vars.included <- c("shaming.states.pct.all", "shaming.ingos.pct.all")
+vars.included <- c("shaming.states.std", "shaming.ingos.std")
 coef.plot.shame <- fig.coef(list("All shaming factors" = lna.shame.simple,
                                  "All factors (excerpt)" = lna.all.full), 
                             xlab="Civil society regulatory environment (CSRE)",
