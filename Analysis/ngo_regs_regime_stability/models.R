@@ -114,8 +114,8 @@ autocracies <- filter(full.data, gwf.ever.autocracy) %>%
 lna.all.simple <- lm(cs_env_sum.lead ~ 
                        icrg.stability + icrg.internal +
                        icrg.pol.risk_wt +
-                       shaming.states.pct.all +
-                       shaming.ingos.pct.all + 
+                       shaming.states.std +
+                       shaming.ingos.std + 
                        as.factor(year.num),
                      data=autocracies)
 
@@ -132,8 +132,8 @@ lna.all.full <- lm(cs_env_sum.lead ~
                      protests.violent.std_wt +
                      protests.nonviolent.std_wt +
                      # Shaming
-                     shaming.states.pct.all +
-                     shaming.ingos.pct.all +
+                     shaming.states.std +
+                     shaming.ingos.std +
                      # Minimal controls
                      as.factor(year.num),
                    data=autocracies)
@@ -243,8 +243,8 @@ lna.shame.simple <- lm(cs_env_sum.lead ~
                          # TODO: Deal with proper normalized or weighted values
                          # shaming.states.pct.govt +
                          # shaming.ingos.pct.ingo +
-                         shaming.states.pct.all +
-                         shaming.ingos.pct.all +
+                         shaming.states.std +
+                         shaming.ingos.std +
                          as.factor(year.num),
                        data=autocracies)
 
