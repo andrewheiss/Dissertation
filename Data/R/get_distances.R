@@ -3,19 +3,21 @@
 # the rocker/hadleyverse image, ran this through RStudio in a browser,
 # downloaded all the .rds files locally, and then killed the VPS.
 
+# Also, install rgeos because of gpclib restrictions
+
 library(cshapes)  # Has to come before dplyr because it uses plyr
 library(parallel)
 
 get.distances <- function(year.to.get) {
   year.to.get <- as.Date(paste0(year.to.get, "-01-01"))
   
-  dmat.min <- cshapes::distmatrix(year.to.get, type="mindist", useGW=FALSE)
+  dmat.min <- cshapes::distmatrix(year.to.get, type="mindist", useGW=TRUE)
   saveRDS(dmat.min, paste0("min_", year.to.get, ".rds"))
   
-  dmat.capital <- cshapes::distmatrix(year.to.get, type="capdist", useGW=FALSE)
+  dmat.capital <- cshapes::distmatrix(year.to.get, type="capdist", useGW=TRUE)
   saveRDS(dmat.capital, paste0("capital_", year.to.get, ".rds"))
   
-  dmat.centdist <- cshapes::distmatrix(year.to.get, type="centdist", useGW=FALSE)
+  dmat.centdist <- cshapes::distmatrix(year.to.get, type="centdist", useGW=TRUE)
   saveRDS(dmat.capital, paste0("cent_", year.to.get, ".rds"))
 }
 
@@ -26,7 +28,7 @@ no_cores <- detectCores()
 cl <- makeCluster(no_cores, type="FORK")
 
 # Calculate all three distances for each year
-parSapply(cl, 1990:2012, get.distances)
+parSapply(cl, 1990:2015, get.distances)
 
 # Kill the cluster
 stopCluster(cl)
