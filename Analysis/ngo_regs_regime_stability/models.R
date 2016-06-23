@@ -327,7 +327,7 @@ fig.save.cairo(coef.plot.all, filename="1-coefs-lna-all",
 
 #' ## Marginal effects
 #' 
-#' ### CSRE across range of ICRG scores
+#' ### CSRE across internal variables
 new.data.int.stability <- lna.internal.full$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
@@ -386,54 +386,8 @@ plot.icrg.int.pred
 fig.save.cairo(plot.icrg.int.pred, filename="1-icrg-int-pred",
                width=5, height=3)
 
-
-#' ### CSRE across years executive has been in office
-new.data.yrsoffc <- lna.internal.full$model %>%
-  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
-  mutate(year.num = 2005,
-         index = 1) %>%
-  select(-c(cs_env_sum.lead, icrg.stability, yrsoffc)) %>%
-  right_join(expand.grid(icrg.stability = seq(0, 12, by=0.1),
-                         yrsoffc = c(2, 30),
-                         index = 1, stringsAsFactors=FALSE),
-             by="index") %>%
-  select(-index)
-
-plot.predict.yrsoffc <- lna.internal.full %>%
-  augment(newdata=new.data.yrsoffc) %>%
-  mutate(pred = .fitted,
-         pred.lower = pred + (qnorm(0.025) * .se.fit),
-         pred.upper = pred + (qnorm(0.975) * .se.fit),
-         yrsoffc.clean = factor(yrsoffc, labels=paste(unique(yrsoffc),
-                                                      "years in office")))
-
-plot.icrg.yrs.int.pred <- ggplot(plot.predict.yrsoffc,
-                                 aes(x=icrg.stability,
-                                     y=pred, colour=yrsoffc.clean)) +
-  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=yrsoffc.clean),
-              alpha=0.3, colour=NA) +
-  geom_line(size=1.5) +
-  labs(x="Internal stability (ICRG)", y="Predicted CSRE in following year") +
-  scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
-  scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
-  coord_cartesian(ylim=c(-4, 4)) +
-  theme_ath()
-plot.icrg.yrs.int.pred
-
-fig.save.cairo(plot.icrg.yrs.int.pred, filename="1-icrg-yrs-int-pred",
-               width=5, height=3)
  
-#' ### Both predictions together
-plot.icrg.int.pred.both <- arrangeGrob(plot.icrg.int.pred,
-                                       plot.icrg.yrs.int.pred,
-                                       nrow=1)
-grid::grid.draw(plot.icrg.int.pred.both)
-
-fig.save.cairo(plot.icrg.int.pred.both, filename="1-icrg-yrs-int-pred-both",
-               width=5, height=2.5)
-
- 
-#' ### CSRE across neighbor stability and coups in region
+#' ### CSRE across external variables
 new.data.ext <- lna.external.full$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
@@ -475,6 +429,60 @@ plot.ext.icrg.nonviolent
 #                width=5, height=2.5)
 # 
 
+#' ### CSRE across shaming variables
+new.data.shame.states <- lna.all.full$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, shaming.states.std)) %>%
+  right_join(expand.grid(shaming.states.std =
+                           seq(1, 5, by=0.1),
+                         index = 1),
+             by="index") %>%
+  select(-index)
+
+new.data.shame.ingos <- lna.all.full$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, shaming.ingos.std)) %>%
+  right_join(expand.grid(shaming.ingos.std =
+                           seq(1, 5, by=0.1),
+                         index = 1),
+             by="index") %>%
+  select(-index)
+
+plot.predict.states <- lna.all.full %>%
+  augment(newdata=new.data.shame.states) %>%
+  mutate(val.to.plot = shaming.states.std,
+         var.name = "State-based shaming")
+
+plot.predict.ingos <- lna.all.full %>%
+  augment(newdata=new.data.shame.ingos) %>%
+  mutate(val.to.plot = shaming.ingos.std,
+         var.name = "INGO-based shaming")
+
+plot.predict.shame <- bind_rows(plot.predict.states, plot.predict.ingos) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit))
+
+plot.shame.states.ingos <- ggplot(plot.predict.shame, 
+                                  aes(x=val.to.plot, y=pred, 
+                                      fill=var.name, colour=var.name)) +
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) +
+  labs(x="Level of shaming", y="Predicted CSRE in following year") +
+  scale_colour_manual(values=c(col.auth, col.dem), name=NULL) +
+  scale_fill_manual(values=c(col.auth, col.dem), name=NULL, guide=FALSE) +
+  coord_cartesian(ylim=c(-2, 4)) +
+  theme_ath() 
+plot.shame.states.ingos
+
+fig.save.cairo(plot.shame.states.ingos, filename="1-shame-states-ingos",
+               width=5, height=3)
+
 
 #' # Nested analysis case selection
 #'
@@ -507,253 +515,22 @@ plot.lna.selection <- ggplot(lna.selection.data,
 plot.lna.selection
 
 
-# #' # Shaming and diplomatic conflict factors
-# #' 
-# #' ## Actual models
-# #' 
-# #' ### Just severity and shame percent
-# model.shame.simple <- lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
-#                            icews.pct.shame + 
-#                            as.factor(year.num),
-#                          data=filter(full.data, gwf.binary == "Autocracy"))
-# 
-# #+ results='asis'
-# stargazer(model.shame.simple, type="html", 
-#           dep.var.caption="CSRE",
-#           dep.var.labels.include=FALSE, no.space=TRUE,
-#           column.labels=names(model.int.all),
-#           omit="factor\\(year", 
-#           add.lines=list(c("Year fixed effects",
-#                            rep("Yes", 2))))
-# 
-# #' ### Severity and shame and regional instability
-# model.shame.regional <- lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
-#                              icews.pct.shame + 
-#                              icrg.pol.risk.regional.loo +
-#                              as.factor(year.num),
-#                            data=filter(full.data, gwf.binary == "Autocracy"))
-# 
-# #+ results='asis'
-# stargazer(model.shame.regional, type="html", 
-#           dep.var.caption="CSRE",
-#           dep.var.labels.include=FALSE, no.space=TRUE,
-#           column.labels=names(model.int.all),
-#           omit="factor\\(year", 
-#           add.lines=list(c("Year fixed effects",
-#                            rep("Yes", 2))))
-# 
-# #' ### All shaming variables + controls (interstate)
-# model.shame.full.ctrl.state <- lm(cs_env_sum.lead ~ icews.conflict.severity.abs + 
-#                                     icews.pct.shame + 
-#                                     icrg.pol.risk.regional.loo +
-#                                     gdpcap.log + population.log +
-#                                     oda.log + countngo + globalization + as.factor(year.num),
-#                                   data=filter(full.data, gwf.binary == "Autocracy"))
-# 
-# #+ results='asis'
-# stargazer(model.shame.full.ctrl.state, type="html", 
-#           dep.var.caption="CSRE",
-#           dep.var.labels.include=FALSE, no.space=TRUE,
-#           column.labels=names(model.int.all),
-#           omit="factor\\(year", 
-#           add.lines=list(c("Year fixed effects",
-#                            rep("Yes", 2))))
-# 
-# #' ### All shaming variables + controls (INGOs)
-# model.shame.full.ctrl.ingos <- lm(cs_env_sum.lead ~ icews.conflict.severity.abs.ingos +
-#                                     icews.pct.shame.ingos +
-#                                     icrg.pol.risk.regional.loo +
-#                                     gdpcap.log + population.log +
-#                                     oda.log + countngo + globalization + as.factor(year.num),
-#                                   data=filter(full.data, gwf.binary == "Autocracy"))
-# 
-# #+ results='asis'
-# stargazer(model.shame.full.ctrl.ingos, type="html", 
-#           dep.var.caption="CSRE",
-#           dep.var.labels.include=FALSE, no.space=TRUE,
-#           column.labels=names(model.int.all),
-#           omit="factor\\(year", 
-#           add.lines=list(c("Year fixed effects",
-#                            rep("Yes", 2))))
-# 
-# 
-# #' ### All models (to LaTeX)
-# models.shame <- list("Severity, conflict, and regional instability" = model.shame.regional,
-#                      "All controls (interstate)" = model.shame.full.ctrl.state,
-#                      "All controls (INGOs)" = model.shame.full.ctrl.ingos)
-# 
-# coef.labs <- c("Severity of conflictual events (interstate)",
-#                "Percent of all events that are conflictual (interstate)", 
-#                "Severity of conflictual events (INGOs)",
-#                "Percent of all events that are conflictual (INGOs)",
-#                "Average political risk in region",
-#                "GDP per capita (log)", 
-#                "Population (log)", "Foreign aid (log)", 
-#                "Number of INGO members", "Globalization")
-# extra.lines <- list(c("Year fixed effects",
-#                       c(rep("Yes", 8))))
-# 
-# capture.output({
-#   stargazer(models.shame, 
-#             type="latex", font.size="tiny",
-#             out=file.path(PROJHOME, "Output", "tables", "1-shaming-models-all.tex"),
-#             covariate.labels=coef.labs,
-#             title="Reputational determinants of restrictions on the civil society regulatory environment",
-#             label="models-reputational",
-#             dep.var.caption="Civil society regulatory environment (CSRE) in following year",
-#             dep.var.labels.include=FALSE,
-#             column.labels=names(models.shame),
-#             omit="factor\\(year", no.space=TRUE,
-#             add.lines=extra.lines)
-# }, file="/dev/null")
-# 
-# #' ## Model plots
-# #' 
-# #' ### Coefficient plot
-# shame.var.order <- c("icews.conflict.severity.abs", "icews.pct.shame", 
-#                      "icews.conflict.severity.abs.ingos", "icews.pct.shame.ingos", 
-#                      "icrg.pol.risk.regional.loo", "icews.conflict.severity.abs", 
-#                      "icews.pct.shame", "icrg.pol.risk.regional.loo", "gdpcap.log", 
-#                      "population.log", "oda.log", "countngo", "globalization")
-# 
-# plot.shame <- fig.coef(models.shame, xlab="Civil society regulatory environment (CSRE)",
-#                        var.order=shame.var.order)
-# plot.shame
-# 
-# fig.save.cairo(plot.shame, filename="1-coefs-shame", 
-#                width=6, height=3)
-# 
-# 
-# #' ### CSRE across severity of events
-# new.data.severity.state <- model.shame.full.ctrl.state$model %>%
-#   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
-#   mutate(year.num = 2005,
-#          index = 1) %>%
-#   select(-c(cs_env_sum.lead, icews.conflict.severity.abs)) %>%
-#   right_join(data_frame(icews.conflict.severity.abs = seq(0, 10, by=0.1), 
-#                         index = 1),
-#              by="index") %>% 
-#   select(-index)
-# 
-# plot.predict.state <- model.shame.full.ctrl.state %>% 
-#   augment(newdata=new.data.severity.state) %>%
-#   mutate(pred = .fitted,
-#          pred.lower = pred + (qnorm(0.025) * .se.fit),
-#          pred.upper = pred + (qnorm(0.975) * .se.fit),
-#          actor = "Interstate") %>%
-#   rename(severity = icews.conflict.severity.abs)
-# 
-# new.data.severity.ingo <- model.shame.full.ctrl.ingos$model %>%
-#   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
-#   mutate(year.num = 2005,
-#          index = 1) %>%
-#   select(-c(cs_env_sum.lead, icews.conflict.severity.abs.ingos)) %>%
-#   right_join(data_frame(icews.conflict.severity.abs.ingos = seq(0, 10, by=0.1), 
-#                         index = 1),
-#              by="index") %>% 
-#   select(-index)
-# 
-# plot.predict.ingo <- model.shame.full.ctrl.ingos %>% 
-#   augment(newdata=new.data.severity.ingo) %>%
-#   mutate(pred = .fitted,
-#          pred.lower = pred + (qnorm(0.025) * .se.fit),
-#          pred.upper = pred + (qnorm(0.975) * .se.fit),
-#          actor = "INGO-based") %>%
-#   rename(severity = icews.conflict.severity.abs.ingos)
-# 
-# plot.predict <- bind_rows(plot.predict.state, plot.predict.ingo) %>%
-#   mutate(actor = factor(actor, levels=c("Interstate", "INGO-based"), ordered=TRUE))
-# 
-# plot.shame.severity.pred <- ggplot(plot.predict, 
-#                                    aes(x=severity, y=pred, colour=actor)) + 
-#   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=actor), 
-#               alpha=0.3, colour=NA) +
-#   geom_line(size=1.5) + 
-#   labs(x="Average severity of conflictual events", 
-#        y="Predicted CSRE") + 
-#   scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
-#   scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
-#   theme_ath() 
-# plot.shame.severity.pred
-# 
-# fig.save.cairo(plot.shame.severity.pred, filename="1-shame-severity-pred", 
-#                width=5, height=2.5)
-# 
-# 
-# #' ### CSRE across percent of conflictual events
-# new.data.shame.state <- model.shame.full.ctrl.state$model %>%
-#   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
-#   mutate(year.num = 2005,
-#          index = 1) %>%
-#   select(-c(cs_env_sum.lead, icews.pct.shame)) %>%
-#   right_join(data_frame(icews.pct.shame = seq(0, 0.6, by=0.05), 
-#                         index = 1),
-#              by="index") %>% 
-#   select(-index)
-# 
-# plot.predict.state <- model.shame.full.ctrl.state %>% 
-#   augment(newdata=new.data.shame.state) %>%
-#   mutate(pred = .fitted,
-#          pred.lower = pred + (qnorm(0.025) * .se.fit),
-#          pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
-#   mutate(actor = "Interstate",
-#          pct.shame = icews.pct.shame)
-# 
-# new.data.shame.ingos <- model.shame.full.ctrl.ingos$model %>%
-#   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
-#   mutate(year.num = 2005,
-#          index = 1) %>%
-#   select(-c(cs_env_sum.lead, icews.pct.shame.ingos)) %>%
-#   right_join(data_frame(icews.pct.shame.ingos = seq(0, 0.6, by=0.05), 
-#                         index = 1),
-#              by="index") %>% 
-#   select(-index)
-# 
-# plot.predict.ingos <- model.shame.full.ctrl.ingos %>% 
-#   augment(., newdata=new.data.shame.ingos) %>%
-#   mutate(pred = .fitted,
-#          pred.lower = pred + (qnorm(0.025) * .se.fit),
-#          pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
-#   mutate(actor = "INGO-based",
-#          pct.shame = icews.pct.shame.ingos)
-# 
-# plot.predict <- bind_rows(plot.predict.state, plot.predict.ingos) %>%
-#   mutate(actor = factor(actor, levels=c("Interstate", "INGO-based"), ordered=TRUE))
-# 
-# plot.shame.pct.pred <- ggplot(plot.predict, 
-#                               aes(x=pct.shame, 
-#                                   y=pred, colour=actor)) + 
-#   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper, fill=actor), 
-#               alpha=0.3, colour=NA) +
-#   geom_line(size=1.5) + 
-#   labs(x="Percent of events that are conflictual", 
-#        y="Predicted CSRE") + 
-#   scale_colour_manual(values=c("#004259", "#4A0A3D"), name=NULL) +
-#   scale_fill_manual(values=c("#004259", "#4A0A3D"), name=NULL, guide=FALSE) +
-#   scale_x_continuous(labels=percent) +
-#   theme_ath()
-# plot.shame.pct.pred
-# 
-# fig.save.cairo(plot.shame.pct.pred, filename="1-shame-pct-pred", 
-#                width=5, height=3)
-# 
-# 
-# #' # Bayesian tinkering?
-# #' 
-# #' See:
-# #' 
-# #' - https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html
-# #' - https://cran.r-project.org/web/packages/rstanarm/vignettes/continuous.html
-# #' 
-# #' Good, solid, interpretable results, but craaaaazy slow
-# 
-# # library(rstanarm)
-# # options(mc.cores = parallel::detectCores())  # Use all possible cores
-# # 
-# # model.simple.b <- stan_glm(cs_env_sum.lead ~ icrg.stability + e_polity2,
-# #                           data=full.data, family=gaussian(),
-# #                           prior=cauchy(), prior_intercept=cauchy(),
-# #                           seed=my.seed)
-# # print(model.simple.b, digits=2)
-# # plot(model.simple.b, pars=c("icrg.stability", "e_polity2"))
-# # pp_check(model.simple.b, check="distributions", overlay=FALSE, nreps=5)
+#' # Bayesian tinkering?
+#'
+#' See:
+#'
+#' - https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html
+#' - https://cran.r-project.org/web/packages/rstanarm/vignettes/continuous.html
+#'
+#' Good, solid, interpretable results, but craaaaazy slow
+
+# library(rstanarm)
+# options(mc.cores = parallel::detectCores())  # Use all possible cores
+#
+# model.simple.b <- stan_glm(cs_env_sum.lead ~ icrg.stability + e_polity2,
+#                           data=full.data, family=gaussian(),
+#                           prior=cauchy(), prior_intercept=cauchy(),
+#                           seed=my.seed)
+# print(model.simple.b, digits=2)
+# plot(model.simple.b, pars=c("icrg.stability", "e_polity2"))
+# pp_check(model.simple.b, check="distributions", overlay=FALSE, nreps=5)
