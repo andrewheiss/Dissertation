@@ -110,6 +110,35 @@ autocracies <- filter(full.data, gwf.ever.autocracy) %>%
 #' - ICEWS EOIs: 2000-2014
 #' 
 
+#' All models
+lna.all.simple <- lm(cs_env_sum.lead ~ 
+                       icrg.stability + icrg.internal +
+                       icrg.pol.risk_wt +
+                       shaming.states.pct.all +
+                       shaming.ingos.pct.all + 
+                       as.factor(year.num),
+                     data=autocracies)
+
+lna.all.full <- lm(cs_env_sum.lead ~ 
+                     # Internal
+                     icrg.stability + icrg.internal + 
+                     yrsoffc + years.since.comp + opp1vote +
+                     # External
+                     # any.crisis_pct_wt +
+                     # insurgency_pct_mean_nb +
+                     icrg.pol.risk_wt + 
+                     any.crisis_pct_mean_nb +
+                     coups.activity.bin_sum_nb +
+                     protests.violent.std_wt +
+                     protests.nonviolent.std_wt +
+                     # Shaming
+                     shaming.states.pct.all +
+                     shaming.ingos.pct.all +
+                     # Minimal controls
+                     as.factor(year.num),
+                   data=autocracies)
+
+
 #' ## Internal factors
 #' 
 #' ### Models
@@ -134,22 +163,29 @@ lna.internal.alt <- lm(cs_env_sum.lead ~
 
 #+ results='asis'
 stargazer(lna.internal.simple, lna.internal.full, 
+          lna.all.simple, lna.all.full,
           type="html", 
           dep.var.caption="CSRE in following year",
           dep.var.labels.include=FALSE, no.space=TRUE,
           omit="\\.factor",
           add.lines=list(c("Year fixed effects",
-                           rep("Yes", 2))))
+                           rep("Yes", 4))))
 
 #' ### Coefficient plot
 #' 
+vars.included <- c("icrg.stability", "icrg.internal", "yrsoffc", 
+                   "years.since.comp", "opp1vote")
+
 coef.plot.int <- fig.coef(list("Simple" = lna.internal.simple,
-                               "Full" = lna.internal.full), 
-                          xlab="Civil society regulatory environment (CSRE)")
+                               "All internal factors" = lna.internal.full,
+                               "All factors (excerpt)" = lna.all.full), 
+                          xlab="Civil society regulatory environment (CSRE)",
+                          vars.included=vars.included)
 coef.plot.int
 
 fig.save.cairo(coef.plot.int, filename="1-coefs-lna-int",
                width=6, height=3)
+
 
 #' ## External factors
 #' 
@@ -173,23 +209,31 @@ lna.external.full <- lm(cs_env_sum.lead ~
 
 #+ results='asis'
 stargazer(lna.external.simple, lna.external.full,
+          lna.all.simple, lna.all.full,
           type="html", 
           dep.var.caption="CSRE in following year",
           dep.var.labels.include=FALSE, no.space=TRUE,
           omit="\\.factor",
           add.lines=list(c("Year fixed effects",
-                           rep("Yes", 2))))
+                           rep("Yes", 4))))
 
 
 #' ### Coefficient plot
 #' 
+vars.included <- c("icrg.pol.risk_wt", "any.crisis_pct_mean_nb", 
+                   "coups.activity.bin_sum_nb", "protests.violent.std_wt", 
+                   "protests.nonviolent.std_wt")
+
 coef.plot.ext <- fig.coef(list("Simple" = lna.external.simple,
-                               "Full" = lna.external.full), 
-                          xlab="Civil society regulatory environment (CSRE)")
+                               "All external factors" = lna.external.full,
+                               "All factors (excerpt)" = lna.all.full), 
+                          xlab="Civil society regulatory environment (CSRE)",
+                          vars.included=vars.included)
 coef.plot.ext
 
 fig.save.cairo(coef.plot.ext, filename="1-coefs-lna-ext",
                width=6, height=3)
+
 
 #' ## Shaming factors
 #' 
@@ -205,54 +249,35 @@ lna.shame.simple <- lm(cs_env_sum.lead ~
                        data=autocracies)
 
 #+ results='asis'
-stargazer(lna.shame.simple, 
+stargazer(lna.shame.simple, lna.all.simple, lna.all.full,
           type="html", 
           dep.var.caption="CSRE in following year",
           dep.var.labels.include=FALSE, no.space=TRUE,
           omit="\\.factor",
           add.lines=list(c("Year fixed effects",
-                           rep("Yes", 1))))
+                           rep("Yes", 3))))
 
 #' ### Coefficient plot
 #' 
-coef.plot.shame <- fig.coef(list("Simple" = lna.shame.simple), 
-                            xlab="Civil society regulatory environment (CSRE)")
+vars.included <- c("shaming.states.pct.all", "shaming.ingos.pct.all")
+coef.plot.shame <- fig.coef(list("All shaming factors" = lna.shame.simple,
+                                 "All factors (excerpt)" = lna.all.full), 
+                            xlab="Civil society regulatory environment (CSRE)",
+                            vars.included=vars.included)
 coef.plot.shame
 
 fig.save.cairo(coef.plot.shame, filename="1-coefs-lna-shame",
                width=6, height=3)
 
+
 #' ## All factors at once
 #' 
 #' ### Models
 #' 
-lna.all.simple <- lm(cs_env_sum.lead ~ 
-                        icrg.stability + icrg.internal +
-                        icrg.pol.risk_mean_nb +
-                        shaming.states.pct.all +
-                        shaming.ingos.pct.all + 
-                        as.factor(year.num),
-                      data=autocracies)
-
-lna.all.full <- lm(cs_env_sum.lead ~ 
-                     # Internal
-                     icrg.stability + icrg.internal + 
-                     yrsoffc + years.since.comp + opp1vote +
-                     # External
-                     # any.crisis_pct_wt +
-                     # insurgency_pct_mean_nb +
-                     icrg.pol.risk_mean_nb + 
-                     any.crisis_pct_mean_nb +
-                     coups.activity.bin_sum_nb +
-                     protests.violent.std_wt +
-                     protests.nonviolent.std_wt +
-                     # Shaming
-                     shaming.states.pct.all +
-                     shaming.ingos.pct.all +
-                     # Minimal controls
-                     as.factor(year.num),
-                   data=autocracies)
-
+#' Actual full models run previously so they can be compared to smaller models.
+#' 
+#' Here I show the results of all models side-by-side.
+#' 
 var.labs <-  c(
   "Internal stability (ICRG)",
   "Internal conflict (ICRG)",
@@ -275,7 +300,7 @@ stargazer(lna.internal.simple, lna.internal.full,
           type="html",
           dep.var.caption="CSRE in following year",
           dep.var.labels.include=FALSE, no.space=TRUE,
-          covariate.labels=var.labs,
+          # covariate.labels=var.labs,
           omit="\\.factor",
           add.lines=list(c("Year fixed effects",
                            rep("Yes", 7))),
