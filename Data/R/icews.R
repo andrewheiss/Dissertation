@@ -310,7 +310,9 @@ full.icews.panel <- baseline.panel %>%
   group_by(cowcode) %>%
   mutate(protests.all.std = standardize_country_events(protests.all),
          protests.violent.std = standardize_country_events(protests.violent),
-         protests.nonviolent.std = standardize_country_events(protests.nonviolent)) %>%
+         protests.nonviolent.std = standardize_country_events(protests.nonviolent),
+         shaming.states.std = standardize_country_events(shaming.events.states),
+         shaming.ingos.std = standardize_country_events(shaming.events.ingos)) %>%
   ungroup()
 
 
