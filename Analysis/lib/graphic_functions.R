@@ -50,12 +50,22 @@ fig.save.cairo <- function(fig, filepath=file.path(PROJHOME, "Output", "figures"
          width=width, height=height, units=units, type="cairo", dpi=300, ...)
 }
 
-fig.coef <- function(models, title=NULL, xlab=NULL, legend=TRUE, space.below=FALSE, var.order=NULL) {
+fig.coef <- function(models, title=NULL, xlab=NULL, legend=TRUE, 
+                     space.below=FALSE, var.order=NULL, vars.included="all") {
+  
+  # Determine which variables to plot
+  if (all(vars.included == "all")) {
+    vars.search <- ".*"
+  } else {
+    vars.search <- paste0(vars.included, collapse="|")
+  }
+  
   # Convert model to a tidy dataframe for plotting
   plot.data <- models %>%
     map_df(tidy, .id="model.name") %>%
     filter(term != "(Intercept)",
            !str_detect(term, "\\.factor")) %>%
+    filter(str_detect(term, vars.search)) %>%
     mutate(xmin = estimate + (qnorm(0.025) * std.error),
            xmax = estimate + (qnorm(0.975) * std.error)) %>%
     left_join(coef.names, by="term") %>%
