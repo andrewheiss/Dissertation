@@ -98,7 +98,9 @@ set.seed(my.seed)
 autocracies <- filter(full.data, gwf.ever.autocracy) %>%
   mutate(case.study = cowcode %in% c(710, 651, 365)) %>%
   # Make these variables more interpretable unit-wise
-  mutate_each(funs(. * 100), dplyr::contains("pct"))
+  mutate_each(funs(. * 100), dplyr::contains("pct")) %>%
+  mutate(.rownames = rownames(.))
+  
 
 #' Note on time frame of variables: Not all variables overlap perfectly with
 #' V-Dem. Models that include any of the following variables will be inherently
@@ -472,7 +474,39 @@ plot.ext.icrg.nonviolent
 # fig.save.cairo(plot.subregion.coup.pred, filename="1-icrg-subregion-coup-ext-pred", 
 #                width=5, height=2.5)
 # 
-# 
+
+
+#' # Nested analysis case selection
+#'
+#' Use the basic model with minimal variables, in part because of the
+#' principles of LNA, and in part because there are so many dropped, incomplete
+#' cases when using years in office, opposition vote, and ICEWS EOIs.
+#' 
+lna.selection.data <- lna.all.simple %>%
+  augment() %>%
+  left_join(select(autocracies, .rownames, country_name, cowcode), by=".rownames") %>%
+  mutate(case.study = cowcode %in% c(710, 651, 365),
+         country.plot = ifelse(case.study, country_name, "Other"),
+         country.plot = factor(country.plot, levels=c("China", "Egypt", "Russia", "Other"),
+                               ordered=TRUE))
+
+plot.lna.selection <- ggplot(lna.selection.data, 
+                             aes(x=.fitted, y=cs_env_sum.lead,
+                                 colour=country.plot)) +
+  geom_segment(x=-6, xend=6, y=-6, yend=6, colour="grey75", size=0.5) + 
+  geom_point(aes(alpha=country.plot, size=country.plot)) +
+  stat_ellipse(aes(linetype=country.plot), type="norm", size=0.5) +
+  scale_linetype_manual(values=c(1, 1, 1, 0), guide=FALSE) +
+  scale_color_manual(values=c("#CC3340", "#6B4A3D", "#00A1B0", "grey50"), name=NULL) +
+  scale_alpha_manual(values=c(1, 1, 1, 0.25), guide=FALSE) +
+  scale_size_manual(values=c(1, 1, 1, 0.5), guide=FALSE) +
+  labs(x="Predicted CSRE", y="Actual CSRE") +
+  coord_cartesian(xlim=c(-6, 6), ylim=c(-6, 6)) + 
+  theme_ath()
+
+plot.lna.selection
+
+
 # #' # Shaming and diplomatic conflict factors
 # #' 
 # #' ## Actual models
