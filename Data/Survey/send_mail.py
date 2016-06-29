@@ -11,7 +11,7 @@ from time import sleep
 # ------------------
 # E-mail variables
 # ------------------
-deadline = 'June 11, 2016'
+deadline = 'July 5, 2016'
 subject = 'Help with research about international NGOs'
 
 wait_mu = 0.25
@@ -20,7 +20,7 @@ wait_sd = 0.05
 # ------------------------
 # Load Mailgun templates
 # ------------------------
-with open('templates/initial_invitation.html', 'r') as f:
+with open('templates/first_reminder.html', 'r') as f:
     # Python's format()-with-{}s is cool, but it chokes on CSS since it also
     # uses curly braces. Rather than double all curly braces in the HTML
     # template (since that would make it invalid HTML), double them here after
@@ -30,7 +30,7 @@ with open('templates/initial_invitation.html', 'r') as f:
     template_initial_html = (f.read().replace('{', '{{').replace('}', '}}')
                                      .replace('```', '{').replace("'''", '}'))
 
-with open('templates/initial_invitation.txt', 'r') as f:
+with open('templates/first_reminder.txt', 'r') as f:
     template_initial_text = f.read()
 
 
