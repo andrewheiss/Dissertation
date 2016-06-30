@@ -5,11 +5,7 @@ library(stringi)
 library(purrr)
 library(feather)
 
-# TODO: Replace Greenland with Anguilla
-# TODO: Replace Aruba with Kosovo
-# TODO: Replace Cayman Islands with Taiwan
 # TODO: Remove R_12564WimpZZKn5A
-
 
 # ------------------
 # Useful functions
@@ -48,8 +44,19 @@ match_collapse <- function(x) {
 
 # Look up a list of Qualtrics country IDs and return a list of clean country
 # names, ISO3 codes, or COW codes
-countries <- read_feather(file.path(PROJHOME, "Data", "Survey", "output",
-                                    "survey_countries.feather"))
+countries.raw <- read_feather(file.path(PROJHOME, "Data", "Survey", "output",
+                                        "survey_countries.feather"))
+
+# Change Greenland > Anguilla; Aruba > Kosovo; Cayman Islands > Taiwan
+countries.manual.fixes <- data_frame(`Country name` = c("Anguilla", 
+                                                        "Kosovo", "Taiwan"),
+                                     ISO3 = c("AIA", "XKX", "TWN"),
+                                     `COW code` = c(1022, 347, 713),
+                                     `Qualtrics ID` = c(74, 10, 36))
+
+countries <- countries.raw %>%
+  filter(!(`Qualtrics ID` %in% countries.manual.fixes$`Qualtrics ID`)) %>%
+  bind_rows(countries.manual.fixes)
 
 match_country_id <- function(x, id="name") {
   if (!id %in% c("name", "iso3", "cow")) {
