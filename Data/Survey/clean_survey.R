@@ -41,6 +41,23 @@ match_collapse <- function(x) {
   }
 }
 
+# Load data from tracking database to get data on database provenance
+db.email <- src_sqlite(path=file.path(PROJHOME, "Data", "Survey", "list", 
+                                      "final_list.db"))
+
+dbs <- tbl(db.email, "full_list") %>% collect() %>%
+  separate(id_org, c("database", "id.in.db")) %>%
+  select(index_org, database)
+
+completed <- tbl(db.email, "survey_completed") %>% collect() %>%
+  left_join(dbs, by=c("fk_org"="index_org")) %>%
+  select(ResponseID = qualtrics_id, database) %>%
+  filter(ResponseID != "") %>%
+  group_by(ResponseID) %>%
+  slice(1) %>%
+  ungroup()
+
+
 # Look up a list of Qualtrics country IDs and return a list of clean country
 # names, ISO3 codes, or COW codes
 countries.raw <- read_feather(file.path(PROJHOME, "Data", "Survey", "output",
@@ -552,7 +569,7 @@ survey.v2.countries <- survey.v2 %>%
 # Final combined survey data
 # ----------------------------
 survey.orgs.all <- survey.v1.orgs %>%
-  bind_rows(survey.v2.orgs) 
+  bind_rows(survey.v2.orgs)
 
 survey.countries.all <- survey.v1.countries %>%
   bind_rows(survey.v2.countries) 
@@ -572,7 +589,9 @@ survey.orgs <- survey.orgs.all %>%
   select(ResponseID, StartDate, EndDate, Finished, Status, 
          survey, survey.duration, Q1.1, Q2.1, Q2.2, starts_with("Q2.2_"), 
          starts_with("Q2.3"), Q2.4, Q2.4, starts_with("Q2.5"), 
-         starts_with("Q3"), starts_with("Q5"), Q6.1, Q7.1)
+         starts_with("Q3"), starts_with("Q5"), Q6.1, Q7.1) %>%
+  left_join(completed, by="ResponseID") %>%
+  mutate(database = ifelse(is.na(database), "unknown", database))
 
 # Check for duplicates; they're all different and okay
 duplicates <- survey.orgs %>% group_by(Q2.1) %>% filter(n() > 1)
