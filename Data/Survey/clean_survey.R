@@ -574,6 +574,9 @@ survey.orgs <- survey.orgs.all %>%
          starts_with("Q2.3"), Q2.4, Q2.4, starts_with("Q2.5"), 
          starts_with("Q3"), starts_with("Q5"), Q6.1, Q7.1)
 
+# Check for duplicates; they're all different and okay
+duplicates <- survey.orgs %>% group_by(Q2.1) %>% filter(n() > 1)
+
 survey.countries <- survey.countries.all %>%
   filter(ResponseID %in% survey.orgs$ResponseID) %>%
   select(ResponseID, loop.number, survey, starts_with("Q4.1_"), Q4.2, Q4.3, 
