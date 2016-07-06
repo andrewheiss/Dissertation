@@ -305,8 +305,8 @@ stargazer(lna.internal.simple, lna.internal.full,
           # covariate.labels=var.labs,
           omit="\\.factor",
           add.lines=list(c("Year fixed effects",
-                           rep("Yes", 7))),
-          out=file.path("~/Desktop/all.html")
+                           rep("Yes", 7)))#,
+          # out=file.path("~/Desktop/all.html")
           )
 
 #' ### Coefficient plot
@@ -483,6 +483,138 @@ plot.shame.states.ingos
 fig.save.cairo(plot.shame.states.ingos, filename="1-shame-states-ingos",
                width=5, height=3)
 
+
+#' ## Robustness checks
+#' 
+#' ### Different external variables
+#'
+robust.ext.no.eois <- lm(cs_env_sum.lead ~ 
+                           icrg.pol.risk_wt + 
+                           coups.activity.bin_sum_nb +
+                           protests.violent.std_wt +
+                           protests.nonviolent.std_wt +
+                           as.factor(year.num),
+                         data=autocracies)
+
+robust.ext.risk.nb <- lm(cs_env_sum.lead ~ 
+                           icrg.pol.risk_mean_nb + 
+                           any.crisis_pct_mean_nb +
+                           coups.activity.bin_sum_nb +
+                           protests.violent.std_wt +
+                           protests.nonviolent.std_wt +
+                           as.factor(year.num),
+                         data=autocracies)
+
+robust.ext.risk.nb.no.eois <- lm(cs_env_sum.lead ~ 
+                                   icrg.pol.risk_mean_nb + 
+                                   coups.activity.bin_sum_nb +
+                                   protests.violent.std_wt +
+                                   protests.nonviolent.std_wt +
+                                   as.factor(year.num),
+                                 data=autocracies)
+
+robust.ext.protests.prop.wt <- lm(cs_env_sum.lead ~ 
+                                    icrg.pol.risk_wt + 
+                                    any.crisis_pct_mean_nb +
+                                    coups.activity.bin_sum_nb +
+                                    protests.violent.pct.all_wt +
+                                    protests.nonviolent.pct.all_wt +
+                                    as.factor(year.num),
+                                  data=autocracies)
+
+robust.ext.protests.prop.nb <- lm(cs_env_sum.lead ~ 
+                                    icrg.pol.risk_wt + 
+                                    any.crisis_pct_mean_nb +
+                                    coups.activity.bin_sum_nb +
+                                    protests.violent.pct.all_mean_nb +
+                                    protests.nonviolent.pct.all_mean_nb +
+                                    as.factor(year.num),
+                                  data=autocracies)
+
+robust.ext.protests.prop.wt.no.eois <- lm(cs_env_sum.lead ~ 
+                                            icrg.pol.risk_wt + 
+                                            coups.activity.bin_sum_nb +
+                                            protests.violent.pct.all_wt +
+                                            protests.nonviolent.pct.all_wt +
+                                            as.factor(year.num),
+                                          data=autocracies)
+
+robust.ext.protests.prop.nb.no.eois <- lm(cs_env_sum.lead ~ 
+                                            icrg.pol.risk_wt + 
+                                            coups.activity.bin_sum_nb +
+                                            protests.violent.pct.all_mean_nb +
+                                            protests.nonviolent.pct.all_mean_nb +
+                                            as.factor(year.num),
+                                          data=autocracies)
+
+robust.ext.protests.log.wt <- lm(cs_env_sum.lead ~ 
+                                   icrg.pol.risk_wt + 
+                                   any.crisis_pct_mean_nb +
+                                   coups.activity.bin_sum_nb +
+                                   protests.violent.log_wt +
+                                   protests.nonviolent.log_wt +
+                                   as.factor(year.num),
+                                 data=autocracies)
+
+robust.ext.protests.log.nb <- lm(cs_env_sum.lead ~ 
+                                   icrg.pol.risk_wt + 
+                                   any.crisis_pct_mean_nb +
+                                   coups.activity.bin_sum_nb +
+                                   protests.violent.log_mean_nb +
+                                   protests.nonviolent.log_mean_nb +
+                                   as.factor(year.num),
+                                 data=autocracies)
+
+robust.ext.protests.log.wt.no.eois <- lm(cs_env_sum.lead ~ 
+                                           icrg.pol.risk_wt + 
+                                           coups.activity.bin_sum_nb +
+                                           protests.violent.log_wt +
+                                           protests.nonviolent.log_wt +
+                                           as.factor(year.num),
+                                         data=autocracies)
+
+robust.ext.protests.log.nb.no.eois <- lm(cs_env_sum.lead ~ 
+                                           icrg.pol.risk_wt + 
+                                           coups.activity.bin_sum_nb +
+                                           protests.violent.log_mean_nb +
+                                           protests.nonviolent.log_mean_nb +
+                                           as.factor(year.num),
+                                         data=autocracies)
+
+#+ results='asis'
+stargazer(lna.external.simple, lna.external.full,
+          lna.all.simple, lna.all.full, 
+          robust.ext.no.eois, robust.ext.risk.nb,
+          robust.ext.risk.nb.no.eois,
+          type="html", 
+          dep.var.caption="CSRE in following year",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          omit="\\.factor",
+          add.lines=list(c("Year fixed effects",
+                           rep("Yes", 7))))
+
+#+ results='asis'
+stargazer(lna.external.simple, lna.external.full,
+          lna.all.simple, lna.all.full,
+          robust.ext.protests.prop.nb,
+          robust.ext.protests.prop.wt,
+          robust.ext.protests.log.wt,
+          robust.ext.protests.log.nb,
+          robust.ext.protests.prop.nb.no.eois,
+          robust.ext.protests.prop.wt.no.eois,
+          robust.ext.protests.log.wt.no.eois,
+          robust.ext.protests.log.nb.no.eois,
+          type="html", 
+          dep.var.caption="CSRE in following year",
+          dep.var.labels.include=FALSE, no.space=TRUE,
+          omit="\\.factor",
+          add.lines=list(c("Year fixed effects",
+                           rep("Yes", 12))))
+
+
+#' 
+#' ### Different internal variables
+#' 
 
 #' # Nested analysis case selection
 #'

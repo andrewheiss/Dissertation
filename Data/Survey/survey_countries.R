@@ -6,7 +6,7 @@ library(pander)       # Markdown
 library(feather)      # For passing data between R scripts
 
 # World Bank countries
-wb.countries.raw <- read_html("http://data.worldbank.org/country") %>%
+wb.countries.raw <- read_html("https://web.archive.org/web/20160422022535/http://data.worldbank.org/country/") %>%
   html_nodes(xpath='//*[@id="block-views-countries-block_1"]/div/div/div/table') %>%
   html_table() %>% bind_rows() %>% as_data_frame()
 wb.countries.raw
