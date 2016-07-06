@@ -305,8 +305,8 @@ stargazer(lna.internal.simple, lna.internal.full,
           # covariate.labels=var.labs,
           omit="\\.factor",
           add.lines=list(c("Year fixed effects",
-                           rep("Yes", 7))),
-          out=file.path("~/Desktop/all.html")
+                           rep("Yes", 7)))#,
+          # out=file.path("~/Desktop/all.html")
           )
 
 #' ### Coefficient plot
