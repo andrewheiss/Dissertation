@@ -108,14 +108,15 @@ response.summary <- list.details %>%
   left_join(email.by.db, by=c("name" = "db")) %>%
   left_join(dead.and.bounced.by.db, by=c("name" = "db")) %>%
   mutate(num.invited = num.apparently.valid - num.dead.bounced) %>%
-  select(-c(description, name))
+  select(-c(description))
 
 response.summary.total <- response.summary %>%
-  summarise_each(funs(sum), -title) %>%
+  summarise_each(funs(sum), -title, -name) %>%
   mutate(title = "**Total**")
 
 response.summary.with.total <- bind_rows(response.summary,
                                          response.summary.total) %>%
+  select(-name) %>%
   mutate(perc.valid = num.apparently.valid / num_rows_raw,
          perc.bounced.from.valid = num.dead.bounced / num.apparently.valid,
          perc.invited.from.raw = num.invited / num_rows_raw,
@@ -148,6 +149,25 @@ response.summary.display <- response.summary.with.total %>%
 
 #+ results="asis"
 pandoc.table(response.summary.display)
+
+#' Some databases were more responsive than others (though this is hardly
+#' accurate; half of the responses aren't linked to specific databases):
+survey.dbs <- survey.orgs.clean %>%
+  group_by(database) %>%
+  summarise(num.responses = n()) %>% 
+  ungroup()
+
+response.summary.actual <- survey.dbs %>%
+  left_join(response.summary, by=c("database"="name")) %>%
+  mutate(pct.responded.from.invited = num.responses / num.invited,
+         pct.responded.clean = percent(pct.responded.from.invited)) %>%
+  mutate(database = ifelse(database == "unknown", "zzzunknown", database),
+         title = ifelse(is.na(title), "Unknown", title)) %>%
+  arrange(database) %>%
+  select(title, num.responses, num.invited, pct.responded.clean)
+
+#+ results="asis"
+pandoc.table(response.summary.actual)
 
 #' ## Figure out partials, incompletes, completes
 #' 
