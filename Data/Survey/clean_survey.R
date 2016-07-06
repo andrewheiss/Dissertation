@@ -574,14 +574,18 @@ survey.orgs.all <- survey.v1.orgs %>%
 survey.countries.all <- survey.v1.countries %>%
   bind_rows(survey.v2.countries) 
 
-survey.clean.all <- survey.countries.all %>%
-  left_join(survey.orgs.all, by=c("ResponseID", "survey"))
-
-partials <- survey.clean.all %>%
-  filter(Finished == 0)
+partials <- survey.orgs.all %>%
+  left_join(survey.countries.all, by=c("ResponseID", "survey")) %>%
+  distinct(ResponseID, .keep_all=TRUE) %>%
+  filter(Finished == 0) %>%
+  # Threshold for partialness determined in Analysis/ingo_survey/completion_rates.R
+  # At least 20 questions answered + more than 3 questions answered in the Q4 loop
+  mutate(num.answered = rowSums(!is.na(select(., starts_with("Q")))),
+         num.answered.loop = rowSums(!is.na(select(., starts_with("Q4"))))) %>%
+  filter(num.answered >= 20, num.answered.loop > 3)
 
 # Create clean dataframes with complete and valid partial responses
-survey.orgs <- survey.orgs.all %>%
+survey.orgs.clean <- survey.orgs.all %>%
   # Only INGOs
   filter(Q2.4 == "Yes") %>%
   # Completes and valid partials
@@ -591,32 +595,63 @@ survey.orgs <- survey.orgs.all %>%
          starts_with("Q2.3"), Q2.4, Q2.4, starts_with("Q2.5"), 
          starts_with("Q3"), starts_with("Q5"), Q6.1, Q7.1) %>%
   left_join(completed, by="ResponseID") %>%
-  mutate(database = ifelse(is.na(database), "unknown", database))
+  mutate(database = ifelse(is.na(database), "unknown", database),
+         complete = Finished == 1)
 
-# Check for duplicates; they're all different and okay
-duplicates <- survey.orgs %>% group_by(Q2.1) %>% filter(n() > 1)
+# Check for duplicates
+duplicates <- survey.orgs.clean %>% group_by(Q2.1) %>% filter(n() > 1) %>%
+  ungroup() %>%
+  mutate(num.answered = rowSums(!is.na(select(., starts_with("Q"))))) %>%
+  arrange(Q2.1) %>%
+  select(num.answered, everything())
 
-survey.countries <- survey.countries.all %>%
-  filter(ResponseID %in% survey.orgs$ResponseID) %>%
+# Remove duplicates by hand based on duplicateness of organization name and
+# respondent position. If two different positions took the survey (secretary +
+# CEO), keep both. When there are duplicates, keep the most complete version
+# (i.e. num.answered is highest)
+duplicates.to.remove <- c("R_YX1hTAf6tyU0uKR", "R_3qkcPw5yq7OXdC3", 
+                          "R_0090udYN7iJyZzz", "R_1rv3XB7IMwhvimY", 
+                          "R_qUsJ4yoqFxJbQc1", "R_xFotgZUftQNYRNL", 
+                          "R_12AnwDO20ylpr8Y", "R_2YhA66WSwhBGij5", 
+                          "R_25KGf8lnLcWBi4t", "R_1NsD5DZORpTuP09", 
+                          "R_1r35atiHGBTG2Mr", "R_3iO6djbKRSpsHmz", 
+                          "R_3PzzfiVWgQwdX1h", "R_sgIvZaOeNU7etrj", 
+                          "R_2qBKcjLLCZDbwpk")
+
+survey.orgs.clean.final <- survey.orgs.clean %>%
+  filter(!ResponseID %in% duplicates.to.remove)
+
+partials.clean <- partials %>%
+  filter(!ResponseID %in% duplicates.to.remove)
+
+survey.countries.clean <- survey.countries.all %>%
+  filter(ResponseID %in% survey.orgs.clean.final$ResponseID) %>%
   select(ResponseID, loop.number, survey, starts_with("Q4.1_"), Q4.2, Q4.3, 
          Q4.3_value, Q4.4, starts_with("Q4.5"), starts_with("Q4.6"), 
          starts_with("Q4.7"), starts_with("Q4.8"), Q4.9, Q4.10, Q4.11, Q4.12, 
          Q4.13, Q4.14, starts_with("Q4.15"), starts_with("Q4.16"), Q4.17, 
          Q4.18, Q4.19, Q4.20, starts_with("Q4.21"), Q4.22, Q4.23, Q4.24)
 
+survey.clean.all <- survey.orgs.clean.final %>%
+  left_join(survey.countries.clean, by=c("ResponseID", "survey"))
+
 # Not using feather because it can't handle list columns yet
 saveRDS(survey.orgs.all,
         file=file.path(PROJHOME, "Data", "data_processed",
                        "survey_orgs_all.rds"))
 
+saveRDS(partials.clean,
+        file=file.path(PROJHOME, "Data", "data_processed",
+                       "survey_partials.rds"))
+
 saveRDS(survey.clean.all,
         file=file.path(PROJHOME, "Data", "data_processed",
                        "survey_clean_all.rds"))
 
-saveRDS(survey.orgs, 
+saveRDS(survey.orgs.clean.final, 
         file=file.path(PROJHOME, "Data", "data_processed", 
-                       "survey_orgs.rds"))
+                       "survey_orgs_clean.rds"))
 
-saveRDS(survey.countries, 
+saveRDS(survey.countries.clean, 
         file=file.path(PROJHOME, "Data", "data_processed", 
-                       "survey_countries.rds"))
+                       "survey_countries_clean.rds"))

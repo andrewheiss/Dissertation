@@ -71,6 +71,26 @@ dead.and.bounced.by.db <- dead.and.bounced %>%
   group_by(db) %>%
   summarise(num.dead.bounced = n())
 
+# Load full survey data (minus the Q4\* loop for simplicity)
+survey.orgs.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                     "survey_orgs_all.rds"))
+
+# Load cleaned, country-based survey data (*with* the Q4\* loop)
+survey.clean.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                      "survey_clean_all.rds"))
+
+# Load cleaned, organization-based data (without the Q4 loop)
+survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                       "survey_orgs_clean.rds"))
+
+# Load cleaned, country-based data (only the Q4 loop)
+survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                            "survey_countries_clean.rds"))
+
+# Load valid partial responses
+survey.partials <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                     "survey_partials.rds"))
+
 
 #' ## Summarize response rates from each database
 # Load YAML metadata for survey lists
@@ -134,14 +154,6 @@ pandoc.table(response.summary.display)
 #' Determine the best cutoff point for partially answered questions based on
 #' the number of questions answered.
 #' 
-# Load full survey data (minus the Q4\* loop for simplicity)
-survey.orgs.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
-                                     "survey_orgs_all.rds"))
-
-# Load cleaned, country-based survey data (*with* the Q4\* loop)
-survey.clean.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
-                                      "survey_clean_all.rds"))
-
 #' What was the minimum number of questions answered by an INGO that finished
 #' the survey?
 #' 
@@ -154,27 +166,26 @@ min(complete.ingos$num.answered)
 
 #' Thus, my rough cut-off point for partials = 20.
 #'
-#' But, joining survey.orgs.all to survey.countries.all filters out all
-#' respondents who did not answer anything in the loop of country questions.
-#' That's not a problem, though, since the minimum number of questions answered
-#' by one of these partials is higher than 20:
+#' However, some respondents quit before answering any questions about the 
+#' countries they work in. I count any respondent that answered more than six 
+#' questions in the loop of country questions. I use six because of how the Q4
+#' variables are generated and cleaned. If an organization answered Q4.1 (the
+#' country name), the script converted it to COW and ISO codes, resulting in 3
+#' valid Q4.1 questions. Additionally, the script converts text-based Q4
+#' questions into characters and will sometimes yield NULL instead of NA, which
+#' then gets counted in the number of questions (so it's possible for a
+#' respondent to answer just the country name and have that count as 6
+#' questions). More than six quesion.
 #' 
-partials <- survey.clean.all %>%
-  filter(Finished == 0) %>%
-  mutate(num.answered = rowSums(!is.na(select(., starts_with("Q"))))) %>%
-  filter(num.answered >= 20)
-
-min(partials$num.answered)
-
-#' So, I count any respondent that answered at least one question in the loop
-#' of country questions. Doing so means that (1) they made it far enough into
-#' the survey, and (2) shared *something* about how they relate to the
-#' governments they work in. It's also a more conservative cutoff than simply
-#' choosing a 20-question minimum arbitrarily.
-#'
+#' So, I use a combination of factors to determine partiality. A respondent has
+#' to answer at least 20 questions, and at least 6 have to come from the Q4
+#' loop. This is a better, more robust cutoff than simply using a 20-question
+#' minimum arbitrarily.
+#' 
 #' Thus, there are this many valid partial responses:
 #' 
-length(unique(partials$ResponseID))
+nrow(survey.orgs.clean)
+table(survey.orgs.clean$complete)
 
 
 #' # Survey meta-metrics
@@ -220,7 +231,7 @@ survey.orgs.ingos <- survey.orgs.all %>%
   filter(Q2.4 == "Yes")
 
 BO <- survey.orgs.ingos %>%
-  filter(!(ResponseID %in% unique(c(partials$ResponseID,
+  filter(!(ResponseID %in% unique(c(survey.partials$ResponseID,
                                     survey.clean.all$ResponseID)))) %>%
   select(ResponseID) %>% unique() %>% nrow() %>% unlist()
 
@@ -228,7 +239,7 @@ I.survey <- survey.clean.all %>%
   filter(Finished == 1) %>% select(ResponseID) %>% 
   unique() %>% nrow() %>% unlist()
 
-P.survey <- length(unique(partials$ResponseID))
+P.survey <- length(unique(survey.partials$ResponseID))
 
 break.off.rate <- BO / (I.survey + P.survey + BO)
 
@@ -412,10 +423,7 @@ ggplotly(plot.timeline.interactive)
 
 
 #' ## Timeline of survey responses
-survey.orgs <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
-                                 "survey_orgs.rds"))
-
-survey.time.plot <- survey.orgs %>%
+survey.time.plot <- survey.orgs.clean %>%
   select(EndDate) %>%
   arrange(EndDate) %>%
   mutate(done = 1,
