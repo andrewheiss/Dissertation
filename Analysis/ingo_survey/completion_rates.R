@@ -360,7 +360,10 @@ sending.groups.summary <- sending.groups %>%
   mutate(email_final_reminder = 
            str_extract(notes, "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}")) %>%
   mutate_each(funs(ymd_hms), starts_with("email")) %>%
-  gather(email_type, email_date, starts_with("email"))
+  gather(email_type, email_date, starts_with("email")) %>%
+  # Make Group 9's reminder be the final reminder
+  mutate(email_type = ifelse(email_type == "email_reminder" & id_group == 9,
+                             "email_final_reminder", email_type))
 
 
 make_range <- function(x) {
