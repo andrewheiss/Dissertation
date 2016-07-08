@@ -25,6 +25,7 @@ library(pander)
 library(magrittr)
 library(DT)
 library(scales)
+library(countrycode)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -45,6 +46,13 @@ survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 # Load cleaned, country-based data (only the Q4 loop)
 survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
                                             "survey_countries_clean.rds"))
+
+# Load Robinson map projection
+countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                                     "countries110_robinson_ggmap.rds"))
+
+# All possible countries (to fix the South Sudan issue)
+possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
 
 
 #' # General questions
@@ -105,7 +113,76 @@ plot.respondents.other
 
 
 #' ## How are these NGOs distributed by HQ?
-#' 
+df.hq.countries <- survey.orgs.clean %>%
+  group_by(Q2.2_iso3) %>%
+  summarise(num.ngos = n()) %>%
+  ungroup() %>%
+  # Combine with list of all possible mappable countries
+  right_join(possible.countries, by=c("Q2.2_iso3"="id")) %>%
+  mutate(num.ceiling = ifelse(num.ngos >= 50, 50, num.ngos),
+         prop = num.ngos / sum(num.ngos, na.rm=TRUE),
+         country.name = countrycode(Q2.2_iso3, "iso3c", "country.name"),
+         presence = num.ngos >= 1) %>%
+  arrange(desc(num.ngos))
+
+datatable(df.hq.countries)
+
+
+#' ### Number of unique HQ countries
+sum(df.hq.countries$presence, na.rm=TRUE)
+
+
+#' ### Regional distribution of HQ countries
+df.hq.regions <- df.hq.countries %>%
+  filter(!is.na(num.ngos)) %>%
+  mutate(region = countrycode(Q2.2_iso3, "iso3c", "continent"),
+         region = ifelse(Q2.2_iso3 == "TWN", "Asia", region)) %>%
+  group_by(region) %>%
+  summarise(num = sum(num.ngos, na.rm=TRUE)) %>% ungroup() %>%
+  mutate(prop = num / sum(num)) %>%
+  arrange(desc(num)) %>%
+  mutate(region = factor(region, levels=rev(region), ordered=TRUE))
+df.hq.regions
+
+plot.hq.regions <- ggplot(df.hq.regions, aes(x=num, y=region)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of respondents", y=NULL, 
+       title="Region of headquarters",
+       subtitle="Q2.2: Where is your organization's headquarters? (summarized by region)") +
+  theme_ath()
+plot.hq.regions
+
+
+#' ### Countries with at least one response
+hq.map.presence <- ggplot(df.hq.countries, aes(fill=presence, map_id=Q2.2_iso3)) +
+  geom_map(map=countries.ggmap, size=0.15, colour="black") + 
+  expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
+  coord_equal() +
+  scale_fill_manual(values=c("grey50", "#FFFFFF"), na.value="#FFFFFF", guide=FALSE) +
+  labs(title="Countries with at least one response",
+       subtitle="Q2.2: Where is your organization's headquarters?") +
+  theme_ath_map()
+hq.map.presence
+
+
+#' ### Responses per country (50 NGO ceiling)
+hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_iso3)) +
+  geom_map(map=countries.ggmap, size=0.15, colour="black") + 
+  expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
+  coord_equal() +
+  scale_fill_gradient(low="grey95", high="grey20", breaks=seq(0, 50, 10), 
+                      labels=c(paste(seq(0, 40, 10), "  "), "50+"),
+                      na.value="#FFFFFF", name="NGOs based in country",
+                      guide=guide_colourbar(ticks=FALSE, barwidth=6)) + 
+  labs(title="Number of responding NGOs around the world",
+       subtitle="Q2.2: Where is your organization's headquarters? (50 NGO ceiling)") +
+  theme_ath_map() +
+  theme(legend.position="bottom", legend.key.size=unit(0.65, "lines"),
+        strip.background=element_rect(colour="#FFFFFF", fill="#FFFFFF"))
+hq.map.scale
+
+
 #' Where do these NGOs work? Count all the countries they selected + the countries they answered for
 #' 
 #' ## What do these NGOs do?

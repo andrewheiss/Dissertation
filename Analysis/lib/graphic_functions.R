@@ -42,6 +42,23 @@ theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
   ret
 }
 
+# For maps
+theme_ath_map <- function(base_size=9, base_family="Source Sans Pro Light") {
+  ret <- theme_bw(base_size, base_family) + 
+    theme(panel.background = element_rect(fill="#ffffff", colour=NA),
+          title=element_text(size=rel(1.1), vjust=1.2, family="Source Sans Pro Semibold"),
+          plot.subtitle=element_text(size=rel(0.8), family="Source Sans Pro Light"),
+          plot.caption=element_text(margin=margin(t=10), size=rel(0.6),
+                                    family="Source Sans Pro Light"),
+          panel.border=element_blank(), axis.line=element_blank(),
+          panel.grid=element_blank(), axis.ticks=element_blank(),
+          axis.title=element_blank(), axis.text=element_blank(),
+          legend.text=element_text(size=rel(0.7), family="Source Sans Pro Light"),
+          legend.title=element_text(size=rel(0.7), family="Source Sans Pro Semibold"),
+          strip.text=element_text(size=rel(1), family="Source Sans Pro Semibold"))
+  ret
+}
+
 fig.save.cairo <- function(fig, filepath=file.path(PROJHOME, "Output", "figures"), 
                            filename, width, height, units="in", ...) {
   ggsave(fig, filename=file.path(filepath, paste0(filename, ".pdf")),
