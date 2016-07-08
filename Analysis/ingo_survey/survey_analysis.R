@@ -242,7 +242,76 @@ plot.work.all.map.scale
 
 # TODO: How many work in/answered questions for/are based in authoritarian countries?
 
-# df.work.countries.answered
+
+#' ## Which countries did NGOs answer about?
+df.work.countries.answered <- survey.countries.clean %>%
+  group_by(Q4.1_iso3) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  # Combine with list of all possible mappable countries
+  right_join(possible.countries, by=c("Q4.1_iso3"="id")) %>%
+  mutate(num.ceiling = ifelse(num >= 20, 20, num),
+         prop = num / sum(num, na.rm=TRUE),
+         country.name = countrycode(Q4.1_iso3, "iso3c", "country.name"),
+         presence = num >= 1) %>%
+  arrange(desc(num))
+
+datatable(df.work.countries.answered)
+
+
+#' ### Regional distribution of countries NGOs answered about
+df.work.regions.answered <- df.work.countries.answered %>%
+  filter(!is.na(num)) %>%
+  mutate(region = countrycode(Q4.1_iso3, "iso3c", "continent")) %>%
+  group_by(region) %>%
+  summarise(num = sum(num)) %>% ungroup() %>%
+  mutate(prop = num / sum(num)) %>%
+  arrange(desc(num)) %>%
+  mutate(region = factor(region, levels=rev(region), ordered=TRUE))
+df.work.regions.answered
+
+plot.work.regions <- ggplot(df.work.regions.answered, aes(x=num, y=region)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="Region of country NGO answered about",
+       subtitle="One of countries selected in Q2.5: Besides 'home_country', where does your organization work?") +
+  theme_ath()
+plot.work.regions
+
+
+#' ### Number of unique countries NGOs answered about
+sum(df.work.countries.answered$presence, na.rm=TRUE)
+
+
+#' ### Countries with at least one response
+plot.work.map.presence <- ggplot(df.work.countries.answered, 
+                                 aes(fill=presence, map_id=Q4.1_iso3)) +
+  geom_map(map=countries.ggmap, size=0.15, colour="black") + 
+  expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
+  coord_equal() +
+  scale_fill_manual(values=c("grey50", "#FFFFFF"), na.value="#FFFFFF", guide=FALSE) +
+  labs(title="Countries about which at least one NGO answered questions",
+       subtitle="One of countries selected in Q2.5: Besides 'home_country', where does your organization work?") +
+  theme_ath_map()
+plot.work.map.presence
+
+
+# ### Responses per country (20 NGO ceiling)
+plot.work.map.scale <- ggplot(df.work.countries.answered, 
+                              aes(fill=num.ceiling, map_id=Q4.1_iso3)) +
+  geom_map(map=countries.ggmap, size=0.15, colour="black") + 
+  expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
+  coord_equal() +
+  scale_fill_gradient(low="grey95", high="grey20", #breaks=seq(0, 50, 10), 
+                      na.value="#FFFFFF", name="NGOs answered about country",
+                      guide=guide_colourbar(ticks=FALSE, barwidth=6)) + 
+  labs(title="Countries about which NGOs answered questions",
+       subtitle="One of countries selected in Q2.5: Besides 'home_country', where does your organization work?") +
+  theme_ath_map() +
+  theme(legend.position="bottom", legend.key.size=unit(0.65, "lines"),
+        strip.background=element_rect(colour="#FFFFFF", fill="#FFFFFF"))
+plot.work.map.scale
 
 
 #' 
