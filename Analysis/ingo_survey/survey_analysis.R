@@ -18,6 +18,7 @@
 #' # Load clean data and set everything up
 #+ message=FALSE
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(ggstance)
 library(stringr)
@@ -183,9 +184,71 @@ plot.hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_i
 plot.hq.map.scale
 
 
-#' Where do these NGOs work? Count all the countries they selected + the countries they answered for
+#' ## Where do these NGOs work?
+df.work.countries.all <- survey.orgs.clean %>%
+  unnest(Q2.5_iso3) %>%
+  group_by(Q2.5_iso3) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  # Combine with list of all possible mappable countries
+  right_join(possible.countries, by=c("Q2.5_iso3"="id")) %>%
+  mutate(prop = num / sum(num, na.rm=TRUE),
+         country.name = countrycode(Q2.5_iso3, "iso3c", "country.name"),
+         presence = num >= 1) %>%
+  arrange(desc(num))
+
+datatable(df.work.countries.all)
+
+#' ### Regional distribution of countries where NGOs report working
+df.work.regions.all <- survey.orgs.clean %>%
+  unnest(Q2.5_iso3) %>%
+  mutate(region = countrycode(Q2.5_iso3, "iso3c", "continent"),
+         region = ifelse(Q2.5_iso3 == "TWN", "Asia", region),
+         region = ifelse(Q2.5_iso3 == "XKX", "Europe", region)) %>%
+  group_by(region) %>%
+  summarise(num = n()) %>% ungroup() %>%
+  mutate(prop = num / sum(num)) %>%
+  arrange(desc(num))
+df.work.regions.all
+
+#' Not plotting because the organization-county-region unit is a little wonky.
 #' 
-#' ## What do these NGOs do?
+
+
+#' ### Number of unique countries where work is reported
+sum(df.work.countries.all$presence, na.rm=TRUE)
+
+#' That's pretty much every country! There are 172 recognized countries in the
+#' map file, so mapping them out is kind of pointless.
+#' 
+
+
+#' ### Responses per country
+plot.work.all.map.scale <- ggplot(df.work.countries.all,
+                                  aes(fill=num, map_id=Q2.5_iso3)) +
+  geom_map(map=countries.ggmap, size=0.15, colour="black") + 
+  expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
+  coord_equal() +
+  scale_fill_gradient(low="grey95", high="grey20", #breaks=seq(0, 200, 50), 
+                      # labels=c(paste(seq(0, 150, 50), "  "), "50+"),
+                      na.value="#FFFFFF", name="NGOs reporting work in country",
+                      guide=guide_colourbar(ticks=FALSE, barwidth=6)) + 
+  labs(title="Countries where NGOs work",
+       subtitle="Q2.5: Besides 'home_country', where does your organization work?") +
+  theme_ath_map() +
+  theme(legend.position="bottom", legend.key.size=unit(0.65, "lines"),
+        strip.background=element_rect(colour="#FFFFFF", fill="#FFFFFF"))
+plot.work.all.map.scale
+
+# TODO: How many work in/answered questions for/are based in authoritarian countries?
+
+# df.work.countries.answered
+
+
+#' 
+#' Count all the countries they selected + the countries they answered for
+#' 
+#' # What do these NGOs do?
 #' 
 #' What kind of issues do the NGOs work on? Which issues do they work on the most?
 #' 
@@ -197,7 +260,7 @@ plot.hq.map.scale
 #' 
 #' Where does their funding come from?
 #' 
-#' ## Deeper principles (mission, vision, values)
+#' # Deeper principles (mission, vision, values)
 #' 
 #' Q3.9 - Q3.13
 #' 
