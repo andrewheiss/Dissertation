@@ -314,9 +314,6 @@ plot.work.map.scale <- ggplot(df.work.countries.answered,
 plot.work.map.scale
 
 
-#' 
-#' Count all the countries they selected + the countries they answered for
-#' 
 #' # What do these NGOs do?
 #' 
 #' What kind of issues do the NGOs work on? Which issues do they work on the most?
