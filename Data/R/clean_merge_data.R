@@ -22,6 +22,7 @@ library(testthat)
 library(rgdal)
 library(rgeos)
 library(spdep)
+library(maptools)
 
 
 # ------------------
@@ -945,6 +946,29 @@ dcjw.years <- dcjw.raw[,1:50] %>%
   gather(key, value)
 
 
+# Get map data for plotting
+map.url <- paste0("http://www.naturalearthdata.com/", 
+                  "http//www.naturalearthdata.com/download/110m/cultural/", 
+                  "ne_110m_admin_0_countries.zip")
+map.path <- file.path(PROJHOME, "Data", "data_raw", 
+                      "External", "Natural Earth maps")
+map.zip.name <- basename(map.url)
+map.name <- tools::file_path_sans_ext(map.zip.name)
+
+# Download Natural Earth shapefiles if needed
+if (!file.exists(file.path(map.path, paste0(map.name, ".shp")))) {
+  download.file(url=map.url, file.path(map.path, map.zip.name), "auto")
+  unzip(file.path(map.path, map.zip.name), exdir=map.path)
+  file.remove(file.path(map.path, map.zip.name))
+}
+
+countries.map <- readOGR(map.path, map.name)
+countries.robinson <- spTransform(countries.map, CRS("+proj=robin"))
+countries.ggmap <- ggplot2::fortify(countries.robinson, region="iso_a3") %>%
+  filter(!(id %in% c("ATA", -99))) %>%  # Get rid of Antarctica and NAs
+  mutate(id = ifelse(id == "GRL", "DNK", id))  # Greenland is part of Denmark
+
+
 # ------------------
 # Merge everything!
 # ------------------
@@ -982,3 +1006,7 @@ write_feather(full.data,
 write_feather(icrg.monthly, 
               file.path(PROJHOME, "Data", 
                         "data_processed", "icrg_monthly.feather"))
+
+saveRDS(countries.ggmap,
+        file=file.path(PROJHOME, "Data", 
+                       "data_processed", "countries_robinson_ggmap.rds"))
