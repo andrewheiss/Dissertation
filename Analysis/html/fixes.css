@@ -2,6 +2,10 @@
     font-size: 46px;
 }
 
+h1 {
+  font-size: 39px;
+}
+
 #TOC {
     margin: 30px 0;
 }
@@ -35,4 +39,8 @@ blockquote {
 a.back-to-top:hover {
     color: #FFDC00;
     text-decoration: none;
+}
+
+.datatables {
+  margin-bottom: 10.5px;
 }
