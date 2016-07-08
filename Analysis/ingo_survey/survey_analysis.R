@@ -20,7 +20,11 @@
 library(dplyr)
 library(ggplot2)
 library(ggstance)
+library(stringr)
 library(pander)
+library(magrittr)
+library(DT)
+library(scales)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -44,13 +48,65 @@ survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 
 
 #' # General questions
-#' 
 #'
-#' How are these NGOs distributed by HQ?
+#' ## How many NGOs responded?
+nrow(survey.orgs.clean) 
+
+
+#' ## How many respondents answered questions for more than one country?
+survey.countries.clean %>% filter(loop.number > 1) %>% nrow %T>%
+  {print(percent(. / nrow(survey.orgs.clean)))}
+
+
+#' ## Who in the organization responded to the survey?
+df.plot.respondents <- survey.orgs.clean %>%
+  group_by(Q2.3) %>%
+  summarise(num = n()) %>%
+  arrange(num) %>% 
+  mutate(question = factor(Q2.3, levels=Q2.3, ordered=TRUE))
+
+plot.respondents <- ggplot(df.plot.respondents, aes(x=num, y=question)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of respondents", y=NULL, 
+       title="Who filled out the survey?",
+       subtitle="Q2.3: What is your position in your organization?") +
+  theme_ath()
+
+plot.respondents
+
+#' Lots of others. Who are the others?
+# Table
+position.in.org <- survey.orgs.clean %>%
+  filter(!is.na(Q2.3_TEXT)) %>%
+  mutate(position.in.org = str_to_title(Q2.3_TEXT)) %>% 
+  group_by(position.in.org) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num))
+
+datatable(position.in.org)
+
+# Figure
+df.plot.respondents.other <- position.in.org %>%
+  filter(num >= 5) %>%
+  mutate(question = factor(position.in.org, 
+                           levels=rev(position.in.org), ordered=TRUE))
+
+plot.respondents.other <- ggplot(df.plot.respondents.other,
+                                 aes(x=num, y=question)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of respondents", y=NULL,
+       title="What are the positions of those who answered “Other”?",
+       subtitle="Q2.3: What is your position in your organization?: Free responses to “Other”") +
+  theme_ath()
+
+plot.respondents.other
+
+
+#' ## How are these NGOs distributed by HQ?
 #' 
 #' Where do these NGOs work? Count all the countries they selected + the countries they answered for
-#'
-#' Who responded in the organizations?
 #' 
 #' ## What do these NGOs do?
 #' 
@@ -67,6 +123,7 @@ survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 #' ## Deeper principles (mission, vision, values)
 #' 
 #' Q3.9 - Q3.13
+#' 
 
 #' # Testing hypotheses
 #' 
