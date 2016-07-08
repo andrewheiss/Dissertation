@@ -155,7 +155,7 @@ plot.hq.regions
 
 
 #' ### Countries with at least one response
-hq.map.presence <- ggplot(df.hq.countries, aes(fill=presence, map_id=Q2.2_iso3)) +
+plot.hq.map.presence <- ggplot(df.hq.countries, aes(fill=presence, map_id=Q2.2_iso3)) +
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
   expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
   coord_equal() +
@@ -163,11 +163,11 @@ hq.map.presence <- ggplot(df.hq.countries, aes(fill=presence, map_id=Q2.2_iso3))
   labs(title="Countries with at least one response",
        subtitle="Q2.2: Where is your organization's headquarters?") +
   theme_ath_map()
-hq.map.presence
+plot.hq.map.presence
 
 
 #' ### Responses per country (50 NGO ceiling)
-hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_iso3)) +
+plot.hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_iso3)) +
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
   expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
   coord_equal() +
@@ -180,7 +180,7 @@ hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_iso3))
   theme_ath_map() +
   theme(legend.position="bottom", legend.key.size=unit(0.65, "lines"),
         strip.background=element_rect(colour="#FFFFFF", fill="#FFFFFF"))
-hq.map.scale
+plot.hq.map.scale
 
 
 #' Where do these NGOs work? Count all the countries they selected + the countries they answered for
