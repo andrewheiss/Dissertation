@@ -6,9 +6,9 @@ h1 {
   font-size: 39px;
 }
 
-#TOC {
+/*#TOC {
     margin: 30px 0;
-}
+}*/
 
 table {
     font-size: 85%;
@@ -24,7 +24,7 @@ blockquote {
     margin-right: 4em;
 }
 
-.back-to-top {
+/*.back-to-top {
     width: 150px;
     position: fixed;
     bottom: 10px;
@@ -39,7 +39,7 @@ blockquote {
 a.back-to-top:hover {
     color: #FFDC00;
     text-decoration: none;
-}
+}*/
 
 .datatables {
   margin-bottom: 10.5px;

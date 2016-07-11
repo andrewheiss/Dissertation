@@ -5,11 +5,11 @@
 #' output: 
 #'   html_document: 
 #'     css: ../html/fixes.css
+#'     code_folding: hide
 #'     toc: yes
+#'     toc_float: true
 #'     highlight: pygments
 #'     theme: cosmo
-#'     includes:
-#'       after_body: ../html/jump.html
 #'     keep_md: yes
 #' bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
 #' csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
