@@ -24,6 +24,26 @@ blockquote {
     margin-right: 4em;
 }
 
+.tocify-header {
+    margin-left: 5px !important;
+    text-indent: 0;
+}
+
+.tocify-subheader {
+    margin-left: 15px !important;
+    text-indent: 0;
+}
+
+.tocify-subheader .tocify-subheader {
+    margin-left: 25px !important;
+    text-indent: 0;
+}
+
+.tocify-subheader .tocify-subheader .tocify-subheader {
+    margin-left: 35px !important;
+    text-indent: 0;
+}
+
 /*.back-to-top {
     width: 150px;
     position: fixed;
