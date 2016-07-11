@@ -8,6 +8,7 @@
 #'     code_folding: hide
 #'     toc: yes
 #'     toc_float: true
+#'     toc_depth: 4
 #'     highlight: pygments
 #'     theme: cosmo
 #'     keep_md: yes
@@ -15,7 +16,7 @@
 #' csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
 #' ...
 
-#' # Load clean data and set everything up
+#' ## Load clean data and set everything up
 #+ message=FALSE
 library(dplyr)
 library(tidyr)
@@ -56,18 +57,18 @@ countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
 
 
-#' # General questions
+#' ## General questions
 #'
-#' ## How many NGOs responded?
+#' ### How many NGOs responded?
 nrow(survey.orgs.clean) 
 
 
-#' ## How many respondents answered questions for more than one country?
+#' ### How many respondents answered questions for more than one country?
 survey.countries.clean %>% filter(loop.number > 1) %>% nrow %T>%
   {print(percent(. / nrow(survey.orgs.clean)))}
 
 
-#' ## Who in the organization responded to the survey?
+#' ### Who in the organization responded to the survey?
 df.plot.respondents <- survey.orgs.clean %>%
   group_by(Q2.3) %>%
   summarise(num = n()) %>%
@@ -113,7 +114,7 @@ plot.respondents.other <- ggplot(df.plot.respondents.other,
 plot.respondents.other
 
 
-#' ## How are these NGOs distributed by HQ?
+#' ### How are these NGOs distributed by HQ?
 df.hq.countries <- survey.orgs.clean %>%
   group_by(Q2.2_iso3) %>%
   summarise(num.ngos = n()) %>%
@@ -129,11 +130,11 @@ df.hq.countries <- survey.orgs.clean %>%
 datatable(df.hq.countries)
 
 
-#' ### Number of unique HQ countries
+#' #### Number of unique HQ countries
 sum(df.hq.countries$presence, na.rm=TRUE)
 
 
-#' ### Regional distribution of HQ countries
+#' #### Regional distribution of HQ countries
 df.hq.regions <- df.hq.countries %>%
   filter(!is.na(num.ngos)) %>%
   mutate(region = countrycode(Q2.2_iso3, "iso3c", "continent"),
@@ -155,7 +156,7 @@ plot.hq.regions <- ggplot(df.hq.regions, aes(x=num, y=region)) +
 plot.hq.regions
 
 
-#' ### Countries with at least one response
+#' #### Countries with at least one response
 plot.hq.map.presence <- ggplot(df.hq.countries, aes(fill=presence, map_id=Q2.2_iso3)) +
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
   expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
@@ -167,7 +168,7 @@ plot.hq.map.presence <- ggplot(df.hq.countries, aes(fill=presence, map_id=Q2.2_i
 plot.hq.map.presence
 
 
-#' ### Responses per country (50 NGO ceiling)
+#' #### Responses per country (50 NGO ceiling)
 plot.hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_iso3)) +
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
   expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
@@ -184,7 +185,7 @@ plot.hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_i
 plot.hq.map.scale
 
 
-#' ## Where do these NGOs work?
+#' ### Where do these NGOs work?
 df.work.countries.all <- survey.orgs.clean %>%
   unnest(Q2.5_iso3) %>%
   group_by(Q2.5_iso3) %>%
@@ -199,7 +200,7 @@ df.work.countries.all <- survey.orgs.clean %>%
 
 datatable(df.work.countries.all)
 
-#' ### Regional distribution of countries where NGOs report working
+#' #### Regional distribution of countries where NGOs report working
 df.work.regions.all <- survey.orgs.clean %>%
   unnest(Q2.5_iso3) %>%
   mutate(region = countrycode(Q2.5_iso3, "iso3c", "continent"),
@@ -215,7 +216,7 @@ df.work.regions.all
 #' 
 
 
-#' ### Number of unique countries where work is reported
+#' #### Number of unique countries where work is reported
 sum(df.work.countries.all$presence, na.rm=TRUE)
 
 #' That's pretty much every country! There are 172 recognized countries in the
@@ -223,7 +224,7 @@ sum(df.work.countries.all$presence, na.rm=TRUE)
 #' 
 
 
-#' ### Responses per country
+#' #### Responses per country
 plot.work.all.map.scale <- ggplot(df.work.countries.all,
                                   aes(fill=num, map_id=Q2.5_iso3)) +
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
@@ -243,7 +244,7 @@ plot.work.all.map.scale
 # TODO: How many work in/answered questions for/are based in authoritarian countries?
 
 
-#' ## Which countries did NGOs answer about?
+#' ### Which countries did NGOs answer about?
 df.work.countries.answered <- survey.countries.clean %>%
   group_by(Q4.1_iso3) %>%
   summarise(num = n()) %>%
@@ -259,7 +260,7 @@ df.work.countries.answered <- survey.countries.clean %>%
 datatable(df.work.countries.answered)
 
 
-#' ### Regional distribution of countries NGOs answered about
+#' #### Regional distribution of countries NGOs answered about
 df.work.regions.answered <- df.work.countries.answered %>%
   filter(!is.na(num)) %>%
   mutate(region = countrycode(Q4.1_iso3, "iso3c", "continent")) %>%
@@ -280,11 +281,11 @@ plot.work.regions <- ggplot(df.work.regions.answered, aes(x=num, y=region)) +
 plot.work.regions
 
 
-#' ### Number of unique countries NGOs answered about
+#' #### Number of unique countries NGOs answered about
 sum(df.work.countries.answered$presence, na.rm=TRUE)
 
 
-#' ### Countries with at least one response
+#' #### Countries with at least one response
 plot.work.map.presence <- ggplot(df.work.countries.answered, 
                                  aes(fill=presence, map_id=Q4.1_iso3)) +
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
@@ -297,7 +298,7 @@ plot.work.map.presence <- ggplot(df.work.countries.answered,
 plot.work.map.presence
 
 
-# ### Responses per country (20 NGO ceiling)
+# #### Responses per country (20 NGO ceiling)
 plot.work.map.scale <- ggplot(df.work.countries.answered, 
                               aes(fill=num.ceiling, map_id=Q4.1_iso3)) +
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
@@ -314,7 +315,7 @@ plot.work.map.scale <- ggplot(df.work.countries.answered,
 plot.work.map.scale
 
 
-#' # What do these NGOs do?
+#' ## What do these NGOs do?
 #' 
 #' What kind of issues do the NGOs work on? Which issues do they work on the most?
 #' 
@@ -326,12 +327,12 @@ plot.work.map.scale
 #' 
 #' Where does their funding come from?
 #' 
-#' # Deeper principles (mission, vision, values)
+#' ## Deeper principles (mission, vision, values)
 #' 
 #' Q3.9 - Q3.13
 #' 
 
-#' # Testing hypotheses
+#' ## Testing hypotheses
 #' 
 #' My claim:
 #' 
