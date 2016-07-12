@@ -478,8 +478,52 @@ plot.volunteers <- ggplot(df.volunteers, aes(x=Q3.5.num)) +
 plot.volunteers
 
 
-#' Do NGOs collaborate?
+#' ### Collaboration
+df.collaboration <- survey.orgs.clean %>%
+  unnest(Q3.6_value) %>%
+  group_by(Q3.6_value) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q3.6_value)) %>%
+  mutate(partner = factor(Q3.6_value, levels=rev(Q3.6_value), ordered=TRUE))
+
+# Add line break to label
+levels(df.collaboration$partner)[levels(df.collaboration$partner) == "We do not collaborate with other organizations or institutions"] <-
+  "We do not collaborate with other\norganizations or institutions"
+
+plot.collaboration <- ggplot(df.collaboration, aes(x=num, y=partner)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Times selected", y=NULL,
+       title="Do NGOs collaborate with other organizations?",
+       subtitle="Q3.6: Does your organization collaborate with any of these organizations\nor institutions? (multiple answers allowed)") +
+  theme_ath()
+
+plot.collaboration
+
+#' What are the other organizations?
+df.collaboration.other <- survey.orgs.clean %>%
+  filter(!is.na(Q3.6_other_TEXT)) %>%
+  mutate(collaboration.other = str_to_title(Q3.6_other_TEXT)) %>% 
+  group_by(collaboration.other) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num))
+
+datatable(df.collaboration.other)
+
+#' Seems to mostly be universities, research centers, foundations, and
+#' religious groups.
+
+#' #### Specific organizations and institutions
 #' 
+#' Q3.7: Please list a few of the organizations or institutions you partner
+#' with most often:
+df.collaboration.partners <- survey.orgs.clean %>%
+  filter(!is.na(Q3.7)) %>% select(Q3.7) %>% arrange(Q3.7)
+
+datatable(df.collaboration.partners)
+
+
 #' Where does their funding come from?
 #' 
 #' ## Deeper principles (mission, vision, values)
