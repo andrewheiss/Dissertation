@@ -596,10 +596,10 @@ partials <- survey.orgs.all %>%
   distinct(ResponseID, .keep_all=TRUE) %>%
   filter(Finished == 0) %>%
   # Threshold for partialness determined in Analysis/ingo_survey/completion_rates.R
-  # At least 20 questions answered + more than 3 questions answered in the Q4 loop
+  # At least 31 questions answered + more than 3 questions answered in the Q4 loop
   mutate(num.answered = rowSums(!is.na(select(., starts_with("Q")))),
          num.answered.loop = rowSums(!is.na(select(., starts_with("Q4"))))) %>%
-  filter(num.answered >= 20, num.answered.loop > 3)
+  filter(num.answered >= 31, num.answered.loop > 3)
 
 # Create clean dataframes with complete and valid partial responses
 survey.orgs.clean <- survey.orgs.all %>%
