@@ -264,6 +264,10 @@ survey.v1.orgs <- survey.v1 %>%
                                 Q3.3_advocacy_dk, Q3.3_advocacy),
          Q3.3_monitor = ifelse(!is.na(Q3.3_monitor_dk), 
                                Q3.3_monitor_dk, Q3.3_monitor)) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q3.3_aid, Q3.3_education, Q3.3_mobilize, 
+                Q3.3_advocacy, Q3.3_monitor)) %>%
   # Get rid of don't know columns
   select(-matches("Q3\\.3_.+_dk")) %>%
   # Convert answers to factors
@@ -345,6 +349,10 @@ survey.v2.orgs <- survey.v2 %>%
          Q3.3_aid_TEXT = Q3.3zzz2_1_1_TEXT, Q3.3_education_TEXT = Q3.3zzz2_2_1_TEXT,
          Q3.3_mobilize_TEXT = Q3.3zzz2_3_1_TEXT, Q3.3_advocacy_TEXT = Q3.3zzz2_4_1_TEXT,
          Q3.3_monitor_TEXT = Q3.3zzz2_5_1_TEXT) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q3.3_aid, Q3.3_education, Q3.3_mobilize, 
+                Q3.3_advocacy, Q3.3_monitor)) %>%
   # Convert answers to factors
   mutate_each(funs(factor(., levels=1:7, labels=always.never.dk)),
               c(Q3.3_aid, Q3.3_education, Q3.3_mobilize, 
