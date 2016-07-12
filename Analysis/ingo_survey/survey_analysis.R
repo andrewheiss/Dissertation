@@ -443,7 +443,40 @@ plot.activities <- ggplot(df.activities, aes(y=num, x=response)) +
 
 plot.activities
 
+#' ### Staffing details
 #' 
+#' #### Full time employees
+df.employees <- survey.orgs.clean %>%
+  select(Q3.4.num) %>%
+  filter(!is.na(Q3.4.num))
+
+plot.employees <- ggplot(df.employees, aes(x=Q3.4.num)) +
+  geom_histogram(binwidth=0.5) +
+  labs(x="Number of employees (natural log)", y="Frequency",
+       title="How many employees do NGOs use?",
+       subtitle="Q3.4: Approximately how many full-time employees does your organization have?") +
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) +
+  theme_ath()
+
+plot.employees
+
+
+#' ### Volunteers
+df.volunteers <- survey.orgs.clean %>%
+  select(Q3.5.num) %>%
+  filter(!is.na(Q3.5.num))
+
+plot.volunteers <- ggplot(df.volunteers, aes(x=Q3.5.num)) +
+  geom_histogram(binwidth=0.5) +
+  labs(x="Number of volunteers (natural log)", y="Frequency",
+       title="How many volunteers do NGOs use?",
+       subtitle="Q3.5: Approximately how many volunteers does your organization have?") +
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:6), 5000000), labels=comma) +
+  theme_ath()
+
+plot.volunteers
+
+
 #' Do NGOs collaborate?
 #' 
 #' Where does their funding come from?
