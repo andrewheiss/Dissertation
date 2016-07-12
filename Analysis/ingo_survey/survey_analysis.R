@@ -433,7 +433,7 @@ df.activities <- survey.orgs.clean %>%
   ungroup() %>%
   mutate(response = factor(response, levels=levels(survey.orgs.clean$Q3.3_aid), ordered=TRUE))
 
-ggplot(df.activities, aes(y=num, x=response)) +
+plot.activities <- ggplot(df.activities, aes(y=num, x=response)) +
   geom_bar(stat="identity") +
   labs(y="Number of responses", x=NULL,
        title="What kinds of activities are NGOs engaged in?",
@@ -441,7 +441,8 @@ ggplot(df.activities, aes(y=num, x=response)) +
   facet_wrap(~ question, ncol=1) + 
   theme_ath()
 
-#' ### How big are these NGOs? Staff? Volunteers?
+plot.activities
+
 #' 
 #' Do NGOs collaborate?
 #' 
