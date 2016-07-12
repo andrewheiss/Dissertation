@@ -513,6 +513,7 @@ datatable(df.collaboration.other)
 
 #' Seems to mostly be universities, research centers, foundations, and
 #' religious groups.
+#' 
 
 #' #### Specific organizations and institutions
 #' 
@@ -524,8 +525,51 @@ df.collaboration.partners <- survey.orgs.clean %>%
 datatable(df.collaboration.partners)
 
 
-#' Where does their funding come from?
+#' ### Funding
+labels.funding <- data_frame(levels=c("individual", "corporate", "foundation", 
+                                      "home_govt", "host_govt", "other"),
+                             labels=c("Individual donations",
+                                      "Corporate donations",
+                                      "Foundation donations",
+                                      "Grants from home country",
+                                      "Grants from host country",
+                                      "Other"))
+
+df.funding <- survey.orgs.clean %>%
+  select(dplyr::contains("Q3.8"), -dplyr::contains("TEXT")) %>%
+  gather(question, response) %>%
+  mutate(question = str_replace(question, "Q3\\.8_", ""),
+         question = factor(question, levels=labels.funding$levels,
+                           labels=labels.funding$labels, ordered=TRUE)) %>%
+  filter(!(response %in% c("Don't know", "Not applicable"))) %>%
+  group_by(question, response) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(response = factor(response, 
+                           levels=levels(survey.orgs.clean$Q3.8_individual), 
+                           ordered=TRUE))
+
+plot.funding <- ggplot(df.funding, aes(y=num, x=response)) +
+  geom_bar(stat="identity") +
+  labs(y="Number of responses", x=NULL,
+       title="Where does NGO funding come from?",
+       subtitle="Q3.8: How much of your organization’s funding comes from each of these sources?") +
+  facet_wrap(~ question, ncol=1) + 
+  theme_ath()
+
+plot.funding
+
+#' What other sources of funding do NGOs use?
+df.funding.other <- survey.orgs.clean %>%
+  filter(!is.na(Q3.8_other_TEXT)) %>%
+  arrange(Q3.8_other_TEXT) %>% select(Q3.8_other_TEXT)
+
+datatable(df.funding.other)
+
+#' The EU, churches, membership fees, etc.
 #' 
+
+
 #' ## Deeper principles (mission, vision, values)
 #' 
 #' Q3.9 - Q3.13
