@@ -409,11 +409,39 @@ findAssocs(tdm.issues, "develop", 0.1)
 #' Imputing latent themes from these other topics algorithmically is tricky though. K-means, PAM, latent semantic analysis (LSA), and latent dirichlet allocation (LDA) all choke, since the corpus isn't that big and the "documents" are super short (often just one word long). I attempt each of these in `/Analysis/ingo_survey/sandbox.R`, but none of them work well, even for coarse sorting. 
 #' 
 #' So, hand-coding it is.
-
-
-#' What kinds of activities do these NGOs engage in?
 #' 
-#' How big are these NGOs? Staff? Volunteers?
+
+
+#' ### What kinds of activities do these NGOs engage in?
+labels.activities <- data_frame(levels=c("aid", "education", "mobilize", 
+                                         "advocacy", "monitor"),
+                                labels=c("Providing direct aid and services",
+                                         "Engaging in research and public education",
+                                         "Mobilizing people",
+                                         "Engaging in advocacy",
+                                         "Monitoring and assessing the effects of policies"))
+
+df.activities <- survey.orgs.clean %>%
+  select(dplyr::contains("Q3.3"), -dplyr::contains("TEXT")) %>%
+  gather(question, response) %>%
+  mutate(question = str_replace(question, "Q3\\.3_", ""),
+         question = factor(question, levels=labels.activities$levels,
+                           labels=labels.activities$labels, ordered=TRUE)) %>%
+  filter(!(response %in% c("Don't know", "Not applicable"))) %>%
+  group_by(question, response) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(response = factor(response, levels=levels(survey.orgs.clean$Q3.3_aid), ordered=TRUE))
+
+ggplot(df.activities, aes(y=num, x=response)) +
+  geom_bar(stat="identity") +
+  labs(y="Number of responses", x=NULL,
+       title="What kinds of activities are NGOs engaged in?",
+       subtitle="Q3.3: Please indicate how often your organization engages in each of these types of activities") +
+  facet_wrap(~ question, ncol=1) + 
+  theme_ath()
+
+#' ### How big are these NGOs? Staff? Volunteers?
 #' 
 #' Do NGOs collaborate?
 #' 
