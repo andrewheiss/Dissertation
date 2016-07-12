@@ -98,6 +98,7 @@ position.in.org <- survey.orgs.clean %>%
 
 datatable(position.in.org)
 
+
 # Figure
 df.plot.respondents.other <- position.in.org %>%
   filter(num >= 5) %>%
@@ -461,7 +462,7 @@ plot.employees <- ggplot(df.employees, aes(x=Q3.4.num)) +
 plot.employees
 
 
-#' ### Volunteers
+#' #### Volunteers
 df.volunteers <- survey.orgs.clean %>%
   select(Q3.5.num) %>%
   filter(!is.na(Q3.5.num))
