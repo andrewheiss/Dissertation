@@ -570,10 +570,58 @@ datatable(df.funding.other)
 #' 
 
 
-#' ## Deeper principles (mission, vision, values)
+#' ## Deeper principles
+#'
+#' ### What is the NGO trying to accomplish?
 #' 
-#' Q3.9 - Q3.13
+#' Q3.9: In general, what would you say your organization is trying to accomplish?
+# TODO: NLP/hand code these things
+df.Q3.9 <- survey.orgs.clean %>%
+  filter(!is.na(Q3.9)) %>%
+  arrange(Q3.9) %>% select(Q3.9)
+
+datatable(df.Q3.9)
+
+
+#' ### How are mission, vision, and values reflected in activities?
 #' 
+#' Q3.10: How is your organization’s mission, vision, and values reflected in these objectives?
+df.Q3.10 <- survey.orgs.clean %>%
+  filter(!is.na(Q3.10)) %>%
+  arrange(Q3.10) %>% select(Q3.10)
+
+datatable(df.Q3.10)
+
+
+#' ### Have these objectives changed?
+#' 
+#' Q3.11: Have these objectives changed at all in the last 10 years? If so, how?
+df.Q3.11 <- survey.orgs.clean %>%
+  filter(!is.na(Q3.11)) %>%
+  arrange(Q3.11) %>% select(Q3.11)
+
+datatable(df.Q3.11)
+
+
+#' ### Obstacles to objectives
+#' 
+#' Q3.12: What are the major obstacles, if any, to reaching your organization’s objectives?
+df.Q3.12 <- survey.orgs.clean %>%
+  filter(!is.na(Q3.12)) %>%
+  arrange(Q3.12) %>% select(Q3.12)
+
+datatable(df.Q3.12)
+
+
+#' ### Desired changes in goals and strategies
+#' 
+#' Q3.13: Are there any changes that you would like to see in your organization’s goals and strategies, now or in the future?
+df.Q3.13 <- survey.orgs.clean %>%
+  filter(!is.na(Q3.13)) %>%
+  arrange(Q3.13) %>% select(Q3.13)
+
+datatable(df.Q3.13)
+
 
 #' ## Testing hypotheses
 #' 
