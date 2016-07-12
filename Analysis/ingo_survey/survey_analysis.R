@@ -18,6 +18,8 @@
 
 #' ## Load clean data and set everything up
 #+ message=FALSE
+knitr::opts_chunk$set(fig.retina=2)
+
 library(dplyr)
 library(tidyr)
 library(purrr)
