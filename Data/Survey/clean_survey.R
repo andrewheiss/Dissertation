@@ -2,6 +2,7 @@ library(dplyr)
 library(tidyr)
 library(readr)
 library(stringi)
+library(stringr)
 library(purrr)
 library(feather)
 
@@ -640,9 +641,77 @@ survey.countries.clean <- survey.countries.all %>%
          Q4.13, Q4.14, starts_with("Q4.15"), starts_with("Q4.16"), Q4.17, 
          Q4.18, Q4.19, Q4.20, starts_with("Q4.21"), Q4.22, Q4.23, Q4.24)
 
-survey.clean.all <- survey.orgs.clean.final %>%
+
+# The number of employees and volunteers requires some cleaning since it was an
+# open text field in case they wanted to explain more about the number of
+# employees. If the response is only numeric, count it as numeric. Otherwise,
+# export responses that aren't purely numeric to CSV for hand coding.
+#
+# Hand coding rules:
+#    - If they give a range, take the average (100-200 = 150; 10-15 = 12)
+#    - If they say "thousands" or "many" use 5-based numbers, like 5,000 or 5
+
+# CSV to work with by hand
+survey.orgs.clean.final %>%
+  select(ResponseID, Q3.4) %>%
+  mutate(is.num = !str_detect(Q3.4, "[^0-9\\.,]"),
+         Q3.4.num.manual = 0) %>%
+  filter(is.num == FALSE) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_base",
+                      "employees_count_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+employees.clean <- read_csv(file.path(PROJHOME, "Data", "data_base",
+                                      "employees_count.csv")) %>%
+  select(ResponseID, Q3.4.num.manual)
+
+# Combine the automatic and manual columns
+employees.num <- survey.orgs.clean.final %>%
+  select(ResponseID, Q3.4) %>%
+  mutate(Q3.4.num.auto = as_num(Q3.4)$result) %>%
+  left_join(employees.clean, by="ResponseID") %>%
+  rowwise() %>%
+  mutate(Q3.4.num = ifelse(!is.na(Q3.4.num.auto) | !is.na(Q3.4.num.manual),
+                           sum(Q3.4.num.auto, Q3.4.num.manual, na.rm=TRUE),
+                           NA)) %>%
+  select(ResponseID, Q3.4.num)
+
+# CSV to work with by hand
+survey.orgs.clean.final %>%
+  select(ResponseID, Q3.5) %>%
+  mutate(is.num = !str_detect(Q3.5, "[^0-9\\.,]"),
+         Q3.5.num.manual = 0) %>%
+  filter(is.num == FALSE) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_base",
+                      "volunteers_count_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+volunteers.clean <- read_csv(file.path(PROJHOME, "Data", "data_base",
+                                      "volunteers_count.csv")) %>%
+  select(ResponseID, Q3.5.num.manual)
+
+# Combine the automatic and manual columns
+volunteers.num <- survey.orgs.clean.final %>%
+  select(ResponseID, Q3.5) %>%
+  mutate(Q3.5.num.auto = as_num(Q3.5)$result) %>%
+  left_join(volunteers.clean, by="ResponseID") %>%
+  rowwise() %>%
+  mutate(Q3.5.num = ifelse(!is.na(Q3.5.num.auto) | !is.na(Q3.5.num.manual),
+                           sum(Q3.5.num.auto, Q3.5.num.manual, na.rm=TRUE),
+                           NA)) %>%
+  select(ResponseID, Q3.5.num)
+
+# Merge in numeric columns
+survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
+  left_join(employees.num, by="ResponseID") %>%
+  left_join(volunteers.num, by="ResponseID")
+
+# Combine with country-level data
+survey.clean.all <- survey.orgs.clean.final.for.realz %>%
   left_join(survey.countries.clean, by=c("ResponseID", "survey"))
 
+
+# Save all these things!
 # Not using feather because it can't handle list columns yet
 saveRDS(survey.orgs.all,
         file=file.path(PROJHOME, "Data", "data_processed",
@@ -656,7 +725,7 @@ saveRDS(survey.clean.all,
         file=file.path(PROJHOME, "Data", "data_processed",
                        "survey_clean_all.rds"))
 
-saveRDS(survey.orgs.clean.final, 
+saveRDS(survey.orgs.clean.final.for.realz, 
         file=file.path(PROJHOME, "Data", "data_processed", 
                        "survey_orgs_clean.rds"))
 
