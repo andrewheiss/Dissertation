@@ -640,7 +640,7 @@ plot.time.country <- ggplot(df.time.country, aes(x=num, y=Q4.2)) +
   scale_x_continuous(expand=c(0, 0)) +
   labs(x="Number of responses", y=NULL, 
        title="How long has the NGO worked in the country?",
-       subtitle="How long has your organization worked in `target_country`?") +
+       subtitle="Q4.2: How long has your organization worked in `target_country`?") +
   theme_ath()
 
 plot.time.country
@@ -666,7 +666,7 @@ plot.operations <- ggplot(df.operations, aes(x=num, y=operation)) +
   scale_x_continuous(expand=c(0, 0)) +
   labs(x="Times selected", y=NULL,
        title="How do NGOs work in the target country?",
-       subtitle="Q4.3: What does your organization do in target_country? (multiple answers allowed)") +
+       subtitle="Q4.3: What does your organization do in `target_country`? (multiple answers allowed)") +
   theme_ath()
 
 plot.operations
@@ -685,15 +685,166 @@ plot.registered <- ggplot(df.registered, aes(x=num, y=Q4.4)) +
   scale_x_continuous(expand=c(0, 0)) +
   labs(x="Number of responses", y=NULL, 
        title="Is the NGO registered?",
-       subtitle="Is your organization registered with the national government in `target_country`?") +
+       subtitle="Q4.4: Is your organization registered with the national government in `target_country`?") +
   theme_ath()
 
 plot.registered
 
 
 #' ### Contact with government
+#'
+#' #### Frequency of government contact
+df.freq.contact <- survey.countries.clean %>%
+  filter(!is.na(Q4.5)) %>%
+  group_by(Q4.5) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.5 = factor(Q4.5, levels=rev(levels(Q4.5)), ordered=TRUE))
+
+plot.freq.contact <- ggplot(df.freq.contact, aes(x=num, y=Q4.5)) +
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How often does the NGO contact government?",
+       subtitle="Q4.5: About how often does your organization have contact with\ngovernment or party officials in `target_country`?") +
+  theme_ath()
+
+plot.freq.contact
+
+#' What other kinds of frequency do people report?
+df.freq.contact.other <- survey.countries.clean %>%
+  filter(!is.na(Q4.5_TEXT)) %>%
+  mutate(other.freq = str_to_title(Q4.5_TEXT)) %>% 
+  group_by(other.freq) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num))
+
+datatable(df.freq.contact.other)
+
+# TODO: Hand code these other options
+#' Lots of "as needed" options. Will need to code those by hand.
+#'
+
+
+#' #### Frequency of reporting to government
+df.freq.report <- survey.countries.clean %>%
+  filter(!is.na(Q4.8)) %>%
+  group_by(Q4.8) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.8 = factor(Q4.8, levels=rev(levels(Q4.8)), ordered=TRUE))
+
+plot.freq.report <- ggplot(df.freq.report, aes(x=num, y=Q4.8)) +
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How often does the NGO report to government?",
+       subtitle="Q4.8: How often is your organization required to report to the government of  `target_country`?") +
+  theme_ath()
+
+plot.freq.report
+
+#' What other kinds of frequency do people report?
+df.freq.report.other <- survey.countries.clean %>%
+  filter(!is.na(Q4.8_TEXT)) %>%
+  select(Q4.8_TEXT) %>%
+  arrange(Q4.8_TEXT)
+
+datatable(df.freq.report.other)
+
+# TODO: Hand code these
+#' Again, lots of "as needed" and "depends" options.
 #' 
+
+
+#' #### Kinds of government officials NGOs have contact with
+df.officials.contact <- survey.countries.clean %>%
+  unnest(Q4.6_value) %>%
+  group_by(Q4.6_value) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q4.6_value)) %>%
+  mutate(official = factor(Q4.6_value, levels=rev(Q4.6_value), ordered=TRUE))
+
+plot.officials.contact <- ggplot(df.officials.contact, aes(x=num, y=official)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Times selected", y=NULL,
+       title="Which officials do NGOs report to?",
+       subtitle="Q4.6: What kind of government officials does your organization have contact with? (multiple answers allowed)") +
+  theme_ath()
+
+plot.officials.contact
+
+#' And the others?
+df.officials.contact.other <- survey.countries.clean %>%
+  filter(!is.na(Q4.6_other_TEXT)) %>%
+  mutate(official = str_to_title(Q4.6_other_TEXT)) %>% 
+  group_by(official) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num))
+
+datatable(df.freq.contact.other)
+
+#' #### Officials reported to the most
+df.officials.contact.most <- survey.countries.clean %>%
+  group_by(Q4.7) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q4.7)) %>%
+  mutate(issue = factor(Q4.7, levels=rev(Q4.7), ordered=TRUE))
+
+plot.officials.contact.most <- ggplot(df.officials.contact.most, 
+                                      aes(x=num, y=issue)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Times selected", y=NULL,
+       title="Which officials do NGOs report to the most?",
+       subtitle="Q4.7: What kind of government officials does your organization have contact with most often?") +
+  theme_ath()
+
+plot.officials.contact.most
+
+#' Who are the others?
+df.officials.contact.most.other <- survey.countries.clean %>%
+  filter(!is.na(Q4.7_TEXT)) %>%
+  rename(official = Q4.7_TEXT) %>% 
+  group_by(official) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num))
+
+datatable(df.officials.contact.most.other)
+
+
+#' #### Are members of the government involved in work?
+df.govt.involved <- survey.countries.clean %>%
+  filter(!is.na(Q4.9)) %>%
+  group_by(Q4.9) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.9 = factor(Q4.9, levels=rev(levels(Q4.9)), ordered=TRUE))
+
+plot.govt.involved <- ggplot(df.govt.involved, aes(x=num, y=Q4.9)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="Is the government involved in the NGO's work?",
+       subtitle="Q4.9: Are members of the government or ruling party of `target_country` involved in your work?") +
+  theme_ath()
+
+plot.govt.involved
+
+
+#' #### How is government involved in work?
 #' 
+#' Q4.10: How is the government of `target_country`` involved in your work?
+df.Q4.10 <- survey.countries.clean %>%
+  filter(!is.na(Q4.10)) %>%
+  arrange(Q4.10) %>% select(Q4.10)
+
+datatable(df.Q4.10)
+
+
 #' ### Relationship with government
 #' 
 #' 
