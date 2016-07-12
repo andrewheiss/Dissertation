@@ -847,7 +847,36 @@ datatable(df.Q4.10)
 
 #' ### Relationship with government
 #' 
+#' #### Positivity of relationship
+df.govt.positivity <- survey.countries.clean %>%
+  filter(!is.na(Q4.11)) %>%
+  group_by(Q4.11) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.11 = factor(Q4.11, levels=rev(levels(Q4.11)), ordered=TRUE))
+
+plot.govt.positivity <- ggplot(df.govt.positivity, aes(x=num, y=Q4.11)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How is the NGO's relationship with the government?",
+       subtitle="Q4.11: How would you characterize your organization’s relationship with the government of `target_country`?") +
+  theme_ath()
+
+plot.govt.positivity
+
+
+#' #### Description of relationship
 #' 
+#' Q4.12: Briefly describe your organization's relationship with the government
+#' of `target_country`:
+df.Q4.12 <- survey.countries.clean %>%
+  filter(!is.na(Q4.12)) %>%
+  arrange(Q4.12) %>% select(Q4.12)
+
+datatable(df.Q4.12)
+
+
 #' ### NGO regulations and restrictions
 #' 
 #' 
