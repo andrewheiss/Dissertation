@@ -370,11 +370,13 @@ survey.v2.orgs <- survey.v2 %>%
          Q3.8_foundation = Q3.8_3, Q3.8_home_govt = Q3.8_4,
          Q3.8_host_govt = Q3.8_5, Q3.8_other = Q3.8_6,
          Q3.8_other_TEXT = Q3.8_6_TEXT) %>%
+  # For whatever reason, the levels in Q3.8* aren't continuous; they include 
+  # (1, 3-8) and skip 2
   # Assume that missing values = not applicable
-  mutate_each(funs(ifelse(is.na(.), 7, .)),
+  mutate_each(funs(ifelse(is.na(.), 8, .)),
               c(Q3.8_individual, Q3.8_corporate, Q3.8_foundation, 
                 Q3.8_home_govt, Q3.8_host_govt, Q3.8_other)) %>%
-  mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
+  mutate_each(funs(factor(., levels=c(1, 3:8), labels=great.none.dk)),
               c(Q3.8_individual, Q3.8_corporate, Q3.8_foundation, 
                 Q3.8_home_govt, Q3.8_host_govt, Q3.8_other)) %>%
   #
