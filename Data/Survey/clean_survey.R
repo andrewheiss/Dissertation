@@ -301,6 +301,10 @@ survey.v1.orgs <- survey.v1 %>%
                                  Q3.8_host_govt_dk, Q3.8_host_govt),
          Q3.8_other = ifelse(!is.na(Q3.8_other_dk), 
                              Q3.8_other_dk, Q3.8_other)) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q3.8_individual, Q3.8_corporate, Q3.8_foundation, 
+                Q3.8_home_govt, Q3.8_host_govt, Q3.8_other)) %>%
   # Get rid of don't know columns
   select(-matches("Q3\\.8_.+_dk"), -Q3.8zzz2_6_TEXT) %>%
   # Convert answers to factors
@@ -366,6 +370,10 @@ survey.v2.orgs <- survey.v2 %>%
          Q3.8_foundation = Q3.8_3, Q3.8_home_govt = Q3.8_4,
          Q3.8_host_govt = Q3.8_5, Q3.8_other = Q3.8_6,
          Q3.8_other_TEXT = Q3.8_6_TEXT) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q3.8_individual, Q3.8_corporate, Q3.8_foundation, 
+                Q3.8_home_govt, Q3.8_host_govt, Q3.8_other)) %>%
   mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
               c(Q3.8_individual, Q3.8_corporate, Q3.8_foundation, 
                 Q3.8_home_govt, Q3.8_host_govt, Q3.8_other)) %>%
