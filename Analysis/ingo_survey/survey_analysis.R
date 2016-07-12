@@ -20,6 +20,7 @@
 #+ message=FALSE
 library(dplyr)
 library(tidyr)
+library(purrr)
 library(ggplot2)
 library(ggstance)
 library(stringr)
@@ -28,6 +29,7 @@ library(magrittr)
 library(DT)
 library(scales)
 library(countrycode)
+library(tm)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -317,8 +319,98 @@ plot.work.map.scale
 
 #' ## What do these NGOs do?
 #' 
-#' What kind of issues do the NGOs work on? Which issues do they work on the most?
+#' ### Which issues do these NGOs work on?
+df.issues <- survey.orgs.clean %>%
+  unnest(Q3.1_value) %>%
+  group_by(Q3.1_value) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q3.1_value)) %>%
+  mutate(issue = factor(Q3.1_value, levels=rev(Q3.1_value), ordered=TRUE))
+
+plot.issues <- ggplot(df.issues, aes(x=num, y=issue)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Times selected", y=NULL,
+       title="Which issues do NGOs work on?",
+       subtitle="Q3.1: Which issues does your organization focus on? (multiple answers allowed)") +
+  theme_ath()
+
+plot.issues
+
+
+#' ### Which issues do NGOs work on the most?
+df.issues.most <- survey.orgs.clean %>%
+  group_by(Q3.2) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q3.2)) %>%
+  mutate(issue = factor(Q3.2, levels=rev(Q3.2), ordered=TRUE))
+
+plot.issues.most <- ggplot(df.issues.most, aes(x=num, y=issue)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Times selected", y=NULL,
+       title="Which issues do NGOs work on?",
+       subtitle="Q3.2: Which issues does your organization focus on the most?") +
+  theme_ath()
+
+plot.issues.most
+
+#' There are lots of others, both for all issues and most important issue. What are they?
+df.other.issues <- survey.orgs.clean %>%
+  filter(!is.na(Q3.1_other_TEXT)) %>%
+  mutate(other.issue = str_to_title(Q3.1_other_TEXT)) %>% 
+  group_by(other.issue) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num))
+
+datatable(df.other.issues)
+
+#' There are 300+ other issues here. That's a lot. Natural language processing
+#' can help make sense of the mess.
+# Build clean corpus for NLP
+issue.corpus.df <- survey.orgs.clean %>%
+  filter(!is.na(Q3.1_other_TEXT)) %>%
+  mutate(other.issue = str_to_lower(Q3.1_other_TEXT)) %>%
+  select(other.issue)
+
+issue.corpus <- issue.corpus.df %>%
+  DataframeSource() %>% Corpus() %>%
+  tm_map(removePunctuation) %>%
+  tm_map(removeNumbers) %>%
+  tm_map(removeWords, stopwords("english")) %>%
+  tm_map(stemDocument, language="english") %>%
+  tm_map(stripWhitespace)
+
+tdm.issues <- TermDocumentMatrix(issue.corpus)
+
+# This works, but doesn't provide frequencies, so dplyr it is
+#   findFreqTerms(tdm.issues, 5)
+term.frequency <- as.data.frame(as.matrix(tdm.issues)) %>%
+  mutate(term = rownames(.)) %>%
+  gather(document, freq, -term) %>%
+  filter(freq > 0) %>%
+  group_by(term) %>%
+  summarise(num = n()) %>%
+  ungroup()
+
+frequent.issues <- term.frequency %>%
+  filter(num >= 5) %>%
+  arrange(desc(num))
+frequent.issues
+
+#' Lots of NGOs deal with rights, health, and developent. Do they qualify those
+#' broader issues?
+findAssocs(tdm.issues, "right", 0.1)
+findAssocs(tdm.issues, "health", 0.1)
+findAssocs(tdm.issues, "develop", 0.1)
+
+#' Imputing latent themes from these other topics algorithmically is tricky though. K-means, PAM, latent semantic analysis (LSA), and latent dirichlet allocation (LDA) all choke, since the corpus isn't that big and the "documents" are super short (often just one word long). I attempt each of these in `/Analysis/ingo_survey/sandbox.R`, but none of them work well, even for coarse sorting. 
 #' 
+#' So, hand-coding it is.
+
+
 #' What kinds of activities do these NGOs engage in?
 #' 
 #' How big are these NGOs? Staff? Volunteers?
