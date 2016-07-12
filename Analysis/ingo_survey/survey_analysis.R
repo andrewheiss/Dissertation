@@ -623,6 +623,28 @@ df.Q3.13 <- survey.orgs.clean %>%
 datatable(df.Q3.13)
 
 
+#' ## Government relations
+#' 
+#' ### General questions
+#' 
+#' 
+#' ### Contact with government
+#' 
+#' 
+#' ### Relationship with government
+#' 
+#' 
+#' ### NGO regulations and restrictions
+#' 
+#' 
+#' ### Responses to regulations
+#' 
+
+
+#' ## Final questions
+#' 
+
+
 #' ## Testing hypotheses
 #' 
 #' My claim:
