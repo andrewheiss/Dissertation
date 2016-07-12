@@ -296,7 +296,7 @@ plot.work.map.presence <- ggplot(df.work.countries.answered,
   coord_equal() +
   scale_fill_manual(values=c("grey50", "#FFFFFF"), na.value="#FFFFFF", guide=FALSE) +
   labs(title="Countries about which at least one NGO answered questions",
-       subtitle="One of countries selected in Q2.5: Besides 'home_country', where does your organization work?") +
+       subtitle="Q4.1: Please select a country you would like to discuss\n(One of countries selected in Q2.5)") +
   theme_ath_map()
 plot.work.map.presence
 
@@ -311,7 +311,7 @@ plot.work.map.scale <- ggplot(df.work.countries.answered,
                       na.value="#FFFFFF", name="NGOs answered about country",
                       guide=guide_colourbar(ticks=FALSE, barwidth=6)) + 
   labs(title="Countries about which NGOs answered questions",
-       subtitle="One of countries selected in Q2.5: Besides 'home_country', where does your organization work?") +
+       subtitle="Q4.1: Please select a country you would like to discuss\n(One of countries selected in Q2.5)") +
   theme_ath_map() +
   theme(legend.position="bottom", legend.key.size=unit(0.65, "lines"),
         strip.background=element_rect(colour="#FFFFFF", fill="#FFFFFF"))
@@ -627,7 +627,70 @@ datatable(df.Q3.13)
 #' 
 #' ### General questions
 #' 
-#' 
+#' #### Time in country
+df.time.country <- survey.countries.clean %>%
+  filter(!is.na(Q4.2)) %>%
+  group_by(Q4.2) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.2 = factor(Q4.2, levels=rev(levels(Q4.2)), ordered=TRUE))
+
+plot.time.country <- ggplot(df.time.country, aes(x=num, y=Q4.2)) +
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How long has the NGO worked in the country?",
+       subtitle="How long has your organization worked in `target_country`?") +
+  theme_ath()
+
+plot.time.country
+
+
+#' #### Operations in country
+df.operations <- survey.countries.clean %>%
+  unnest(Q4.3_value) %>%
+  group_by(Q4.3_value) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q4.3_value)) %>%
+  mutate(operation = factor(Q4.3_value, levels=rev(Q4.3_value), ordered=TRUE))
+
+# Add line breaks to labels
+levels(df.operations$operation)[levels(df.operations$operation) == "Maintain a physical office staffed primarily by people from target_country"] <-
+  "Maintain a physical office staffed\nprimarily by people from target_country"
+levels(df.operations$operation)[levels(df.operations$operation) == "Maintain a physical office staffed primarily by foreigners"] <-
+  "Maintain a physical office staffed\nprimarily by foreigners"
+
+plot.operations <- ggplot(df.operations, aes(x=num, y=operation)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Times selected", y=NULL,
+       title="How do NGOs work in the target country?",
+       subtitle="Q4.3: What does your organization do in target_country? (multiple answers allowed)") +
+  theme_ath()
+
+plot.operations
+
+
+#' #### Is the NGO registered?
+df.registered <- survey.countries.clean %>%
+  filter(!is.na(Q4.4)) %>%
+  group_by(Q4.4) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.4 = factor(Q4.4, levels=rev(levels(Q4.4)), ordered=TRUE))
+
+plot.registered <- ggplot(df.registered, aes(x=num, y=Q4.4)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="Is the NGO registered?",
+       subtitle="Is your organization registered with the national government in `target_country`?") +
+  theme_ath()
+
+plot.registered
+
+
 #' ### Contact with government
 #' 
 #' 
