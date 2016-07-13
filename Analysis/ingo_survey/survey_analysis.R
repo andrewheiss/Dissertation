@@ -1,5 +1,5 @@
 #' ---
-#' title: "Survey analysis"
+#' title: "Survey summary"
 #' author: "Andrew Heiss"
 #' date: "`r format(Sys.time(), '%B %e, %Y')`"
 #' output: 
@@ -16,7 +16,7 @@
 #' csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
 #' ...
 
-#' ## Load clean data and set everything up
+#' ## Load clean data
 #+ message=FALSE
 knitr::opts_chunk$set(fig.retina=2)
 
@@ -693,9 +693,9 @@ plot.registered <- ggplot(df.registered, aes(x=num, y=Q4.4)) +
 plot.registered
 
 
-#' ### Contact with government
+#' ## Contact with government
 #'
-#' #### Frequency of government contact
+#' ### Frequency of government contact
 df.freq.contact <- survey.countries.clean %>%
   filter(!is.na(Q4.5)) %>%
   group_by(Q4.5) %>%
@@ -728,7 +728,7 @@ datatable(df.freq.contact.other)
 #'
 
 
-#' #### Frequency of reporting to government
+#' ### Frequency of reporting to government
 df.freq.report <- survey.countries.clean %>%
   filter(!is.na(Q4.8)) %>%
   group_by(Q4.8) %>%
@@ -759,7 +759,7 @@ datatable(df.freq.report.other)
 #' 
 
 
-#' #### Kinds of government officials NGOs have contact with
+#' ### Kinds of government officials NGOs have contact with
 df.officials.contact <- survey.countries.clean %>%
   unnest(Q4.6_value) %>%
   group_by(Q4.6_value) %>%
@@ -788,7 +788,7 @@ df.officials.contact.other <- survey.countries.clean %>%
 
 datatable(df.freq.contact.other)
 
-#' #### Officials reported to the most
+#' ### Officials reported to the most
 df.officials.contact.most <- survey.countries.clean %>%
   group_by(Q4.7) %>%
   summarise(num = n()) %>%
@@ -818,7 +818,7 @@ df.officials.contact.most.other <- survey.countries.clean %>%
 datatable(df.officials.contact.most.other)
 
 
-#' #### Are members of the government involved in work?
+#' ### Are members of the government involved in work?
 df.govt.involved <- survey.countries.clean %>%
   filter(!is.na(Q4.9)) %>%
   group_by(Q4.9) %>%
@@ -837,7 +837,7 @@ plot.govt.involved <- ggplot(df.govt.involved, aes(x=num, y=Q4.9)) +
 plot.govt.involved
 
 
-#' #### How is government involved in work?
+#' ### How is government involved in work?
 #' 
 #' Q4.10: How is the government of `target_country`` involved in your work?
 df.Q4.10 <- survey.countries.clean %>%
@@ -847,9 +847,9 @@ df.Q4.10 <- survey.countries.clean %>%
 datatable(df.Q4.10)
 
 
-#' ### Relationship with government
+#' ## Relationship with government
 #' 
-#' #### Positivity of relationship
+#' ### Positivity of relationship
 df.govt.positivity <- survey.countries.clean %>%
   filter(!is.na(Q4.11)) %>%
   group_by(Q4.11) %>%
@@ -868,7 +868,7 @@ plot.govt.positivity <- ggplot(df.govt.positivity, aes(x=num, y=Q4.11)) +
 plot.govt.positivity
 
 
-#' #### Description of relationship
+#' ### Description of relationship
 #' 
 #' Q4.12: Briefly describe your organization's relationship with the government
 #' of `target_country`:
@@ -879,9 +879,9 @@ df.Q4.12 <- survey.countries.clean %>%
 datatable(df.Q4.12)
 
 
-#' ### NGO regulations and restrictions
+#' ## NGO regulations and restrictions
 #' 
-#' #### Familiarity with regulations
+#' ### Familiarity with regulations
 df.reg.familiarity <- survey.countries.clean %>%
   filter(!is.na(Q4.13)) %>%
   group_by(Q4.13) %>%
@@ -900,7 +900,7 @@ plot.reg.familiarity <- ggplot(df.reg.familiarity, aes(x=num, y=Q4.13)) +
 plot.reg.familiarity
 
 
-#' #### Frequency of regulation change
+#' ### Frequency of regulation change
 df.reg.change <- survey.countries.clean %>%
   filter(!is.na(Q4.14)) %>%
   group_by(Q4.14) %>%
@@ -919,7 +919,7 @@ plot.reg.change <- ggplot(df.reg.change, aes(x=num, y=Q4.14)) +
 plot.reg.change
 
 
-#' #### How do NGOs find out about changes?
+#' ### How do NGOs find out about changes?
 df.change.how <- survey.countries.clean %>%
   unnest(Q4.15_value) %>%
   group_by(Q4.15_value) %>%
@@ -950,7 +950,7 @@ df.change.how.other <- survey.countries.clean %>%
 datatable(df.change.how.other)
 
 
-#' #### How are NGOs affected by regulations?
+#' ### How are NGOs affected by regulations?
 labels.reg.effects <- data_frame(levels=c("registration", "operations", "speech", 
                                           "communications", "assembly", "resources"),
                                  labels=c("Regulations regarding registration",
@@ -1050,7 +1050,7 @@ df.Q4.16.resources <- survey.countries.clean %>%
 datatable(df.Q4.16.resources)
 
 
-#' #### How are NGOs affected by regulations in general?
+#' ### How are NGOs affected by regulations in general?
 df.reg.effect.general <- survey.countries.clean %>%
   filter(!is.na(Q4.17)) %>%
   group_by(Q4.17) %>%
@@ -1069,7 +1069,7 @@ plot.reg.effect.general <- ggplot(df.reg.effect.general, aes(x=num, y=Q4.17)) +
 plot.reg.effect.general
 
 
-#' #### Effect of regulations on ability to pursue mission
+#' ### Effect of regulations on ability to pursue mission
 #' 
 #' Q4.18: How do the local laws and regulations in `target_country` affect your
 #' organization’s ability to pursue its mission?
@@ -1080,9 +1080,9 @@ df.Q4.18 <- survey.countries.clean %>%
 datatable(df.Q4.18)
 
 
-#' ### Responses to regulations
+#' ## Responses to regulations
 #' 
-#' #### Have NGOs changed programming?
+#' ### Have NGOs changed programming?
 df.change.programming <- survey.countries.clean %>%
   filter(!is.na(Q4.19)) %>%
   group_by(Q4.19) %>%
@@ -1112,7 +1112,7 @@ df.Q4.20 <- survey.countries.clean %>%
 datatable(df.Q4.20)
 
 
-#' #### Changes in response to regulations
+#' ### Changes in response to regulations
 labels.changes <- data_frame(levels=c("funding", "issues", "comm_govt", 
                                       "comm_donors", "locations", "country_office",
                                       "local_staff", "foreign_staff"),
@@ -1239,7 +1239,7 @@ df.Q4.21.foreign_staff <- survey.countries.clean %>%
 datatable(df.Q4.21.foreign_staff)
 
 
-#' #### Have NGOs discussed regulations with government?
+#' ### Have NGOs discussed regulations with government?
 df.reg.discuss <- survey.countries.clean %>%
   filter(!is.na(Q4.22)) %>%
   group_by(Q4.22) %>%
@@ -1258,7 +1258,7 @@ plot.reg.discuss <- ggplot(df.reg.discuss, aes(x=num, y=Q4.22)) +
 plot.reg.discuss
 
 
-#' #### Have NGOs tried to change regulations?
+#' ### Have NGOs tried to change regulations?
 df.reg.lobby <- survey.countries.clean %>%
   filter(!is.na(Q4.23)) %>%
   group_by(Q4.23) %>%
@@ -1277,9 +1277,7 @@ plot.reg.lobby <- ggplot(df.reg.lobby, aes(x=num, y=Q4.23)) +
 plot.reg.lobby
 
 
-#' ## Final questions
-#' 
-#' ### Final thoughts
+#' ## Final thoughts
 #'
 #' Q5.1: Do you have any additional comments?
 df.Q5.1 <- survey.orgs.clean %>%
