@@ -26,18 +26,11 @@ library(purrr)
 library(ggplot2)
 library(ggstance)
 library(stringr)
-library(pander)
 library(magrittr)
 library(DT)
 library(scales)
 library(countrycode)
 library(tm)
-
-panderOptions('table.split.table', Inf)
-panderOptions('table.split.cells', Inf)
-panderOptions('keep.line.breaks', TRUE)
-panderOptions('table.style', 'multiline')
-panderOptions('table.alignment.default', 'left')
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
