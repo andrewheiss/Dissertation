@@ -200,14 +200,15 @@ min(complete.ingos$num.answered)
 #' questions into characters and will sometimes yield NULL instead of NA, which
 #' then gets counted in the number of questions (so it's possible for a
 #' respondent to answer just the country name and have that count as 6
-#' questions).
+#' questions). Also, Q4.16 creates 6 ghost questions, so the limit is 
+#' technically 12 (6 + 6).
 #' 
 #' So, I use a combination of factors to determine partiality. A respondent has
 #' to answer at least 20 (31) questions, and at least 6 have to come from the
 #' Q4 loop. This is a better, more robust cutoff than simply using a
 #' 20-question minimum arbitrarily.
 #' 
-#' Thus, there are this many valid partial responses:
+#' Thus, there are this many valid complete and partial responses:
 #' 
 nrow(survey.orgs.clean)
 table(survey.orgs.clean$complete)

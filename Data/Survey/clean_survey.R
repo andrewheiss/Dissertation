@@ -457,6 +457,10 @@ survey.v1.countries <- survey.v1 %>%
                                  Q4.16_assembly_dk, Q4.16_assembly),
          Q4.16_resources = ifelse(!is.na(Q4.16_resources_dk), 
                                   Q4.16_resources_dk, Q4.16_resources)) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q4.16_registration, Q4.16_operations, Q4.16_speech,
+                Q4.16_communications, Q4.16_assembly, Q4.16_resources)) %>%
   # Get rid of don't know columns
   select(-matches("Q4\\.16_.+_dk")) %>%
   mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
@@ -561,6 +565,10 @@ survey.v2.countries <- survey.v2 %>%
          Q4.16_registration_TEXT = Q4.16a, Q4.16_operations_TEXT = Q4.16b,
          Q4.16_speech_TEXT = Q4.16c, Q4.16_communications_TEXT = Q4.16d,
          Q4.16_assembly_TEXT = Q4.16e, Q4.16_resources_TEXT = Q4.16f) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q4.16_registration, Q4.16_operations, Q4.16_speech,
+                Q4.16_communications, Q4.16_assembly, Q4.16_resources)) %>%
   mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
               c(Q4.16_registration, Q4.16_operations, Q4.16_speech, 
                 Q4.16_communications, Q4.16_assembly, Q4.16_resources)) %>%
@@ -598,10 +606,10 @@ partials <- survey.orgs.all %>%
   distinct(ResponseID, .keep_all=TRUE) %>%
   filter(Finished == 0) %>%
   # Threshold for partialness determined in Analysis/ingo_survey/completion_rates.R
-  # At least 31 questions answered + more than 3 questions answered in the Q4 loop
+  # At least 31 questions answered + more than 12 questions answered in the Q4 loop
   mutate(num.answered = rowSums(!is.na(select(., starts_with("Q")))),
          num.answered.loop = rowSums(!is.na(select(., starts_with("Q4"))))) %>%
-  filter(num.answered >= 31, num.answered.loop > 3)
+  filter(num.answered >= 31, num.answered.loop > 12)
 
 # Create clean dataframes with complete and valid partial responses
 survey.orgs.clean <- survey.orgs.all %>%
