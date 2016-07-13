@@ -688,11 +688,13 @@ survey.orgs.clean.final %>%
   mutate(is.num = !str_detect(Q3.4, "[^0-9\\.,]"),
          Q3.4.num.manual = 0) %>%
   filter(is.num == FALSE) %>%
-  write_csv(file.path(PROJHOME, "Data", "data_base",
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
                       "employees_count_WILL_BE_OVERWRITTEN.csv"))
 
 # Read in clean CSV
-employees.clean <- read_csv(file.path(PROJHOME, "Data", "data_base",
+employees.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                      "handcoded_survey_stuff",
                                       "employees_count.csv")) %>%
   select(ResponseID, Q3.4.num.manual)
 
@@ -713,12 +715,14 @@ survey.orgs.clean.final %>%
   mutate(is.num = !str_detect(Q3.5, "[^0-9\\.,]"),
          Q3.5.num.manual = 0) %>%
   filter(is.num == FALSE) %>%
-  write_csv(file.path(PROJHOME, "Data", "data_base",
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
                       "volunteers_count_WILL_BE_OVERWRITTEN.csv"))
 
 # Read in clean CSV
-volunteers.clean <- read_csv(file.path(PROJHOME, "Data", "data_base",
-                                      "volunteers_count.csv")) %>%
+volunteers.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                       "handcoded_survey_stuff",
+                                       "volunteers_count.csv")) %>%
   select(ResponseID, Q3.5.num.manual)
 
 # Combine the automatic and manual columns
