@@ -167,6 +167,13 @@ how.often <- c("Once a week", "Once a month", "Once a year",
 how.often.short <- c("Once a month", "Once a year", "Once every few years",
                      "Rarely", "Never", "Don't know")
 
+how.often.extra <- c("Don't know", "Never", "Rarely", "Once every 2+ years", 
+                     "As necessary/depends", "Once a year",
+                     "More than once a year,\nless than once a month",
+                     "Once a month", 
+                     "More than once a month,\nless than once a week",
+                     "Once a week", "More than once a week")
+
 govt.officials <- c("President or prime minister", "Member of parliament", 
                     "Head of a ministry", "Ministry staff", "Military",
                     "Police or internal security", "Other", 
@@ -746,6 +753,61 @@ volunteers.num <- survey.orgs.clean.final %>%
   select(ResponseID, Q3.5.num)
 
 
+# --------------------------------------
+# Frequency of contact with government
+# --------------------------------------
+# Hand coding rules:
+#    - Assume following numeric values for frequency:
+#        - -1: Don't know
+#        - 0: Never
+#        - 1: Once every 2+ years
+#        - 2: Once a year
+#        - 3: Once a month
+#        - 4: Once a week
+#    - Add these new values:
+#        - 0.5: Rarely
+#        - 1.5: Unclear, like "as necessary" or "depends" or "occasionally"
+#        - 2.5: More than once a year, less than once a month (also "often",
+#               "regularly")
+#        - 3.5: More than once a month, less than once a week
+#        - 4.5: More than once a week
+
+# CSV to work with by hand
+survey.countries.clean %>%
+  select(ResponseID, Q4.5_TEXT) %>%
+  filter(!is.na(Q4.5_TEXT)) %>%
+  mutate(Q4.5.manual = 0) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "frequency_govt_contact_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+govt.freq.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                       "handcoded_survey_stuff",
+                                       "frequency_govt_contact.csv")) %>%
+  select(ResponseID, Q4.5.manual)
+
+# Combine the automatic and manual columns
+govt.freq.fixed <- survey.countries.clean %>%
+  select(ResponseID, Q4.5) %>%
+  mutate(Q4.5.num = case_when(
+    .$Q4.5 == "Don't know" ~ -1,
+    .$Q4.5 == "Never" ~ 0,
+    .$Q4.5 == "Once every 2+ years" ~ 1,
+    .$Q4.5 == "Once a year" ~ 2,
+    .$Q4.5 == "Once a month" ~ 3,
+    .$Q4.5 == "Once a week" ~ 4
+  )) %>%
+  left_join(govt.freq.clean, by="ResponseID") %>%
+  rowwise() %>%
+  mutate(Q4.5.num = ifelse(!is.na(Q4.5) | !is.na(Q4.5.num),
+                           sum(Q4.5.num, Q4.5.manual, na.rm=TRUE),
+                           NA)) %>%
+  mutate(Q4.5.clean = factor(Q4.5.num, levels=c(-1, seq(0, 4.5, 0.5)),
+                             labels=how.often.extra, ordered=TRUE)) %>%
+  select(ResponseID, Q4.5.clean)
+
+
 # --------------------------
 # Merge in hand-coded data
 # --------------------------
@@ -753,9 +815,12 @@ survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
   left_join(employees.num, by="ResponseID") %>%
   left_join(volunteers.num, by="ResponseID")
 
+survey.countries.clean.for.realz <- survey.countries.clean %>%
+  left_join(govt.freq.fixed, by="ResponseID")
+
 # Combine with country-level data
 survey.clean.all <- survey.orgs.clean.final.for.realz %>%
-  left_join(survey.countries.clean, by=c("ResponseID", "survey"))
+  left_join(survey.countries.clean.for.realz, by=c("ResponseID", "survey"))
 
 
 # ------------------------
@@ -778,6 +843,6 @@ saveRDS(survey.orgs.clean.final.for.realz,
         file=file.path(PROJHOME, "Data", "data_processed", 
                        "survey_orgs_clean.rds"))
 
-saveRDS(survey.countries.clean, 
+saveRDS(survey.countries.clean.for.realz, 
         file=file.path(PROJHOME, "Data", "data_processed", 
                        "survey_countries_clean.rds"))

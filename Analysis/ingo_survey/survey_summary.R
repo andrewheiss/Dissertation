@@ -239,8 +239,6 @@ plot.work.all.map.scale <- ggplot(df.work.countries.all,
         strip.background=element_rect(colour="#FFFFFF", fill="#FFFFFF"))
 plot.work.all.map.scale
 
-# TODO: How many work in/answered questions for/are based in authoritarian countries?
-
 
 #' ### Which countries did NGOs answer about?
 df.work.countries.answered <- survey.countries.clean %>%
@@ -706,6 +704,7 @@ plot.freq.contact <- ggplot(df.freq.contact, aes(x=num, y=Q4.5)) +
 
 plot.freq.contact
 
+
 #' What other kinds of frequency do people report?
 df.freq.contact.other <- survey.countries.clean %>%
   filter(!is.na(Q4.5_TEXT)) %>%
@@ -716,9 +715,26 @@ df.freq.contact.other <- survey.countries.clean %>%
 
 datatable(df.freq.contact.other)
 
-# TODO: Hand code these other options
-#' Lots of "as needed" options. Will need to code those by hand.
-#'
+
+#' With all the other options cleaned up
+df.freq.contact.clean <- survey.countries.clean %>%
+  filter(!is.na(Q4.5.clean)) %>%
+  group_by(Q4.5.clean) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.5.clean = factor(Q4.5.clean, levels=rev(levels(Q4.5.clean)),
+                             ordered=TRUE))
+
+plot.freq.contact.clean <- ggplot(df.freq.contact.clean, 
+                                  aes(x=num, y=Q4.5.clean)) +
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How often does the NGO contact government?",
+       subtitle="Q4.5: About how often does your organization have contact with\ngovernment or party officials in `target_country`?") +
+  theme_ath()
+
+plot.freq.contact.clean
 
 
 #' ### Frequency of reporting to government
