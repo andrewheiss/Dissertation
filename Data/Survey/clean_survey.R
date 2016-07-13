@@ -808,6 +808,47 @@ govt.freq.fixed <- survey.countries.clean %>%
   select(ResponseID, Q4.5.clean)
 
 
+# --------------------------------------
+# Frequency of reporting to government
+# --------------------------------------
+# Hand coding rules: Use same rules as contact with government above
+
+# CSV to work with by hand
+survey.countries.clean %>%
+  select(ResponseID, Q4.8_TEXT) %>%
+  filter(!is.na(Q4.8_TEXT)) %>%
+  mutate(Q4.8.manual = 0) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "frequency_govt_report_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+govt.freq.report.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                             "handcoded_survey_stuff",
+                                             "frequency_govt_report.csv")) %>%
+  select(ResponseID, Q4.8.manual)
+
+# Combine the automatic and manual columns
+govt.freq.report.fixed <- survey.countries.clean %>%
+  select(ResponseID, Q4.8) %>%
+  mutate(Q4.8.num = case_when(
+    .$Q4.8 == "Don't know" ~ -1,
+    .$Q4.8 == "Never" ~ 0,
+    .$Q4.8 == "Once every 2+ years" ~ 1,
+    .$Q4.8 == "Once a year" ~ 2,
+    .$Q4.8 == "Once a month" ~ 3,
+    .$Q4.8 == "Once a week" ~ 4
+  )) %>%
+  left_join(govt.freq.report.clean, by="ResponseID") %>%
+  rowwise() %>%
+  mutate(Q4.8.num = ifelse(!is.na(Q4.8) | !is.na(Q4.8.num),
+                           sum(Q4.8.num, Q4.8.manual, na.rm=TRUE),
+                           NA)) %>%
+  mutate(Q4.8.clean = factor(Q4.8.num, levels=c(-1, seq(0, 4.5, 0.5)),
+                             labels=how.often.extra, ordered=TRUE)) %>%
+  select(ResponseID, Q4.8.clean)
+
+
 # --------------------------
 # Merge in hand-coded data
 # --------------------------
@@ -816,7 +857,8 @@ survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
   left_join(volunteers.num, by="ResponseID")
 
 survey.countries.clean.for.realz <- survey.countries.clean %>%
-  left_join(govt.freq.fixed, by="ResponseID")
+  left_join(govt.freq.fixed, by="ResponseID") %>%
+  left_join(govt.freq.report.fixed, by="ResponseID")
 
 # Combine with country-level data
 survey.clean.all <- survey.orgs.clean.final.for.realz %>%

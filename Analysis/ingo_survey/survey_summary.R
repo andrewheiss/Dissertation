@@ -763,9 +763,26 @@ df.freq.report.other <- survey.countries.clean %>%
 
 datatable(df.freq.report.other)
 
-# TODO: Hand code these
-#' Again, lots of "as needed" and "depends" options.
-#' 
+
+#' With all the other options cleaned up
+df.freq.report.clean <- survey.countries.clean %>%
+  filter(!is.na(Q4.8.clean)) %>%
+  group_by(Q4.8.clean) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.8.clean = factor(Q4.8.clean, levels=rev(levels(Q4.8.clean)),
+                             ordered=TRUE))
+
+plot.freq.report.clean <- ggplot(df.freq.report.clean, 
+                                  aes(x=num, y=Q4.8.clean)) +
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How often does the NGO report to government?",
+       subtitle="Q4.8: How often is your organization required to report to the government of  `target_country`?") +
+  theme_ath()
+
+plot.freq.report.clean
 
 
 #' ### Kinds of government officials NGOs have contact with
