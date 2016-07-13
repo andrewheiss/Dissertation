@@ -881,7 +881,205 @@ datatable(df.Q4.12)
 
 #' ### NGO regulations and restrictions
 #' 
+#' #### Familiarity with regulations
+df.reg.familiarity <- survey.countries.clean %>%
+  filter(!is.na(Q4.13)) %>%
+  group_by(Q4.13) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.13 = factor(Q4.13, levels=rev(levels(Q4.13)), ordered=TRUE))
+
+plot.reg.familiarity <- ggplot(df.reg.familiarity, aes(x=num, y=Q4.13)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How familiar are NGOs with regulations?",
+       subtitle="Q4.13: How familiar is your organization with regulations for\ninternational nongovernmental organizations (NGOs) in `target_country`?") +
+  theme_ath()
+
+plot.reg.familiarity
+
+
+#' #### Frequency of regulation change
+df.reg.change <- survey.countries.clean %>%
+  filter(!is.na(Q4.14)) %>%
+  group_by(Q4.14) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.14 = factor(Q4.14, levels=rev(levels(Q4.14)), ordered=TRUE))
+
+plot.reg.change <- ggplot(df.reg.change, aes(x=num, y=Q4.14)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How often do NGO regulations change?",
+       subtitle="Q4.14: How often do regulations for international NGOs in `target_country` change?") +
+  theme_ath()
+
+plot.reg.change
+
+
+#' #### How do NGOs find out about changes?
+df.change.how <- survey.countries.clean %>%
+  unnest(Q4.15_value) %>%
+  group_by(Q4.15_value) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q4.15_value)) %>%
+  mutate(how = factor(Q4.15_value, levels=rev(Q4.15_value), ordered=TRUE))
+
+levels(df.change.how$how)[levels(df.change.how$how) == "Newspapers, television, and other media"] <-
+  "Newspapers, television,\nand other media"
+
+plot.change.how <- ggplot(df.change.how, aes(x=num, y=how)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Times selected", y=NULL,
+       title="How do NGOs find out about changes to regulations?",
+       subtitle="Q4.15: How does your organization find out about changes to\nNGO regulations in `target_country`? (multiple answers allowed)") +
+  theme_ath()
+
+plot.change.how
+
+#' What are the other ways?
+df.change.how.other <- survey.countries.clean %>%
+  filter(!is.na(Q4.15_other_TEXT)) %>%
+  select(Q4.15_other_TEXT) %>%
+  arrange(Q4.15_other_TEXT)
+
+datatable(df.change.how.other)
+
+
+#' #### How are NGOs affected by regulations?
+labels.reg.effects <- data_frame(levels=c("registration", "operations", "speech", 
+                                          "communications", "assembly", "resources"),
+                                 labels=c("Regulations regarding registration",
+                                          "Regulations regarding operations",
+                                          "Regulations regarding speech and advocacy",
+                                          "Regulations regarding communication and cooperation",
+                                          "Regulations regarding assembly",
+                                          "Regulations regarding resources"))
+
+df.reg.effects <- survey.countries.clean %>%
+  select(dplyr::contains("Q4.16"), -dplyr::contains("TEXT")) %>%
+  gather(question, response) %>%
+  mutate(question = str_replace(question, "Q4\\.16_", ""),
+         question = factor(question, levels=labels.reg.effects$levels,
+                           labels=labels.reg.effects$labels, ordered=TRUE)) %>%
+  filter(!(response %in% c("Don't know", "Not applicable"))) %>%
+  group_by(question, response) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(response = factor(response, 
+                           levels=levels(survey.countries.clean$Q4.16_speech), 
+                           ordered=TRUE))
+
+plot.reg.effects <- ggplot(df.reg.effects, aes(y=num, x=response)) +
+  geom_bar(stat="identity") +
+  labs(y="Number of responses", x=NULL,
+       title="How are NGOs affected by regulations?",
+       subtitle="Q4.16: How is your organization affected by the following types\nof legal regulations for international NGOs in `target_country`?") +
+  facet_wrap(~ question, ncol=1) + 
+  theme_ath()
+
+plot.reg.effects
+
+#' #### Regulations regarding registration
 #' 
+#' Q4.16a: Please describe how your organization is affected by regulations
+#' regarding registration.
+df.Q4.16.registration <- survey.countries.clean %>%
+  filter(!is.na(Q4.16_registration_TEXT)) %>%
+  arrange(Q4.16_registration_TEXT) %>% select(Q4.16_registration_TEXT)
+
+datatable(df.Q4.16.registration)
+
+
+#' #### Regulations regarding operations
+#' 
+#' Q4.16b: Please describe how your organization is affected by regulations
+#' regarding operations.
+df.Q4.16.operations <- survey.countries.clean %>%
+  filter(!is.na(Q4.16_operations_TEXT)) %>%
+  arrange(Q4.16_operations_TEXT) %>% select(Q4.16_operations_TEXT)
+
+datatable(df.Q4.16.operations)
+
+
+#' #### Regulations regarding speech and advocacy
+#' 
+#' Q4.16c: Please describe how your organization is affected by regulations
+#' regarding speech and advocacy.
+df.Q4.16.speech <- survey.countries.clean %>%
+  filter(!is.na(Q4.16_speech_TEXT)) %>%
+  arrange(Q4.16_speech_TEXT) %>% select(Q4.16_speech_TEXT)
+
+datatable(df.Q4.16.speech)
+
+
+#' #### Regulations regarding communication and cooperation
+#' 
+#' Q4.16d: Please describe how your organization is affected by regulations
+#' regarding communication and cooperation.
+df.Q4.16.communications <- survey.countries.clean %>%
+  filter(!is.na(Q4.16_communications_TEXT)) %>%
+  arrange(Q4.16_communications_TEXT) %>% select(Q4.16_communications_TEXT)
+
+datatable(df.Q4.16.communications)
+
+
+#' #### Regulations regarding assembly
+#' 
+#' Q4.16e: Please describe how your organization is affected by regulations
+#' regarding assembly.
+df.Q4.16.assembly <- survey.countries.clean %>%
+  filter(!is.na(Q4.16_assembly_TEXT)) %>%
+  arrange(Q4.16_assembly_TEXT) %>% select(Q4.16_assembly_TEXT)
+
+datatable(df.Q4.16.assembly)
+
+
+#' #### Regulations regarding resources
+#' 
+#' Q4.16f: Please describe how your organization is affected by regulations
+#' regarding resources.
+df.Q4.16.resources <- survey.countries.clean %>%
+  filter(!is.na(Q4.16_resources_TEXT)) %>%
+  arrange(Q4.16_resources_TEXT) %>% select(Q4.16_resources_TEXT)
+
+datatable(df.Q4.16.resources)
+
+
+#' #### How are NGOs affected by regulations in general?
+df.reg.effect.general <- survey.countries.clean %>%
+  filter(!is.na(Q4.17)) %>%
+  group_by(Q4.17) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.17 = factor(Q4.17, levels=rev(levels(Q4.17)), ordered=TRUE))
+
+plot.reg.effect.general <- ggplot(df.reg.effect.general, aes(x=num, y=Q4.17)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How are NGOs affected by regulations in general?",
+       subtitle="Q4.17: Overall, how is your organization's work affected by government regulations in `target_country`?") +
+  theme_ath()
+
+plot.reg.effect.general
+
+
+#' #### Effect of regulations on ability to pursue mission
+#' 
+#' Q4.18: How do the local laws and regulations in `target_country` affect your
+#' organization’s ability to pursue its mission?
+df.Q4.18 <- survey.countries.clean %>%
+  filter(!is.na(Q4.18)) %>%
+  arrange(Q4.18) %>% select(Q4.18)
+
+datatable(df.Q4.18)
+
+
 #' ### Responses to regulations
 #' 
 
