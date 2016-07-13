@@ -1278,23 +1278,3 @@ df.Q5.1 <- survey.orgs.clean %>%
   arrange(Q5.1) %>% select(Q5.1)
 
 datatable(df.Q5.1)
-
-
-#' ## Testing hypotheses
-#' 
-#' My claim:
-#' 
-#' > If an INGO does not make one of these three adjustments—shifting its ideal
-#' point, increasing its operational flexibility, or becoming essential for the
-#' regime—it runs a high risk of expulsion.
-#' 
-#' What influences feelings of restriction? Main hypotheses:
-#' 
-#' - Normative principles and ideals
-#'     - Issue area
-#' - Instrumental flexibility
-#'     - Size
-#'     - Type of funding
-#'     - Collaboration
-#' - Alignment with regime preferences
-#' 

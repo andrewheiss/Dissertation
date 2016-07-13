@@ -60,3 +60,23 @@ countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 # All possible countries (to fix the South Sudan issue)
 possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
 
+
+
+#' ## Testing hypotheses
+#' 
+#' My claim:
+#' 
+#' > If an INGO does not make one of these three adjustments—shifting its ideal
+#' point, increasing its operational flexibility, or becoming essential for the
+#' regime—it runs a high risk of expulsion.
+#' 
+#' What influences feelings of restriction? Main hypotheses:
+#' 
+#' - Normative principles and ideals
+#'     - Issue area
+#' - Instrumental flexibility
+#'     - Size
+#'     - Type of funding
+#'     - Collaboration
+#' - Alignment with regime preferences
+#' 
