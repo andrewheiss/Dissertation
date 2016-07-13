@@ -566,10 +566,12 @@ survey.v2.countries <- survey.v2 %>%
          Q4.16_speech_TEXT = Q4.16c, Q4.16_communications_TEXT = Q4.16d,
          Q4.16_assembly_TEXT = Q4.16e, Q4.16_resources_TEXT = Q4.16f) %>%
   # Assume that missing values = not applicable
-  mutate_each(funs(ifelse(is.na(.), 7, .)),
+  # For whatever reason, the levels in Q4.16* aren't continuous; they include 
+  # (1, 3-8) and skip 2
+  mutate_each(funs(ifelse(is.na(.), 8, .)),
               c(Q4.16_registration, Q4.16_operations, Q4.16_speech,
                 Q4.16_communications, Q4.16_assembly, Q4.16_resources)) %>%
-  mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
+  mutate_each(funs(factor(., levels=c(1, 3:8), labels=great.none.dk)),
               c(Q4.16_registration, Q4.16_operations, Q4.16_speech, 
                 Q4.16_communications, Q4.16_assembly, Q4.16_resources)) %>%
   mutate(Q4.17 = factor(Q4.17, levels=1:6, labels=restricted),
