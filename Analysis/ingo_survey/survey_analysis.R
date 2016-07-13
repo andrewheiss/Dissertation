@@ -1279,6 +1279,14 @@ plot.reg.lobby
 
 #' ## Final questions
 #' 
+#' ### Final thoughts
+#'
+#' Q5.1: Do you have any additional comments?
+df.Q5.1 <- survey.orgs.clean %>%
+  filter(!is.na(Q5.1)) %>%
+  arrange(Q5.1) %>% select(Q5.1)
+
+datatable(df.Q5.1)
 
 
 #' ## Testing hypotheses
