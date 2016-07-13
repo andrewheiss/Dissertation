@@ -66,6 +66,8 @@ Data/data_raw/NGO\ lists/*
 
 Data/data_processed/*
 
+Data/data_base/*count*.csv
+
 # ----------------
 # Protected data
 # ----------------

@@ -5,11 +5,12 @@
 #' output: 
 #'   html_document: 
 #'     css: ../html/fixes.css
+#'     code_folding: hide
 #'     toc: yes
+#'     toc_float: true
+#'     toc_depth: 4
 #'     highlight: pygments
 #'     theme: cosmo
-#'     includes:
-#'       after_body: ../html/jump.html
 #'     keep_md: yes
 #' bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
 #' csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
@@ -184,7 +185,11 @@ complete.ingos <- survey.orgs.all %>%
 
 min(complete.ingos$num.answered)
 
-#' Thus, my rough cut-off point for partials = 20.
+#' Thus, my rough cut-off point for partials = 20. But with Q3.3 and Q3.8,
+#' missing values are converted to "Not applicable", so even if a respondent
+#' didn't ever see it, they'll get a recorded response for that question. This
+#' means that there are 11 ghost responses that have to be ignored (5 in Q3.3,
+#' 6 in Q3.8), so the technical cut-off point is 31.
 #'
 #' However, some respondents quit before answering any questions about the 
 #' countries they work in. I count any respondent that answered more than six 
@@ -195,14 +200,15 @@ min(complete.ingos$num.answered)
 #' questions into characters and will sometimes yield NULL instead of NA, which
 #' then gets counted in the number of questions (so it's possible for a
 #' respondent to answer just the country name and have that count as 6
-#' questions). More than six quesion.
+#' questions). Also, Q4.16 creates 6 ghost questions, so the limit is 
+#' technically 12 (6 + 6).
 #' 
 #' So, I use a combination of factors to determine partiality. A respondent has
-#' to answer at least 20 questions, and at least 6 have to come from the Q4
-#' loop. This is a better, more robust cutoff than simply using a 20-question
-#' minimum arbitrarily.
+#' to answer at least 20 (31) questions, and at least 6 have to come from the
+#' Q4 loop. This is a better, more robust cutoff than simply using a
+#' 20-question minimum arbitrarily.
 #' 
-#' Thus, there are this many valid partial responses:
+#' Thus, there are this many valid complete and partial responses:
 #' 
 nrow(survey.orgs.clean)
 table(survey.orgs.clean$complete)

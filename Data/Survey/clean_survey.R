@@ -2,6 +2,7 @@ library(dplyr)
 library(tidyr)
 library(readr)
 library(stringi)
+library(stringr)
 library(purrr)
 library(feather)
 
@@ -264,6 +265,10 @@ survey.v1.orgs <- survey.v1 %>%
                                 Q3.3_advocacy_dk, Q3.3_advocacy),
          Q3.3_monitor = ifelse(!is.na(Q3.3_monitor_dk), 
                                Q3.3_monitor_dk, Q3.3_monitor)) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q3.3_aid, Q3.3_education, Q3.3_mobilize, 
+                Q3.3_advocacy, Q3.3_monitor)) %>%
   # Get rid of don't know columns
   select(-matches("Q3\\.3_.+_dk")) %>%
   # Convert answers to factors
@@ -296,6 +301,10 @@ survey.v1.orgs <- survey.v1 %>%
                                  Q3.8_host_govt_dk, Q3.8_host_govt),
          Q3.8_other = ifelse(!is.na(Q3.8_other_dk), 
                              Q3.8_other_dk, Q3.8_other)) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q3.8_individual, Q3.8_corporate, Q3.8_foundation, 
+                Q3.8_home_govt, Q3.8_host_govt, Q3.8_other)) %>%
   # Get rid of don't know columns
   select(-matches("Q3\\.8_.+_dk"), -Q3.8zzz2_6_TEXT) %>%
   # Convert answers to factors
@@ -345,6 +354,10 @@ survey.v2.orgs <- survey.v2 %>%
          Q3.3_aid_TEXT = Q3.3zzz2_1_1_TEXT, Q3.3_education_TEXT = Q3.3zzz2_2_1_TEXT,
          Q3.3_mobilize_TEXT = Q3.3zzz2_3_1_TEXT, Q3.3_advocacy_TEXT = Q3.3zzz2_4_1_TEXT,
          Q3.3_monitor_TEXT = Q3.3zzz2_5_1_TEXT) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q3.3_aid, Q3.3_education, Q3.3_mobilize, 
+                Q3.3_advocacy, Q3.3_monitor)) %>%
   # Convert answers to factors
   mutate_each(funs(factor(., levels=1:7, labels=always.never.dk)),
               c(Q3.3_aid, Q3.3_education, Q3.3_mobilize, 
@@ -357,7 +370,13 @@ survey.v2.orgs <- survey.v2 %>%
          Q3.8_foundation = Q3.8_3, Q3.8_home_govt = Q3.8_4,
          Q3.8_host_govt = Q3.8_5, Q3.8_other = Q3.8_6,
          Q3.8_other_TEXT = Q3.8_6_TEXT) %>%
-  mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
+  # For whatever reason, the levels in Q3.8* aren't continuous; they include 
+  # (1, 3-8) and skip 2
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 8, .)),
+              c(Q3.8_individual, Q3.8_corporate, Q3.8_foundation, 
+                Q3.8_home_govt, Q3.8_host_govt, Q3.8_other)) %>%
+  mutate_each(funs(factor(., levels=c(1, 3:8), labels=great.none.dk)),
               c(Q3.8_individual, Q3.8_corporate, Q3.8_foundation, 
                 Q3.8_home_govt, Q3.8_host_govt, Q3.8_other)) %>%
   #
@@ -438,6 +457,10 @@ survey.v1.countries <- survey.v1 %>%
                                  Q4.16_assembly_dk, Q4.16_assembly),
          Q4.16_resources = ifelse(!is.na(Q4.16_resources_dk), 
                                   Q4.16_resources_dk, Q4.16_resources)) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 7, .)),
+              c(Q4.16_registration, Q4.16_operations, Q4.16_speech,
+                Q4.16_communications, Q4.16_assembly, Q4.16_resources)) %>%
   # Get rid of don't know columns
   select(-matches("Q4\\.16_.+_dk")) %>%
   mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
@@ -480,6 +503,11 @@ survey.v1.countries <- survey.v1 %>%
                                     Q4.21_local_staff_dk, Q4.21_local_staff),
          Q4.21_foreign_staff = ifelse(!is.na(Q4.21_foreign_staff_dk), 
                                       Q4.21_foreign_staff_dk, Q4.21_foreign_staff)) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 4, .)),
+              c(Q4.21_funding, Q4.21_issues, Q4.21_comm_govt, 
+                Q4.21_comm_donors, Q4.21_locations, Q4.21_country_office,
+                Q4.21_local_staff, Q4.21_foreign_staff)) %>%
   # Get rid of don't know columns
   select(-matches("Q4\\.21_.+_dk")) %>%
   mutate_each(funs(factor(., levels=1:4, labels=yndk.na)),
@@ -542,7 +570,13 @@ survey.v2.countries <- survey.v2 %>%
          Q4.16_registration_TEXT = Q4.16a, Q4.16_operations_TEXT = Q4.16b,
          Q4.16_speech_TEXT = Q4.16c, Q4.16_communications_TEXT = Q4.16d,
          Q4.16_assembly_TEXT = Q4.16e, Q4.16_resources_TEXT = Q4.16f) %>%
-  mutate_each(funs(factor(., levels=1:7, labels=great.none.dk)),
+  # Assume that missing values = not applicable
+  # For whatever reason, the levels in Q4.16* aren't continuous; they include 
+  # (1, 3-8) and skip 2
+  mutate_each(funs(ifelse(is.na(.), 8, .)),
+              c(Q4.16_registration, Q4.16_operations, Q4.16_speech,
+                Q4.16_communications, Q4.16_assembly, Q4.16_resources)) %>%
+  mutate_each(funs(factor(., levels=c(1, 3:8), labels=great.none.dk)),
               c(Q4.16_registration, Q4.16_operations, Q4.16_speech, 
                 Q4.16_communications, Q4.16_assembly, Q4.16_resources)) %>%
   mutate(Q4.17 = factor(Q4.17, levels=1:6, labels=restricted),
@@ -555,7 +589,13 @@ survey.v2.countries <- survey.v2 %>%
          Q4.21_comm_govt_TEXT = Q4.21c, Q4.21_comm_donors_TEXT = Q4.21d,
          Q4.21_locations_TEXT = Q4.21e, Q4.21_country_office_TEXT = Q4.21f,
          Q4.21_local_staff_TEXT = Q4.21g, Q4.21_foreign_staff_TEXT = Q4.21h) %>%
-  mutate_each(funs(factor(., levels=1:4, labels=yndk.na)),
+  # Same here. Q4.21* is missing 2 as a level
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 5, .)),
+              c(Q4.21_funding, Q4.21_issues, Q4.21_comm_govt, 
+                Q4.21_comm_donors, Q4.21_locations, Q4.21_country_office,
+                Q4.21_local_staff, Q4.21_foreign_staff)) %>%
+  mutate_each(funs(factor(., levels=c(1, 3:5), labels=yndk.na)),
               c(Q4.21_funding, Q4.21_issues, Q4.21_comm_govt, 
                 Q4.21_comm_donors, Q4.21_locations, Q4.21_country_office,
                 Q4.21_local_staff, Q4.21_foreign_staff)) %>%
@@ -579,10 +619,10 @@ partials <- survey.orgs.all %>%
   distinct(ResponseID, .keep_all=TRUE) %>%
   filter(Finished == 0) %>%
   # Threshold for partialness determined in Analysis/ingo_survey/completion_rates.R
-  # At least 20 questions answered + more than 3 questions answered in the Q4 loop
+  # At least 31 questions answered + more than 12 questions answered in the Q4 loop
   mutate(num.answered = rowSums(!is.na(select(., starts_with("Q")))),
          num.answered.loop = rowSums(!is.na(select(., starts_with("Q4"))))) %>%
-  filter(num.answered >= 20, num.answered.loop > 3)
+  filter(num.answered >= 31, num.answered.loop > 12)
 
 # Create clean dataframes with complete and valid partial responses
 survey.orgs.clean <- survey.orgs.all %>%
@@ -632,9 +672,77 @@ survey.countries.clean <- survey.countries.all %>%
          Q4.13, Q4.14, starts_with("Q4.15"), starts_with("Q4.16"), Q4.17, 
          Q4.18, Q4.19, Q4.20, starts_with("Q4.21"), Q4.22, Q4.23, Q4.24)
 
-survey.clean.all <- survey.orgs.clean.final %>%
+
+# The number of employees and volunteers requires some cleaning since it was an
+# open text field in case they wanted to explain more about the number of
+# employees. If the response is only numeric, count it as numeric. Otherwise,
+# export responses that aren't purely numeric to CSV for hand coding.
+#
+# Hand coding rules:
+#    - If they give a range, take the average (100-200 = 150; 10-15 = 12)
+#    - If they say "thousands" or "many" use 5-based numbers, like 5,000 or 5
+
+# CSV to work with by hand
+survey.orgs.clean.final %>%
+  select(ResponseID, Q3.4) %>%
+  mutate(is.num = !str_detect(Q3.4, "[^0-9\\.,]"),
+         Q3.4.num.manual = 0) %>%
+  filter(is.num == FALSE) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_base",
+                      "employees_count_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+employees.clean <- read_csv(file.path(PROJHOME, "Data", "data_base",
+                                      "employees_count.csv")) %>%
+  select(ResponseID, Q3.4.num.manual)
+
+# Combine the automatic and manual columns
+employees.num <- survey.orgs.clean.final %>%
+  select(ResponseID, Q3.4) %>%
+  mutate(Q3.4.num.auto = as_num(Q3.4)$result) %>%
+  left_join(employees.clean, by="ResponseID") %>%
+  rowwise() %>%
+  mutate(Q3.4.num = ifelse(!is.na(Q3.4.num.auto) | !is.na(Q3.4.num.manual),
+                           sum(Q3.4.num.auto, Q3.4.num.manual, na.rm=TRUE),
+                           NA)) %>%
+  select(ResponseID, Q3.4.num)
+
+# CSV to work with by hand
+survey.orgs.clean.final %>%
+  select(ResponseID, Q3.5) %>%
+  mutate(is.num = !str_detect(Q3.5, "[^0-9\\.,]"),
+         Q3.5.num.manual = 0) %>%
+  filter(is.num == FALSE) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_base",
+                      "volunteers_count_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+volunteers.clean <- read_csv(file.path(PROJHOME, "Data", "data_base",
+                                      "volunteers_count.csv")) %>%
+  select(ResponseID, Q3.5.num.manual)
+
+# Combine the automatic and manual columns
+volunteers.num <- survey.orgs.clean.final %>%
+  select(ResponseID, Q3.5) %>%
+  mutate(Q3.5.num.auto = as_num(Q3.5)$result) %>%
+  left_join(volunteers.clean, by="ResponseID") %>%
+  rowwise() %>%
+  mutate(Q3.5.num = ifelse(!is.na(Q3.5.num.auto) | !is.na(Q3.5.num.manual),
+                           sum(Q3.5.num.auto, Q3.5.num.manual, na.rm=TRUE),
+                           NA)) %>%
+  select(ResponseID, Q3.5.num)
+
+# Merge in numeric columns
+survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
+  left_join(employees.num, by="ResponseID") %>%
+  left_join(volunteers.num, by="ResponseID")
+
+# Combine with country-level data
+survey.clean.all <- survey.orgs.clean.final.for.realz %>%
   left_join(survey.countries.clean, by=c("ResponseID", "survey"))
 
+
+# Save all these things!
 # Not using feather because it can't handle list columns yet
 saveRDS(survey.orgs.all,
         file=file.path(PROJHOME, "Data", "data_processed",
@@ -648,7 +756,7 @@ saveRDS(survey.clean.all,
         file=file.path(PROJHOME, "Data", "data_processed",
                        "survey_clean_all.rds"))
 
-saveRDS(survey.orgs.clean.final, 
+saveRDS(survey.orgs.clean.final.for.realz, 
         file=file.path(PROJHOME, "Data", "data_processed", 
                        "survey_orgs_clean.rds"))
 

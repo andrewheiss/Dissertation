@@ -2,9 +2,13 @@
     font-size: 46px;
 }
 
-#TOC {
-    margin: 30px 0;
+h1 {
+  font-size: 39px;
 }
+
+/*#TOC {
+    margin: 30px 0;
+}*/
 
 table {
     font-size: 85%;
@@ -20,7 +24,27 @@ blockquote {
     margin-right: 4em;
 }
 
-.back-to-top {
+.tocify-header {
+    margin-left: 5px !important;
+    text-indent: 0;
+}
+
+.tocify-subheader {
+    margin-left: 15px !important;
+    text-indent: 0;
+}
+
+.tocify-subheader .tocify-subheader {
+    margin-left: 25px !important;
+    text-indent: 0;
+}
+
+.tocify-subheader .tocify-subheader .tocify-subheader {
+    margin-left: 35px !important;
+    text-indent: 0;
+}
+
+/*.back-to-top {
     width: 150px;
     position: fixed;
     bottom: 10px;
@@ -35,4 +59,8 @@ blockquote {
 a.back-to-top:hover {
     color: #FFDC00;
     text-decoration: none;
+}*/
+
+.datatables {
+  margin-bottom: 10.5px;
 }
