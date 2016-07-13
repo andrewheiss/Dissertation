@@ -673,6 +673,15 @@ survey.countries.clean <- survey.countries.all %>%
          Q4.18, Q4.19, Q4.20, starts_with("Q4.21"), Q4.22, Q4.23, Q4.24)
 
 
+# ------------------------------------------------------
+# ---------------------------
+# Deal with hand-coded data
+# ---------------------------
+# ------------------------------------------------------
+#
+# --------------------------
+# Employees and volunteers
+# --------------------------
 # The number of employees and volunteers requires some cleaning since it was an
 # open text field in case they wanted to explain more about the number of
 # employees. If the response is only numeric, count it as numeric. Otherwise,
@@ -736,7 +745,10 @@ volunteers.num <- survey.orgs.clean.final %>%
                            NA)) %>%
   select(ResponseID, Q3.5.num)
 
-# Merge in numeric columns
+
+# --------------------------
+# Merge in hand-coded data
+# --------------------------
 survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
   left_join(employees.num, by="ResponseID") %>%
   left_join(volunteers.num, by="ResponseID")
@@ -746,7 +758,9 @@ survey.clean.all <- survey.orgs.clean.final.for.realz %>%
   left_join(survey.countries.clean, by=c("ResponseID", "survey"))
 
 
+# ------------------------
 # Save all these things!
+# --------------------------
 # Not using feather because it can't handle list columns yet
 saveRDS(survey.orgs.all,
         file=file.path(PROJHOME, "Data", "data_processed",
