@@ -503,6 +503,11 @@ survey.v1.countries <- survey.v1 %>%
                                     Q4.21_local_staff_dk, Q4.21_local_staff),
          Q4.21_foreign_staff = ifelse(!is.na(Q4.21_foreign_staff_dk), 
                                       Q4.21_foreign_staff_dk, Q4.21_foreign_staff)) %>%
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 4, .)),
+              c(Q4.21_funding, Q4.21_issues, Q4.21_comm_govt, 
+                Q4.21_comm_donors, Q4.21_locations, Q4.21_country_office,
+                Q4.21_local_staff, Q4.21_foreign_staff)) %>%
   # Get rid of don't know columns
   select(-matches("Q4\\.21_.+_dk")) %>%
   mutate_each(funs(factor(., levels=1:4, labels=yndk.na)),
@@ -584,7 +589,13 @@ survey.v2.countries <- survey.v2 %>%
          Q4.21_comm_govt_TEXT = Q4.21c, Q4.21_comm_donors_TEXT = Q4.21d,
          Q4.21_locations_TEXT = Q4.21e, Q4.21_country_office_TEXT = Q4.21f,
          Q4.21_local_staff_TEXT = Q4.21g, Q4.21_foreign_staff_TEXT = Q4.21h) %>%
-  mutate_each(funs(factor(., levels=1:4, labels=yndk.na)),
+  # Same here. Q4.21* is missing 2 as a level
+  # Assume that missing values = not applicable
+  mutate_each(funs(ifelse(is.na(.), 5, .)),
+              c(Q4.21_funding, Q4.21_issues, Q4.21_comm_govt, 
+                Q4.21_comm_donors, Q4.21_locations, Q4.21_country_office,
+                Q4.21_local_staff, Q4.21_foreign_staff)) %>%
+  mutate_each(funs(factor(., levels=c(1, 3:5), labels=yndk.na)),
               c(Q4.21_funding, Q4.21_issues, Q4.21_comm_govt, 
                 Q4.21_comm_donors, Q4.21_locations, Q4.21_country_office,
                 Q4.21_local_staff, Q4.21_foreign_staff)) %>%
