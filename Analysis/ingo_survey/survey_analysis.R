@@ -1082,6 +1082,199 @@ datatable(df.Q4.18)
 
 #' ### Responses to regulations
 #' 
+#' #### Have NGOs changed programming?
+df.change.programming <- survey.countries.clean %>%
+  filter(!is.na(Q4.19)) %>%
+  group_by(Q4.19) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.19 = factor(Q4.19, levels=rev(levels(Q4.19)), ordered=TRUE))
+
+plot.change.programming <- ggplot(df.change.programming, aes(x=num, y=Q4.19)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="Have NGOs changed their mix of programming?",
+       subtitle="Q4.19: Over the last 10 years, has your organization changed its mix of programming in `target_country`?") +
+  theme_ath()
+
+plot.change.programming
+
+
+#' How so?
+#' 
+#' Q4.20: How has your organization’s mix of programming changed in
+#' `target_country`?
+df.Q4.20 <- survey.countries.clean %>%
+  filter(!is.na(Q4.20)) %>%
+  arrange(Q4.20) %>% select(Q4.20)
+
+datatable(df.Q4.20)
+
+
+#' #### Changes in response to regulations
+labels.changes <- data_frame(levels=c("funding", "issues", "comm_govt", 
+                                      "comm_donors", "locations", "country_office",
+                                      "local_staff", "foreign_staff"),
+                             labels=c("Changed sources of funding",
+                                      "Changed issues worked on",
+                                      "Changed communication with the government",
+                                      "Changed communication with donors",
+                                      "Changed locations worked in",
+                                      "Changed location country office",
+                                      "Used more local staff and/or volunteers",
+                                      "Used more foreign staff and/or volunteers"))
+
+df.reg.changes.response <- survey.countries.clean %>%
+  select(dplyr::contains("Q4.21"), -dplyr::contains("TEXT")) %>%
+  gather(question, response) %>%
+  mutate(question = str_replace(question, "Q4\\.21_", ""),
+         question = factor(question, levels=labels.changes$levels,
+                           labels=labels.changes$labels, ordered=TRUE)) %>%
+  filter(!(response %in% c("Don't know", "Not applicable"))) %>%
+  group_by(question, response) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(response = factor(response, 
+                           levels=levels(survey.countries.clean$Q4.21_funding), 
+                           ordered=TRUE))
+
+plot.reg.changes.response <- ggplot(df.reg.changes.response,
+                                    aes(y=num, x=response)) +
+  geom_bar(stat="identity") +
+  labs(y="Number of responses", x=NULL,
+       title="How have NGOs changed in response to regulations?",
+       subtitle="Q4.21: Has your organization done any of the following in response to changes in government regulations in `target_country`?") +
+  facet_wrap(~ question, ncol=2) + 
+  theme_ath()
+
+plot.reg.changes.response
+
+
+#' #### Changed sources of funding
+#'
+#' Q4.21a: Please describe how your organization changed its funding sources.
+#' What regulation were you responding to?
+df.Q4.21.funding <- survey.countries.clean %>%
+  filter(!is.na(Q4.21_funding_TEXT)) %>%
+  arrange(Q4.21_funding_TEXT) %>% select(Q4.21_funding_TEXT)
+
+datatable(df.Q4.21.funding)
+
+
+#' #### Changed issues worked on
+#'
+#' Q4.21b: Please describe how your organization changed which issues it works
+#' on. What regulation were you responding to?
+df.Q4.21.issues <- survey.countries.clean %>%
+  filter(!is.na(Q4.21_issues_TEXT)) %>%
+  arrange(Q4.21_issues_TEXT) %>% select(Q4.21_issues_TEXT)
+
+datatable(df.Q4.21.issues)
+
+
+#' #### Changed communication with the government
+#'
+#' Q4.21c: Please describe how your organization changed how it communicates
+#' with the government. What regulation were you responding to?
+df.Q4.21.comm_govt <- survey.countries.clean %>%
+  filter(!is.na(Q4.21_comm_govt_TEXT)) %>%
+  arrange(Q4.21_comm_govt_TEXT) %>% select(Q4.21_comm_govt_TEXT)
+
+datatable(df.Q4.21.comm_govt)
+
+
+#' #### Changed communication with donors
+#'
+#' Q4.21d: Please describe how your organization changed how it communicates
+#' with donors. What regulation were you responding to?
+df.Q4.21.comm_donors <- survey.countries.clean %>%
+  filter(!is.na(Q4.21_comm_donors_TEXT)) %>%
+  arrange(Q4.21_comm_donors_TEXT) %>% select(Q4.21_comm_donors_TEXT)
+
+datatable(df.Q4.21.comm_donors)
+
+
+#' #### Changed locations worked in
+#'
+#' Q4.21e: Please describe how your organization changed the locations it works
+#' in. What regulation were you responding to?
+df.Q4.21.locations <- survey.countries.clean %>%
+  filter(!is.na(Q4.21_locations_TEXT)) %>%
+  arrange(Q4.21_locations_TEXT) %>% select(Q4.21_locations_TEXT)
+
+datatable(df.Q4.21.locations)
+
+
+#' #### Changed location country office
+#'
+#' Q4.21f: Please describe how your organization changed the location of its
+#' country office. What regulation were you responding to?
+df.Q4.21.country_office <- survey.countries.clean %>%
+  filter(!is.na(Q4.21_country_office_TEXT)) %>%
+  arrange(Q4.21_country_office_TEXT) %>% select(Q4.21_country_office_TEXT)
+
+datatable(df.Q4.21.country_office)
+
+
+#' #### Used more local staff and/or volunteers
+#'
+#' Q4.21g: Please describe how your organization used more local staff or
+#' volunteers. What regulation were you responding to?
+df.Q4.21.local_staff <- survey.countries.clean %>%
+  filter(!is.na(Q4.21_local_staff_TEXT)) %>%
+  arrange(Q4.21_local_staff_TEXT) %>% select(Q4.21_local_staff_TEXT)
+
+datatable(df.Q4.21.local_staff)
+
+
+#' #### Used more foreign staff and/or volunteers
+#'
+#' Q4.21h: Please describe how your organization used more foreign staff or
+#' volunteers. What regulation were you responding to?
+df.Q4.21.foreign_staff <- survey.countries.clean %>%
+  filter(!is.na(Q4.21_foreign_staff_TEXT)) %>%
+  arrange(Q4.21_foreign_staff_TEXT) %>% select(Q4.21_foreign_staff_TEXT)
+
+datatable(df.Q4.21.foreign_staff)
+
+
+#' #### Have NGOs discussed regulations with government?
+df.reg.discuss <- survey.countries.clean %>%
+  filter(!is.na(Q4.22)) %>%
+  group_by(Q4.22) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.22 = factor(Q4.22, levels=rev(levels(Q4.22)), ordered=TRUE))
+
+plot.reg.discuss <- ggplot(df.reg.discuss, aes(x=num, y=Q4.22)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="Have NGOs discussed regulations with government?",
+       subtitle="Q4.22: Has your organization discussed NGO regulations with government officials in `target_country`?") +
+  theme_ath()
+
+plot.reg.discuss
+
+
+#' #### Have NGOs tried to change regulations?
+df.reg.lobby <- survey.countries.clean %>%
+  filter(!is.na(Q4.23)) %>%
+  group_by(Q4.23) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.23 = factor(Q4.23, levels=rev(levels(Q4.23)), ordered=TRUE))
+
+plot.reg.lobby <- ggplot(df.reg.lobby, aes(x=num, y=Q4.23)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="Have NGOs tried to change regulations?",
+       subtitle="Q4.23: Has your organization tried to change NGO regulations in `target_country`?") +
+  theme_ath()
+
+plot.reg.lobby
 
 
 #' ## Final questions
