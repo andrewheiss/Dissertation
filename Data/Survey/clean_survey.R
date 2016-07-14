@@ -5,6 +5,8 @@ library(stringi)
 library(stringr)
 library(purrr)
 library(feather)
+library(zoo)
+library(countrycode)
 
 
 # ------------------
@@ -66,10 +68,12 @@ countries.raw <- read_feather(file.path(PROJHOME, "Data", "Survey", "output",
 
 # Change Greenland > Anguilla; Aruba > Kosovo; Cayman Islands > Taiwan
 countries.manual.fixes <- data_frame(`Country name` = c("Anguilla", 
-                                                        "Kosovo", "Taiwan"),
-                                     ISO3 = c("AIA", "XKX", "TWN"),
-                                     `COW code` = c(1022, 347, 713),
-                                     `Qualtrics ID` = c(74, 10, 36))
+                                                        "Kosovo", "Taiwan",
+                                                        "Hong Kong SAR, China",
+                                                        "Serbia", "West Bank and Gaza"),
+                                     ISO3 = c("AIA", "XKX", "TWN", "HKG", "SRB", "PSE"),
+                                     `COW code` = c(1022, 347, 713, 715, 340, 669),
+                                     `Qualtrics ID` = c(74, 10, 36, 83, 163, 209))
 
 countries <- countries.raw %>%
   filter(!(`Qualtrics ID` %in% countries.manual.fixes$`Qualtrics ID`)) %>%
@@ -851,18 +855,113 @@ govt.freq.report.fixed <- survey.countries.clean %>%
   select(ResponseID, loop.number, Q4.8.clean)
 
 
+# --------------------------------------------------
+# -------------------------
+# Deal with external data
+# -------------------------
+# --------------------------------------------------
+# CSRE-related data
+full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                                    "full_data.feather"))
+
+# Get most recent CSRE, average CSRE over past 10 years, gwf.ever.autocracy,
+# most recent Polity, average Polity over past 10 years
+external.data <- full.data %>%
+  select(cowcode, country_name, year.num, autocracy = gwf.binary, 
+         csre = cs_env_sum, polity = e_polity2) %>%
+  filter(year.num >= 2005)
+
+# These external datasets don't cover all COW codes. For the models predicting
+# the CSRE, this is okay, since these missing countries tend to be missing a
+# ton of other variables too, so they're dropped. But with the survey analysis,
+# I don't want to discount dozens of responses because they're not matched in
+# the external data. So, I hand-code my own subjectivish autocracy measure for
+# countries that GWF don't cover.
+#
+# Get a list of all COW codes present in the survey (home and target countries)
+cows.all.survey <- unique(c(survey.orgs.clean.final$Q2.2_cow,
+                            survey.countries.clean$Q4.1_cow))
+  
+# List of all COW codes in V-Dem
+cows.in.external <- external.data %>%
+  distinct(cowcode)
+
+# Determine which countries don't have regime type data
+cows.no.regime.type <- external.data %>%
+  group_by(cowcode) %>%
+  mutate(no.gwf = all(is.na(autocracy))) %>%
+  ungroup() %>%
+  filter(no.gwf) %>%
+  distinct(cowcode)
+
+cows.in.survey.not.in.vdem <- data_frame(cowcode = cows.all.survey) %>%
+  filter(!(cowcode %in% cows.in.external$cowcode)) %>% na.omit()
+
+cows.missing <- c(cows.no.regime.type$cowcode, cows.in.survey.not.in.vdem$cowcode)
+
+# Determine these by hand based on Freedom House and Polity scores:
+data_frame(cowcode = cows.missing) %>%
+  mutate(country_name = countrycode(cowcode, "cown", "country.name")) %>%
+  mutate(autocracy = "", reason = "") %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "manual_regime_types_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+manual.regime.types <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                          "handcoded_survey_stuff",
+                                          "manual_regime_types.csv")) %>%
+  select(cowcode, autocracy.manual = autocracy)
+
+# Summarize external variables from V-Dem (captures most countries in survey)
+external.data.most <- external.data %>% 
+  left_join(manual.regime.types, by="cowcode") %>%
+  mutate(autocracy.final = ifelse(is.na(autocracy) & !is.na(autocracy.manual),
+                                  autocracy.manual, as.character(autocracy))) %>%
+  group_by(cowcode) %>%
+  mutate(csre.fixed = na.locf(csre, na.rm=FALSE),  # Forward-fill CSRE
+         polity.fixed = na.locf(polity, na.rm=FALSE),  # Forward-fill polity
+         ever.autocracy = any(autocracy.final == "Autocracy", na.rm=TRUE)) %>%
+  summarise(csre.mean = mean(csre, na.rm=TRUE),
+            csre.last = last(csre.fixed),
+            ever.autocracy = last(ever.autocracy),
+            polity.mean = mean(polity, na.rm=TRUE),
+            polity.last = last(polity.fixed))
+
+# TODO: Use actual polity for these stragglers instead of NA
+# These are the countries that aren't in V-Dem but are in the survey
+external.data.stragglers <- manual.regime.types %>%
+  filter(!(cowcode %in% external.data.most$cowcode)) %>%
+  group_by(cowcode) %>%
+  summarise(csre.mean = NA, csre.last = NA, 
+            ever.autocracy = any(autocracy.manual == "Autocracy"),
+            polity.mean = NA, polity.last = NA)
+
+# Finally create clean external dataframe to merge in
+external.data.summary <- bind_rows(external.data.most,
+                                   external.data.stragglers)
+
+external.data.home <- external.data.summary %>%
+  magrittr::set_colnames(paste0("home.", colnames(.)))
+
+external.data.target <- external.data.summary %>%
+  magrittr::set_colnames(paste0("target.", colnames(.)))
+
+
+# ----------------------------------------------------
 # --------------------------
-# Merge in hand-coded data
+# Create final survey data
 # --------------------------
+# Merge in hand-coded and external data
 survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
   left_join(employees.num, by="ResponseID") %>%
-  left_join(volunteers.num, by="ResponseID")
+  left_join(volunteers.num, by="ResponseID") %>%
+  left_join(external.data.home, by=c("Q2.2_cow"="home.cowcode"))
 
 survey.countries.clean.for.realz <- survey.countries.clean %>%
-  left_join(govt.freq.fixed, by="ResponseID") %>%
-  left_join(govt.freq.report.fixed, by="ResponseID")
   left_join(govt.freq.fixed, by=c("ResponseID", "loop.number")) %>%
   left_join(govt.freq.report.fixed, by=c("ResponseID", "loop.number")) %>%
+  left_join(external.data.target, by=c("Q4.1_cow"="target.cowcode"))
 
 # Combine with country-level data
 survey.clean.all <- survey.orgs.clean.final.for.realz %>%
