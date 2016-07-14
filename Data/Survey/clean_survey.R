@@ -612,9 +612,11 @@ survey.v2.countries <- survey.v2 %>%
   mutate(survey = "Final")
 
 
-# ----------------------------
-# Final combined survey data
-# ----------------------------
+# ----------------------------------------------------------------------
+# -----------------------------------
+# Deal with partials and duplicates
+# -----------------------------------
+# ----------------------------------------------------------------------
 survey.orgs.all <- survey.v1.orgs %>%
   bind_rows(survey.v2.orgs)
 
@@ -774,7 +776,7 @@ volunteers.num <- survey.orgs.clean.final %>%
 
 # CSV to work with by hand
 survey.countries.clean %>%
-  select(ResponseID, Q4.5_TEXT) %>%
+  select(ResponseID, loop.number, Q4.5_TEXT) %>%
   filter(!is.na(Q4.5_TEXT)) %>%
   mutate(Q4.5.manual = 0) %>%
   write_csv(file.path(PROJHOME, "Data", "data_processed",
@@ -785,11 +787,11 @@ survey.countries.clean %>%
 govt.freq.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
                                        "handcoded_survey_stuff",
                                        "frequency_govt_contact.csv")) %>%
-  select(ResponseID, Q4.5.manual)
+  select(ResponseID, loop.number, Q4.5.manual)
 
 # Combine the automatic and manual columns
 govt.freq.fixed <- survey.countries.clean %>%
-  select(ResponseID, Q4.5) %>%
+  select(ResponseID, loop.number, Q4.5) %>%
   mutate(Q4.5.num = case_when(
     .$Q4.5 == "Don't know" ~ -1,
     .$Q4.5 == "Never" ~ 0,
@@ -798,14 +800,14 @@ govt.freq.fixed <- survey.countries.clean %>%
     .$Q4.5 == "Once a month" ~ 3,
     .$Q4.5 == "Once a week" ~ 4
   )) %>%
-  left_join(govt.freq.clean, by="ResponseID") %>%
+  left_join(govt.freq.clean, by=c("ResponseID", "loop.number")) %>%
   rowwise() %>%
   mutate(Q4.5.num = ifelse(!is.na(Q4.5) | !is.na(Q4.5.num),
                            sum(Q4.5.num, Q4.5.manual, na.rm=TRUE),
                            NA)) %>%
   mutate(Q4.5.clean = factor(Q4.5.num, levels=c(-1, seq(0, 4.5, 0.5)),
                              labels=how.often.extra, ordered=TRUE)) %>%
-  select(ResponseID, Q4.5.clean)
+  select(ResponseID, loop.number, Q4.5.clean)
 
 
 # --------------------------------------
@@ -815,7 +817,7 @@ govt.freq.fixed <- survey.countries.clean %>%
 
 # CSV to work with by hand
 survey.countries.clean %>%
-  select(ResponseID, Q4.8_TEXT) %>%
+  select(ResponseID, loop.number, Q4.8_TEXT) %>%
   filter(!is.na(Q4.8_TEXT)) %>%
   mutate(Q4.8.manual = 0) %>%
   write_csv(file.path(PROJHOME, "Data", "data_processed",
@@ -826,11 +828,11 @@ survey.countries.clean %>%
 govt.freq.report.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
                                              "handcoded_survey_stuff",
                                              "frequency_govt_report.csv")) %>%
-  select(ResponseID, Q4.8.manual)
+  select(ResponseID, loop.number, Q4.8.manual)
 
 # Combine the automatic and manual columns
 govt.freq.report.fixed <- survey.countries.clean %>%
-  select(ResponseID, Q4.8) %>%
+  select(ResponseID, loop.number, Q4.8) %>%
   mutate(Q4.8.num = case_when(
     .$Q4.8 == "Don't know" ~ -1,
     .$Q4.8 == "Never" ~ 0,
@@ -839,14 +841,14 @@ govt.freq.report.fixed <- survey.countries.clean %>%
     .$Q4.8 == "Once a month" ~ 3,
     .$Q4.8 == "Once a week" ~ 4
   )) %>%
-  left_join(govt.freq.report.clean, by="ResponseID") %>%
+  left_join(govt.freq.report.clean, by=c("ResponseID", "loop.number")) %>%
   rowwise() %>%
   mutate(Q4.8.num = ifelse(!is.na(Q4.8) | !is.na(Q4.8.num),
                            sum(Q4.8.num, Q4.8.manual, na.rm=TRUE),
                            NA)) %>%
   mutate(Q4.8.clean = factor(Q4.8.num, levels=c(-1, seq(0, 4.5, 0.5)),
                              labels=how.often.extra, ordered=TRUE)) %>%
-  select(ResponseID, Q4.8.clean)
+  select(ResponseID, loop.number, Q4.8.clean)
 
 
 # --------------------------
@@ -859,6 +861,8 @@ survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
 survey.countries.clean.for.realz <- survey.countries.clean %>%
   left_join(govt.freq.fixed, by="ResponseID") %>%
   left_join(govt.freq.report.fixed, by="ResponseID")
+  left_join(govt.freq.fixed, by=c("ResponseID", "loop.number")) %>%
+  left_join(govt.freq.report.fixed, by=c("ResponseID", "loop.number")) %>%
 
 # Combine with country-level data
 survey.clean.all <- survey.orgs.clean.final.for.realz %>%
