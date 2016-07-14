@@ -407,8 +407,8 @@ survey.v1.countries <- survey.v1 %>%
   # Split the key column into two parts: question number and loop number.
   # Each column follows this pattern: Q4.2(1), Q4.3_1(2), etc., so the regex 
   # captures both parts: (Q4.2, 1), (Q4.3_1, 2), etc.
-  extract(key, c("question", "loop.number"),
-          c("(Q4.+)\\((\\d+)\\)")) %>%
+  tidyr::extract(key, c("question", "loop.number"),
+                 c("(Q4.+)\\((\\d+)\\)")) %>%
   #
   # Make columns for each of the questions
   spread(question, value) %>%
@@ -538,8 +538,8 @@ survey.v2.countries <- survey.v2 %>%
   # Split the key column into two parts: question number and loop number.
   # Each column follows this pattern: Q4.2(1), Q4.3_1(2), etc., so the regex 
   # captures both parts: (Q4.2, 1), (Q4.3_1, 2), etc.
-  extract(key, c("question", "loop.number"),
-          c("(Q4.+)\\((\\d+)\\)")) %>%
+  tidyr::extract(key, c("question", "loop.number"),
+                 c("(Q4.+)\\((\\d+)\\)")) %>%
   #
   # Make columns for each of the questions
   spread(question, value) %>%
