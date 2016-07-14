@@ -939,7 +939,9 @@ external.data.stragglers <- manual.regime.types %>%
 
 # Finally create clean external dataframe to merge in
 external.data.summary <- bind_rows(external.data.most,
-                                   external.data.stragglers)
+                                   external.data.stragglers) %>%
+  mutate(regime.type = factor(ever.autocracy, levels=c(FALSE, TRUE), 
+                              labels=c("Democracy", "Autocracy")))
 
 external.data.home <- external.data.summary %>%
   magrittr::set_colnames(paste0("home.", colnames(.)))
