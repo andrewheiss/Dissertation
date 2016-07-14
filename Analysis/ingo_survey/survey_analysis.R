@@ -61,6 +61,28 @@ countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
 
 
+#' ## Regime type
+#' 
+#' How do respondents differ across the regime types of the countries they work in?
+#' 
+#' ### Distribution of NGOs across regime types
+#' 
+#' Regime types of the home countries for each organization
+home.regime.type <- survey.orgs.clean %>%
+  group_by(home.regime.type) %>%
+  summarise(num = n()) %>%
+  mutate(prop = num / sum(num))
+home.regime.type
+
+#' Regime types of the target countries for each country-organization
+work.regime.type <- survey.countries.clean %>%
+  group_by(target.regime.type) %>%
+  summarise(num = n())%>%
+  mutate(prop = num / sum(num))
+work.regime.type
+
+#' Most NGOs are based in democracies (only 11% are headquartered in autocracies), but a third of them answered questions about their work in autocracies. 
+#' 
 
 #' ## Testing hypotheses
 #' 
