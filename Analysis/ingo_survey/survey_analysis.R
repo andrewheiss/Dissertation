@@ -245,6 +245,44 @@ registered.table <- survey.countries.clean %>%
 analyze.cat.var(registered.table)
 
 
+#' ## Contact with government across regime type
+#' 
+#' ### Registration
+#' 
+#' There's a slight difference in how NGOs register across regimes, with more
+#' NGOs registering in autocracies than in democracies, perhaps because they
+#' are more likely to be *required* to register in autocracies. The difference
+#' is not significant, though.
+#' 
+#' ### Government involvement
+df.involvement.regime <- survey.countries.clean %>%
+  select(Q4.9, target.regime.type) %>%
+  filter(Q4.9 != "Don't know") %>%
+  mutate(Q4.9 = droplevels(Q4.9),
+         Q4.9 = factor(Q4.9, levels=rev(levels(Q4.9))))
+
+plot.involvement.regime <- prodplot(df.involvement.regime,
+                                   ~ target.regime.type + Q4.9, mosaic("h"), 
+                                   colour=NA) + 
+  aes(fill=target.regime.type, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Government involvement, by regime type",
+       subtitle="Q4.9: Are members of the government or ruling party of `target_country` involved in your work?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=2
+plot.involvement.regime
+
+involvement.table <- survey.countries.clean %>%
+  filter(Q4.9 != "Don't know") %>%
+  mutate(Q4.9 = droplevels(Q4.9)) %>%
+  xtabs(~ Q4.9 + target.regime.type, .)
+
+analyze.cat.var(involvement.table)
+
+
 #' ## Testing hypotheses
 #' 
 #' My claim:
