@@ -18,7 +18,9 @@
 
 #' ## Load clean data
 #+ message=FALSE
-knitr::opts_chunk$set(fig.retina=2)
+knitr::opts_chunk$set(fig.retina=2,
+                      tidy.opts=list(width.cutoff=120),  # For code
+                      options(width=120))  # For output
 
 library(plyr)  # Because of productplots
 library(dplyr)
