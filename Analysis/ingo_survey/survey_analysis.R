@@ -149,10 +149,12 @@ plot.time.country.regime <- prodplot(df.time.country.regime,
   aes(fill=target.regime.type, colour="white") + 
   scale_fill_manual(values=c("grey80", "grey40")) +
   guides(fill=FALSE) +
+  labs(title="Length of time in country, by regime type",
+       subtitle="Q4.2: How long has your organization worked in `target_country`?") +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
-#+ fig.width=5, fig.height=3
+#+ fig.width=6, fig.height=4
 plot.time.country.regime
 
 time.country.table <- survey.countries.clean %>%
@@ -192,10 +194,12 @@ plot.operations.regime <- prodplot(df.operations.regime,
   aes(fill=target.regime.type, colour="white") + 
   scale_fill_manual(values=c("grey80", "grey40")) +
   guides(fill=FALSE) +
+  labs(title="How INGOs work in the target country, by regime type",
+       subtitle="Q4.3: What does your organization do in `target_country`?\n(multiple answers allowed)") +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
-#+ fig.width=5, fig.height=3
+#+ fig.width=6, fig.height=4
 plot.operations.regime
 
 operations.table <- survey.countries.clean %>%
@@ -225,10 +229,12 @@ plot.registered.regime <- prodplot(df.registered.regime,
   aes(fill=target.regime.type, colour="white") + 
   scale_fill_manual(values=c("grey80", "grey40")) +
   guides(fill=FALSE) +
+  labs(title="Registration status, by regime type",
+       subtitle="Q4.4: Is your organization registered with the national government in `target_country`?") +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
-#+ fig.width=5, fig.height=3
+#+ fig.width=6, fig.height=2
 plot.registered.regime
 
 registered.table <- survey.countries.clean %>%
