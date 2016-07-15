@@ -206,6 +206,39 @@ operations.table <- survey.countries.clean %>%
 analyze.cat.var(operations.table)
 
 
+#' ### Registration
+#' 
+#' There's a slight difference in how NGOs register across regimes, with more
+#' NGOs registering in autocracies than in democracies, perhaps because they
+#' are more likely to be *required* to register in autocracies. The difference
+#' is not significant, though.
+#' 
+df.registered.regime <- survey.countries.clean %>%
+  select(Q4.4, target.regime.type) %>%
+  filter(Q4.4 != "Don't know") %>%
+  mutate(Q4.4 = droplevels(Q4.4),
+         Q4.4 = factor(Q4.4, levels=rev(levels(Q4.4))))
+
+plot.registered.regime <- prodplot(df.registered.regime,
+                                   ~ target.regime.type + Q4.4, mosaic("h"), 
+                                   colour=NA) + 
+  aes(fill=target.regime.type, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=5, fig.height=3
+plot.registered.regime
+
+registered.table <- survey.countries.clean %>%
+  filter(Q4.4 != "Don't know") %>%
+  mutate(Q4.4 = droplevels(Q4.4)) %>%
+  xtabs(~ Q4.4 + target.regime.type, .)
+
+analyze.cat.var(registered.table)
+
+
 #' ## Testing hypotheses
 #' 
 #' My claim:
