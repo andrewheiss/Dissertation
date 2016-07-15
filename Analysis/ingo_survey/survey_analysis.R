@@ -163,6 +163,48 @@ time.country.table <- survey.countries.clean %>%
 analyze.cat.var(time.country.table)
 
 
+#' ### How NGOs operate in country
+#' 
+#' NGOs in autocracies definitely pursue different operational strategies. The 
+#' most common strategy for these NGOs is to provide funding to domestic NGOs, 
+#' while the least common is to maintain an office staffed by foreigners
+#' (difference is statistically significant). International NGOs seem to be
+#' more likely to take a hands off approach to advocacy in target countries
+#' that are autocracies.
+#' 
+what.do <- c("Maintain a physical office staffed primarily by foreigners",
+             "Maintain a physical office staffed primarily by people from target_country",
+             "Provide funding to domestic NGOs", "Partner with domestic NGOs")
+what.do.short <- c("Maintain a physical office staffed\nprimarily by foreigners",
+                   "Maintain a physical office staffed\nprimarily by people from target_country",
+                   "Provide funding to domestic NGOs", "Partner with domestic NGOs")
+
+df.operations.regime <- survey.countries.clean %>%
+  unnest(Q4.3_value) %>%
+  select(Q4.3_value, target.regime.type) %>%
+  filter(!is.na(Q4.3_value), Q4.3_value != "Don't know") %>%
+  mutate(Q4.3 = factor(Q4.3_value, levels=what.do, 
+                       labels=what.do.short, ordered=TRUE))
+
+plot.operations.regime <- prodplot(df.operations.regime,
+                                     ~ target.regime.type + Q4.3, mosaic("h"), 
+                                     colour=NA) + 
+  aes(fill=target.regime.type, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=5, fig.height=3
+plot.operations.regime
+
+operations.table <- survey.countries.clean %>%
+  unnest(Q4.3_value) %>%
+  filter(Q4.3_value != "Don't know") %>%
+  xtabs(~ Q4.3_value + target.regime.type, .)
+
+analyze.cat.var(operations.table)
+
 
 #' ## Testing hypotheses
 #' 
