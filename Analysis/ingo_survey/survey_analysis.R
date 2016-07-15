@@ -60,6 +60,29 @@ countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 # All possible countries (to fix the South Sudan issue)
 possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
 
+# ------------------
+# Useful functions
+# ------------------
+analyze.cat.var <- function(cat.table) {
+  cat("Table counts\n")
+  print(cat.table)
+  
+  cat("\nRow proporitions\n")
+  print(prop.table(cat.table, margin=1))
+  
+  cat("\nColumn proporitions\n")
+  print(prop.table(cat.table, margin=2))
+  
+  cat("\n\nChi-squared test for table\n")
+  cat.table.chi <- chisq.test(cat.table) %>% print()
+  
+  cat("Cramer's V\n")
+  vcd::assocstats(cat.table)$cramer %>% print()
+  
+  cat("\nComponents of chi-squared\n")
+  components <- cat.table.chi$residuals^2 %>% print()
+  round(1-pchisq(components, cat.table.chi$parameter), 3) %>% print()
+}
 
 #' ## Regime type
 #' 
