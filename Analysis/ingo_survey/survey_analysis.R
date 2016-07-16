@@ -294,7 +294,6 @@ freq.report.table <- df.freq.report.regime %>%
 analyze.cat.var(freq.report.table)
 
 
-#' 
 #' ### Registration
 #' 
 #' There's a slight difference in how NGOs register across regimes, with more
@@ -329,6 +328,41 @@ involvement.table <- survey.countries.clean %>%
   xtabs(~ Q4.9 + target.regime.type, .)
 
 analyze.cat.var(involvement.table)
+
+
+#' ## Relationship with the government across regime type
+#' 
+#' ### Positivity
+#' 
+#' Another huge difference. INGOs working in autocracies have worse
+#' relationships with their host governments.
+#' 
+df.govt.positivity.regime <- survey.countries.clean %>%
+  select(Q4.11, target.regime.type) %>%
+  filter(Q4.11 != "Don't know", Q4.11 != "Prefer not to answer") %>%
+  mutate(Q4.11 = droplevels(Q4.11),
+         Q4.11 = factor(Q4.11, levels=rev(levels(Q4.11))))
+
+plot.govt.positivity.regime <- prodplot(df.govt.positivity.regime,
+                                        ~ target.regime.type + Q4.11, mosaic("h"),
+                                        colour=NA) +
+  aes(fill=target.regime.type, colour="white") +
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Relationship with the government, by regime type",
+       subtitle="Q4.11: How would you characterize your organization’s relationship with the government of `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=5
+plot.govt.positivity.regime
+
+govt.positivity.regime.table <- survey.countries.clean %>%
+  filter(Q4.11 != "Don't know", Q4.11 != "Prefer not to answer") %>%
+  mutate(Q4.11 = droplevels(Q4.11)) %>%
+  xtabs(~ Q4.11 + target.regime.type, .)
+
+analyze.cat.var(govt.positivity.regime.table)
 
 
 #' ## Testing hypotheses
