@@ -247,6 +247,54 @@ analyze.cat.var(registered.table)
 
 #' ## Contact with government across regime type
 #' 
+#' ### Frequency of contact with government
+#' 
+#' There's a dramatic difference in how NGOs report to the government in
+#' autocracies. INGOs that work in autocracies report the most often and are
+#' the least likely to never report, possibly reflective of stricter reporting
+#' requirements.
+#' 
+freq.collapsed <- c("More than once a year", "Once a year", 
+                    "Regularly but not often", "Never")
+
+df.freq.report.regime <- survey.countries.clean %>%
+  filter(!is.na(Q4.8.clean)) %>%
+  mutate(Q4.8.collapsed = case_when(
+    .$Q4.8.clean == "Once a week" ~ freq.collapsed[1],
+    .$Q4.8.clean == "More than once a month,\nless than once a week" ~ freq.collapsed[1],
+    .$Q4.8.clean == "Once a month" ~ freq.collapsed[1], 
+    .$Q4.8.clean == "More than once a year,\nless than once a month" ~ freq.collapsed[1],
+    .$Q4.8.clean == "Once a year" ~ freq.collapsed[2],
+    .$Q4.8.clean == "As necessary/depends" ~ freq.collapsed[3],
+    .$Q4.8.clean == "Once every 2+ years" ~ freq.collapsed[3],
+    .$Q4.8.clean == "Never" ~ freq.collapsed[4],
+    TRUE ~ NA_character_)
+    ) %>%
+  filter(!is.na(Q4.8.collapsed)) %>%
+  mutate(Q4.8.collapsed = factor(Q4.8.collapsed, levels=rev(freq.collapsed), 
+                                 ordered=TRUE))
+
+plot.freq.report.regime <- prodplot(df.freq.report.regime,
+                                   ~ target.regime.type + Q4.8.collapsed, mosaic("h"), 
+                                   colour=NA) + 
+  aes(fill=target.regime.type, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Frequency of reporting to government, by regime type",
+       subtitle="Q4.8: How often is your organization required to report to the government of  `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.freq.report.regime
+
+freq.report.table <- df.freq.report.regime %>%
+  xtabs(~ Q4.8.collapsed + target.regime.type, .)
+
+analyze.cat.var(freq.report.table)
+
+
+#' 
 #' ### Registration
 #' 
 #' There's a slight difference in how NGOs register across regimes, with more
