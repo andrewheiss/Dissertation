@@ -812,7 +812,7 @@ df.officials.contact.other <- survey.countries.clean %>%
   summarise(num = n()) %>%
   arrange(desc(num))
 
-datatable(df.freq.contact.other)
+datatable(df.officials.contact.other)
 
 #' ### Officials reported to the most
 df.officials.contact.most <- survey.countries.clean %>%
