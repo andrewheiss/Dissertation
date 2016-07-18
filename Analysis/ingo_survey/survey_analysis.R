@@ -294,14 +294,11 @@ freq.report.table <- df.freq.report.regime %>%
 analyze.cat.var(freq.report.table)
 
 
-#' ### Registration
-#' 
-#' There's a slight difference in how NGOs register across regimes, with more
-#' NGOs registering in autocracies than in democracies, perhaps because they
-#' are more likely to be *required* to register in autocracies. The difference
-#' is not significant, though.
-#' 
 #' ### Government involvement
+#' 
+#' Members of the government aren't typically directly invovled in INGO work,
+#' but when they are, it is more likely to occur with INGOs working in
+#' autocracies.
 df.involvement.regime <- survey.countries.clean %>%
   select(Q4.9, target.regime.type) %>%
   filter(Q4.9 != "Don't know") %>%
