@@ -368,6 +368,170 @@ govt.positivity.regime.table <- survey.countries.clean %>%
 analyze.cat.var(govt.positivity.regime.table)
 
 
+#' ## NGO regulations and restrictions across regime type
+#' 
+#' ### Familiarity
+#' 
+#' Most INGOs working in democracies are either moderately familiar with
+#' government regulations or not familiar at all. For INGOs working in
+#' autocracies, familiarity with regulations appears to be more essential—most
+#' are very or extremely familiar with regulations, and very few are unaware of
+#' any of the laws governing their activities. The difference in proporitions
+#' across groups is significant.
+df.reg.familiarity.regime <- survey.countries.clean %>%
+  select(Q4.13, target.regime.type) %>%
+  filter(!is.na(Q4.13))
+
+plot.reg.familiarity.regime <- prodplot(df.reg.familiarity.regime,
+                                        ~ target.regime.type + Q4.13, mosaic("h"),
+                                        colour=NA) +
+  aes(fill=target.regime.type, colour="white") +
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Familiarity with regulations, by regime type",
+       subtitle="Q4.13: How familiar is your organization with regulations for\ninternational nongovernmental organizations (NGOs) in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.reg.familiarity.regime
+
+reg.familiarity.regime.table <- survey.countries.clean %>%
+  xtabs(~ Q4.13 + target.regime.type, .)
+
+analyze.cat.var(reg.familiarity.regime.table)
+
+
+#' ### Frequency of change
+#' 
+#' Most NGOs don't know, and I didn't include an "other" category here. The
+#' univariate distribution has a clear-ish trend, with most reporting "Rarely"
+#' (and only a few "Never"). Ignoring "Never" and "Once a month" in the
+#' bivariate analysis because of low cell counts, there's also a trend by
+#' regime type—more INGOs working in autocracies see annual changes in
+#' regulations, possibly reflecting a more volatile regulatory environment.
+df.reg.change.regime <- survey.countries.clean %>%
+  select(Q4.14, target.regime.type) %>%
+  filter(!is.na(Q4.14))
+
+plot.reg.change.regime <- prodplot(df.reg.change.regime,
+                                        ~ target.regime.type + Q4.14, mosaic("h"),
+                                        colour=NA) +
+  aes(fill=target.regime.type, colour="white") +
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Frequency of changes, by regime type",
+       subtitle="Q4.14: How often do regulations for international NGOs in `target_country` change?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.reg.change.regime
+
+reg.change.regime.table <- survey.countries.clean %>%
+  xtabs(~ Q4.14 + target.regime.type, .)
+
+analyze.cat.var(reg.change.regime.table)
+
+
+#' ### How do they find out about changes?
+#' 
+#' INGOs working in different regimes hear about changes somewhat differently 
+#' as well. Those working in autocracies are more likely to hear about changes 
+#' in regulations directly from government officials, while those in 
+#' demcoracies are way less likely to do so. Other NGOs are the most common 
+#' source for both regime types, and all other categories are in the same order
+#' and roughly the same proportion. This makes sense since INGOs already have
+#' more regular contact with government officials in autocracies.
+df.change.how.regime <- survey.countries.clean %>%
+  unnest(Q4.15_value) %>%
+  select(Q4.15 = Q4.15_value, target.regime.type) %>%
+  filter(Q4.15 != "Don't know") %>%
+  mutate(Q4.15 = factor(Q4.15))
+
+levels(df.change.how.regime$Q4.15)[levels(df.change.how.regime$Q4.15) == "Newspapers, television, and other media"] <-
+  "Newspapers, television,\nand other media"
+
+plot.change.how.regime <- prodplot(df.change.how.regime,
+                                   ~ target.regime.type + Q4.15, mosaic("h"),
+                                   colour=NA) +
+  aes(fill=target.regime.type, colour="white") +
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="How NGOs find out, by regime type",
+       subtitle="Q4.15: How does your organization find out about changes to\nNGO regulations in `target_country`? (multiple answers allowed)") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.change.how.regime
+
+plot.df.change.how.regime <- df.change.how.regime %>%
+  group_by(target.regime.type, Q4.15) %>%
+  summarise(num = n()) %>%
+  mutate(perc = num / sum(num)) %>%
+  arrange(perc) %>%
+  ungroup() %>%
+  mutate(Q4.15 = factor(Q4.15, levels=unique(Q4.15), ordered=TRUE))
+
+plot.change.how.regime.bar <- ggplot(plot.df.change.how.regime, 
+                                     aes(x=perc, y=Q4.15, 
+                                         fill=target.regime.type)) +
+  geom_barh(stat="identity") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_x_continuous(labels=percent) +
+  labs(x=NULL, y=NULL, title="Percentages by regime type") + 
+  guides(fill=FALSE) +
+  theme_ath() +
+  facet_wrap(~ target.regime.type)
+
+#+ fig.width=6, fig.height=4
+plot.change.how.regime.bar
+
+change.how.table <- survey.countries.clean %>%
+  unnest(Q4.15_value) %>%
+  filter(Q4.15_value != "Don't know") %>%
+  xtabs(~ Q4.15_value + target.regime.type, .)
+
+analyze.cat.var(change.how.table)
+
+
+#' ### Effect of regulations
+#' 
+#' TODO: Do this
+
+
+#' ### Effect of regulations in general
+#' 
+#' !!! It works !!!
+#' 
+#' INGOs that are restricted tend to work in autocracies and there's almost a perfect trend.
+df.reg.effect.general.regime <- survey.countries.clean %>%
+  select(Q4.17, target.regime.type) %>%
+  filter(Q4.17 != "Don’t know") %>%
+  mutate(Q4.17 = droplevels(Q4.17),
+         Q4.17 = factor(Q4.17, levels=rev(levels(Q4.17))))
+
+plot.reg.effect.general.regime <- prodplot(df.reg.effect.general.regime,
+                                   ~ target.regime.type + Q4.17, mosaic("h"),
+                                   colour=NA) +
+  aes(fill=target.regime.type, colour="white") +
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="General restrictions, by regime type",
+       subtitle="Q4.17: Overall, how is your organization's work affected by government regulations in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.reg.effect.general.regime
+
+reg.effect.general.regime.table <- survey.countries.clean %>%
+  xtabs(~ Q4.17 + target.regime.type, .)
+
+analyze.cat.var(reg.effect.general.regime.table)
+
+
 #' ## Testing hypotheses
 #' 
 #' My claim:
