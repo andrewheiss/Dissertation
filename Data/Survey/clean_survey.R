@@ -761,16 +761,26 @@ main.issue.clean <- survey.orgs.clean.final %>%
   select(ResponseID, Q3.2.clean)
 
 
-# # Combine the automatic and manual columns
-# employees.num <- survey.orgs.clean.final %>%
-#   select(ResponseID, Q3.4) %>%
-#   mutate(Q3.4.num.auto = as_num(Q3.4)$result) %>%
-#   left_join(employees.clean, by="ResponseID") %>%
-#   rowwise() %>%
-#   mutate(Q3.4.num = ifelse(!is.na(Q3.4.num.auto) | !is.na(Q3.4.num.manual),
-#                            sum(Q3.4.num.auto, Q3.4.num.manual, na.rm=TRUE),
-#                            NA)) %>%
-#   select(ResponseID, Q3.4.num)
+# Collapse main clean issue into high/low regime contentiousness
+# This is based partially on Bush:2015's typology of regime compatibility:
+# "programs that the target-country leaders view as unlikely to threaten their
+# imminent survival by causing regime collapse or overthrow"
+main.issue.clean %>%
+  group_by(Q3.2.clean) %>%
+  summarise(num = n()) %>%
+  ungroup() %>% arrange(desc(num)) %>%
+  mutate(potential.contentiousness = "") %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "contentiousness_WILL_BE_OVERWRITTEN.csv"))
+
+contentiousness <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                      "handcoded_survey_stuff",
+                                      "contentiousness.csv")) %>%
+  select(Q3.2.clean, potential.contentiousness) %>%
+  mutate(potential.contentiousness = factor(potential.contentiousness,
+                                            levels=c("Low", "High"),
+                                            ordered=TRUE))
 
 
 # --------------------------
@@ -1039,6 +1049,7 @@ external.data.target <- external.data.summary %>%
 survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
   left_join(all.issues.clean, by="ResponseID") %>%
   left_join(main.issue.clean, by="ResponseID") %>%
+  left_join(contentiousness, by="Q3.2.clean") %>%
   left_join(employees.num, by="ResponseID") %>%
   left_join(volunteers.num, by="ResponseID") %>%
   left_join(external.data.home, by=c("Q2.2_cow"="home.cowcode"))
