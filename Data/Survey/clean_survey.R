@@ -692,6 +692,87 @@ survey.countries.clean <- survey.countries.all %>%
 # ---------------------------
 # ------------------------------------------------------
 #
+# ---------------------------
+# Issues worked on the most
+# ---------------------------
+# In Q3.1, organzations were asked to choose which issues they worked on. One
+# of the options was a free response "other" answer. Rather than carry this
+# response forward (because they might write a really long response), when
+# asked in Q3.2 which issue they worked on *the most*, one of the options was
+# also "other" (though not a free response), standing in place for whatever
+# they filled in as their other answer in Q3.1.
+# 
+# These other responses need to be hand coded. Using NLP or ML or something 
+# would be cool, but there seemingly aren't enough responses to make that 
+# useful. Regardless, responses do appear to cluster into recognizable
+# categories.
+survey.orgs.clean.final %>%
+  filter(!is.na(Q3.1_other_TEXT)) %>%
+  select(ResponseID, Q2.1, Q2.2_country, Q3.1_other_TEXT) %>%
+  mutate(Q3.2.manual = "") %>%
+  arrange(Q3.1_other_TEXT) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "other_issues_WILL_BE_OVERWRITTEN.csv"))
+
+# A handful of organizations left the issue area blank, but that's easiliy
+# imputable based on websites and Q3.1
+survey.orgs.clean.final %>%
+  filter(is.na(Q3.1_other_TEXT) & (Q3.2 == "Other" | is.na(Q3.2))) %>%
+  select(ResponseID, Q2.1, Q2.2_country, Q3.1_value) %>%
+  mutate(Q3.2.manual = "", Q3.1_value = paste(Q3.1_value)) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "missing_issues_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSVs
+other.issues.raw <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                       "handcoded_survey_stuff",
+                                       "other_issues.csv")) %>%
+  select(ResponseID, Q3.2.manual)
+
+missing.issues.raw <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                         "handcoded_survey_stuff",
+                                         "missing_issues.csv")) %>%
+  select(ResponseID, Q3.2.manual)
+
+other.issues.all <- bind_rows(other.issues.raw, missing.issues.raw)
+
+# Add the recoded issue to the list in Q3.1_value
+all.issues.clean <- survey.orgs.clean.final %>%
+  left_join(other.issues.all, by="ResponseID") %>%
+  unnest(Q3.1_value) %>%
+  group_by(ResponseID) %>%
+  mutate(Q3.1.replaced = ifelse(Q3.1_value == "Other", Q3.2.manual, Q3.1_value)) %>%
+  # In case the recoded "Other" matches an existing issue
+  distinct(Q3.1.replaced) %>%  
+  # Collapse all options into a single string, which is then split into a list
+  mutate(Q3.1.clean_value = paste(Q3.1.replaced, collapse=","),
+         Q3.1.clean_value = stri_split(Q3.1.clean_value, regex=",")) %>%
+  # Keep the first row in each group, since all rows are identical
+  slice(1) %>% select(-Q3.1.replaced)
+
+# Replace "Other" with the recoded issue in Q3.2
+main.issue.clean <- survey.orgs.clean.final %>%
+  select(ResponseID, Q3.1_value, Q2.1, Q3.1_other_TEXT, Q3.2) %>%
+  left_join(other.issues.all, by="ResponseID") %>%
+  mutate(Q3.2.clean = ifelse(Q3.2 == "Other", Q3.2.manual, as.character(Q3.2)),
+         Q3.2.clean = ifelse(is.na(Q3.2) & !is.na(Q3.2.manual), Q3.2.manual, Q3.2.clean)) %>%
+  select(ResponseID, Q3.2.clean)
+
+
+# # Combine the automatic and manual columns
+# employees.num <- survey.orgs.clean.final %>%
+#   select(ResponseID, Q3.4) %>%
+#   mutate(Q3.4.num.auto = as_num(Q3.4)$result) %>%
+#   left_join(employees.clean, by="ResponseID") %>%
+#   rowwise() %>%
+#   mutate(Q3.4.num = ifelse(!is.na(Q3.4.num.auto) | !is.na(Q3.4.num.manual),
+#                            sum(Q3.4.num.auto, Q3.4.num.manual, na.rm=TRUE),
+#                            NA)) %>%
+#   select(ResponseID, Q3.4.num)
+
+
 # --------------------------
 # Employees and volunteers
 # --------------------------
@@ -956,6 +1037,8 @@ external.data.target <- external.data.summary %>%
 # --------------------------
 # Merge in hand-coded and external data
 survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
+  left_join(all.issues.clean, by="ResponseID") %>%
+  left_join(main.issue.clean, by="ResponseID") %>%
   left_join(employees.num, by="ResponseID") %>%
   left_join(volunteers.num, by="ResponseID") %>%
   left_join(external.data.home, by=c("Q2.2_cow"="home.cowcode"))
