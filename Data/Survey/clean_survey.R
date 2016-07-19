@@ -217,7 +217,7 @@ survey.v2 <- read_qualtrics(file.path(PROJHOME, "Data", "Survey", "raw_data",
                                       "INGOs_and_government_regulations_new.csv"),
                             file.path(PROJHOME, "Data", "Survey", "raw_data", 
                                       "v2cols.csv")) %>%
-  filter(ResponseID != "R_12564WimpZZKn5A")
+  filter(!(ResponseID %in% c("R_12564WimpZZKn5A", "R_3kwdyUr7vHd8qiE")))
 
 
 # -------------------------
