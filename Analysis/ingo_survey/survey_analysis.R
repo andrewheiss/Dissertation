@@ -139,7 +139,44 @@ work.regime.type
 #' Most NGOs are based in democracies (only 11% are headquartered in autocracies), but a third of them answered questions about their work in autocracies. 
 #' 
 
-#' ### Issues worked on across regime types
+#' ### Issues worked on across regime type
+#' 
+#' There are differences in potential contentiousness across regime type. In
+#' democracies, a quarter of INGOs work on more threatening issues, but in
+#' autocracies, nearly 40% do, which is a lot more than expected. Seen
+#' differently, across types of contentiousness, 70% of INGOs working on low
+#' contention issues work in democracies, in contrast to 58% of high contention
+#' INGOs.
+#' 
+#' This is most likely because autocracies are more in need of high contention
+#' issues like human rights advocacy, human trafficking, conflict prevention,
+#' and freedom of expression protection.
+#' 
+df.issue.regime <- survey.countries.clean %>%
+  select(target.regime.type, potential.contentiousness)
+
+plot.issue.regime <- prodplot(df.issue.regime,
+                              ~ target.regime.type + 
+                                potential.contentiousness, mosaic("h")) + 
+  aes(fill=target.regime.type, linetype=potential.contentiousness) + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_linetype_manual(values=c("blank", "dashed")) +
+  guides(fill=FALSE, linetype=FALSE) +
+  labs(title="Potential issue contentiousness across regime types",
+       subtitle="Issue area of INGO + regime type of target country") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=3
+plot.issue.regime
+
+issue.regime.table <- survey.countries.clean %>%
+  xtabs(~ target.regime.type + potential.contentiousness, .)
+
+cat.table <- issue.regime.table
+
+analyze.cat.var(issue.regime.table)
+
 
 #' ### Activities across regime types
 
