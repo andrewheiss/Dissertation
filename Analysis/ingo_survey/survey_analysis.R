@@ -116,11 +116,14 @@ analyze.cat.var <- function(cat.table) {
   round(1-pchisq(components, cat.table.chi$parameter), 3) %>% print(method="col.compact")
 }
 
-#' ## Organizational characteristics and regime type
+#' ## Organizational characteristics
 #' 
-#' How do respondents differ across the regime types of the countries they work in?
+#' How do respondents differ across the regime types of the countries they work
+#' in and the issues they work on?
 #' 
-#' ### Distribution of NGOs across regime types
+#' ### Distribution of NGOs
+#' 
+#' #### Regime type
 #' 
 #' Regime types of the home countries for each organization
 home.regime.type <- survey.orgs.clean %>%
@@ -178,22 +181,24 @@ cat.table <- issue.regime.table
 analyze.cat.var(issue.regime.table)
 
 
-#' ### Activities across regime types
+#' ### Activities
 
 # TODO: Staffing, collaboration, funding, etc.
 
 # TODO: Figure out how to deal with org-level regime type analysis, since organizations work in multiple countries and answered only for one. Proportion of countries they work in that are autocracies?
 
 
-#' ## Relationships with governments across regime type
+#' ## Relationships with governments
 #' 
-#' This analysis is more straightforward, since each country-organization 
-#' response is limited to a single target country. The questions also deal with
-#' the organization's specific actions in the country, not what they do in all 
-#' countries.
+#' For regime-based questions, this analysis is more straightforward, since
+#' each country-organization response is limited to a single target country.
+#' The questions also deal with the organization's specific actions in the
+#' country, not what they do in all countries.
 #' 
 #' 
 #' ### Time spent working in the country
+#' 
+#' #### Regime type
 #' 
 #' Most NGOs working in democracies have been there for 10+ years, while most
 #' NGOs working in autocracies have only been there for 1-4 years, and the
@@ -382,7 +387,7 @@ registered.table <- survey.countries.clean %>%
 analyze.cat.var(registered.table)
 
 
-#' ## Contact with government across regime type
+#' ## Contact with government
 #' 
 #' ### Frequency of contact with government
 #' 
@@ -470,7 +475,7 @@ analyze.cat.var(involvement.table)
 #' 
 
 
-#' ## Relationship with the government across regime type
+#' ## Relationship with the government
 #' 
 #' ### Positivity
 #' 
@@ -505,7 +510,7 @@ govt.positivity.regime.table <- survey.countries.clean %>%
 analyze.cat.var(govt.positivity.regime.table)
 
 
-#' ## NGO regulations and restrictions across regime type
+#' ## NGO regulations and restrictions
 #' 
 #' ### Familiarity
 #' 
