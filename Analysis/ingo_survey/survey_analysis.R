@@ -78,13 +78,14 @@ analyze.cat.var <- function(cat.table) {
   print(prop.table(cat.table, margin=2))
   
   cat("\n\nChi-squared test for table\n")
-  cat.table.chi <- chisq.test(cat.table) %>% print()
+  cat.table.chi <- chisq.test(ftable(cat.table)) %>% print()
   
   cat("Cramer's V\n")
-  vcd::assocstats(cat.table)$cramer %>% print()
+  vcd::assocstats(ftable(cat.table))$cramer %>% print()
   
   cat("\nComponents of chi-squared\n")
-  components <- cat.table.chi$residuals^2 %>% print()
+  pearson.residuals <- cat.table.chi$residuals %>% print()
+  components <- pearson.residuals^2 %>% print()
   round(1-pchisq(components, cat.table.chi$parameter), 3) %>% print()
 }
 
