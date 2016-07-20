@@ -266,6 +266,42 @@ time.country.table.issue <- survey.countries.clean %>%
 
 analyze.cat.var(time.country.table.issue)
 
+
+#' #### Regime type + contentiousness
+#' 
+#' When accounting for both regime type and main issue area, an interesting story emerges. Previously, I found that INGOs working in their target countries for 5+ years were most likely to work on non-contentious issues and work in democracies. Relatively few of the long-term INGOs work in either autocracies or on more contentious issues.
+#' 
+#' Among more long-term INGOs, however, 
+#' 
+df.time.country.issue.regime <- survey.countries.clean %>%
+  select(Q4.2, potential.contentiousness, target.regime.type) %>%
+  filter(Q4.2 != "Don't know") %>%
+  mutate(Q4.2 = droplevels(Q4.2),
+         Q4.2 = factor(Q4.2, levels=rev(levels(Q4.2))))
+
+plot.time.country.issue.regime <- prodplot(df.time.country.issue.regime,
+                                    ~ target.regime.type + potential.contentiousness +
+                                      Q4.2, mosaic("v")) + 
+  aes(fill=target.regime.type, linetype=potential.contentiousness) + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_linetype_manual(values=c("blank", "dashed")) +
+  guides(fill=FALSE, linetype=FALSE) +
+  labs(title="Length of time in country, by potential contentiousness and regime type",
+       subtitle="Issue area of INGO + regime type of target country") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.time.country.issue.regime
+
+time.country.table.issue.regime <- survey.countries.clean %>%
+  filter(Q4.2 != "Don't know") %>%
+  mutate(Q4.2 = droplevels(Q4.2)) %>%
+  xtabs(~ Q4.2 + potential.contentiousness + target.regime.type, .)
+
+analyze.cat.var(time.country.table.issue.regime)
+
+
 #' ### How NGOs operate in country
 #' 
 #' NGOs in autocracies definitely pursue different operational strategies. The 
