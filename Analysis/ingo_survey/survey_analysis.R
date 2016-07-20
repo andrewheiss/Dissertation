@@ -395,6 +395,8 @@ analyze.cat.var(operations.table.issue)
 
 #' ### Registration
 #' 
+#' #### Regime type
+#' 
 #' There's a slight difference in how NGOs register across regimes, with more
 #' NGOs registering in autocracies than in democracies, perhaps because they
 #' are more likely to be *required* to register in autocracies. The difference
@@ -426,6 +428,40 @@ registered.table <- survey.countries.clean %>%
   xtabs(~ Q4.4 + target.regime.type, .)
 
 analyze.cat.var(registered.table)
+
+
+#' #### Potential contentiousness
+#' 
+#' There is no significant difference in the registration status of low and
+#' high contentious INGOs.
+#' 
+df.registered.issue <- survey.countries.clean %>%
+  select(Q4.4, potential.contentiousness) %>%
+  filter(Q4.4 != "Don't know") %>%
+  mutate(Q4.4 = droplevels(Q4.4),
+         Q4.4 = factor(Q4.4, levels=rev(levels(Q4.4))))
+
+plot.registered.issue <- prodplot(df.registered.issue,
+                                  ~ potential.contentiousness + Q4.4, mosaic("h"), 
+                                  colour=NA) + 
+  aes(fill=potential.contentiousness, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Registration status, by issue",
+       subtitle="Q4.4: Is your organization registered with the national government in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=2
+plot.registered.issue
+
+registered.table.issue <- survey.countries.clean %>%
+  filter(Q4.4 != "Don't know") %>%
+  mutate(Q4.4 = droplevels(Q4.4)) %>%
+  xtabs(~ Q4.4 + potential.contentiousness, .)
+
+analyze.cat.var(registered.table.issue)
+
 
 
 #' ## Contact with government
