@@ -67,6 +67,13 @@ possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
 # ------------------
 # Useful functions
 # ------------------
+# 
+# NB: xtabs() and productplots::prodplot(..., mosaic()) need to be mirror
+# images of each other to get the same plot as vcd::mosaic()
+# 
+# Example:
+#   prodplot(df, ~ x1 + x2 + x3, mosaic())
+#   xtabs(~ x3 + x2 + x1)
 analyze.cat.var <- function(cat.table) {
   cat.table.chi <- chisq.test(ftable(cat.table))
   
