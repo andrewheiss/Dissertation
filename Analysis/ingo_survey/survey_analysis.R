@@ -312,6 +312,8 @@ analyze.cat.var(time.country.table.issue.regime)
 
 #' ### How NGOs operate in country
 #' 
+#' #### Regime type
+#' 
 #' NGOs in autocracies definitely pursue different operational strategies. The 
 #' most common strategy for these NGOs is to provide funding to domestic NGOs, 
 #' while the least common is to maintain an office staffed by foreigners
@@ -353,6 +355,42 @@ operations.table <- survey.countries.clean %>%
   xtabs(~ Q4.3_value + target.regime.type, .)
 
 analyze.cat.var(operations.table)
+
+
+#' #### Potential contentiousness
+#' 
+#' There's an overall significant difference in frequencies, driven primarily
+#' by more high contention INGOs working with foreigners. The individual cell
+#' effects, however, aren't particularly significant. In general, more INGOs
+#' than expected use foreigners in their target countries).
+#' 
+df.operations.issue <- survey.countries.clean %>%
+  unnest(Q4.3_value) %>%
+  select(Q4.3_value, potential.contentiousness) %>%
+  filter(!is.na(Q4.3_value), Q4.3_value != "Don't know") %>%
+  mutate(Q4.3 = factor(Q4.3_value, levels=what.do, 
+                       labels=what.do.short, ordered=TRUE))
+
+plot.operations.issue <- prodplot(df.operations.issue,
+                                  ~ potential.contentiousness + Q4.3, mosaic("h"), 
+                                  colour=NA) + 
+  aes(fill=potential.contentiousness, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="How INGOs work in the target country, by issue",
+       subtitle="Q4.3: What does your organization do in `target_country`?\n(multiple answers allowed)") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.operations.issue
+
+operations.table.issue <- survey.countries.clean %>%
+  unnest(Q4.3_value) %>%
+  filter(Q4.3_value != "Don't know") %>%
+  xtabs(~ Q4.3_value + potential.contentiousness, .)
+
+analyze.cat.var(operations.table.issue)
 
 
 #' ### Registration
