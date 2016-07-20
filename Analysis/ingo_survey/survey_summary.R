@@ -404,6 +404,48 @@ findAssocs(tdm.issues, "develop", 0.1)
 #' 
 #' So, hand-coding it is.
 #' 
+#' Here are the results post-hand-coding:
+#' 
+df.issues.clean <- survey.orgs.clean %>%
+  unnest(Q3.1.clean_value) %>%
+  group_by(Q3.1.clean_value) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q3.1.clean_value)) %>%
+  mutate(issue = factor(Q3.1.clean_value, levels=rev(Q3.1.clean_value), ordered=TRUE))
+
+plot.issues.clean <- ggplot(df.issues.clean, aes(x=num, y=issue)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Times selected", y=NULL,
+       title="Which issues do NGOs work on?",
+       subtitle="Q3.1: Which issues does your organization focus on? (multiple answers allowed)") +
+  theme_ath()
+
+plot.issues.clean
+
+
+df.issues.most.clean <- survey.orgs.clean %>%
+  group_by(Q3.2.clean, potential.contentiousness) %>%
+  summarise(num = n()) %>%
+  filter(!is.na(Q3.2.clean)) %>%
+  ungroup() %>%
+  arrange(desc(num)) %>%
+  mutate(issue = factor(Q3.2.clean, levels=rev(unique(Q3.2.clean)), ordered=TRUE))
+
+plot.issues.most.clean <- ggplot(df.issues.most.clean,
+                                 aes(x=num, y=issue,
+                                     fill=potential.contentiousness)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_fill_manual(values=c("grey80", "grey40"),
+                    name="Potential contentiousness") +
+  labs(x="Times selected", y=NULL,
+       title="Which issues do NGOs work on?",
+       subtitle="Q3.2: Which issues does your organization focus on the most?") +
+  theme_ath()
+
+plot.issues.most.clean
 
 
 #' ### What kinds of activities do these NGOs engage in?
