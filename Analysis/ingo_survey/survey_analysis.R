@@ -230,6 +230,42 @@ time.country.table <- survey.countries.clean %>%
 analyze.cat.var(time.country.table)
 
 
+#' #### Potential contentiousness
+#' 
+#' NGOs working on low contention issues tend to have worked in their
+#' respecitve target countries for a long time. High contention issue NGOs are
+#' more than expected / more likely to work in their target countries for 4
+#' years or less. This may be because there's a burst of more contentious INGOs
+#' being allowed, or that more contentious INGOs get kicked out more regularly
+#' and can only stay in country for so long.
+#' 
+df.time.country.issue <- survey.countries.clean %>%
+  select(Q4.2, potential.contentiousness) %>%
+  filter(Q4.2 != "Don't know") %>%
+  mutate(Q4.2 = droplevels(Q4.2),
+         Q4.2 = factor(Q4.2, levels=rev(levels(Q4.2))))
+
+plot.time.country.issue <- prodplot(df.time.country.issue,
+                                     ~ potential.contentiousness + Q4.2, mosaic("h"), 
+                                     colour=NA) + 
+  aes(fill=potential.contentiousness, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Length of time in country, by potential contentiousness",
+       subtitle="Q4.2: How long has your organization worked in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.time.country.issue
+
+time.country.table.issue <- survey.countries.clean %>%
+  filter(Q4.2 != "Don't know") %>%
+  mutate(Q4.2 = droplevels(Q4.2)) %>%
+  xtabs(~ Q4.2 + potential.contentiousness, .)
+
+analyze.cat.var(time.country.table.issue)
+
 #' ### How NGOs operate in country
 #' 
 #' NGOs in autocracies definitely pursue different operational strategies. The 
