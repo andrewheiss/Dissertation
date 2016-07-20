@@ -68,8 +68,20 @@ possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
 # Useful functions
 # ------------------
 analyze.cat.var <- function(cat.table) {
+  cat.table.chi <- chisq.test(ftable(cat.table))
+  
   cat("Table counts\n")
   print(cat.table)
+  
+  cat("\nExpected values\n")
+  expected.values <- cat.table.chi$expected
+  
+  # Add nice labels if possible
+  if(length(dim(cat.table)) == length(dim(expected.values))) {
+    dimnames(expected.values) <- dimnames(cat.table)
+  }
+  
+  expected.values %>% print(method="col.compact")
   
   cat("\nRow proporitions\n")
   print(prop.table(cat.table, margin=1))
@@ -77,16 +89,24 @@ analyze.cat.var <- function(cat.table) {
   cat("\nColumn proporitions\n")
   print(prop.table(cat.table, margin=2))
   
-  cat("\n\nChi-squared test for table\n")
-  cat.table.chi <- chisq.test(ftable(cat.table)) %>% print()
+  cat("\nChi-squared test for table\n")
+  cat.table.chi %>% print()
   
   cat("Cramer's V\n")
   vcd::assocstats(ftable(cat.table))$cramer %>% print()
   
-  cat("\nComponents of chi-squared\n")
-  pearson.residuals <- cat.table.chi$residuals %>% print()
-  components <- pearson.residuals^2 %>% print()
-  round(1-pchisq(components, cat.table.chi$parameter), 3) %>% print()
+  cat("\nPearson residuals\n",
+      "2 is used as critical value by convention\n", sep="")
+  pearson.residuals <- cat.table.chi$residuals %>% print(method="col.compact")
+  
+  cat("\nComponents of chi-squared\n",
+      "Critical value (0.05 with ", 
+      cat.table.chi$parameter, " df) is ", 
+      round(qchisq(0.95, cat.table.chi$parameter), 2), "\n", sep="")
+  components <- pearson.residuals^2 %>% print(method="col.compact")
+  
+  cat("\np for components\n")
+  round(1-pchisq(components, cat.table.chi$parameter), 3) %>% print(method="col.compact")
 }
 
 #' ## Organizational characteristics and regime type
