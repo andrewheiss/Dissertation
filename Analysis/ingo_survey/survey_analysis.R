@@ -176,8 +176,6 @@ plot.issue.regime
 issue.regime.table <- survey.countries.clean %>%
   xtabs(~ target.regime.type + potential.contentiousness, .)
 
-cat.table <- issue.regime.table
-
 analyze.cat.var(issue.regime.table)
 
 
