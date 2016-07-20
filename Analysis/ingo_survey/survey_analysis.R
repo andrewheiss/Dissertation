@@ -272,9 +272,14 @@ analyze.cat.var(time.country.table.issue)
 
 #' #### Regime type + contentiousness
 #' 
-#' When accounting for both regime type and main issue area, an interesting story emerges. Previously, I found that INGOs working in their target countries for 5+ years were most likely to work on non-contentious issues and work in democracies. Relatively few of the long-term INGOs work in either autocracies or on more contentious issues.
-#' 
-#' Among more long-term INGOs, however, 
+#' When accounting for both regime type and main issue area, an interesting
+#' story emerges. Individually, I found that INGOs working in their target
+#' countries for 5+ years were most likely to work on non-contentious issues
+#' and work in democracies. Relatively few of the long-term INGOs work in
+#' either autocracies or on more contentious issues. This remains the case when
+#' accounting for both target-country regime type and main issue area. There
+#' are fewer low contention, long-term INGOs working in autocracies than
+#' expected and more low contention, long term INGOs working in democracies.
 #' 
 df.time.country.issue.regime <- survey.countries.clean %>%
   select(Q4.2, potential.contentiousness, target.regime.type) %>%
@@ -289,7 +294,7 @@ plot.time.country.issue.regime <- prodplot(df.time.country.issue.regime,
   scale_fill_manual(values=c("grey80", "grey40")) +
   scale_linetype_manual(values=c("blank", "dashed")) +
   guides(fill=FALSE, linetype=FALSE) +
-  labs(title="Length of time in country, by potential contentiousness and regime type",
+  labs(title="Length of time in country",
        subtitle="Issue area of INGO + regime type of target country") +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
