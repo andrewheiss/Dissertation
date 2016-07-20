@@ -1057,7 +1057,14 @@ survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
 survey.countries.clean.for.realz <- survey.countries.clean %>%
   left_join(govt.freq.fixed, by=c("ResponseID", "loop.number")) %>%
   left_join(govt.freq.report.fixed, by=c("ResponseID", "loop.number")) %>%
-  left_join(external.data.target, by=c("Q4.1_cow"="target.cowcode"))
+  left_join(external.data.target, by=c("Q4.1_cow"="target.cowcode")) %>%
+  # Add issue area data
+  left_join(left_join(select(survey.orgs.clean.final.for.realz, 
+                             ResponseID, main.issue = Q3.2.clean), 
+                      contentiousness, 
+                      by=c("main.issue" = "Q3.2.clean")),
+            by="ResponseID")
+
 
 # Combine with country-level data
 survey.clean.all <- survey.orgs.clean.final.for.realz %>%
