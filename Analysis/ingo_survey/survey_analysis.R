@@ -624,19 +624,33 @@ analyze.cat.var(reg.familiarity.regime.table)
 
 
 #' ### Frequency of change
-#' 
-#' Most NGOs don't know, and I didn't include an "other" category here. The
-#' univariate distribution has a clear-ish trend, with most reporting "Rarely"
-#' (and only a few "Never"). Ignoring "Never" and "Once a month" in the
-#' bivariate analysis because of low cell counts, there's also a trend by
-#' regime type—more INGOs working in autocracies see annual changes in
-#' regulations, possibly reflecting a more volatile regulatory environment.
-df.reg.change.regime <- survey.countries.clean %>%
-  select(Q4.14, target.regime.type) %>%
-  filter(!is.na(Q4.14))
+freq.change.collapsed <- c("Once a year+", "Once every few years", 
+                           "Rarely or never", "Don't know")
 
-plot.reg.change.regime <- prodplot(df.reg.change.regime,
-                                        ~ target.regime.type + Q4.14, mosaic("h"),
+df.freq.change <- survey.countries.clean %>%
+  filter(!is.na(Q4.14)) %>%
+  mutate(Q4.14.collapsed = case_when(
+    .$Q4.14 == "Once a month" ~ freq.change.collapsed[1],
+    .$Q4.14 == "Once a year" ~ freq.change.collapsed[1],
+    .$Q4.14 == "Once every few years" ~ freq.change.collapsed[2], 
+    .$Q4.14 == "Rarely" ~ freq.change.collapsed[3],
+    .$Q4.14 == "Never" ~ freq.change.collapsed[3],
+    .$Q4.14 == "Don't know" ~ freq.change.collapsed[4],
+    TRUE ~ NA_character_)) %>%
+  filter(!is.na(Q4.14.collapsed)) %>%
+  mutate(Q4.14.collapsed = factor(Q4.14.collapsed, levels=rev(freq.change.collapsed), 
+                                  ordered=TRUE))
+
+#' #### Regime type
+#' 
+#' Most NGOs don't know, and I didn't include an "other" category here. The 
+#' univariate distribution has a clear trend, with most reporting "Rarely" (and
+#' only a few "Never"; "Never" and "Once a month" are collapsed because of low 
+#' expected values). There's also a trend by regime type—more INGOs working in
+#' autocracies see annual changes in regulations, possibly reflecting a more
+#' volatile regulatory environment.
+plot.reg.change.regime <- prodplot(df.freq.change,
+                                        ~ target.regime.type + Q4.14.collapsed, mosaic("h"),
                                         colour=NA) +
   aes(fill=target.regime.type, colour="white") +
   scale_fill_manual(values=c("grey80", "grey40")) +
@@ -649,8 +663,8 @@ plot.reg.change.regime <- prodplot(df.reg.change.regime,
 #+ fig.width=6, fig.height=4
 plot.reg.change.regime
 
-reg.change.regime.table <- survey.countries.clean %>%
-  xtabs(~ Q4.14 + target.regime.type, .)
+reg.change.regime.table <- df.freq.change %>%
+  xtabs(~ Q4.14.collapsed + target.regime.type, .)
 
 analyze.cat.var(reg.change.regime.table)
 
