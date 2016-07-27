@@ -873,6 +873,73 @@ analyze.cat.var(reg.effect.general.regime.issue.table)
 #' ## Responses to regulations
 #' 
 #' ### Changes in programming
+#' 
+#' #### Regime type
+#' 
+#' Slightly more NGOs that work in autocracies have changed their programming
+#' in the past decade, but not in a statistically significant way. In general,
+#' most INGOs have not changed much, and the split is proportional across
+#' regime type.
+#' 
+df.change.programming.regime <- survey.countries.clean %>%
+  filter(!is.na(Q4.19)) %>%
+  filter(Q4.19 != "Don't know") %>%
+  mutate(Q4.19 = droplevels(Q4.19),
+         Q4.19 = factor(Q4.19, levels=rev(levels(Q4.19)))) %>%
+  select(Q4.19, target.regime.type)
+
+plot.change.programming.regime <- prodplot(df.change.programming.regime,
+                                    ~ target.regime.type + Q4.19, mosaic("h"), 
+                                    colour=NA) + 
+  aes(fill=target.regime.type, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Change in programming, by regime type",
+       subtitle="Q4.19: Over the last 10 years, has your organization changed its mix of programming in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=2
+plot.change.programming.regime
+
+change.programming.table <- df.change.programming.regime %>%
+  xtabs(~ Q4.19 + target.regime.type, .)
+
+analyze.cat.var(change.programming.table)
+
+
+#' #### Potential contentiousness
+#' 
+#' Slightly fewer INGOs working on highly contentious issues have changed their
+#' programming over the past decade, but again, the difference between expected
+#' and actual is not significant.
+#' 
+df.change.programming.issue <- survey.countries.clean %>%
+  filter(!is.na(Q4.19)) %>%
+  filter(Q4.19 != "Don't know") %>%
+  mutate(Q4.19 = droplevels(Q4.19),
+         Q4.19 = factor(Q4.19, levels=rev(levels(Q4.19)))) %>%
+  select(Q4.19, potential.contentiousness)
+
+plot.change.programming.issue <- prodplot(df.change.programming.issue,
+                                   ~ potential.contentiousness + Q4.19, mosaic("h"), 
+                                   colour=NA) + 
+  aes(fill=potential.contentiousness, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Change in programming, by issue",
+       subtitle="Q4.19: Over the last 10 years, has your organization changed its mix of programming in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=2
+plot.change.programming.issue
+
+change.programming.issue.table <- df.change.programming.issue %>%
+  xtabs(~ Q4.19 + potential.contentiousness, .)
+
+analyze.cat.var(change.programming.issue.table)
+
 
 #' ### Discussions with government
 #' 
