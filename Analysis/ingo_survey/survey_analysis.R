@@ -870,6 +870,152 @@ reg.effect.general.regime.issue.table <- df.reg.effect.general.issue.regime %>%
 analyze.cat.var(reg.effect.general.regime.issue.table)
 
 
+#' ## Responses to regulations
+#' 
+#' ### Changes in programming
+
+#' ### Discussions with government
+#' 
+#' #### Regime type
+#' 
+#' INGOs working in autocracies are far more likely to have discussed NGO
+#' regulations with their host governments—the majority actually have (54% of
+#' those responding "yes" work in autocracies; 32% of those working in
+#' autocracies responded "yes"), and the difference is statistically
+#' significant. This is likely because INGOs working in autocracies have more
+#' of a reason to discuss the regulations, as they see more regulations in
+#' general.
+df.discuss.regime <- survey.countries.clean %>%
+  filter(!is.na(Q4.22)) %>%
+  filter(Q4.22 != "Don't know") %>%
+  mutate(Q4.22 = droplevels(Q4.22),
+         Q4.22 = factor(Q4.22, levels=rev(levels(Q4.22)))) %>%
+  select(Q4.22, target.regime.type)
+
+plot.discuss.regime <- prodplot(df.discuss.regime,
+                                    ~ target.regime.type + Q4.22, mosaic("h"), 
+                                    colour=NA) + 
+  aes(fill=target.regime.type, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Discussions about regulations, by regime type",
+       subtitle="Q4.22: Has your organization discussed NGO regulations with government officials in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=2
+plot.discuss.regime
+
+discuss.table <- df.discuss.regime %>%
+  xtabs(~ Q4.22 + target.regime.type, .)
+
+analyze.cat.var(discuss.table)
+
+
+#' #### Potential contentiousness
+#' 
+#' There's no difference across issue areas in whether or not an INGO discusses
+#' regulations with the government—the same proportion (66% haven't discussed;
+#' 20% have; 10% don't know) holds across both levels of potential
+#' contentiousness.
+df.discuss.issue <- survey.countries.clean %>%
+  filter(!is.na(Q4.22)) %>%
+  filter(Q4.22 != "Don't know") %>%
+  mutate(Q4.22 = droplevels(Q4.22),
+         Q4.22 = factor(Q4.22, levels=rev(levels(Q4.22)))) %>%
+  select(Q4.22, potential.contentiousness)
+
+plot.discuss.issue <- prodplot(df.discuss.issue,
+                               ~ potential.contentiousness + Q4.22, mosaic("h"), 
+                               colour=NA) + 
+  aes(fill=potential.contentiousness, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Discussions about regulations, by issue",
+       subtitle="Q4.22: Has your organization discussed NGO regulations with government officials in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=2
+plot.discuss.issue
+
+discuss.issue.table <- df.discuss.issue %>%
+  xtabs(~ Q4.22 + potential.contentiousness, .)
+
+analyze.cat.var(discuss.issue.table)
+
+
+#' ### Attempts to change regulations
+#' 
+#' #### Regime type
+#' 
+#' Most INGOs don't attempt to change regulations, but those that do are most
+#' likely to work in autocracies (and the difference is significant).
+#' Additionally, only 8% of INGOs working in democracies have attempted to
+#' change regulations, while 16% of those working in autocracies have, despite
+#' the fact that the legislative process is much more difficult to navigate in
+#' autocracies. INGOs appear to be more likely to engage in the political
+#' process to adjust regulations despite these challenges.
+df.change.regs.regime <- survey.countries.clean %>%
+  filter(!is.na(Q4.23)) %>%
+  filter(Q4.23 != "Don't know") %>%
+  mutate(Q4.23 = droplevels(Q4.23),
+         Q4.23 = factor(Q4.23, levels=rev(levels(Q4.23)))) %>%
+  select(Q4.23, target.regime.type)
+
+plot.change.regs.regime <- prodplot(df.change.regs.regime,
+                                ~ target.regime.type + Q4.23, mosaic("h"), 
+                                colour=NA) + 
+  aes(fill=target.regime.type, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Attempts to change regulations, by regime type",
+       subtitle="Q4.23: Has your organization tried to change NGO regulations in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=2
+plot.change.regs.regime
+
+change.regs.table <- df.change.regs.regime %>%
+  xtabs(~ Q4.23 + target.regime.type, .)
+
+analyze.cat.var(change.regs.table)
+
+
+#' #### Potential contentiousness
+#' 
+#' There's also a difference across issue area. INGOs working on highly
+#' contentious issues are more likely to try to change regulations, similar to
+#' regime type. The difference is statistically significant overall, but is not
+#' driven by a single significant cell (though yes + high comes close).
+df.change.regs.issue <- survey.countries.clean %>%
+  filter(!is.na(Q4.23)) %>%
+  filter(Q4.23 != "Don't know") %>%
+  mutate(Q4.23 = droplevels(Q4.23),
+         Q4.23 = factor(Q4.23, levels=rev(levels(Q4.23)))) %>%
+  select(Q4.23, potential.contentiousness)
+
+plot.change.regs.issue <- prodplot(df.change.regs.issue,
+                               ~ potential.contentiousness + Q4.23, mosaic("h"), 
+                               colour=NA) + 
+  aes(fill=potential.contentiousness, colour="white") + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Attempts to change regulations, by issue",
+       subtitle="Q4.23: Has your organization tried to change NGO regulations in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=2
+plot.change.regs.issue
+
+change.regs.issue.table <- df.change.regs.issue %>%
+  xtabs(~ Q4.23 + potential.contentiousness, .)
+
+analyze.cat.var(change.regs.issue.table)
+
+
 #' ## Testing hypotheses
 #' 
 #' My claim:
