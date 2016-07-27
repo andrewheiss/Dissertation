@@ -11,7 +11,9 @@
 #'     toc_depth: 4
 #'     highlight: pygments
 #'     theme: cosmo
-#'     keep_md: yes
+#'     self_contained: no
+#'     includes:
+#'       after_body: ../html/add_home_link.html
 #' bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
 #' csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
 #' ...

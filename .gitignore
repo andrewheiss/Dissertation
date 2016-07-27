@@ -96,6 +96,7 @@ Data/Survey/output/*
 # ----------
 Analysis/**.html
 Analysis/**.md
+Analysis/**_files/*
 !Analysis/html/*.html
 
 # ---------
