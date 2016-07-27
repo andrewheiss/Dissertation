@@ -668,6 +668,31 @@ reg.change.regime.table <- df.freq.change %>%
 
 analyze.cat.var(reg.change.regime.table)
 
+#' #### Potential contentiousness
+#' 
+#' There's no difference in the frequency of changes across issue areas, which
+#' is to be expected. Actual legal restrictions are a blunt instrument and
+#' don't really target specific sectors of INGOs.
+plot.reg.change.issue <- prodplot(df.freq.change,
+                                  ~ potential.contentiousness + Q4.14.collapsed, mosaic("h"),
+                                  colour=NA) +
+  aes(fill=potential.contentiousness, colour="white") +
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="Frequency of changes, by issue",
+       subtitle="Q4.14: How often do regulations for international NGOs in `target_country` change?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.reg.change.issue
+
+reg.change.issue.table <- df.freq.change %>%
+  xtabs(~ Q4.14.collapsed + potential.contentiousness, .)
+
+analyze.cat.var(reg.change.issue.table)
+
+
 
 #' ### How do they find out about changes?
 #' 
