@@ -80,7 +80,7 @@ analyze.cat.var <- function(cat.table) {
   cat.table.chi <- chisq.test(ftable(cat.table))
   
   cat("Table counts\n")
-  print(cat.table)
+  ftable(cat.table) %>% print(method="col.compact")
   
   cat("\nExpected values\n")
   expected.values <- cat.table.chi$expected
@@ -93,10 +93,10 @@ analyze.cat.var <- function(cat.table) {
   expected.values %>% print(method="col.compact")
   
   cat("\nRow proporitions\n")
-  print(prop.table(cat.table, margin=1))
+  ftable(prop.table(cat.table, margin=1)) %>% print(method="col.compact")
   
   cat("\nColumn proporitions\n")
-  print(prop.table(cat.table, margin=2))
+  ftable(prop.table(cat.table, margin=2)) %>% print(method="col.compact")
   
   cat("\nChi-squared test for table\n")
   cat.table.chi %>% print()
@@ -720,9 +720,12 @@ analyze.cat.var(change.how.table)
 #' ### Effect of regulations
 #' 
 #' TODO: Do this
+#' 
 
 
 #' ### Effect of regulations in general
+#' 
+#' #### Regime type
 #' 
 #' !!! It works !!!
 #' 
@@ -751,6 +754,81 @@ reg.effect.general.regime.table <- survey.countries.clean %>%
   xtabs(~ Q4.17 + target.regime.type, .)
 
 analyze.cat.var(reg.effect.general.regime.table)
+
+
+#' #### Potential contentiousness
+#' 
+#' Differences in general restrictions by issue are less pronounced. There is a
+#' significant overall difference, driven primarily by high contention INGOs
+#' that report feeling extremely restricted. All levels of restriction are
+#' relatively even, following a 65-35 split between low and high contention
+#' INGOs.
+#' 
+df.reg.effect.general.issue <- survey.countries.clean %>%
+  select(Q4.17, potential.contentiousness) %>%
+  filter(Q4.17 != "Don’t know") %>%
+  mutate(Q4.17 = droplevels(Q4.17),
+         Q4.17 = factor(Q4.17, levels=rev(levels(Q4.17))))
+
+plot.reg.effect.general.issue <- prodplot(df.reg.effect.general.issue,
+                                          ~ potential.contentiousness + Q4.17, mosaic("h"),
+                                          colour=NA) +
+  aes(fill=potential.contentiousness, colour="white") +
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  guides(fill=FALSE) +
+  labs(title="General restrictions, by issue",
+       subtitle="Q4.17: Overall, how is your organization's work affected by government regulations in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=4
+plot.reg.effect.general.issue
+
+reg.effect.general.issue.table <- survey.countries.clean %>%
+  xtabs(~ Q4.17 + potential.contentiousness, .)
+
+analyze.cat.var(reg.effect.general.issue.table)
+
+
+#' #### Regime type + contentiousness
+#' 
+#' There are more unrestricted low contentious NGOs working in democracies than
+#' expected and far fewer unrestricted low contentious NGOs in autocracies.
+#' Additionally, there are fewer highly restricted INGOs in democracies
+#' (especially high contentious ones), and far more highly restricted, highly
+#' contentious INGOs working in autocracies than expected.
+#' 
+
+# Collapse very and extremely restriced because of low expected frequencies
+restricted <- c("Not restricted at all", "Slightly restricted",
+                "Moderately restricted", "Very or extremely restricted")
+
+df.reg.effect.general.issue.regime <- survey.countries.clean %>%
+  select(Q4.17, potential.contentiousness, target.regime.type) %>%
+  filter(Q4.17 != "Don’t know") %>%
+  mutate(Q4.17 = recode_factor(Q4.17, `Very restricted` = restricted[4],
+                        `Extremely restricted` = restricted[4]),
+         Q4.17 = factor(Q4.17, levels=restricted, ordered=TRUE))
+
+plot.reg.effect.general.issue.regime <- prodplot(df.reg.effect.general.issue.regime,
+                                          ~ target.regime.type + potential.contentiousness +
+                                            Q4.17, mosaic("v")) +
+  aes(fill=target.regime.type, linetype=potential.contentiousness) + 
+  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_linetype_manual(values=c("blank", "dashed")) +
+  guides(fill=FALSE, linetype=FALSE) +
+  labs(title="General restrictions, by issue and regime type",
+       subtitle="Q4.17: Overall, how is your organization's work affected by government regulations in `target_country`?") +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+#+ fig.width=6, fig.height=5
+plot.reg.effect.general.issue.regime
+
+reg.effect.general.regime.issue.table <- df.reg.effect.general.issue.regime %>%
+  xtabs(~ Q4.17 + potential.contentiousness + target.regime.type, .)
+
+analyze.cat.var(reg.effect.general.regime.issue.table)
 
 
 #' ## Testing hypotheses
