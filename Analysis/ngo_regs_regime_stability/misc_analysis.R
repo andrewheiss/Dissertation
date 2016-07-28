@@ -5,14 +5,20 @@
 #' output: 
 #'   html_document: 
 #'     css: ../html/fixes.css
+#'     code_folding: hide
 #'     toc: yes
+#'     toc_float: true
+#'     toc_depth: 4
 #'     highlight: pygments
 #'     theme: cosmo
+#'     self_contained: no
 #'     includes:
-#'       after_body: ../html/jump.html
+#'       after_body: ../html/add_home_link.html
 #' ---
 
+
 #' # Load libraries and data
+#+ message=FALSE
 library(magrittr)
 library(dplyr)
 library(feather)
@@ -121,8 +127,8 @@ plot.uds <- ggplot(plot.data, aes(x=uds_mean, y=cs_env_sum)) +
 # GWF regime type and Polity/UDS and CSRE
 gwf.summary <- full.data %>%
   group_by(gwf.binary) %>%
-  summarise(env.avg = mean(cs_env_sum),
-            env.sd = sd(cs_env_sum),
+  summarise(env.avg = mean(cs_env_sum, na.rm=TRUE),
+            env.sd = sd(cs_env_sum, na.rm=TRUE),
             env.se = env.sd / sqrt(n()),
             env.upper = env.avg + (qnorm(0.975) * env.se),
             env.lower = env.avg + (qnorm(0.025) * env.se)) %>%
