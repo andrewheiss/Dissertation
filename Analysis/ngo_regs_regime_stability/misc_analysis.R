@@ -410,142 +410,145 @@ fig.save.cairo(plot.coup.vars, filename="1-ext-coup-vars",
 
 
 #' # Event data visualization
-plot.data <- full.data %>%
-  select(Country, year.num, year.actual, gwf.binary,
-         icews.conflict.severity.abs, icews.pct.shame,
-         icews.conflict.severity.abs.ingos, icews.pct.shame.ingos) %>%
-  na.omit %>%
-  group_by(year.actual, gwf.binary) %>%
-  summarise(shame = mean(icews.pct.shame),
-            shame.sd = sd(icews.pct.shame, na.rm=TRUE),
-            shame.se = shame.sd / sqrt(n()),
-            shame.upper = shame + (qnorm(0.975) * shame.se),
-            shame.lower = shame + (qnorm(0.025) * shame.se),
-            shame.ingo = mean(icews.pct.shame.ingos),
-            shame.ingo.sd = sd(icews.pct.shame.ingos, na.rm=TRUE),
-            shame.ingo.se = shame.ingo.sd / sqrt(n()),
-            shame.ingo.upper = shame.ingo + (qnorm(0.975) * shame.ingo.se),
-            shame.ingo.lower = shame.ingo + (qnorm(0.025) * shame.ingo.se),
-            severity = mean(icews.conflict.severity.abs),
-            severity.sd = sd(icews.conflict.severity.abs, na.rm=TRUE),
-            severity.se = severity.sd / sqrt(n()),
-            severity.upper = severity + (qnorm(0.975) * severity.se),
-            severity.lower = severity + (qnorm(0.025) * severity.se),
-            severity.ingo = mean(icews.conflict.severity.abs.ingos),
-            severity.ingo.sd = sd(icews.conflict.severity.abs.ingos, na.rm=TRUE),
-            severity.ingo.se = severity.ingo.sd / sqrt(n()),
-            severity.ingo.upper = severity.ingo + (qnorm(0.975) * severity.ingo.se),
-            severity.ingo.lower = severity.ingo + (qnorm(0.025) * severity.ingo.se)) %>%
-  mutate(gwf.binary = factor(gwf.binary, levels=c("Democracy", "Autocracy"),
-                             labels=c("Democracies    ", "Autocracies")))
-
-#' ## Interstate shame percent and severity
-plot.states.shame <- ggplot(plot.data, aes(x=year.actual, y=shame, 
-                                           colour=gwf.binary)) + 
-  geom_ribbon(aes(ymin=shame.lower, ymax=shame.upper, fill=gwf.binary), 
-              alpha=0.3, colour=NA) +
-  geom_line(size=1.5) +
-  labs(x=NULL, y="Mean percent of all interstate\nevents that are conflictual") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
-  scale_y_continuous(labels=percent, limits=c(0, 1)) +
-  theme_ath()
-
-plot.states.severity <- ggplot(plot.data, aes(x=year.actual, y=severity, 
-                                              colour=gwf.binary)) + 
-  geom_ribbon(aes(ymin=severity.lower, ymax=severity.upper, fill=gwf.binary), 
-              alpha=0.3, colour=NA) +
-  geom_line(size=1.5) + 
-  labs(x=NULL, y="Mean intensity of\ninterstate conflictual events") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
-  scale_y_continuous(limits=c(0, 10)) +
-  theme_ath()
-
-plot.events.states <- arrangeGrob(plot.states.shame, plot.states.severity, nrow=1)
-grid::grid.draw(plot.events.states)
-
-fig.save.cairo(plot.events.states, filename="1-events-states", 
-               width=6, height=2)
-
-#' Check if the difference in average shame percent is significant in each year
-year.diffs <- full.data %>%
-  select(gwf.binary, year.num, icews.conflict.severity.abs) %>%
-  na.omit() %>%
-  group_by(year.num) %>%
-  do(tidy(t.test(icews.conflict.severity.abs ~ gwf.binary, data=.)))
-
-year.diffs %>% select(1:6) %>% print(n=nrow(.))
-#' Nope, not really.
 #' 
-
-#' Check if the difference in average severity is significant in each year
-year.diffs <- full.data %>%
-  select(gwf.binary, year.num, icews.pct.shame) %>%
-  na.omit() %>%
-  group_by(year.num) %>%
-  do(tidy(t.test(icews.pct.shame ~ gwf.binary, data=.)))
-
-year.diffs %>% select(1:6) %>% print(n=nrow(.))
-#' Again, nope.
+#' This is all old stuff that I've replaced with more accurate data.
 #' 
-
-#' ## INGO shaming percent and severity
-plot.ingos.shame <- ggplot(plot.data, aes(x=year.actual, y=shame.ingo, 
-                                          colour=gwf.binary)) + 
-  geom_ribbon(aes(ymin=shame.ingo.lower, ymax=shame.ingo.upper, fill=gwf.binary), 
-              alpha=0.3, colour=NA) +
-  geom_line(size=1.5) +
-  labs(x=NULL, y="Mean percent of all INGO-state\nevents that are conflictual") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
-  scale_y_continuous(labels=percent, limits=c(0, 1)) +
-  theme_ath()
-
-plot.ingos.severity <- ggplot(plot.data, aes(x=year.actual, y=severity.ingo, 
-                                             colour=gwf.binary)) + 
-  geom_ribbon(aes(ymin=severity.ingo.lower, ymax=severity.ingo.upper, fill=gwf.binary), 
-              alpha=0.3, colour=NA) +
-  geom_line(size=1.5) + 
-  labs(x=NULL, y="Mean intensity of\nINGO-state conflictual events") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
-  scale_y_continuous(limits=c(0, 10)) +
-  theme_ath()
-
-plot.events.ingos <- arrangeGrob(plot.ingos.shame, plot.ingos.severity, nrow=1)
-grid::grid.draw(plot.events.ingos)
-
-fig.save.cairo(plot.events.ingos, filename="1-events-ingos", 
-               width=6, height=2)
-
-#' Check if the difference in average shame percent is significant in each year
-year.diffs <- full.data %>%
-  select(gwf.binary, year.num, icews.conflict.severity.abs.ingos) %>%
-  na.omit() %>%
-  group_by(year.num) %>%
-  do(tidy(t.test(icews.conflict.severity.abs.ingos ~ gwf.binary, data=.)))
-
-year.diffs %>% select(1:6) %>% print(n=nrow(.))
-#' Nope.
-#' 
-
-#' Check if the difference in average severity is significant in each year
-year.diffs <- full.data %>%
-  select(gwf.binary, year.num, icews.pct.shame.ingos) %>%
-  na.omit() %>%
-  group_by(year.num) %>%
-  do(tidy(t.test(icews.pct.shame.ingos ~ gwf.binary, data=.)))
-
-year.diffs %>% select(1:6) %>% print(n=nrow(.))
-#' Nope.
-#' 
-
-#' All four plots at the same time
-plot.events <- arrangeGrob(plot.states.shame + theme(legend.position="none"), 
-                           plot.states.severity + theme(legend.position="none"), 
-                           plot.ingos.shame, plot.ingos.severity)
-grid::grid.draw(plot.events)
-
-fig.save.cairo(plot.events, filename="1-events-both", 
-               width=6, height=4)
+# plot.data <- full.data %>%
+#   select(Country, year.num, year.actual, gwf.binary,
+#          icews.conflict.severity.abs, icews.pct.shame,
+#          icews.conflict.severity.abs.ingos, icews.pct.shame.ingos) %>%
+#   na.omit %>%
+#   group_by(year.actual, gwf.binary) %>%
+#   summarise(shame = mean(icews.pct.shame),
+#             shame.sd = sd(icews.pct.shame, na.rm=TRUE),
+#             shame.se = shame.sd / sqrt(n()),
+#             shame.upper = shame + (qnorm(0.975) * shame.se),
+#             shame.lower = shame + (qnorm(0.025) * shame.se),
+#             shame.ingo = mean(icews.pct.shame.ingos),
+#             shame.ingo.sd = sd(icews.pct.shame.ingos, na.rm=TRUE),
+#             shame.ingo.se = shame.ingo.sd / sqrt(n()),
+#             shame.ingo.upper = shame.ingo + (qnorm(0.975) * shame.ingo.se),
+#             shame.ingo.lower = shame.ingo + (qnorm(0.025) * shame.ingo.se),
+#             severity = mean(icews.conflict.severity.abs),
+#             severity.sd = sd(icews.conflict.severity.abs, na.rm=TRUE),
+#             severity.se = severity.sd / sqrt(n()),
+#             severity.upper = severity + (qnorm(0.975) * severity.se),
+#             severity.lower = severity + (qnorm(0.025) * severity.se),
+#             severity.ingo = mean(icews.conflict.severity.abs.ingos),
+#             severity.ingo.sd = sd(icews.conflict.severity.abs.ingos, na.rm=TRUE),
+#             severity.ingo.se = severity.ingo.sd / sqrt(n()),
+#             severity.ingo.upper = severity.ingo + (qnorm(0.975) * severity.ingo.se),
+#             severity.ingo.lower = severity.ingo + (qnorm(0.025) * severity.ingo.se)) %>%
+#   mutate(gwf.binary = factor(gwf.binary, levels=c("Democracy", "Autocracy"),
+#                              labels=c("Democracies    ", "Autocracies")))
+# 
+# #' ## Interstate shame percent and severity
+# plot.states.shame <- ggplot(plot.data, aes(x=year.actual, y=shame, 
+#                                            colour=gwf.binary)) + 
+#   geom_ribbon(aes(ymin=shame.lower, ymax=shame.upper, fill=gwf.binary), 
+#               alpha=0.3, colour=NA) +
+#   geom_line(size=1.5) +
+#   labs(x=NULL, y="Mean percent of all interstate\nevents that are conflictual") + 
+#   scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
+#   scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
+#   scale_y_continuous(labels=percent, limits=c(0, 1)) +
+#   theme_ath()
+# 
+# plot.states.severity <- ggplot(plot.data, aes(x=year.actual, y=severity, 
+#                                               colour=gwf.binary)) + 
+#   geom_ribbon(aes(ymin=severity.lower, ymax=severity.upper, fill=gwf.binary), 
+#               alpha=0.3, colour=NA) +
+#   geom_line(size=1.5) + 
+#   labs(x=NULL, y="Mean intensity of\ninterstate conflictual events") + 
+#   scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
+#   scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
+#   scale_y_continuous(limits=c(0, 10)) +
+#   theme_ath()
+# 
+# plot.events.states <- arrangeGrob(plot.states.shame, plot.states.severity, nrow=1)
+# grid::grid.draw(plot.events.states)
+# 
+# fig.save.cairo(plot.events.states, filename="1-events-states", 
+#                width=6, height=2)
+# 
+# #' Check if the difference in average shame percent is significant in each year
+# year.diffs <- full.data %>%
+#   select(gwf.binary, year.num, icews.conflict.severity.abs) %>%
+#   na.omit() %>%
+#   group_by(year.num) %>%
+#   do(tidy(t.test(icews.conflict.severity.abs ~ gwf.binary, data=.)))
+# 
+# year.diffs %>% select(1:6) %>% print(n=nrow(.))
+# #' Nope, not really.
+# #' 
+# 
+# #' Check if the difference in average severity is significant in each year
+# year.diffs <- full.data %>%
+#   select(gwf.binary, year.num, icews.pct.shame) %>%
+#   na.omit() %>%
+#   group_by(year.num) %>%
+#   do(tidy(t.test(icews.pct.shame ~ gwf.binary, data=.)))
+# 
+# year.diffs %>% select(1:6) %>% print(n=nrow(.))
+# #' Again, nope.
+# #' 
+# 
+# #' ## INGO shaming percent and severity
+# plot.ingos.shame <- ggplot(plot.data, aes(x=year.actual, y=shame.ingo, 
+#                                           colour=gwf.binary)) + 
+#   geom_ribbon(aes(ymin=shame.ingo.lower, ymax=shame.ingo.upper, fill=gwf.binary), 
+#               alpha=0.3, colour=NA) +
+#   geom_line(size=1.5) +
+#   labs(x=NULL, y="Mean percent of all INGO-state\nevents that are conflictual") + 
+#   scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
+#   scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
+#   scale_y_continuous(labels=percent, limits=c(0, 1)) +
+#   theme_ath()
+# 
+# plot.ingos.severity <- ggplot(plot.data, aes(x=year.actual, y=severity.ingo, 
+#                                              colour=gwf.binary)) + 
+#   geom_ribbon(aes(ymin=severity.ingo.lower, ymax=severity.ingo.upper, fill=gwf.binary), 
+#               alpha=0.3, colour=NA) +
+#   geom_line(size=1.5) + 
+#   labs(x=NULL, y="Mean intensity of\nINGO-state conflictual events") + 
+#   scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
+#   scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
+#   scale_y_continuous(limits=c(0, 10)) +
+#   theme_ath()
+# 
+# plot.events.ingos <- arrangeGrob(plot.ingos.shame, plot.ingos.severity, nrow=1)
+# grid::grid.draw(plot.events.ingos)
+# 
+# fig.save.cairo(plot.events.ingos, filename="1-events-ingos", 
+#                width=6, height=2)
+# 
+# #' Check if the difference in average shame percent is significant in each year
+# year.diffs <- full.data %>%
+#   select(gwf.binary, year.num, icews.conflict.severity.abs.ingos) %>%
+#   na.omit() %>%
+#   group_by(year.num) %>%
+#   do(tidy(t.test(icews.conflict.severity.abs.ingos ~ gwf.binary, data=.)))
+# 
+# year.diffs %>% select(1:6) %>% print(n=nrow(.))
+# #' Nope.
+# #' 
+# 
+# #' Check if the difference in average severity is significant in each year
+# year.diffs <- full.data %>%
+#   select(gwf.binary, year.num, icews.pct.shame.ingos) %>%
+#   na.omit() %>%
+#   group_by(year.num) %>%
+#   do(tidy(t.test(icews.pct.shame.ingos ~ gwf.binary, data=.)))
+# 
+# year.diffs %>% select(1:6) %>% print(n=nrow(.))
+# #' Nope.
+# #' 
+# 
+# #' All four plots at the same time
+# plot.events <- arrangeGrob(plot.states.shame + theme(legend.position="none"), 
+#                            plot.states.severity + theme(legend.position="none"), 
+#                            plot.ingos.shame, plot.ingos.severity)
+# grid::grid.draw(plot.events)
+# 
+# fig.save.cairo(plot.events, filename="1-events-both", 
+#                width=6, height=4)
