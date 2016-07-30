@@ -31,6 +31,7 @@ library(purrr)
 library(ggplot2)
 library(ggstance)
 library(productplots)
+library(gridExtra)
 library(stringr)
 library(pander)
 library(magrittr)
@@ -939,6 +940,112 @@ change.programming.issue.table <- df.change.programming.issue %>%
   xtabs(~ Q4.19 + potential.contentiousness, .)
 
 analyze.cat.var(change.programming.issue.table)
+
+
+#' ### Changes in response to regulations
+#' 
+#' #### Regime type
+labels.changes <- data_frame(levels=c("funding", "issues", "comm_govt", 
+                                      "comm_donors", "locations", "country_office",
+                                      "local_staff", "foreign_staff"),
+                             labels=c("Changed sources of funding",
+                                      "Changed issues worked on",
+                                      "Changed communication with the government",
+                                      "Changed communication with donors",
+                                      "Changed locations worked in",
+                                      "Changed location country office",
+                                      "Used more local staff and/or volunteers",
+                                      "Used more foreign staff and/or volunteers"))
+
+df.changes.response <- survey.countries.clean %>%
+  select(dplyr::contains("Q4.21"), -dplyr::contains("TEXT"),
+         target.regime.type, potential.contentiousness) %>%
+  gather(question, response, -c(target.regime.type, potential.contentiousness)) %>%
+  mutate(question = str_replace(question, "Q4\\.21_", ""),
+         question = factor(question, levels=labels.changes$levels,
+                           labels=labels.changes$labels, ordered=TRUE)) %>%
+  filter(!(response %in% c("Don't know", "Not applicable")))
+
+
+show.output <- function(chunk) {
+  current.question <- as.character(chunk$question[1])
+  cat("\n")
+  cat(paste0(rep("-", nchar(current.question) + 2), collapse=""))
+  cat(paste0("\n", current.question, "\n"))
+  cat(paste0(rep("-", nchar(current.question) + 2), collapse=""))
+  cat("\n")
+  
+  regime.table <- chunk %>%
+    xtabs(~ response + target.regime.type, .)
+  
+  issue.table <- chunk %>%
+    xtabs(~ response + potential.contentiousness, .)
+  
+  # Use diff for the two column effect!
+  # http://stackoverflow.com/a/9214177/120898
+  cat(capture.output( analyze.cat.var(regime.table) ), sep="\n", file="tmp_regime")
+  cat(capture.output( analyze.cat.var(issue.table) ), sep="\n", file="tmp_issue")
+ 
+  # system does weeeeird stuff with knitr (see https://github.com/yihui/knitr/issues/1203),
+  # so system(..., intern=TRUE) + cat(paste(..., collapse="\n)) does the trick
+  system.output <- system("diff -y -W 140 tmp_regime tmp_issue", intern=TRUE)
+  
+  cat(paste(system.output, collapse="\n"))
+}
+
+show.plots <- function(chunk) {
+  current.question <- as.character(chunk$question[1])
+  
+  plot.regime <- prodplot(chunk,
+                          ~ target.regime.type + response, mosaic("h"),
+                          colour=NA) + 
+    aes(fill=target.regime.type, colour="white") + 
+    scale_fill_manual(values=c("grey80", "grey40")) +
+    guides(fill=FALSE) +
+    labs(title=current.question) +
+    theme_ath() + theme(axis.title=element_blank(),
+                        panel.grid=element_blank())
+  
+  plot.issue <- prodplot(chunk,
+                         ~ potential.contentiousness + response, mosaic("h"),
+                         colour=NA) + 
+    aes(fill=potential.contentiousness, colour="white") + 
+    scale_fill_manual(values=c("grey80", "grey40")) +
+    guides(fill=FALSE) +
+    labs(title=" ") +
+    theme_ath() + theme(axis.title=element_blank(),
+                        panel.grid=element_blank())
+
+  # Can't do this because knitr chokes...
+  # plot.both <- arrangeGrob(plot.regime, plot.issue, nrow=1)
+  # grid::grid.draw(plot.both)
+  
+  grid.arrange(plot.regime, plot.issue, nrow=1)
+}
+
+# show.output(chunk)
+# 
+
+
+# This could be done with purrr, but I can't get it to work right (the output
+# and plots go in two huge chunks instead of alternating between text and
+# plots; if I put show.plots() in show.output(), only one plot shows up). So
+# instead of using fancy R vectorization, yay loops. \(•◡•)/
+#
+# Something like this with purrr almost works:
+# suppressWarnings(response.to.regulations <- df.changes.response %>%
+#   split(.$question) %>%
+#   map(~ show.output(.))) %>%
+#   map(~ show.plots(.))
+
+#+ fig.width=7, fig.height=2
+for (Q in unique(df.changes.response$question)) {
+  chunk <- filter(df.changes.response, question == Q)
+  
+  show.plots(chunk)
+  suppressWarnings(show.output(chunk))
+  cat("\n")
+}
 
 
 #' ### Discussions with government
