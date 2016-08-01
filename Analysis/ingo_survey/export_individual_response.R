@@ -28,7 +28,7 @@ export.intro <- function(org) {
   pandoc.p(org$Q2.4)
   
   pandoc.header(sprintf("Q2.5: Besides %s, where does your organization work?", home.country), level=3)
-  pandoc.list(org$Q2.5_name, indent.level=-1)
+  pandoc.list(org$Q2.5_name, indent.level=0)
 }
 
 
@@ -36,7 +36,7 @@ export.intro <- function(org) {
 export.organizational <- function(org) {
   pandoc.header("Organizational questions", 1)
   pandoc.header("*Q3.1*: Which issues does your organization focus on?", level=3)
-  pandoc.list(org$Q3.1.clean_value, indent.level=-1)
+  pandoc.list(org$Q3.1.clean_value, indent.level=0)
   pandoc.p(paste0("Other: ", org$Q3.1_other_TEXT))
   
   pandoc.header("*Q3.2*: Which issue does your organization focus on *the most*?", level=3)
@@ -120,7 +120,7 @@ export.country <- function(org.country) {
   pandoc.p(paste0(org.country$Q4.5, " (", org.country$Q4.5.clean, ")"))
   
   pandoc.header(sprintf("*Q4.6*: What kind of government officials does your organization have contact with?", country.name), level=3)
-  pandoc.list(org.country$Q4.6_value, indent.level=-1)
+  pandoc.list(org.country$Q4.6_value, indent.level=0)
   pandoc.p(paste0("Other: ", org.country$Q4.6_other_TEXT))
   
   pandoc.header(sprintf("*Q4.7*: What kind of government officials does your organization have contact with *most often*?", country.name), level=3)
