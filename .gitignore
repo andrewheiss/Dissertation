@@ -64,6 +64,8 @@ Data/data_raw/IssueCrawler*/*
 Data/data_raw/NGO\ lists/*
 !Data/data_raw/NGO\ lists/ngo_lists.yml
 
+Data/INGO\ raw\ materials/*
+
 Data/data_processed/*
 
 
