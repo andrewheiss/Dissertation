@@ -1,0 +1,21 @@
+---
+title: "Dissertation analysis notebooks"
+author: "Andrew Heiss"
+date: "`r format(Sys.time(), '%B %e, %Y')`"
+output: 
+  html_document: 
+    css: html/fixes.css
+    highlight: pygments
+    theme: cosmo
+---
+
+## Civil society regulatory environment in authoritarian regimes
+
+- [Non-regression analysis](ngo_regs_regime_stability/misc_analysis.html)
+- [Models](ngo_regs_regime_stability/models.html)
+
+## INGO survey
+
+- [Completion rates](ingo_survey/completion_rates.html)
+- [Summary](ingo_survey/survey_summary.html)
+- [Analysis](ingo_survey/survey_analysis.html)

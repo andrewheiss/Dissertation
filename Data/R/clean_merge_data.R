@@ -146,15 +146,32 @@ gw.lookup <- gw.codes %>%
 
 # Varieties of Democracy
 # https://v-dem.net/en/
-# V-Dem v6 is semicolon-delimited
-vdem.raw <- read_csv2(file.path(PROJHOME, "Data", "data_raw", "External",
-                                "V-Dem", "v6", "V-Dem-DS-CY+Others-v6.csv")) %>%
+# readr::read_csv chokes on the raw V-Dem file, so read.csv it is :(
+# But only temporarily/once. Read the file in with read.csv then save as RDS
+vdem.original.location <- file.path(PROJHOME, "Data", "data_raw", 
+                                    "External", "V-Dem", "v6.1",
+                                    "V-Dem-DS-CY+Others-v6.1.csv")
+vdem.rds <- file.path(PROJHOME, "Data", "data_processed",
+                      "V-Dem-DS-CY+Others-v6.1.rds")
+
+if (!file.exists(vdem.rds)) {
+  vdem.raw.slow <- read.csv(vdem.original.location,
+                            stringsAsFactors=FALSE)
+  
+  saveRDS(vdem.raw.slow, vdem.rds)
+  rm(vdem.raw.slow)
+}
+
+vdem.raw <- readRDS(vdem.rds) %>%
   # Missing COW codes
   mutate(COWcode = case_when(
     .$country_text_id == "SML" ~ as.integer(521),
     .$country_text_id == "PSE" ~ as.integer(667),
     .$country_text_id == "PSG" ~ as.integer(668),
     TRUE ~ .$COWcode))
+
+testthat::expect_equal(nrow(vdem.raw), 16675)
+testthat::expect_equal(ncol(vdem.raw), 3224)
 
 # COW issues
 # vdem.raw %>% filter(is.na(COWcode)) %>% select(country_name) %>% unique

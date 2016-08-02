@@ -11,7 +11,9 @@
 #'     toc_depth: 4
 #'     highlight: pygments
 #'     theme: cosmo
-#'     keep_md: yes
+#'     self_contained: no
+#'     includes:
+#'       after_body: ../html/add_home_link.html
 #' bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
 #' csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
 #' ...
@@ -26,18 +28,11 @@ library(purrr)
 library(ggplot2)
 library(ggstance)
 library(stringr)
-library(pander)
 library(magrittr)
 library(DT)
 library(scales)
 library(countrycode)
 library(tm)
-
-panderOptions('table.split.table', Inf)
-panderOptions('table.split.cells', Inf)
-panderOptions('keep.line.breaks', TRUE)
-panderOptions('table.style', 'multiline')
-panderOptions('table.alignment.default', 'left')
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
@@ -246,8 +241,6 @@ plot.work.all.map.scale <- ggplot(df.work.countries.all,
         strip.background=element_rect(colour="#FFFFFF", fill="#FFFFFF"))
 plot.work.all.map.scale
 
-# TODO: How many work in/answered questions for/are based in authoritarian countries?
-
 
 #' ### Which countries did NGOs answer about?
 df.work.countries.answered <- survey.countries.clean %>%
@@ -413,6 +406,48 @@ findAssocs(tdm.issues, "develop", 0.1)
 #' 
 #' So, hand-coding it is.
 #' 
+#' Here are the results post-hand-coding:
+#' 
+df.issues.clean <- survey.orgs.clean %>%
+  unnest(Q3.1.clean_value) %>%
+  group_by(Q3.1.clean_value) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q3.1.clean_value)) %>%
+  mutate(issue = factor(Q3.1.clean_value, levels=rev(Q3.1.clean_value), ordered=TRUE))
+
+plot.issues.clean <- ggplot(df.issues.clean, aes(x=num, y=issue)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Times selected", y=NULL,
+       title="Which issues do NGOs work on?",
+       subtitle="Q3.1: Which issues does your organization focus on? (multiple answers allowed)") +
+  theme_ath()
+
+plot.issues.clean
+
+
+df.issues.most.clean <- survey.orgs.clean %>%
+  group_by(Q3.2.clean, potential.contentiousness) %>%
+  summarise(num = n()) %>%
+  filter(!is.na(Q3.2.clean)) %>%
+  ungroup() %>%
+  arrange(desc(num)) %>%
+  mutate(issue = factor(Q3.2.clean, levels=rev(unique(Q3.2.clean)), ordered=TRUE))
+
+plot.issues.most.clean <- ggplot(df.issues.most.clean,
+                                 aes(x=num, y=issue,
+                                     fill=potential.contentiousness)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_fill_manual(values=c("grey80", "grey40"),
+                    name="Potential contentiousness") +
+  labs(x="Times selected", y=NULL,
+       title="Which issues do NGOs work on?",
+       subtitle="Q3.2: Which issues does your organization focus on the most?") +
+  theme_ath()
+
+plot.issues.most.clean
 
 
 #' ### What kinds of activities do these NGOs engage in?
@@ -713,6 +748,7 @@ plot.freq.contact <- ggplot(df.freq.contact, aes(x=num, y=Q4.5)) +
 
 plot.freq.contact
 
+
 #' What other kinds of frequency do people report?
 df.freq.contact.other <- survey.countries.clean %>%
   filter(!is.na(Q4.5_TEXT)) %>%
@@ -723,9 +759,26 @@ df.freq.contact.other <- survey.countries.clean %>%
 
 datatable(df.freq.contact.other)
 
-# TODO: Hand code these other options
-#' Lots of "as needed" options. Will need to code those by hand.
-#'
+
+#' With all the other options cleaned up
+df.freq.contact.clean <- survey.countries.clean %>%
+  filter(!is.na(Q4.5.clean)) %>%
+  group_by(Q4.5.clean) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.5.clean = factor(Q4.5.clean, levels=rev(levels(Q4.5.clean)),
+                             ordered=TRUE))
+
+plot.freq.contact.clean <- ggplot(df.freq.contact.clean, 
+                                  aes(x=num, y=Q4.5.clean)) +
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How often does the NGO contact government?",
+       subtitle="Q4.5: About how often does your organization have contact with\ngovernment or party officials in `target_country`?") +
+  theme_ath()
+
+plot.freq.contact.clean
 
 
 #' ### Frequency of reporting to government
@@ -754,9 +807,26 @@ df.freq.report.other <- survey.countries.clean %>%
 
 datatable(df.freq.report.other)
 
-# TODO: Hand code these
-#' Again, lots of "as needed" and "depends" options.
-#' 
+
+#' With all the other options cleaned up
+df.freq.report.clean <- survey.countries.clean %>%
+  filter(!is.na(Q4.8.clean)) %>%
+  group_by(Q4.8.clean) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.8.clean = factor(Q4.8.clean, levels=rev(levels(Q4.8.clean)),
+                             ordered=TRUE))
+
+plot.freq.report.clean <- ggplot(df.freq.report.clean, 
+                                  aes(x=num, y=Q4.8.clean)) +
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  labs(x="Number of responses", y=NULL, 
+       title="How often does the NGO report to government?",
+       subtitle="Q4.8: How often is your organization required to report to the government of  `target_country`?") +
+  theme_ath()
+
+plot.freq.report.clean
 
 
 #' ### Kinds of government officials NGOs have contact with
@@ -786,7 +856,7 @@ df.officials.contact.other <- survey.countries.clean %>%
   summarise(num = n()) %>%
   arrange(desc(num))
 
-datatable(df.freq.contact.other)
+datatable(df.officials.contact.other)
 
 #' ### Officials reported to the most
 df.officials.contact.most <- survey.countries.clean %>%
@@ -1285,23 +1355,3 @@ df.Q5.1 <- survey.orgs.clean %>%
   arrange(Q5.1) %>% select(Q5.1)
 
 datatable(df.Q5.1)
-
-
-#' ## Testing hypotheses
-#' 
-#' My claim:
-#' 
-#' > If an INGO does not make one of these three adjustments—shifting its ideal
-#' point, increasing its operational flexibility, or becoming essential for the
-#' regime—it runs a high risk of expulsion.
-#' 
-#' What influences feelings of restriction? Main hypotheses:
-#' 
-#' - Normative principles and ideals
-#'     - Issue area
-#' - Instrumental flexibility
-#'     - Size
-#'     - Type of funding
-#'     - Collaboration
-#' - Alignment with regime preferences
-#' 

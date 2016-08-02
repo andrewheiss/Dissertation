@@ -5,11 +5,15 @@
 #' output: 
 #'   html_document: 
 #'     css: ../html/fixes.css
+#'     code_folding: hide
 #'     toc: yes
+#'     toc_float: true
+#'     toc_depth: 4
 #'     highlight: pygments
 #'     theme: cosmo
+#'     self_contained: no
 #'     includes:
-#'       after_body: ../html/jump.html
+#'       after_body: ../html/add_home_link.html
 #' ---
 
 #' # Load libraries and data

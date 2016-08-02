@@ -5,6 +5,8 @@ library(stringi)
 library(stringr)
 library(purrr)
 library(feather)
+library(zoo)
+library(countrycode)
 
 
 # ------------------
@@ -66,10 +68,12 @@ countries.raw <- read_feather(file.path(PROJHOME, "Data", "Survey", "output",
 
 # Change Greenland > Anguilla; Aruba > Kosovo; Cayman Islands > Taiwan
 countries.manual.fixes <- data_frame(`Country name` = c("Anguilla", 
-                                                        "Kosovo", "Taiwan"),
-                                     ISO3 = c("AIA", "XKX", "TWN"),
-                                     `COW code` = c(1022, 347, 713),
-                                     `Qualtrics ID` = c(74, 10, 36))
+                                                        "Kosovo", "Taiwan",
+                                                        "Hong Kong SAR, China",
+                                                        "Serbia", "West Bank and Gaza"),
+                                     ISO3 = c("AIA", "XKX", "TWN", "HKG", "SRB", "PSE"),
+                                     `COW code` = c(1022, 347, 713, 715, 340, 669),
+                                     `Qualtrics ID` = c(74, 10, 36, 83, 163, 209))
 
 countries <- countries.raw %>%
   filter(!(`Qualtrics ID` %in% countries.manual.fixes$`Qualtrics ID`)) %>%
@@ -167,6 +171,13 @@ how.often <- c("Once a week", "Once a month", "Once a year",
 how.often.short <- c("Once a month", "Once a year", "Once every few years",
                      "Rarely", "Never", "Don't know")
 
+how.often.extra <- c("Don't know", "Never", "Rarely", "Once every 2+ years", 
+                     "As necessary/depends", "Once a year",
+                     "More than once a year,\nless than once a month",
+                     "Once a month", 
+                     "More than once a month,\nless than once a week",
+                     "Once a week", "More than once a week")
+
 govt.officials <- c("President or prime minister", "Member of parliament", 
                     "Head of a ministry", "Ministry staff", "Military",
                     "Police or internal security", "Other", 
@@ -206,7 +217,7 @@ survey.v2 <- read_qualtrics(file.path(PROJHOME, "Data", "Survey", "raw_data",
                                       "INGOs_and_government_regulations_new.csv"),
                             file.path(PROJHOME, "Data", "Survey", "raw_data", 
                                       "v2cols.csv")) %>%
-  filter(ResponseID != "R_12564WimpZZKn5A")
+  filter(!(ResponseID %in% c("R_12564WimpZZKn5A", "R_3kwdyUr7vHd8qiE")))
 
 
 # -------------------------
@@ -400,8 +411,8 @@ survey.v1.countries <- survey.v1 %>%
   # Split the key column into two parts: question number and loop number.
   # Each column follows this pattern: Q4.2(1), Q4.3_1(2), etc., so the regex 
   # captures both parts: (Q4.2, 1), (Q4.3_1, 2), etc.
-  extract(key, c("question", "loop.number"),
-          c("(Q4.+)\\((\\d+)\\)")) %>%
+  tidyr::extract(key, c("question", "loop.number"),
+                 c("(Q4.+)\\((\\d+)\\)")) %>%
   #
   # Make columns for each of the questions
   spread(question, value) %>%
@@ -531,8 +542,8 @@ survey.v2.countries <- survey.v2 %>%
   # Split the key column into two parts: question number and loop number.
   # Each column follows this pattern: Q4.2(1), Q4.3_1(2), etc., so the regex 
   # captures both parts: (Q4.2, 1), (Q4.3_1, 2), etc.
-  extract(key, c("question", "loop.number"),
-          c("(Q4.+)\\((\\d+)\\)")) %>%
+  tidyr::extract(key, c("question", "loop.number"),
+                 c("(Q4.+)\\((\\d+)\\)")) %>%
   #
   # Make columns for each of the questions
   spread(question, value) %>%
@@ -605,9 +616,11 @@ survey.v2.countries <- survey.v2 %>%
   mutate(survey = "Final")
 
 
-# ----------------------------
-# Final combined survey data
-# ----------------------------
+# ----------------------------------------------------------------------
+# -----------------------------------
+# Deal with partials and duplicates
+# -----------------------------------
+# ----------------------------------------------------------------------
 survey.orgs.all <- survey.v1.orgs %>%
   bind_rows(survey.v2.orgs)
 
@@ -673,6 +686,106 @@ survey.countries.clean <- survey.countries.all %>%
          Q4.18, Q4.19, Q4.20, starts_with("Q4.21"), Q4.22, Q4.23, Q4.24)
 
 
+# ------------------------------------------------------
+# ---------------------------
+# Deal with hand-coded data
+# ---------------------------
+# ------------------------------------------------------
+#
+# ---------------------------
+# Issues worked on the most
+# ---------------------------
+# In Q3.1, organzations were asked to choose which issues they worked on. One
+# of the options was a free response "other" answer. Rather than carry this
+# response forward (because they might write a really long response), when
+# asked in Q3.2 which issue they worked on *the most*, one of the options was
+# also "other" (though not a free response), standing in place for whatever
+# they filled in as their other answer in Q3.1.
+# 
+# These other responses need to be hand coded. Using NLP or ML or something 
+# would be cool, but there seemingly aren't enough responses to make that 
+# useful. Regardless, responses do appear to cluster into recognizable
+# categories.
+survey.orgs.clean.final %>%
+  filter(!is.na(Q3.1_other_TEXT)) %>%
+  select(ResponseID, Q2.1, Q2.2_country, Q3.1_other_TEXT) %>%
+  mutate(Q3.2.manual = "") %>%
+  arrange(Q3.1_other_TEXT) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "other_issues_WILL_BE_OVERWRITTEN.csv"))
+
+# A handful of organizations left the issue area blank, but that's easiliy
+# imputable based on websites and Q3.1
+survey.orgs.clean.final %>%
+  filter(is.na(Q3.1_other_TEXT) & (Q3.2 == "Other" | is.na(Q3.2))) %>%
+  select(ResponseID, Q2.1, Q2.2_country, Q3.1_value) %>%
+  mutate(Q3.2.manual = "", Q3.1_value = paste(Q3.1_value)) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "missing_issues_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSVs
+other.issues.raw <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                       "handcoded_survey_stuff",
+                                       "other_issues.csv")) %>%
+  select(ResponseID, Q3.2.manual)
+
+missing.issues.raw <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                         "handcoded_survey_stuff",
+                                         "missing_issues.csv")) %>%
+  select(ResponseID, Q3.2.manual)
+
+other.issues.all <- bind_rows(other.issues.raw, missing.issues.raw)
+
+# Add the recoded issue to the list in Q3.1_value
+all.issues.clean <- survey.orgs.clean.final %>%
+  left_join(other.issues.all, by="ResponseID") %>%
+  unnest(Q3.1_value) %>%
+  group_by(ResponseID) %>%
+  mutate(Q3.1.replaced = ifelse(Q3.1_value == "Other", Q3.2.manual, Q3.1_value)) %>%
+  # In case the recoded "Other" matches an existing issue
+  distinct(Q3.1.replaced) %>%  
+  # Collapse all options into a single string, which is then split into a list
+  mutate(Q3.1.clean_value = paste(Q3.1.replaced, collapse=","),
+         Q3.1.clean_value = stri_split(Q3.1.clean_value, regex=",")) %>%
+  # Keep the first row in each group, since all rows are identical
+  slice(1) %>% select(-Q3.1.replaced)
+
+# Replace "Other" with the recoded issue in Q3.2
+main.issue.clean <- survey.orgs.clean.final %>%
+  select(ResponseID, Q3.1_value, Q2.1, Q3.1_other_TEXT, Q3.2) %>%
+  left_join(other.issues.all, by="ResponseID") %>%
+  mutate(Q3.2.clean = ifelse(Q3.2 == "Other", Q3.2.manual, as.character(Q3.2)),
+         Q3.2.clean = ifelse(is.na(Q3.2) & !is.na(Q3.2.manual), Q3.2.manual, Q3.2.clean)) %>%
+  select(ResponseID, Q3.2.clean)
+
+
+# Collapse main clean issue into high/low regime contentiousness
+# This is based partially on Bush:2015's typology of regime compatibility:
+# "programs that the target-country leaders view as unlikely to threaten their
+# imminent survival by causing regime collapse or overthrow"
+main.issue.clean %>%
+  group_by(Q3.2.clean) %>%
+  summarise(num = n()) %>%
+  ungroup() %>% arrange(desc(num)) %>%
+  mutate(potential.contentiousness = "") %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "contentiousness_WILL_BE_OVERWRITTEN.csv"))
+
+contentiousness <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                      "handcoded_survey_stuff",
+                                      "contentiousness.csv")) %>%
+  select(Q3.2.clean, potential.contentiousness) %>%
+  mutate(potential.contentiousness = factor(potential.contentiousness,
+                                            levels=c("Low", "High"),
+                                            ordered=TRUE))
+
+
+# --------------------------
+# Employees and volunteers
+# --------------------------
 # The number of employees and volunteers requires some cleaning since it was an
 # open text field in case they wanted to explain more about the number of
 # employees. If the response is only numeric, count it as numeric. Otherwise,
@@ -688,11 +801,13 @@ survey.orgs.clean.final %>%
   mutate(is.num = !str_detect(Q3.4, "[^0-9\\.,]"),
          Q3.4.num.manual = 0) %>%
   filter(is.num == FALSE) %>%
-  write_csv(file.path(PROJHOME, "Data", "data_base",
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
                       "employees_count_WILL_BE_OVERWRITTEN.csv"))
 
 # Read in clean CSV
-employees.clean <- read_csv(file.path(PROJHOME, "Data", "data_base",
+employees.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                      "handcoded_survey_stuff",
                                       "employees_count.csv")) %>%
   select(ResponseID, Q3.4.num.manual)
 
@@ -713,12 +828,14 @@ survey.orgs.clean.final %>%
   mutate(is.num = !str_detect(Q3.5, "[^0-9\\.,]"),
          Q3.5.num.manual = 0) %>%
   filter(is.num == FALSE) %>%
-  write_csv(file.path(PROJHOME, "Data", "data_base",
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
                       "volunteers_count_WILL_BE_OVERWRITTEN.csv"))
 
 # Read in clean CSV
-volunteers.clean <- read_csv(file.path(PROJHOME, "Data", "data_base",
-                                      "volunteers_count.csv")) %>%
+volunteers.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                       "handcoded_survey_stuff",
+                                       "volunteers_count.csv")) %>%
   select(ResponseID, Q3.5.num.manual)
 
 # Combine the automatic and manual columns
@@ -732,17 +849,231 @@ volunteers.num <- survey.orgs.clean.final %>%
                            NA)) %>%
   select(ResponseID, Q3.5.num)
 
-# Merge in numeric columns
+
+# --------------------------------------
+# Frequency of contact with government
+# --------------------------------------
+# Hand coding rules:
+#    - Assume following numeric values for frequency:
+#        - -1: Don't know
+#        - 0: Never
+#        - 1: Once every 2+ years
+#        - 2: Once a year
+#        - 3: Once a month
+#        - 4: Once a week
+#    - Add these new values:
+#        - 0.5: Rarely
+#        - 1.5: Unclear, like "as necessary" or "depends" or "occasionally"
+#        - 2.5: More than once a year, less than once a month (also "often",
+#               "regularly")
+#        - 3.5: More than once a month, less than once a week
+#        - 4.5: More than once a week
+
+# CSV to work with by hand
+survey.countries.clean %>%
+  select(ResponseID, loop.number, Q4.5_TEXT) %>%
+  filter(!is.na(Q4.5_TEXT)) %>%
+  mutate(Q4.5.manual = 0) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "frequency_govt_contact_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+govt.freq.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                       "handcoded_survey_stuff",
+                                       "frequency_govt_contact.csv")) %>%
+  select(ResponseID, loop.number, Q4.5.manual)
+
+# Combine the automatic and manual columns
+govt.freq.fixed <- survey.countries.clean %>%
+  select(ResponseID, loop.number, Q4.5) %>%
+  mutate(Q4.5.num = case_when(
+    .$Q4.5 == "Don't know" ~ -1,
+    .$Q4.5 == "Never" ~ 0,
+    .$Q4.5 == "Once every 2+ years" ~ 1,
+    .$Q4.5 == "Once a year" ~ 2,
+    .$Q4.5 == "Once a month" ~ 3,
+    .$Q4.5 == "Once a week" ~ 4
+  )) %>%
+  left_join(govt.freq.clean, by=c("ResponseID", "loop.number")) %>%
+  rowwise() %>%
+  mutate(Q4.5.num = ifelse(!is.na(Q4.5) | !is.na(Q4.5.num),
+                           sum(Q4.5.num, Q4.5.manual, na.rm=TRUE),
+                           NA)) %>%
+  mutate(Q4.5.clean = factor(Q4.5.num, levels=c(-1, seq(0, 4.5, 0.5)),
+                             labels=how.often.extra, ordered=TRUE)) %>%
+  select(ResponseID, loop.number, Q4.5.clean)
+
+
+# --------------------------------------
+# Frequency of reporting to government
+# --------------------------------------
+# Hand coding rules: Use same rules as contact with government above
+
+# CSV to work with by hand
+survey.countries.clean %>%
+  select(ResponseID, loop.number, Q4.8_TEXT) %>%
+  filter(!is.na(Q4.8_TEXT)) %>%
+  mutate(Q4.8.manual = 0) %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "frequency_govt_report_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+govt.freq.report.clean <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                             "handcoded_survey_stuff",
+                                             "frequency_govt_report.csv")) %>%
+  select(ResponseID, loop.number, Q4.8.manual)
+
+# Combine the automatic and manual columns
+govt.freq.report.fixed <- survey.countries.clean %>%
+  select(ResponseID, loop.number, Q4.8) %>%
+  mutate(Q4.8.num = case_when(
+    .$Q4.8 == "Don't know" ~ -1,
+    .$Q4.8 == "Never" ~ 0,
+    .$Q4.8 == "Once every 2+ years" ~ 1,
+    .$Q4.8 == "Once a year" ~ 2,
+    .$Q4.8 == "Once a month" ~ 3,
+    .$Q4.8 == "Once a week" ~ 4
+  )) %>%
+  left_join(govt.freq.report.clean, by=c("ResponseID", "loop.number")) %>%
+  rowwise() %>%
+  mutate(Q4.8.num = ifelse(!is.na(Q4.8) | !is.na(Q4.8.num),
+                           sum(Q4.8.num, Q4.8.manual, na.rm=TRUE),
+                           NA)) %>%
+  mutate(Q4.8.clean = factor(Q4.8.num, levels=c(-1, seq(0, 4.5, 0.5)),
+                             labels=how.often.extra, ordered=TRUE)) %>%
+  select(ResponseID, loop.number, Q4.8.clean)
+
+
+# --------------------------------------------------
+# -------------------------
+# Deal with external data
+# -------------------------
+# --------------------------------------------------
+# CSRE-related data
+full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                                    "full_data.feather"))
+
+# Get most recent CSRE, average CSRE over past 10 years, gwf.ever.autocracy,
+# most recent Polity, average Polity over past 10 years
+external.data <- full.data %>%
+  select(cowcode, country_name, year.num, autocracy = gwf.binary, 
+         csre = cs_env_sum, polity = e_polity2) %>%
+  filter(year.num >= 2005)
+
+# These external datasets don't cover all COW codes. For the models predicting
+# the CSRE, this is okay, since these missing countries tend to be missing a
+# ton of other variables too, so they're dropped. But with the survey analysis,
+# I don't want to discount dozens of responses because they're not matched in
+# the external data. So, I hand-code my own subjectivish autocracy measure for
+# countries that GWF don't cover.
+#
+# Get a list of all COW codes present in the survey (home and target countries)
+cows.all.survey <- unique(c(survey.orgs.clean.final$Q2.2_cow,
+                            survey.countries.clean$Q4.1_cow))
+  
+# List of all COW codes in V-Dem
+cows.in.external <- external.data %>%
+  distinct(cowcode)
+
+# Determine which countries don't have regime type data
+cows.no.regime.type <- external.data %>%
+  group_by(cowcode) %>%
+  mutate(no.gwf = all(is.na(autocracy))) %>%
+  ungroup() %>%
+  filter(no.gwf) %>%
+  distinct(cowcode)
+
+cows.in.survey.not.in.vdem <- data_frame(cowcode = cows.all.survey) %>%
+  filter(!(cowcode %in% cows.in.external$cowcode)) %>% na.omit()
+
+cows.missing <- c(cows.no.regime.type$cowcode, cows.in.survey.not.in.vdem$cowcode)
+
+# Determine these by hand based on Freedom House and Polity scores:
+data_frame(cowcode = cows.missing) %>%
+  mutate(country_name = countrycode(cowcode, "cown", "country.name")) %>%
+  mutate(autocracy = "", reason = "") %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "manual_regime_types_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+manual.regime.types <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                          "handcoded_survey_stuff",
+                                          "manual_regime_types.csv")) %>%
+  select(cowcode, autocracy.manual = autocracy)
+
+# Summarize external variables from V-Dem (captures most countries in survey)
+external.data.most <- external.data %>% 
+  left_join(manual.regime.types, by="cowcode") %>%
+  mutate(autocracy.final = ifelse(is.na(autocracy) & !is.na(autocracy.manual),
+                                  autocracy.manual, as.character(autocracy))) %>%
+  group_by(cowcode) %>%
+  mutate(csre.fixed = na.locf(csre, na.rm=FALSE),  # Forward-fill CSRE
+         polity.fixed = na.locf(polity, na.rm=FALSE),  # Forward-fill polity
+         ever.autocracy = any(autocracy.final == "Autocracy", na.rm=TRUE)) %>%
+  summarise(csre.mean = mean(csre, na.rm=TRUE),
+            csre.last = last(csre.fixed),
+            ever.autocracy = last(ever.autocracy),
+            polity.mean = mean(polity, na.rm=TRUE),
+            polity.last = last(polity.fixed))
+
+# TODO: Use actual polity for these stragglers instead of NA
+# These are the countries that aren't in V-Dem but are in the survey
+external.data.stragglers <- manual.regime.types %>%
+  filter(!(cowcode %in% external.data.most$cowcode)) %>%
+  group_by(cowcode) %>%
+  summarise(csre.mean = NA, csre.last = NA, 
+            ever.autocracy = any(autocracy.manual == "Autocracy"),
+            polity.mean = NA, polity.last = NA)
+
+# Finally create clean external dataframe to merge in
+external.data.summary <- bind_rows(external.data.most,
+                                   external.data.stragglers) %>%
+  mutate(regime.type = factor(ever.autocracy, levels=c(FALSE, TRUE), 
+                              labels=c("Democracy", "Autocracy")))
+
+external.data.home <- external.data.summary %>%
+  magrittr::set_colnames(paste0("home.", colnames(.)))
+
+external.data.target <- external.data.summary %>%
+  magrittr::set_colnames(paste0("target.", colnames(.)))
+
+
+# ----------------------------------------------------
+# --------------------------
+# Create final survey data
+# --------------------------
+# Merge in hand-coded and external data
 survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
+  left_join(all.issues.clean, by="ResponseID") %>%
+  left_join(main.issue.clean, by="ResponseID") %>%
+  left_join(contentiousness, by="Q3.2.clean") %>%
   left_join(employees.num, by="ResponseID") %>%
-  left_join(volunteers.num, by="ResponseID")
+  left_join(volunteers.num, by="ResponseID") %>%
+  left_join(external.data.home, by=c("Q2.2_cow"="home.cowcode"))
+
+survey.countries.clean.for.realz <- survey.countries.clean %>%
+  left_join(govt.freq.fixed, by=c("ResponseID", "loop.number")) %>%
+  left_join(govt.freq.report.fixed, by=c("ResponseID", "loop.number")) %>%
+  left_join(external.data.target, by=c("Q4.1_cow"="target.cowcode")) %>%
+  # Add issue area data
+  left_join(left_join(select(survey.orgs.clean.final.for.realz, 
+                             ResponseID, main.issue = Q3.2.clean), 
+                      contentiousness, 
+                      by=c("main.issue" = "Q3.2.clean")),
+            by="ResponseID")
+
 
 # Combine with country-level data
 survey.clean.all <- survey.orgs.clean.final.for.realz %>%
-  left_join(survey.countries.clean, by=c("ResponseID", "survey"))
+  left_join(survey.countries.clean.for.realz, by=c("ResponseID", "survey"))
 
 
+# ------------------------
 # Save all these things!
+# --------------------------
 # Not using feather because it can't handle list columns yet
 saveRDS(survey.orgs.all,
         file=file.path(PROJHOME, "Data", "data_processed",
@@ -760,6 +1091,6 @@ saveRDS(survey.orgs.clean.final.for.realz,
         file=file.path(PROJHOME, "Data", "data_processed", 
                        "survey_orgs_clean.rds"))
 
-saveRDS(survey.countries.clean, 
+saveRDS(survey.countries.clean.for.realz, 
         file=file.path(PROJHOME, "Data", "data_processed", 
                        "survey_countries_clean.rds"))
