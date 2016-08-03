@@ -55,18 +55,18 @@ dcjw <- read_feather(file.path(PROJHOME, "Data", "data_processed",
 
 # Archigos database of political leaders
 # http://privatewww.essex.ac.uk/~ksg/archigos.html
-leaders <- read_tsv("http://privatewww.essex.ac.uk/~ksg/data/1March_Archigos_4.1.txt")
-leaders.cases.orig <- leaders %>%
-  filter(ccode %in% countrycode(cases, "iso3c", "cown")) %>%
-  filter(enddate > ymd("1991-01-01")) %>%
-  mutate(middate = startdate - floor((startdate - enddate) / 2),
-         time.in.office = enddate - startdate,
-         leader = iconv(leader, from="Windows-1252", to="UTF-8"))  # Convert to UTF-8
+# leaders <- read_tsv("http://privatewww.essex.ac.uk/~ksg/data/1March_Archigos_4.1.txt")
+# leaders.cases.orig <- leaders %>%
+#   filter(ccode %in% countrycode(cases, "iso3c", "cown")) %>%
+#   filter(enddate > ymd("1991-01-01")) %>%
+#   mutate(middate = startdate - floor((startdate - enddate) / 2),
+#          time.in.office = enddate - startdate,
+#          leader = iconv(leader, from="Windows-1252", to="UTF-8"))  # Convert to UTF-8
 
 # Export to CSV for hand refining (and reinsertion of Medvedev since Archigos
 # says Putin never relinquished power, which is trueish)
-write_csv(leaders.cases.orig, file.path(PROJHOME, "Data", "data_base",
-                                        "leaders_archigos.csv"))
+# write_csv(leaders.cases.orig, file.path(PROJHOME, "Data", "data_base",
+#                                         "leaders_archigos.csv"))
 
 leaders.cases <- read_csv(file.path(PROJHOME, "Data", "data_base",
                                     "cases_presidents.csv")) %>%
