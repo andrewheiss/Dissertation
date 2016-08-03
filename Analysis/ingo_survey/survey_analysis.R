@@ -983,12 +983,15 @@ show.output <- function(chunk) {
   
   # Use diff for the two column effect!
   # http://stackoverflow.com/a/9214177/120898
-  cat(capture.output( analyze.cat.var(regime.table) ), sep="\n", file="tmp_regime")
-  cat(capture.output( analyze.cat.var(issue.table) ), sep="\n", file="tmp_issue")
+  tmp.regime <- tempfile()
+  tmp.issue <- tempfile()
+  
+  cat(capture.output( analyze.cat.var(regime.table) ), sep="\n", file=tmp.regime)
+  cat(capture.output( analyze.cat.var(issue.table) ), sep="\n", file=tmp.issue)
  
   # system does weeeeird stuff with knitr (see https://github.com/yihui/knitr/issues/1203),
   # so system(..., intern=TRUE) + cat(paste(..., collapse="\n)) does the trick
-  system.output <- system("diff -y -W 140 tmp_regime tmp_issue", intern=TRUE)
+  system.output <- system(sprintf("diff -y -W 140 %s %s", tmp.regime, tmp.issue), intern=TRUE)
   
   cat(paste(system.output, collapse="\n"))
 }
