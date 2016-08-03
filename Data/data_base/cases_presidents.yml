@@ -1,9 +1,14 @@
 ---
-title: Russian presidents
-filename: russia_presidents.csv
+title: Presidents of case study countries
+filename: cases_presidents.csv
 source:
+  - Archigos database of political leaders (http://privatewww.essex.ac.uk/~ksg/archigos.html)
   - "https://en.wikipedia.org/wiki/List_of_presidents_of_Russia"
 fields:
+  - name: ISO3
+    title: ISO3
+    type: string
+    description: ISO3 code for country
   - name: Date_start
     title: Term start date
     type: date

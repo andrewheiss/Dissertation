@@ -1,9 +1,13 @@
 ---
-title: Wars Russia has been directly engaged in
-filename: russia_wars.csv
+title: Wars and revolutions in case study countries
+filename: cases_wars.csv
 source:
   - "https://en.wikipedia.org/wiki/List_of_wars_involving_Russia#Russian_Federation_.281991.E2.80.93present.29"
 fields:
+  - name: ISO3
+    title: ISO3
+    type: string
+    description: ISO3 code for country
   - name: Date_start
     title: War start date
     type: date

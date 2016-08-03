@@ -1,0 +1,37 @@
+---
+title: Laws regulating civil society in case study countries
+filename: cases_ngo_laws.csv
+source:
+  - ICNL NGO Law Monitor (http://www.icnl.org/research/monitor/)
+  - Christensen and Weinstein data (https://darinchristensen.github.io/Data/DCJW_NGO_Laws.xlsx)
+  - Personal research
+fields:
+  - name: Date
+    title: Date
+    type: date
+    description: Date the law was passed or took effect
+  - name: ISO3
+    title: ISO3
+    type: string
+    description: ISO3 code for country
+  - name: law
+    title: Law name
+    type: string
+    description: Name of the law
+  - name: note
+    title: Note
+    type: string
+    description: Extra notes about the law
+  - name: include_plot
+    title: Include in plot
+    type: integer
+    description: Flag indicating if law should be plotted in timeline
+  - name: plot_y
+    title: Y position
+    type: float
+    description: Amount to shift label vertically
+  - name: plot_h
+    title: X position
+    type: string
+    description: Horizontal alignment of label
+---
