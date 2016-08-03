@@ -14,6 +14,39 @@ coef.names <- read_csv(file.path(PROJHOME, "Analysis",
 col.auth <- "#441152"
 col.dem <- "#BEDB3A"
 
+# Borrowed from wesanderson
+# https://github.com/karthik/wesanderson/blob/master/R/colors.R
+ath.palettes <- list(
+  wars = c("#00A1B0", "#6B4A3D", "#CC3340", 
+           "#EB6642", "#EDC952", "#B00DC9"),
+  leaders = c("#EB2E4A", "#78C4D4", "#333845",
+              "#D9EDE3", "#F5F791", "#ABABAB")
+)
+
+ath.palette <- function(name, n, type = c("discrete", "continuous")) {
+  type <- match.arg(type)
+  
+  pal <- ath.palettes[[name]]
+  if (is.null(pal)) {
+    stop("Palette not found.")
+  }
+  
+  if (missing(n)) {
+    n <- length(pal)
+  }
+  
+  if (type == "discrete" && n > length(pal)) {
+    stop("Number of requested colors greater than what palette can offer")
+  }
+  
+  out <- switch(type,
+                continuous = colorRampPalette(pal)(n),
+                discrete = pal[1:n]
+  )
+  structure(out, class = "palette", name = name)
+}
+
+
 theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
   update_geom_defaults("bar", list(fill = "grey30"))
   update_geom_defaults("line", list(colour = "grey30"))

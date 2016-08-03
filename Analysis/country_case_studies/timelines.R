@@ -16,32 +16,6 @@ source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 cases <- c("EGY", "CHN", "RUS")
 
 
-# Borrowed from wesanderson
-# https://github.com/karthik/wesanderson/blob/master/R/colors.R
-timeline.palettes <- list(
-  wars = c("#00A1B0", "#6B4A3D", "#CC3340", 
-           "#EB6642", "#EDC952", "#B00DC9"),
-  leaders = c("#EB2E4A", "#78C4D4", "#333845",
-              "#D9EDE3", "#F5F791", "#ABABAB")
-)
-
-timeline.palette <- function(name, n) {
-  pal <- timeline.palettes[[name]]
-  
-  if (is.null(pal)) {
-    stop("Palette not found.")
-  }
-  
-  if (missing(n)) {
-    n <- length(pal)
-  }
-  
-  out <- pal[1:n]
-  
-  structure(out, class="palette", name=name)
-}
-
-
 # -----------
 # Load data
 # -----------
@@ -154,8 +128,8 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
                              ymin=0, ymax=0.2, fill=war)) + 
     geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
                size=0.5, colour="grey50", linetype="dotted") +
-    scale_colour_manual(values=timeline.palette("leaders"), name=NULL) +
-    scale_fill_manual(values=timeline.palette("wars"), name=NULL) + 
+    scale_colour_manual(values=ath.palette("leaders"), name=NULL) +
+    scale_fill_manual(values=ath.palette("wars"), name=NULL) + 
     coord_cartesian(xlim=ymd(c(start.date, end.date))) +
     guides(colour=guide_legend(order=1),
            fill=guide_legend(order=2)) +
