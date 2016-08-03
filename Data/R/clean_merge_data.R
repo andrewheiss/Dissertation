@@ -952,15 +952,34 @@ gwf.simplfied.extended <- expand.grid(cowcode = unique(gwf.simplified$cowcode),
 
 
 # Christensen and Weinstein NGO laws
-dcjw.raw <- read_excel(file.path(PROJHOME, "Data", "data_raw",
-                                 "External", "DCJW NGO Laws", 
-                                 "DCJW_NGO_Laws.xlsx"))
+# Get and load DCJW data
+dcjw.url <- "https://darinchristensen.github.io/Data/DCJW_NGO_Laws.xlsx"
+dcjw.name <- basename(dcjw.url)
+dcjw.path <- file.path(PROJHOME, "Data", "data_raw",
+                       "External", "DCJW NGO Laws", dcjw.name)
 
-dcjw.years <- dcjw.raw[,1:50] %>%
-  summarise_each(funs(year.min = min(., na.rm=TRUE),
-                      year.max = max(., na.rm=TRUE)),
-                 ends_with("year")) %>%
-  gather(key, value)
+if (!file.exists(dcjw.path)) {
+  download.file(url=dcjw.url, dcjw.path, "auto")
+}
+
+# Tidy DCJW data
+dcjw <- read_excel(dcjw.path)[,1:50] %>%
+  select(-c(dplyr::contains("source"), dplyr::contains("burden"), 
+            dplyr::contains("subset"), Coder, Date)) %>%
+  gather(key, value, -Country) %>%
+  separate(key, c("question", "var.name"), 4) %>%
+  filter(!is.na(Country)) %>%
+  mutate(var.name = ifelse(var.name == "", "value", gsub("_", "", var.name))) %>%
+  spread(var.name, value) %>%
+  mutate(year.actual = ymd(paste0(year, "-01-01"), quiet=TRUE),
+         country.name = countrycode(Country, "country.name", "country.name"))
+
+write_feather(dcjw, file.path(PROJHOME, "data", "dcjw.feather"))
+
+dcjw.years <- dcjw %>%
+  group_by(question) %>%
+  summarise(year.min = min(year, na.rm=TRUE),
+            year.max = max(year, na.rm=TRUE))
 
 
 # Get map data for plotting
@@ -1027,3 +1046,7 @@ write_feather(icrg.monthly,
 saveRDS(countries.ggmap,
         file=file.path(PROJHOME, "Data", 
                        "data_processed", "countries110_robinson_ggmap.rds"))
+
+write_feather(dcjw,
+              file.path(PROJHOME, "Data", 
+                        "data_processed", "dcjw.feather"))
