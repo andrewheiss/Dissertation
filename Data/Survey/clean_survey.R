@@ -780,6 +780,8 @@ contentiousness <- read_csv(file.path(PROJHOME, "Data", "data_processed",
   select(Q3.2.clean, potential.contentiousness) %>%
   mutate(potential.contentiousness = factor(potential.contentiousness,
                                             levels=c("Low", "High"),
+                                            labels=c("Low contention",
+                                                     "High contention"),
                                             ordered=TRUE))
 
 
