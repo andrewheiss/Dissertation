@@ -16,11 +16,20 @@ col.dem <- "#BEDB3A"
 
 # Borrowed from wesanderson
 # https://github.com/karthik/wesanderson/blob/master/R/colors.R
+# Plain colors from http://clrs.cc/
 ath.palettes <- list(
   wars = c("#00A1B0", "#6B4A3D", "#CC3340", 
            "#EB6642", "#EDC952", "#B00DC9"),
   leaders = c("#EB2E4A", "#78C4D4", "#333845",
-              "#D9EDE3", "#F5F791", "#ABABAB")
+              "#D9EDE3", "#F5F791", "#ABABAB"),
+  palette1 = c("#FF4136",  # red
+               "#0074D9",  # blue
+               "#2ECC40",  # green
+               "#B10DC9",  # purple
+               "#FF851B",  # orange
+               "#FFDC00"),  # yellow
+  contention = c("#3D9970",  # olive
+                 "#FF851B")  # orange
 )
 
 ath.palette <- function(name, n, type = c("discrete", "continuous")) {
