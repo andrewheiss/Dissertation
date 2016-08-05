@@ -1070,7 +1070,8 @@ survey.countries.clean.for.realz <- survey.countries.clean %>%
 
 # Combine with country-level data
 survey.clean.all <- survey.orgs.clean.final.for.realz %>%
-  left_join(survey.countries.clean.for.realz, by=c("ResponseID", "survey"))
+  left_join(survey.countries.clean.for.realz,
+            by=c("ResponseID", "survey", "potential.contentiousness"))
 
 
 # ------------------------
