@@ -201,12 +201,46 @@ analyze.cat.var(issue.regime.table)
 #' - Sources and mix of funding
 #' - Time working in country
 #' 
-#' ### Staffing
+#' ### Employees
 #' 
-#' #### Employees
+#' #### Relationship with government (Q4.11)
+#' 
+df.employees.relationship <- survey.clean.all %>%
+  select(Q3.4.num, Q4.11, potential.contentiousness) %>%
+  filter(!(Q4.11 %in% c("Don't know", "Prefer not to answer"))) %>%
+  filter(!is.na(Q4.11)) %>%
+  mutate(Q4.11 = droplevels(Q4.11),
+         Q4.11 = factor(Q4.11, levels=rev(levels(Q4.11))))
 
-# TODO: Violin plots of distribution of employees, volunteers in each restrictiveness, since the median/means are so different + use log possibly
+df.employees.relationship.plot.means <- df.employees.relationship %>%
+  group_by(Q4.11, potential.contentiousness) %>%
+  summarise(average = mean(Q3.4.num, na.rm=TRUE),
+            med = median(Q3.4.num, na.rm=TRUE),
+            num = n())
 
+#+ fig.width=6, fig.height=3
+ggplot(df.employees.relationship, aes(y=Q4.11, x=Q3.4.num)) + 
+  geom_violinh(na.rm=TRUE) +
+  geom_point(alpha=0.2, size=0.5) +
+  geom_point(data=df.employees.relationship.plot.means,
+             aes(x=med, y=Q4.11)) +
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  labs(x="Number of employees", y=NULL,
+       title="Relationship with government and # of employees") +
+  theme_ath() + facet_wrap(~ potential.contentiousness)
+
+#+ fig.width=6, fig.height=3
+ggplot(df.employees.relationship.plot.means, 
+       aes(x=med, y=Q4.11, fill=potential.contentiousness)) +
+  geom_barh(stat="identity", position="dodge") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
+  labs(x="Median number of employees", y=NULL, 
+       title="Median # of employees and relationship with government") +
+  theme_ath()
+
+#' #### Overall perception of restriction (Q4.17)
+#' 
 df.employees.restriction <- survey.clean.all %>%
   select(Q3.4.num, Q4.17, potential.contentiousness) %>%
   filter(Q4.17 != "Don’t know") %>%
@@ -233,15 +267,87 @@ ggplot(df.employees.restriction, aes(y=Q4.17, x=Q3.4.num)) +
 #+ fig.width=6, fig.height=3
 ggplot(df.employees.restrictions.plot.means, 
        aes(x=med, y=Q4.17, fill=potential.contentiousness)) +
-  geom_barh(stat="identity", position="stack") + 
+  geom_barh(stat="identity", position="dodge") + 
   scale_x_continuous(expand=c(0, 0)) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   labs(x="Median number of employees", y=NULL, 
        title="Median # of employees and perceptions of restriction") +
   theme_ath()
 
+#' #### Changes in programming (Q4.19)
+#' 
+df.employees.changes <- survey.clean.all %>%
+  select(Q3.4.num, Q4.19, potential.contentiousness) %>%
+  filter(Q4.19 != "Don't know") %>%
+  mutate(Q4.19 = droplevels(Q4.19),
+         Q4.19 = factor(Q4.19, levels=rev(levels(Q4.19))))
 
-#' #### Volunteers
+df.employees.changes.plot.means <- df.employees.changes %>%
+  group_by(Q4.19, potential.contentiousness) %>%
+  summarise(average = mean(Q3.4.num, na.rm=TRUE),
+            med = median(Q3.4.num, na.rm=TRUE),
+            num = n())
+
+#+ fig.width=6, fig.height=3
+ggplot(df.employees.changes, aes(y=Q4.19, x=Q3.4.num)) + 
+  geom_violinh(na.rm=TRUE) +
+  geom_point(alpha=0.2, size=0.5) +
+  geom_point(data=df.employees.changes.plot.means,
+             aes(x=med, y=Q4.19)) +
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  labs(x="Number of employees", y=NULL,
+       title="Changes in programming and # of employees") +
+  theme_ath() + facet_wrap(~ potential.contentiousness)
+
+#+ fig.width=6, fig.height=3
+ggplot(df.employees.changes.plot.means, 
+       aes(x=med, y=Q4.19, fill=potential.contentiousness)) +
+  geom_barh(stat="identity", position="dodge") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
+  labs(x="Median number of employees", y=NULL, 
+       title="Median # of employees and changes in programming") +
+  theme_ath()
+
+#' #### Attempts to change programming (Q4.23)
+#' 
+df.employees.change.attempt <- survey.clean.all %>%
+  select(Q3.4.num, Q4.23, potential.contentiousness) %>%
+  filter(Q4.23 != "Don't know") %>%
+  mutate(Q4.23 = droplevels(Q4.23),
+         Q4.23 = factor(Q4.23, levels=rev(levels(Q4.23))))
+
+df.employees.change.attempt.plot.means <- df.employees.change.attempt %>%
+  group_by(Q4.23, potential.contentiousness) %>%
+  summarise(average = mean(Q3.4.num, na.rm=TRUE),
+            med = median(Q3.4.num, na.rm=TRUE),
+            num = n())
+
+#+ fig.width=6, fig.height=3
+ggplot(df.employees.change.attempt, aes(y=Q4.23, x=Q3.4.num)) + 
+  geom_violinh(na.rm=TRUE) +
+  geom_point(alpha=0.2, size=0.5) +
+  geom_point(data=df.employees.change.attempt.plot.means,
+             aes(x=med, y=Q4.23)) +
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  labs(x="Number of employees", y=NULL,
+       title="Changes in programming and # of employees") +
+  theme_ath() + facet_wrap(~ potential.contentiousness)
+
+#+ fig.width=6, fig.height=3
+ggplot(df.employees.change.attempt.plot.means, 
+       aes(x=med, y=Q4.23, fill=potential.contentiousness)) +
+  geom_barh(stat="identity", position="dodge") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
+  labs(x="Median number of employees", y=NULL, 
+       title="Median # of employees and changes in programming") +
+  theme_ath()
+
+#' ### Volunteers
+#' 
+#' #### Overall perception of restriction (Q4.17)
+#' 
 df.volunteers.restriction <- survey.clean.all %>%
   select(Q3.5.num, Q4.17, potential.contentiousness) %>%
   filter(Q4.17 != "Don’t know") %>%
@@ -268,7 +374,7 @@ ggplot(df.volunteers.restriction, aes(y=Q4.17, x=Q3.5.num)) +
 #+ fig.width=6, fig.height=3
 ggplot(df.volunteers.restrictions.plot.means, 
        aes(x=med, y=Q4.17, fill=potential.contentiousness)) +
-  geom_barh(stat="identity", position="stack") + 
+  geom_barh(stat="identity", position="dodge") + 
   scale_x_continuous(expand=c(0, 0)) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   labs(x="Median number of volunteers", y=NULL, 
