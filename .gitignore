@@ -99,6 +99,7 @@ Data/Survey/output/*
 Analysis/**.html
 Analysis/**.md
 Analysis/**_files/*
+Analysis/**_cache/*
 !Analysis/html/*.html
 
 # ---------
