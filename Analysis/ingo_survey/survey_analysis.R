@@ -182,7 +182,99 @@ issue.regime.table <- survey.countries.clean %>%
 analyze.cat.var(issue.regime.table)
 
 
-#' ### Activities
+#' ## H~1~: Instrumental concerns
+#' 
+#' What is the relationship beween feelings of restriction and instrumental
+#' concerns? How do respondents working in different regime types and on
+#' different issues differ in the distribution of their instrumental
+#' characteristics? Do those differences help drive restrictions?
+#' 
+#' Things to check against relationship with government (Q4.11), types of
+#' regulation (Q4.16), overall level of restriction (Q4.17), changes in
+#' programming (Q4.19), type of changes (Q4.21), and attempts at changing
+#' regulations (Q4.23):
+#' 
+#' - Staffing (employees and volunteers)
+#' - Collaboration (which kinds of institutions do they collaborate with +
+#' number of different types of collaborative relationships (i.e. collaboration
+#' only with governemnts vs. governments + IGOs + NGOs + businesses))
+#' - Sources and mix of funding
+#' - Time working in country
+#' 
+#' ### Staffing
+#' 
+#' #### Employees
+
+# TODO: Violin plots of distribution of employees, volunteers in each restrictiveness, since the median/means are so different + use log possibly
+
+df.employees.restriction <- survey.clean.all %>%
+  select(Q3.4.num, Q4.17, potential.contentiousness) %>%
+  filter(Q4.17 != "Don’t know") %>%
+  mutate(Q4.17 = droplevels(Q4.17),
+         Q4.17 = factor(Q4.17, levels=rev(levels(Q4.17))))
+
+df.employees.restrictions.plot.means <- df.employees.restriction %>%
+  group_by(Q4.17, potential.contentiousness) %>%
+  summarise(average = mean(Q3.4.num, na.rm=TRUE),
+            med = median(Q3.4.num, na.rm=TRUE),
+            num = n())
+
+#+ fig.width=6, fig.height=3
+ggplot(df.employees.restriction, aes(y=Q4.17, x=Q3.4.num)) + 
+  geom_violinh(na.rm=TRUE) +
+  geom_point(alpha=0.2, size=0.5) +
+  geom_point(data=df.employees.restrictions.plot.means,
+             aes(x=med, y=Q4.17)) +
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  labs(x="Number of employees", y=NULL,
+       title="Perceptions of restriction and # of employees") +
+  theme_ath() + facet_wrap(~ potential.contentiousness)
+
+#+ fig.width=6, fig.height=3
+ggplot(df.employees.restrictions.plot.means, 
+       aes(x=med, y=Q4.17, fill=potential.contentiousness)) +
+  geom_barh(stat="identity", position="stack") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
+  labs(x="Median number of employees", y=NULL, 
+       title="Median # of employees and perceptions of restriction") +
+  theme_ath()
+
+
+#' #### Volunteers
+df.volunteers.restriction <- survey.clean.all %>%
+  select(Q3.5.num, Q4.17, potential.contentiousness) %>%
+  filter(Q4.17 != "Don’t know") %>%
+  mutate(Q4.17 = droplevels(Q4.17),
+         Q4.17 = factor(Q4.17, levels=rev(levels(Q4.17))))
+
+df.volunteers.restrictions.plot.means <- df.volunteers.restriction %>%
+  group_by(Q4.17, potential.contentiousness) %>%
+  summarise(average = mean(Q3.5.num, na.rm=TRUE),
+            med = median(Q3.5.num, na.rm=TRUE),
+            num = n())
+
+#+ fig.width=6, fig.height=3
+ggplot(df.volunteers.restriction, aes(y=Q4.17, x=Q3.5.num)) + 
+  geom_violinh(na.rm=TRUE) +
+  geom_point(alpha=0.2, size=0.5) +
+  geom_point(data=df.volunteers.restrictions.plot.means,
+             aes(x=med, y=Q4.17)) +
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  labs(x="Number of volunteers", y=NULL,
+       title="Perceptions of restriction and # of volunteers") +
+  theme_ath() + facet_wrap(~ potential.contentiousness)
+
+#+ fig.width=6, fig.height=3
+ggplot(df.volunteers.restrictions.plot.means, 
+       aes(x=med, y=Q4.17, fill=potential.contentiousness)) +
+  geom_barh(stat="identity", position="stack") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
+  labs(x="Median number of volunteers", y=NULL, 
+       title="Median # of volunteers and perceptions of restriction") +
+  theme_ath()
+
 
 # TODO: Staffing, collaboration, funding, etc.
 
