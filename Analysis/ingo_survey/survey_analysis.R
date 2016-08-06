@@ -165,7 +165,7 @@ plot.issue.regime <- prodplot(df.issue.regime,
                               ~ target.regime.type + 
                                 potential.contentiousness, mosaic("h")) + 
   aes(fill=target.regime.type, linetype=potential.contentiousness) + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   scale_linetype_manual(values=c("blank", "dashed")) +
   guides(fill=FALSE, linetype=FALSE) +
   labs(title="Potential issue contentiousness across regime types",
@@ -416,7 +416,7 @@ plot.time.country.regime <- prodplot(df.time.country.regime,
                                      ~ target.regime.type + Q4.2, mosaic("h"), 
                                      colour=NA) + 
   aes(fill=target.regime.type, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Length of time in country, by regime type",
        subtitle="Q4.2: How long has your organization worked in `target_country`?") +
@@ -453,7 +453,7 @@ plot.time.country.issue <- prodplot(df.time.country.issue,
                                      ~ potential.contentiousness + Q4.2, mosaic("h"), 
                                      colour=NA) + 
   aes(fill=potential.contentiousness, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Length of time in country, by potential contentiousness",
        subtitle="Q4.2: How long has your organization worked in `target_country`?") +
@@ -492,7 +492,7 @@ plot.time.country.issue.regime <- prodplot(df.time.country.issue.regime,
                                     ~ target.regime.type + potential.contentiousness +
                                       Q4.2, mosaic("v")) + 
   aes(fill=target.regime.type, linetype=potential.contentiousness) + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime")) +
   scale_linetype_manual(values=c("blank", "dashed")) +
   guides(fill=FALSE, linetype=FALSE) +
   labs(title="Length of time in country",
@@ -540,7 +540,7 @@ plot.operations.regime <- prodplot(df.operations.regime,
                                      ~ target.regime.type + Q4.3, mosaic("h"), 
                                      colour=NA) + 
   aes(fill=target.regime.type, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="How INGOs work in the target country, by regime type",
        subtitle="Q4.3: What does your organization do in `target_country`?\n(multiple answers allowed)") +
@@ -576,7 +576,7 @@ plot.operations.issue <- prodplot(df.operations.issue,
                                   ~ potential.contentiousness + Q4.3, mosaic("h"), 
                                   colour=NA) + 
   aes(fill=potential.contentiousness, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="How INGOs work in the target country, by issue",
        subtitle="Q4.3: What does your organization do in `target_country`?\n(multiple answers allowed)") +
@@ -613,7 +613,7 @@ plot.registered.regime <- prodplot(df.registered.regime,
                                    ~ target.regime.type + Q4.4, mosaic("h"), 
                                    colour=NA) + 
   aes(fill=target.regime.type, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Registration status, by regime type",
        subtitle="Q4.4: Is your organization registered with the national government in `target_country`?") +
@@ -646,7 +646,7 @@ plot.registered.issue <- prodplot(df.registered.issue,
                                   ~ potential.contentiousness + Q4.4, mosaic("h"), 
                                   colour=NA) + 
   aes(fill=potential.contentiousness, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Registration status, by issue",
        subtitle="Q4.4: Is your organization registered with the national government in `target_country`?") +
@@ -698,7 +698,7 @@ plot.freq.report.regime <- prodplot(df.freq.report.regime,
                                    ~ target.regime.type + Q4.8.collapsed, mosaic("h"), 
                                    colour=NA) + 
   aes(fill=target.regime.type, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Frequency of reporting to government, by regime type",
        subtitle="Q4.8: How often is your organization required to report to the government of  `target_country`?") +
@@ -729,7 +729,7 @@ plot.involvement.regime <- prodplot(df.involvement.regime,
                                    ~ target.regime.type + Q4.9, mosaic("h"), 
                                    colour=NA) + 
   aes(fill=target.regime.type, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Government involvement, by regime type",
        subtitle="Q4.9: Are members of the government or ruling party of `target_country` involved in your work?") +
@@ -770,7 +770,7 @@ plot.govt.positivity.regime <- prodplot(df.govt.positivity.regime,
                                         ~ target.regime.type + Q4.11, mosaic("h"),
                                         colour=NA) +
   aes(fill=target.regime.type, colour="white") +
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Relationship with the government, by regime type",
        subtitle="Q4.11: How would you characterize your organization’s relationship with the government of `target_country`?") +
@@ -806,7 +806,7 @@ plot.reg.familiarity.regime <- prodplot(df.reg.familiarity.regime,
                                         ~ target.regime.type + Q4.13, mosaic("h"),
                                         colour=NA) +
   aes(fill=target.regime.type, colour="white") +
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Familiarity with regulations, by regime type",
        subtitle="Q4.13: How familiar is your organization with regulations for\ninternational nongovernmental organizations (NGOs) in `target_country`?") +
@@ -852,7 +852,7 @@ plot.reg.change.regime <- prodplot(df.freq.change,
                                         ~ target.regime.type + Q4.14.collapsed, mosaic("h"),
                                         colour=NA) +
   aes(fill=target.regime.type, colour="white") +
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Frequency of changes, by regime type",
        subtitle="Q4.14: How often do regulations for international NGOs in `target_country` change?") +
@@ -876,7 +876,7 @@ plot.reg.change.issue <- prodplot(df.freq.change,
                                   ~ potential.contentiousness + Q4.14.collapsed, mosaic("h"),
                                   colour=NA) +
   aes(fill=potential.contentiousness, colour="white") +
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Frequency of changes, by issue",
        subtitle="Q4.14: How often do regulations for international NGOs in `target_country` change?") +
@@ -915,7 +915,7 @@ plot.change.how.regime <- prodplot(df.change.how.regime,
                                    ~ target.regime.type + Q4.15, mosaic("h"),
                                    colour=NA) +
   aes(fill=target.regime.type, colour="white") +
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="How NGOs find out, by regime type",
        subtitle="Q4.15: How does your organization find out about changes to\nNGO regulations in `target_country`? (multiple answers allowed)") +
@@ -937,7 +937,7 @@ plot.change.how.regime.bar <- ggplot(plot.df.change.how.regime,
                                      aes(x=perc, y=Q4.15, 
                                          fill=target.regime.type)) +
   geom_barh(stat="identity") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   scale_x_continuous(labels=percent) +
   labs(x=NULL, y=NULL, title="Percentages by regime type") + 
   guides(fill=FALSE) +
@@ -978,7 +978,7 @@ plot.reg.effect.general.regime <- prodplot(df.reg.effect.general.regime,
                                    ~ target.regime.type + Q4.17, mosaic("h"),
                                    colour=NA) +
   aes(fill=target.regime.type, colour="white") +
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="General restrictions, by regime type",
        subtitle="Q4.17: Overall, how is your organization's work affected by government regulations in `target_country`?") +
@@ -1012,7 +1012,7 @@ plot.reg.effect.general.issue <- prodplot(df.reg.effect.general.issue,
                                           ~ potential.contentiousness + Q4.17, mosaic("h"),
                                           colour=NA) +
   aes(fill=potential.contentiousness, colour="white") +
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="General restrictions, by issue",
        subtitle="Q4.17: Overall, how is your organization's work affected by government regulations in `target_country`?") +
@@ -1052,7 +1052,7 @@ plot.reg.effect.general.issue.regime <- prodplot(df.reg.effect.general.issue.reg
                                           ~ target.regime.type + potential.contentiousness +
                                             Q4.17, mosaic("v")) +
   aes(fill=target.regime.type, linetype=potential.contentiousness) + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime")) +
   scale_linetype_manual(values=c("blank", "dashed")) +
   guides(fill=FALSE, linetype=FALSE) +
   labs(title="General restrictions, by issue and regime type",
@@ -1091,7 +1091,7 @@ plot.change.programming.regime <- prodplot(df.change.programming.regime,
                                     ~ target.regime.type + Q4.19, mosaic("h"), 
                                     colour=NA) + 
   aes(fill=target.regime.type, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Change in programming, by regime type",
        subtitle="Q4.19: Over the last 10 years, has your organization changed its mix of programming in `target_country`?") +
@@ -1124,7 +1124,7 @@ plot.change.programming.issue <- prodplot(df.change.programming.issue,
                                    ~ potential.contentiousness + Q4.19, mosaic("h"), 
                                    colour=NA) + 
   aes(fill=potential.contentiousness, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Change in programming, by issue",
        subtitle="Q4.19: Over the last 10 years, has your organization changed its mix of programming in `target_country`?") +
@@ -1201,7 +1201,7 @@ show.plots <- function(chunk) {
                           ~ target.regime.type + response, mosaic("h"),
                           colour=NA) + 
     aes(fill=target.regime.type, colour="white") + 
-    scale_fill_manual(values=c("grey80", "grey40")) +
+    scale_fill_manual(values=ath.palette("regime"), name=NULL) +
     guides(fill=FALSE) +
     labs(title=current.question) +
     theme_ath() + theme(axis.title=element_blank(),
@@ -1211,7 +1211,7 @@ show.plots <- function(chunk) {
                          ~ potential.contentiousness + response, mosaic("h"),
                          colour=NA) + 
     aes(fill=potential.contentiousness, colour="white") + 
-    scale_fill_manual(values=c("grey80", "grey40")) +
+    scale_fill_manual(values=ath.palette("contention"), name=NULL) +
     guides(fill=FALSE) +
     labs(title=" ") +
     theme_ath() + theme(axis.title=element_blank(),
@@ -1271,7 +1271,7 @@ plot.discuss.regime <- prodplot(df.discuss.regime,
                                     ~ target.regime.type + Q4.22, mosaic("h"), 
                                     colour=NA) + 
   aes(fill=target.regime.type, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Discussions about regulations, by regime type",
        subtitle="Q4.22: Has your organization discussed NGO regulations with government officials in `target_country`?") +
@@ -1304,7 +1304,7 @@ plot.discuss.issue <- prodplot(df.discuss.issue,
                                ~ potential.contentiousness + Q4.22, mosaic("h"), 
                                colour=NA) + 
   aes(fill=potential.contentiousness, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Discussions about regulations, by issue",
        subtitle="Q4.22: Has your organization discussed NGO regulations with government officials in `target_country`?") +
@@ -1342,7 +1342,7 @@ plot.change.regs.regime <- prodplot(df.change.regs.regime,
                                 ~ target.regime.type + Q4.23, mosaic("h"), 
                                 colour=NA) + 
   aes(fill=target.regime.type, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Attempts to change regulations, by regime type",
        subtitle="Q4.23: Has your organization tried to change NGO regulations in `target_country`?") +
@@ -1375,7 +1375,7 @@ plot.change.regs.issue <- prodplot(df.change.regs.issue,
                                ~ potential.contentiousness + Q4.23, mosaic("h"), 
                                colour=NA) + 
   aes(fill=potential.contentiousness, colour="white") + 
-  scale_fill_manual(values=c("grey80", "grey40")) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="Attempts to change regulations, by issue",
        subtitle="Q4.23: Has your organization tried to change NGO regulations in `target_country`?") +

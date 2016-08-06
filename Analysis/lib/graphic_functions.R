@@ -29,7 +29,9 @@ ath.palettes <- list(
                "#FF851B",  # orange
                "#FFDC00"),  # yellow
   contention = c("#3D9970",  # olive
-                 "#FF851B")  # orange
+                 "#FF851B"),  # orange
+  regime = c("#FFDC00",  # yellow
+             "#85144b")  # maroon
 )
 
 ath.palette <- function(name, n, type = c("discrete", "continuous")) {
