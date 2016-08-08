@@ -67,6 +67,12 @@ countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 # All possible countries (to fix the South Sudan issue)
 possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
 
+# Survey responses
+great.none.dk <- c("A great deal", "A lot", "A moderate amount",
+                   "A little", "None at all", "Don't know", "Not applicable")
+great.none <- great.none.dk[1:5]
+
+
 # ------------------
 # Useful functions
 # ------------------
@@ -238,6 +244,47 @@ ggplot(df.employees.relationship.plot.means,
   labs(x="Median number of employees", y=NULL, 
        title="Median # of employees and relationship with government") +
   theme_ath()
+
+#' #### Types of regulation (Q4.16)
+#' 
+df.employees.reg.types <- survey.clean.all %>%
+  select(Q3.4.num, starts_with("Q4.16"), -dplyr::contains("TEXT"), 
+         potential.contentiousness) %>%
+  gather(regulation, response, starts_with("Q4.16")) %>%
+  mutate(regulation = gsub("Q4\\.16_", "", regulation)) %>%
+  filter(!(response %in% c("Don't know", "Not applicable"))) %>%
+  filter(!is.na(response)) %>%
+  mutate(response = factor(response, levels=great.none, ordered=TRUE))
+
+df.employees.reg.types.plot.means <- df.employees.reg.types %>%
+  group_by(regulation, response, potential.contentiousness) %>%
+  summarise(average = mean(Q3.4.num, na.rm=TRUE),
+            med = median(Q3.4.num, na.rm=TRUE),
+            num = n())
+
+#+ fig.width=9, fig.height=4
+ggplot(df.employees.reg.types, aes(y=response, x=Q3.4.num, 
+                                   fill=potential.contentiousness)) + 
+  geom_violinh(na.rm=TRUE) + 
+  geom_point(alpha=0.2, size=0.5) +
+  geom_point(data=df.employees.reg.types.plot.means,
+             aes(x=med, y=response)) +
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
+  labs(x="Number of employees", y=NULL,
+       title="Types of regulation, perceptions of restriction, and # of employees (logged)") +
+  theme_ath() + 
+  facet_wrap(~ regulation + potential.contentiousness, nrow=2)
+
+#+ fig.width=6, fig.height=3
+ggplot(df.employees.reg.types.plot.means, 
+       aes(x=med, y=response, fill=potential.contentiousness)) +
+  geom_barh(stat="identity", position="dodge") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
+  labs(x="Median number of employees", y=NULL, 
+       title="Median # of employees and types of regulation") +
+  theme_ath() + facet_wrap(~ regulation)
 
 #' #### Overall perception of restriction (Q4.17)
 #' 
