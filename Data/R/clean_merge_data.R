@@ -1050,3 +1050,8 @@ saveRDS(countries.ggmap,
 write_feather(dcjw,
               file.path(PROJHOME, "Data", 
                         "data_processed", "dcjw.feather"))
+
+# For Judith's book
+write_feather(icrg.all,
+              file.path(PROJHOME, "Data", 
+                        "data_processed", "icrg_all.feather"))
