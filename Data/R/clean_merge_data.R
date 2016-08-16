@@ -974,12 +974,51 @@ dcjw <- read_excel(dcjw.path)[,1:50] %>%
   mutate(year.actual = ymd(paste0(year, "-01-01"), quiet=TRUE),
          country.name = countrycode(Country, "country.name", "country.name"))
 
-write_feather(dcjw, file.path(PROJHOME, "data", "dcjw.feather"))
+dcjw.clean <- dcjw %>%
+  mutate(barrier = case_when(
+    substr(.$question, 3, 3) == 2 ~ "dcjw.entry",
+    substr(.$question, 3, 3) == 3 ~ "dcjw.funding",
+    substr(.$question, 3, 3) == 4 ~ "dcjw.advocacy",
+    TRUE ~ NA_character_
+  )) %>%
+  # Can't use case_when here because it gives "NAs are not allowed in 
+  # subscripted assignments" error
+  mutate(value = ifelse(question == "q_2c" & value == 0, 1,
+                        ifelse(question == "q_2c" & value == 1, 0, value))) %>%
+  # Get rid of non-barrier questions
+  filter(!is.na(barrier)) %>%
+  filter(!is.na(value)) %>%
+  # Get rid of rows where year is missing and regulation was not imposed
+  filter(!(is.na(year) & value == 0)) %>%
+  # If year is missing but some regulation exists, assume it has always already
+  # existed (since 1950, arbitrarily)
+  mutate(year = ifelse(is.na(year), 1950, year))
 
-dcjw.years <- dcjw %>%
-  group_by(question) %>%
-  summarise(year.min = min(year, na.rm=TRUE),
-            year.max = max(year, na.rm=TRUE))
+potential.dcjw.panel <- dcjw.clean %>%
+  tidyr::expand(country.name, barrier, 
+                year = min(.$year, na.rm=TRUE):max(.$year, na.rm=TRUE))
+
+dcjw.by.year <- dcjw.clean %>%
+  # Sum of restrictions in each type of barrier in each country each year
+  group_by(country.name, barrier, year) %>%
+  summarise(index = sum(value)) %>%
+  # Join with full possible panel
+  right_join(potential.dcjw.panel, by=c("country.name", "barrier", "year")) %>%
+  # Cumulative sum of restrictions in each type of barrier in each country
+  mutate(index = ifelse(is.na(index), 0, index),
+         index.cum = cumsum(index)) %>%
+  ungroup() %>%
+  # Lop off the ancient observations
+  filter(year > 1990) %>%
+  # Fix Serbia
+  mutate(cowcode = countrycode(country.name, "country.name", "cown"),
+         cowcode = ifelse(country.name == "Serbia", 340, cowcode)) %>%
+  select(-c(index, country.name)) %>%
+  # Make variables for each kind of barrier + total number of barriers
+  spread(barrier, index.cum) %>%
+  rowwise() %>%
+  mutate(dcjw.total = sum(dcjw.entry, dcjw.funding, dcjw.advocacy)) %>%
+  ungroup()
 
 
 # Get map data for plotting
@@ -1014,6 +1053,7 @@ countries.ggmap <- ggplot2::fortify(countries.robinson, region="iso_a3") %>%
 full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   # Join *everything* to the empty panel
   left_join(vdem.cso, by=c("year", "cowcode")) %>%
+  left_join(dcjw.by.year, by=c("year", "cowcode")) %>%
   left_join(vars.distance.min, by=c("year", "cowcode")) %>%
   left_join(icrg.all.with.aggregates, by=c("cowcode", "year" = "year.num")) %>%
   left_join(pol.inst, by=c("cowcode" = "cow", "year")) %>%
