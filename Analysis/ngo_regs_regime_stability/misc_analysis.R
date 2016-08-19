@@ -36,11 +36,15 @@ library(ggstance)
 library(gridExtra)
 library(scales)
 library(Cairo)
+library(pander)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
 full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
                                     "full_data.feather"))
+
+dcjw <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                               "dcjw.feather"))
 
 my.seed <- 1234
 set.seed(my.seed)
@@ -99,6 +103,174 @@ fig.save.cairo(plot.csre.top.bottom, filename="1-csre-top-bottom",
                width=5, height=2.5)
 
 
+#' # CSRE and other measures of restriction?
+#' 
+#' How does the CSRE compare to other measures of civil society restriction?
+#' 
+#' ## Christensen and Weinstein NGO laws
+#' 
+#' The DCJW data shows the rough onset of different types of foreign-ish NGO
+#' restriction, including barriers to (1) entry, (2) funding, and (3) advocacy.
+#' I create a kind of index for each, sometimes reversing the coding (i.e. when
+#' a "no" actually means worsening restrictions). Here's what I do:
+#' 
+#' **Barriers to entry**: (4 points)
+#' 
+#' - 2a. Are NGOs required to register with the government?: Yes = 1; No = 0
+#' - 2b. How burdensome is registration?: Vague, onerous = 1; well defined = 0
+#' - 2c. In law, can an NGO appeal if denied registration?: Yes = 0; No = 1
+#'   (reversed)
+#' - 2d. Are barriers to entry different for NGOs receiving foreign funds?:
+#'   Less burdensome = −1; same = 0; more burdensome = 1
+#' 
+#' **Barriers to funding**: (8 points)
+#' 
+#' - 3a. Are NGOs required to disclose their funding sources to the
+#'   government?: Yes = 1; No = 0
+#' - 3b. Do NGOs need prior approval from the government to receive foreign
+#'   funding?: Yes = 1; No = 0
+#' - 3c. Are NGOs required to channel foreign funding through state-owned banks
+#'   or government ministries?: Yes = 1; No = 0
+#' - 3d. Are any additional restrictions on foreign support in place (beyond
+#'   prior approval for and the channeling of foreign funding)?: Yes = 1; No = 0
+#' - 3e. Are all NGOs prohibited from receiving foreign funds?: No = 0; No up
+#'   to a certain threshold = 1; Yes = 2
+#' - 3f. Are a category of NGOs prohibited from receiving foreign funds?: No =
+#'   0; No up to a certain threshold = 1; Yes = 2
+#' 
+#' **Barriers to advocacy**: (4 points)
+#' 
+#' - 4a. Does the law restrict NGOs from engaging in political activities?: No
+#'   = 0; topics/ability limited = 1; political activities prohibited = 2
+#' - Has the government used intimidation or dissolution to deter NGOs from
+#'   engaging in political activities?: Yes = 1; No = 0
+#' - 4c. Are restrictions on political activities different for NGOs receiving
+#'   foreign funds?: Less restrictive = −1; same = 0; more restrictive = 1
+#' 
+#' The count of restrictions on NGOs is negatively correlated with the CSRE,
+#' which makes sense—the CSRE has a wide possible distribution when there are
+#' only a few restrictions, since it's normal to have *some* sort of legal
+#' control over NGOs. But as those restrictions increase, the CSRE worsens.
+#' 
+#' Barriers to entry aren't as linked to the CSRE; barriers to advocacy and
+#' funding have a stronger negative effect.
+#' 
+#+ warning=FALSE
+dcjw.barriers.plot.data <- full.data %>%
+  select(cs_env_sum, starts_with("dcjw")) %>%
+  gather(barrier, value, starts_with("dcjw")) %>%
+  filter(!is.na(value)) %>%
+  mutate(barrier = factor(barrier,
+                          levels=c("dcjw.entry", "dcjw.funding",
+                                   "dcjw.advocacy", "dcjw.total"),
+                          labels=c("Barriers to entry", "Barriers to funding",
+                                   "Barriers to advocacy", "All barriers")))
+
+ggplot(dcjw.barriers.plot.data, aes(x=value, y=cs_env_sum)) + 
+  geom_point(alpha=0.15, size=1) + 
+  geom_smooth(method="loess") +
+  labs(x="Number of legal restrictions on NGOs", y="CSRE") + 
+  theme_ath() + 
+  facet_wrap(~ barrier, scales="free_x")
+
+
+dcjw.type.models <- dcjw.barriers.plot.data %>%
+  filter(barrier != "All barriers") %>%
+  group_by(barrier) %>%
+  nest() %>%
+  mutate(model = data %>% map(~ lm(cs_env_sum ~ value, data=.))) %>%
+  mutate(tidy = model %>% map(broom::tidy),
+         estimate = tidy %>% map_dbl(c(2, 2)),
+         std.error = tidy %>% map_dbl(c(3, 2)),
+         p.value = tidy %>% map_dbl(c(5, 2))) %>%
+  mutate(p.stars = case_when(
+    .$p.value <= 0.001 ~ "***",
+    .$p.value <= 0.01 ~ "**",
+    .$p.value <= 0.05 ~ "*",
+    TRUE ~ ""
+  )) %>%
+  mutate(clean.estimate = sprintf("%.3f (%.3f)%s", estimate, std.error, p.stars)) %>%
+  select(Barrier = barrier, Coefficient = clean.estimate)
+
+#+ results="asis"
+pandoc.table(dcjw.type.models)
+
+caption <- "Coefficients from OLS models predicting the CSRE with the count of legal barriers to NGOs {#tbl:csre-dcjw-coefs}"
+cat(pandoc.table.return(dcjw.type.models, caption=caption), 
+    file=file.path(PROJHOME, "Output", "tables", "1-csre-dcjw-coefs.md"))
+
+
+#' This relationship holds up over time too. 
+dcjw.time.plot.data <- full.data %>%
+  select(cowcode, year.num, cs_env_sum, cs_env_sum.lead, starts_with("dcjw"))
+
+dcjw.agg.levels <- data_frame(barrier = c("cs_env_sum_avg",
+                                          "dcjw.advocacy_avg",
+                                          "dcjw.entry_avg",
+                                          "dcjw.funding_avg",
+                                          "dcjw.total_avg"),
+                              barrier.clean = c("CSRE",
+                                                "Barriers to advocacy",
+                                                "Barriers to entry",
+                                                "Barriers to funding",
+                                                "All barriers"))
+
+dcjw.time.agg <- dcjw.time.plot.data %>%
+  group_by(year.num) %>%
+  summarise_each(funs(avg = mean(., na.rm=TRUE)), 
+                 cs_env_sum, starts_with("dcjw")) %>%
+  gather(barrier, value, -year.num) %>%
+  left_join(dcjw.agg.levels, by="barrier") %>%
+  filter(year.num <= 2012) %>%
+  mutate(measure = ifelse(barrier == "cs_env_sum_avg", 
+                          "Average CSRE", "Average DCJW barriers"))
+
+ggplot(dcjw.time.agg, aes(x=year.num, y=value, colour=barrier.clean)) +
+  geom_line(size=1) + 
+  labs(x=NULL, y="Average value") + 
+  scale_color_manual(values=ath.palette("palette1"), name=NULL) +
+  theme_ath() +
+  facet_wrap(~ measure, ncol=1, scales="free_y")
+
+
+#' So, overall, the CSRE tracks pretty well with DCJW's collection of legal
+#' restrictions
+#' 
+
+#' ## "Stop Meddling in My Country!" (DupuyRonPrakash:2014a)
+#' 
+#' Dupuy, Ron, and Prakash predict the onset of foreign funding restrictions on NGOs in 45 countries, which is just one of the types tracked by Christensen and Weinstein. I'm guessing that because this is just a subset, it won't have *that* much of a relationship to the CSRE, since the CSRE is more expansive. But I check anyway.
+#' 
+dpr.plot.data <- full.data %>%
+  select(year.num, cs_env_sum, starts_with("foreign")) %>%
+  filter(!is.na(foreign.funding.count))
+
+ggplot(dpr.plot.data, aes(x=foreign.funding.count, y=cs_env_sum)) + 
+  geom_point(alpha=0.15, size=1) + 
+  geom_smooth(method="lm") + 
+  labs(x="Number of foreign funding restrictions on NGOs", y="CSRE") + 
+  theme_ath() 
+
+#' Pretty flat. There's no correlation between the two over time, either:
+#' 
+dpr.time.agg <- dpr.plot.data %>%
+  group_by(year.num) %>%
+  summarise(cs_env_sum_avg = mean(cs_env_sum, na.rm=TRUE),
+            foreign.funding.count = sum(foreign.funding.count, na.rm=TRUE)) %>%
+  gather(measure, value, -year.num) %>%
+  # left_join(dcjw.agg.levels, by="barrier") %>%
+  filter(year.num <= 2012) %>%
+  mutate(measure = ifelse(measure == "cs_env_sum_avg", "Average CSRE",
+                          "Cumulative total of foreign funding restrictions"))
+
+ggplot(dpr.time.agg, aes(x=year.num, y=value, colour=measure)) +
+  geom_line(size=1) + 
+  labs(x=NULL, y="Average value") + 
+  scale_color_manual(values=ath.palette("palette1"), name=NULL) +
+  theme_ath() +
+  facet_wrap(~ measure, ncol=1, scales="free_y")
+
+
 #' # Visualizing basic correlation between regime type and CSRE
 #' 
 #' Regime type and CSRE are quite correlated
@@ -110,6 +282,8 @@ plot.data %>%
   summarise_each(funs(cor(., plot.data$cs_env_sum)), -cs_env_sum)
 
 #' You can see that visually too
+#' 
+#+ warning=FALSE
 plot.polity <- ggplot(plot.data, aes(x=e_polity2, y=cs_env_sum)) + 
   geom_vline(xintercept=0, colour="#EA2E49", size=0.5) +
   geom_point(size=0.25, alpha=0.25) + 
@@ -159,6 +333,7 @@ fig.save.cairo(plot.regime.csre, filename="1-regime-csre",
 #' Conceptualizing the political risk measure is a little tricky. Showing a few
 #' example countries can help. Figure out which countries have change the
 #' least/most since 2000:
+#' 
 risk.stats <- full.data %>%
   filter(year.num > 2000) %>%
   group_by(Country) %>%
@@ -171,6 +346,7 @@ risk.stats <- full.data %>%
 #' Norway and Congo are the most consistent; Syria saw the biggest change.
 #'
 #' Average volatility/range by regime type:
+#' 
 risk.stats %>% 
   left_join(select(full.data, Country, polity_ord), by="Country") %>%
   group_by(polity_ord) %>% summarise(index.change.avg = mean(index.change))
@@ -185,6 +361,7 @@ risk.stats %>%
 
 
 #' Visualize changes:
+#' 
 example.countries <- c(652, 385, 484)
 example.stability <- full.data %>%
   filter(year.num > 2000, cowcode %in% example.countries) %>%
@@ -213,6 +390,7 @@ fig.save.cairo(plot.icrg.examples, filename="1-icrg-examples",
 #' 
 #' Are autocracies necessarily more unstable than democracies? They are more
 #' volatile, as shown above with `risk.stats` summaries…
+#' 
 plot.data <- full.data %>%
   group_by(gwf.binary, year.actual) %>%
   summarise(icrg = mean(icrg.pol.risk.internal.scaled, na.rm=TRUE),
@@ -240,6 +418,7 @@ fig.save.cairo(plot.icrg.regime, filename="1-icrg-regime",
                width=5, height=3)
 
 #' Check if the difference in means is significant in each year
+#' 
 year.diffs <- full.data %>%
   select(gwf.binary, year.num, icrg.pol.risk.internal.scaled) %>%
   na.omit() %>%
@@ -254,6 +433,7 @@ year.diffs %>% select(1:6) %>% print(n=nrow(.))
 #' # Other authoritarian stability variables and CSRE
 #' 
 #' All three variables seem moderately correlated with the CSRE
+#' 
 plot.data <- full.data %>%
   select(cs_env_sum, yrsoffc, years.since.comp, opp1vote) %>% 
   na.omit()
@@ -262,6 +442,7 @@ plot.data %>%
   summarise_each(funs(cor(., plot.data$cs_env_sum)), -cs_env_sum)
 
 #' Plot the correlations
+#' 
 plot.yrs.offc <- ggplot(plot.data, aes(x=yrsoffc, y=cs_env_sum)) + 
   geom_point(size=0.25, alpha=0.25) + 
   geom_smooth(method="lm", se=TRUE, colour="#014358") + 
@@ -332,6 +513,7 @@ grid::grid.draw(plot.auth.vars)
 #' # Neighboring and regional ICRG risk
 #' 
 #' Example of Kenya's neighborhood in 2012
+#' 
 kenya.neighbors <- full.data %>%
   filter(year.num == 2012, cowcode == 501) %>%
   mutate(neighbors.cow = strsplit(neighbors.cow, ",")) %>%
@@ -347,6 +529,7 @@ plot.data <- full.data %>%
   select(cs_env_sum, neighbor.pol.risk.min, icrg.pol.risk.subregional)
 
 #' Plot the correlations
+#' 
 plot.neighbor.risk <- ggplot(plot.data, aes(x=neighbor.pol.risk.min, 
                                             y=cs_env_sum)) + 
   geom_point(size=0.25, alpha=0.25) + 
@@ -372,6 +555,7 @@ fig.save.cairo(plot.ext.vars, filename="1-ext-risk-vars",
                width=6, height=2)
 
 #' The two external risk variables are fairly correlated though
+#' 
 cor(plot.data$icrg.pol.risk.subregional, 
     plot.data$neighbor.pol.risk.min, use="complete.obs")
 
