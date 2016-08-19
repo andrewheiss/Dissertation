@@ -447,8 +447,8 @@ pol.inst <- read_dta(file.path(PROJHOME, "Data", "data_raw", "External",
 # 
 # TODO: type of most recent election? + time since previous election?
 # True if all elections that year were competitive
-nelda <- read_dta(file.path(PROJHOME, "Data", "data_raw", "External",
-                            "NELDA", "id & q-wide.dta")) %>%
+nelda <- read_tsv(file.path(PROJHOME, "Data", "data_raw", "External",
+                            "NELDA", "NELDA.csv")) %>%
   mutate(competitive = ifelse(nelda3 == "yes" & nelda4 == "yes" & 
                                 nelda5 == "yes", TRUE, FALSE)) %>%
   group_by(ccode, year) %>%
