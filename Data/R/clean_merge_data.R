@@ -913,6 +913,17 @@ uds <- read_csv(uds.tmp) %>%
                        ordered_result=TRUE)) %>%
   select(-country)
 
+# UDS data only goes to 2012, but V-Dem goes to 2015
+# Extend the uds_* variables to include 2015 by creating a skeleton panel of
+# all cowcodes and years + 2013:2015, joining `uds`, and then creating
+# uds.ever.autocracy`
+uds.extended <- expand.grid(cowcode = unique(uds$cowcode),
+                            year = 1991:2015) %>%
+  left_join(uds, by=c("cowcode", "year")) %>%
+  group_by(cowcode) %>%
+  mutate(uds.ever.autocracy = any(uds_ord == "Autocracy", na.rm=TRUE)) %>%
+  ungroup()
+
 
 # GWF Autocratic regimes
 # http://sites.psu.edu/dictators/
@@ -1063,7 +1074,7 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   left_join(murdie, by=c("cowcode", "year")) %>%
   left_join(kof, by=c("cowcode", "year")) %>%
   left_join(neighbor.stability, by=c("cowcode", "year" = "year.num")) %>%
-  left_join(uds, by=c("cowcode", "year")) %>%
+  left_join(uds.extended, by=c("cowcode", "year")) %>%
   left_join(coups.final, by=c("cowcode", "year")) %>%
   left_join(icews, by=c("year" = "event.year", "cowcode")) %>%
   left_join(icews.eois, by=c("cowcode" = "ccode", "year")) %>%
