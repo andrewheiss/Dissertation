@@ -962,6 +962,26 @@ gwf.simplfied.extended <- expand.grid(cowcode = unique(gwf.simplified$cowcode),
   ungroup()
 
 
+# Dupuy, Ron, and Prakash foreign funding restrictions
+dpr <- read_csv(file.path(PROJHOME, "Data", "data_raw", 
+                          "External", "DupuyRonPrakash2014",
+                          "dpr.csv")) %>%
+  mutate(cowcode = countrycode(country_name, "country.name", "cown"),
+         imposed = TRUE)
+
+potential.dpr.panel <- dpr %>%
+  tidyr::expand(cowcode,
+                year = 1990:2015)
+
+dpr.clean <- potential.dpr.panel %>%
+  left_join(dpr, by=c("cowcode", "year"="year_onset")) %>%
+  mutate(foreign.funding.imposed = ifelse(is.na(imposed), FALSE, imposed)) %>%
+  group_by(cowcode) %>%
+  mutate(foreign.funding.count = cumsum(foreign.funding.imposed)) %>%
+  ungroup() %>%
+  select(-country_name, -imposed)
+
+
 # Christensen and Weinstein NGO laws
 # Get and load DCJW data
 dcjw.url <- "https://darinchristensen.github.io/Data/DCJW_NGO_Laws.xlsx"
@@ -1065,6 +1085,7 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   # Join *everything* to the empty panel
   left_join(vdem.cso, by=c("year", "cowcode")) %>%
   left_join(dcjw.by.year, by=c("year", "cowcode")) %>%
+  left_join(dpr.clean, by=c("cowcode", "year.num" = "year")) %>%
   left_join(vars.distance.min, by=c("year", "cowcode")) %>%
   left_join(icrg.all.with.aggregates, by=c("cowcode", "year" = "year.num")) %>%
   left_join(pol.inst, by=c("cowcode" = "cow", "year")) %>%

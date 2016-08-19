@@ -252,4 +252,25 @@ datasets:
       Christensen, Darin, and Jeremy M. Weinstein. 2013. "Defunding Dissent:
       Restrictions on Aid to NGOs." *Journal of Democracy 24, no. 2 (April):
       77–91. doi:10.1353/jod.2013.0026.
+
+  - name: DPR foreign funding restrictions
+    title: "Foreign funding restrictions"
+    author:
+      - name: Kendra Dupuy
+        affiliation: University of Washington, Seattle
+      - name: James Ron
+        affiliation: University of Minnesota, Twin Cities
+      - name: Aseem Prakash
+        affiliation: University of Washington, Seattle
+    url: http://ssrn.com/abstract=2529620
+    filename: "DupuyRonPrakash2014/dpr"
+    type: csv
+    description: >-
+      List of dates of onset of foreign funding restrictions in 45 countries 
+      from 1999–2012. Table 1 from their paper, copied/pasted into CSV.
+    citation: >-
+      Dupuy, Kendra E., James Ron, and Aseem Prakash. 2014. "Stop Meddling in
+      my Country! Governments’ Restrictions on Foreign Aid to Non-Governmental
+      Organizations." Working Paper. November 23. Accessed February 18, 2016.
+      http://ssrn.com/abstract=2529620.
 ---
