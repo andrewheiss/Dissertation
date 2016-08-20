@@ -385,73 +385,68 @@ fig.save.cairo(plot.regime.csre, filename="1-regime-csre",
 #' 
 #' Internal political risk:
 #' 
-risk.stats <- full.data %>%
+risk.stats <- autocracies %>%
   filter(year.num > 2000) %>%
-  group_by(cowcode) %>%
-  summarise(index.change.internal = max(icrg.pol.risk.internal.scaled, na.rm=TRUE) - 
-              min(icrg.pol.risk.internal.scaled, na.rm=TRUE),
-            index.change.stability = max(icrg.stability, na.rm=TRUE) - 
-              min(icrg.stability, na.rm=TRUE)) %>%
-  
+  group_by(country) %>%
+  summarise(risk.max = max(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+            risk.min = min(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+            stability.max = max(icrg.stability, na.rm=TRUE),
+            stability.min = min(icrg.stability, na.rm=TRUE),
+            change.risk = risk.max - risk.min,
+            change.stability = stability.max - stability.min)
 
 risk.stats %>%
-  select(-index.change.stability) %>%
-  filter(!is.na(index.change.internal)) %>%
-  arrange(index.change.internal) %T>%
+  select(country, change.risk) %>%
+  filter(!is.na(change.risk)) %>%
+  arrange(change.risk) %T>%
   {print(head(., 5))} %>% {print(tail(., 5))}
 
-#' Norway and Congo are the most consistent; Syria saw the biggest change.
+#' Congo most consistent; Middle East saw the biggest change.
 
 #' Government stability only (just the ICRG subcomponent):
 #' 
 risk.stats %>%
-  select(-index.change.internal) %>%
-  filter(!is.na(index.change.stability)) %>%
-  arrange(index.change.stability) %T>%
+  select(country, change.stability) %>%
+  filter(!is.na(change.stability)) %>%
+  arrange(change.stability) %T>%
   {print(head(., 5))} %>% {print(tail(., 5))}
 
-#' Ireland is suprisingly there, but that's because this measures government stability only and not corruption, military threats, or 
+#' Congo, Myanmar again most stable over time, government-wise; Guinea, Libya,
+#' and Syria saw biggest changes.
 #' 
-#' 
-
-ireland <- full.data %>% 
-  filter(Country ==)
-#' Average volatility/range by regime type:
-#' 
-risk.stats %>% 
-  left_join(select(full.data, Country, polity_ord), by="Country") %>%
-  group_by(polity_ord) %>% summarise(index.change.avg = mean(index.change))
-
-risk.stats %>% 
-  left_join(select(full.data, Country, polity_ord2), by="Country") %>%
-  group_by(polity_ord2) %>% summarise(index.change.avg = mean(index.change))
-
-risk.stats %>% 
-  left_join(select(full.data, Country, gwf.binary), by="Country") %>%
-  group_by(gwf.binary) %>% summarise(index.change.avg = mean(index.change))
-
-
 #' Visualize changes:
 #' 
-example.countries <- c(652, 385, 484)
-example.stability <- full.data %>%
-  filter(year.num > 2000, cowcode %in% example.countries) %>%
-  mutate(country.plot = factor(Country,
-                               levels=c("Norway", "Syria", "Congo"), 
-                               ordered=TRUE))
+example.countries <- c("Somalia", "Syria", "Qatar")
 
-# example.stability$icrg.pol.grade.internal
-# c(0, 49.99, 59.99, 69.99, 79.99, Inf)
-plot.icrg.examples <- ggplot(example.stability, 
-                             aes(x=year.actual, 
-                                 y=icrg.pol.risk.internal.scaled,
-                                 colour=country.plot)) + 
-  geom_line(size=1.5) + 
+example.countries <- autocracies %>%
+  filter(year.num > 2000, 
+         country %in% example.countries)
+
+plot.icrg.risk.examples <- ggplot(example.countries, 
+                                  aes(x=year.actual, 
+                                      y=icrg.pol.risk.internal.scaled,
+                                      colour=country)) + 
+  geom_line(size=1) +
   labs(x=NULL, y="Internal political risk (ICRG)") + 
   coord_cartesian(xlim=ymd(c("2000-01-01", "2015-01-01"))) +
-  scale_colour_manual(values=c("#014358", "#FD7401", "#BEDB3A"), name=NULL) +
+  scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
   theme_ath()
-plot.icrg.examples
+
+plot.icrg.stability.examples <- ggplot(example.countries, 
+                                       aes(x=year.actual, 
+                                           y=icrg.stability,
+                                           colour=country)) + 
+  geom_line(size=1) +
+  labs(x=NULL, y="Government stability (ICRG)") + 
+  coord_cartesian(xlim=ymd(c("2000-01-01", "2015-01-01")),
+                  ylim=c(2, 12)) +
+  scale_y_continuous(breaks=c(seq(2, 12, 2))) +
+  scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
+  theme_ath()
+
+plot.icrg.examples <- arrangeGrob(plot.icrg.risk.examples, 
+                                  plot.icrg.stability.examples, nrow=1)
+grid::grid.draw(plot.icrg.examples)
 
 fig.save.cairo(plot.icrg.examples, filename="1-icrg-examples", 
                width=5, height=2)
