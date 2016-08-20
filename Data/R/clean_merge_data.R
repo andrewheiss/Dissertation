@@ -1108,6 +1108,7 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
     .$cowcode == 521 ~ "Somaliland",
     .$cowcode == 667 ~ "Palestine (West Bank)",
     .$cowcode == 668 ~ "Palestine (Gaza)",
+    .$country == "Syrian Arab Republic" ~ "Syria",
     TRUE ~ .$country
   )) %>%
   mutate(iso3 = case_when(
