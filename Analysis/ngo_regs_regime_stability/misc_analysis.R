@@ -19,7 +19,7 @@
 
 #' Load libraries and data
 #+ message=FALSE
-knitr::opts_chunk$set(cache=TRUE, fig.retina=2,
+knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
                       tidy.opts=list(width.cutoff=120),  # For code
                       options(width=120))  # For output
 
