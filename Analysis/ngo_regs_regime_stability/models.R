@@ -82,8 +82,14 @@ options(mc.cores = parallel::detectCores())  # Use all possible cores
 #'   `icrg.investment` + `icrg.internal` + `icrg.corruption` +
 #'   `icrg.military` + `icrg.religion` + `icrg.law` + `icrg.ethnic` + 
 #'   `icrg.bureau`
+#' - `icrg.pol.risk.internal.nostab`: `icrg.socioeconomic` + 
+#'   `icrg.investment` + `icrg.internal` + `icrg.corruption` + 
+#'   `icrg.military` + `icrg.religion` + `icrg.law` + `icrg.ethnic` + 
+#'   `icrg.bureau`
 #' - `icrg.pol.risk.internal.scaled`: `icrg.pol.risk.internal` rescaled to
 #'    0-100 scale
+#' - `icrg.pol.risk.internal.nostab.scaled`: `icrg.pol.risk.internal.nostab`
+#'    rescaled to 0-100 scale
 #' - `yrsoffc`: Years the executive has been in office
 #' - `years.since.comp`: Years since last competitve election
 #' - `opp1vote`: Opposition vote share

@@ -292,7 +292,11 @@ icrg.all <- bind_rows(all.dfs) %>%
          icrg.pol.risk.internal = icrg.stability + icrg.socioeconomic + 
            icrg.investment + icrg.internal + icrg.corruption + 
            icrg.military + icrg.religion + icrg.law + icrg.ethnic + icrg.bureau,
+         icrg.pol.risk.internal.nostab = icrg.socioeconomic + 
+           icrg.investment + icrg.internal + icrg.corruption + 
+           icrg.military + icrg.religion + icrg.law + icrg.ethnic + icrg.bureau,
          icrg.pol.risk.internal.scaled = icrg.rescale(icrg.pol.risk.internal),
+         icrg.pol.risk.internal.nostab.scaled = icrg.rescale(icrg.pol.risk.internal.nostab),
          icrg.pol.grade = cut(icrg.pol.risk, 
                               c(0, 49.99, 59.99, 69.99, 79.99, Inf),
                               labels=c("Very High", "High", "Moderate", 
@@ -407,7 +411,11 @@ icrg.monthly <- bind_rows(all.dfs.monthly) %>%
          icrg.pol.risk.internal = icrg.stability + icrg.socioeconomic + 
            icrg.investment + icrg.internal + icrg.corruption + 
            icrg.military + icrg.religion + icrg.law + icrg.ethnic + icrg.bureau,
+         icrg.pol.risk.internal.nostab = icrg.socioeconomic + 
+           icrg.investment + icrg.internal + icrg.corruption + 
+           icrg.military + icrg.religion + icrg.law + icrg.ethnic + icrg.bureau,
          icrg.pol.risk.internal.scaled = icrg.rescale(icrg.pol.risk.internal),
+         icrg.pol.risk.internal.nostab.scaled = icrg.rescale(icrg.pol.risk.internal.nostab),
          icrg.pol.grade = cut(icrg.pol.risk, 
                               c(0, 49.99, 59.99, 69.99, 79.99, Inf),
                               labels=c("Very High", "High", "Moderate", 
