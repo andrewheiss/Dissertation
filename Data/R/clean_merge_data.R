@@ -1085,7 +1085,7 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   # Join *everything* to the empty panel
   left_join(vdem.cso, by=c("year", "cowcode")) %>%
   left_join(dcjw.by.year, by=c("year", "cowcode")) %>%
-  left_join(dpr.clean, by=c("cowcode", "year.num" = "year")) %>%
+  left_join(dpr.clean, by=c("year", "cowcode")) %>%
   left_join(vars.distance.min, by=c("year", "cowcode")) %>%
   left_join(icrg.all.with.aggregates, by=c("cowcode", "year" = "year.num")) %>%
   left_join(pol.inst, by=c("cowcode" = "cow", "year")) %>%
@@ -1127,3 +1127,4 @@ write_feather(dcjw,
 write_feather(icrg.all,
               file.path(PROJHOME, "Data", 
                         "data_processed", "icrg_all.feather"))
+
