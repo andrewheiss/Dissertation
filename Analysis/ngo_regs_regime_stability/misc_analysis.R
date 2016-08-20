@@ -107,6 +107,62 @@ cows.autocracies %>% length()
 autocracies <- full.data %>%
   filter(cowcode %in% cows.autocracies)
 
+#' ## Visualizing basic correlation between regime type and CSRE
+#' 
+#' Regime type and CSRE are quite correlated
+#' 
+plot.data <- full.data %>%
+  select(cs_env_sum, uds_mean, e_polity2) %>% 
+  na.omit()
+
+plot.data %>%
+  summarise_each(funs(cor(., plot.data$cs_env_sum)), -cs_env_sum)
+
+#' You can see that visually too
+#' 
+#+ warning=FALSE
+plot.polity <- ggplot(plot.data, aes(x=e_polity2, y=cs_env_sum)) + 
+  geom_vline(xintercept=0, colour="#EA2E49", size=0.5) +
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
+  labs(x="Polity IV score", 
+       y="Civil society regulatory environment\n(CSRE)") +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  coord_cartesian(ylim=c(-6, 6)) +
+  theme_ath()
+
+plot.uds <- ggplot(plot.data, aes(x=uds_mean, y=cs_env_sum)) + 
+  geom_vline(xintercept=0, colour="#EA2E49", size=0.5) +
+  geom_point(size=0.25, alpha=0.25) + 
+  geom_smooth(method="lm", se=TRUE, colour="#014358") +
+  labs(x="Mean UDS score", y=NULL) +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  coord_cartesian(ylim=c(-6, 6)) +
+  theme_ath()
+
+# GWF regime type and Polity/UDS and CSRE
+gwf.summary <- full.data %>%
+  group_by(gwf.binary) %>%
+  summarise(env.avg = mean(cs_env_sum, na.rm=TRUE),
+            env.sd = sd(cs_env_sum, na.rm=TRUE),
+            env.se = env.sd / sqrt(n()),
+            env.upper = env.avg + (qnorm(0.975) * env.se),
+            env.lower = env.avg + (qnorm(0.025) * env.se)) %>%
+  na.omit
+
+plot.gwf.csre <- ggplot(gwf.summary, aes(x=gwf.binary, y=env.avg)) + 
+  geom_pointrange(aes(ymin=env.lower, ymax=env.upper), size=0.5) +
+  geom_point(data=full.data, aes(y=cs_env_sum), size=0.25, alpha=0.05) +
+  labs(y=NULL, x="Geddes et al. categorization") +
+  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+  coord_cartesian(ylim=c(-6, 6)) +
+  theme_ath()
+
+plot.regime.csre <- arrangeGrob(plot.polity, plot.uds, plot.gwf.csre, nrow=1)
+grid::grid.draw(plot.regime.csre)
+
+fig.save.cairo(plot.regime.csre, filename="1-regime-csre", 
+               width=5, height=2)
 
 #' # Dependent variable: civil society regulatory environment (CSRE)
 #' 
@@ -289,6 +345,7 @@ dpr.plot.data <- autocracies %>%
   select(year.num, cs_env_sum, starts_with("foreign")) %>%
   filter(!is.na(foreign.funding.count))
 
+#+ warning=FALSE
 ggplot(dpr.plot.data, aes(x=foreign.funding.count, y=cs_env_sum)) + 
   geom_point(alpha=0.15, size=1) + 
   geom_smooth(method="lm") + 
@@ -313,66 +370,6 @@ ggplot(dpr.time.agg, aes(x=year.num, y=value, colour=measure)) +
   scale_color_manual(values=ath.palette("palette1"), name=NULL) +
   theme_ath() +
   facet_wrap(~ measure, ncol=1, scales="free_y")
-
-
-#' # Regime type
-#' 
-#' ## Visualizing basic correlation between regime type and CSRE
-#' 
-#' Regime type and CSRE are quite correlated
-#' 
-plot.data <- full.data %>%
-  select(cs_env_sum, uds_mean, e_polity2) %>% 
-  na.omit()
-
-plot.data %>%
-  summarise_each(funs(cor(., plot.data$cs_env_sum)), -cs_env_sum)
-
-#' You can see that visually too
-#' 
-#+ warning=FALSE
-plot.polity <- ggplot(plot.data, aes(x=e_polity2, y=cs_env_sum)) + 
-  geom_vline(xintercept=0, colour="#EA2E49", size=0.5) +
-  geom_point(size=0.25, alpha=0.25) + 
-  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
-  labs(x="Polity IV score", 
-       y="Civil society regulatory environment\n(CSRE)") +
-  scale_y_continuous(breaks=seq(-6, 6, 2)) +
-  coord_cartesian(ylim=c(-6, 6)) +
-  theme_ath()
-
-plot.uds <- ggplot(plot.data, aes(x=uds_mean, y=cs_env_sum)) + 
-  geom_vline(xintercept=0, colour="#EA2E49", size=0.5) +
-  geom_point(size=0.25, alpha=0.25) + 
-  geom_smooth(method="lm", se=TRUE, colour="#014358") +
-  labs(x="Mean UDS score", y=NULL) +
-  scale_y_continuous(breaks=seq(-6, 6, 2)) +
-  coord_cartesian(ylim=c(-6, 6)) +
-  theme_ath()
-
-# GWF regime type and Polity/UDS and CSRE
-gwf.summary <- full.data %>%
-  group_by(gwf.binary) %>%
-  summarise(env.avg = mean(cs_env_sum, na.rm=TRUE),
-            env.sd = sd(cs_env_sum, na.rm=TRUE),
-            env.se = env.sd / sqrt(n()),
-            env.upper = env.avg + (qnorm(0.975) * env.se),
-            env.lower = env.avg + (qnorm(0.025) * env.se)) %>%
-  na.omit
-
-plot.gwf.csre <- ggplot(gwf.summary, aes(x=gwf.binary, y=env.avg)) + 
-  geom_pointrange(aes(ymin=env.lower, ymax=env.upper), size=0.5) +
-  geom_point(data=full.data, aes(y=cs_env_sum), size=0.25, alpha=0.05) +
-  labs(y=NULL, x="Geddes et al. categorization") +
-  scale_y_continuous(breaks=seq(-6, 6, 2)) +
-  coord_cartesian(ylim=c(-6, 6)) +
-  theme_ath()
-
-plot.regime.csre <- arrangeGrob(plot.polity, plot.uds, plot.gwf.csre, nrow=1)
-grid::grid.draw(plot.regime.csre)
-
-fig.save.cairo(plot.regime.csre, filename="1-regime-csre", 
-               width=5, height=2)
 
 
 #' # Internal explanatory variables
@@ -444,6 +441,7 @@ plot.icrg.stability.examples <- ggplot(example.countries,
   scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
   theme_ath()
 
+#+ warning=FALSE
 plot.icrg.examples <- arrangeGrob(plot.icrg.risk.examples, 
                                   plot.icrg.stability.examples, nrow=1)
 grid::grid.draw(plot.icrg.examples)
@@ -454,60 +452,49 @@ fig.save.cairo(plot.icrg.examples, filename="1-icrg-examples",
 
 #' ## ICRG and CSRE
 #' 
-#' What does the relationship between internal stability and CSRE look like?
+#' What does the relationship between internal stability, internal risk, and 
+#' the CSRE look like?
 #' 
-plot.data <- full.data
-  
-
-#' ## ICRG across regime type
+#' The CSRE is positively correlated with general internal risk. That is, as
+#' the country becomes less risky, the CSRE get better in the following year.
 #' 
-#' Are autocracies necessarily more unstable than democracies? They are more
-#' volatile, as shown above with `risk.stats` summaries…
-#' 
-plot.data <- full.data %>%
-  group_by(gwf.binary, year.actual) %>%
-  summarise(icrg = mean(icrg.pol.risk.internal.scaled, na.rm=TRUE),
-            icrg.sd = sd(icrg.pol.risk.internal.scaled, na.rm=TRUE),
-            icrg.se = icrg.sd / sqrt(n()),
-            icrg.upper = icrg + (qnorm(0.975) * icrg.se),
-            icrg.lower = icrg + (qnorm(0.025) * icrg.se)) %>%
-  na.omit() %>%
-  ungroup() %>%
-  mutate(gwf.binary = factor(gwf.binary, levels=c("Democracy", "Autocracy"),
-                             labels=c("Democracies    ", "Autocracies")))
-
-plot.icrg.regime <- ggplot(plot.data, aes(x=year.actual, y=icrg, 
-                                          colour=gwf.binary)) + 
-  geom_ribbon(aes(ymin=icrg.lower, ymax=icrg.upper, fill=gwf.binary), 
-              alpha=0.3, colour=NA) +
-  geom_line(size=1.5) + 
-  labs(x=NULL, y="Mean internal political risk (ICRG)") + 
-  scale_colour_manual(values=c(col.dem, col.auth), name=NULL) +
-  scale_fill_manual(values=c(col.dem, col.auth), name=NULL, guide=FALSE) +
+#+ warning=FALSE
+ggplot(autocracies, aes(x=icrg.pol.risk.internal.scaled, y=cs_env_sum.lead)) + 
+  geom_point(alpha=0.3) + 
+  geom_smooth(method="lm") + 
+  geom_smooth(method="loess") + 
   theme_ath()
-plot.icrg.regime
 
-fig.save.cairo(plot.icrg.regime, filename="1-icrg-regime", 
-               width=5, height=3)
-
-#' Check if the difference in means is significant in each year
+#' The CSRE is *negatively* correlated with specific government stability,
+#' though. That means that as autocratic governments become more stable, they
+#' regulate civil society more in the following year.
 #' 
-year.diffs <- full.data %>%
-  select(gwf.binary, year.num, icrg.pol.risk.internal.scaled) %>%
-  na.omit() %>%
-  group_by(year.num) %>%
-  do(tidy(t.test(icrg.pol.risk.internal.scaled ~ gwf.binary, data=.)))
+#+ warning=FALSE
+ggplot(autocracies, aes(x=icrg.stability, y=cs_env_sum.lead)) + 
+  geom_point(alpha=0.3) + 
+  geom_smooth(method="lm") + 
+  geom_smooth(method="loess") + 
+  theme_ath()
 
-year.diffs %>% select(1:6) %>% print(n=nrow(.))
-#' Yup. They are.
+#' This holds when removing stability from the internal political risk index,
+#' too. The general risk score is still positively correlated; stability is
+#' negatively correlated.
 #' 
+#+ warning=FALSE
+ggplot(autocracies, aes(x=icrg.pol.risk.internal.nostab.scaled, y=cs_env_sum.lead)) + 
+  geom_point(alpha=0.3) + 
+  geom_smooth(method="lm") + 
+  geom_smooth(method="loess") +
+  theme_ath()
 
 
-#' ## Other authoritarian stability variables and CSRE
+#' ## Other authoritarian stability variables
 #' 
-#' All three variables seem moderately correlated with the CSRE
+#' ### Other variables and CSRE
 #' 
-plot.data <- full.data %>%
+#' All three variables seem closely correlated with the CSRE
+#' 
+plot.data <- autocracies %>%
   select(cs_env_sum, yrsoffc, years.since.comp, opp1vote) %>% 
   na.omit()
 
@@ -539,6 +526,7 @@ plot.opp.vote <- ggplot(plot.data, aes(x=opp1vote, y=cs_env_sum)) +
   scale_y_continuous(breaks=seq(-6, 6, 2)) +
   theme_ath()
 
+#+ warning=FALSE
 plot.auth.vars <- arrangeGrob(plot.yrs.offc, plot.yrs.since.comp, 
                               plot.opp.vote, nrow=1)
 grid::grid.draw(plot.auth.vars)
@@ -546,8 +534,8 @@ grid::grid.draw(plot.auth.vars)
 fig.save.cairo(plot.auth.vars, filename="1-auth-vars", 
                width=6, height=2)
 
-#' ### ICRG stability and competition
-plot.data <- full.data %>%
+#' ### Other variables and ICRG
+plot.data <- autocracies %>%
   select(icrg.pol.risk.internal.scaled, yrsoffc, years.since.comp, opp1vote) %>% 
   na.omit()
 
@@ -578,6 +566,7 @@ plot.opp.vote <- ggplot(plot.data, aes(x=opp1vote, y=icrg.pol.risk.internal.scal
   scale_y_continuous(breaks=seq(-0, 100, 20)) +
   theme_ath()
 
+#+ warning=FALSE
 plot.auth.vars <- arrangeGrob(plot.yrs.offc, plot.yrs.since.comp, 
                               plot.opp.vote, nrow=1)
 grid::grid.draw(plot.auth.vars)
@@ -596,7 +585,7 @@ kenya.neighbors <- full.data %>%
 
 full.data %>%
   filter(year.num == 2012, cowcode %in% kenya.neighbors) %>%
-  select(Country, icrg.pol.risk.internal.scaled)
+  select(country, icrg.pol.risk.internal.scaled)
 
 
 #' ## Visualize neighbor and subregional instability
