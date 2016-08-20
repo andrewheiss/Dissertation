@@ -1078,8 +1078,6 @@ countries.ggmap <- ggplot2::fortify(countries.robinson, region="iso_a3") %>%
 # ------------------
 # Merge everything!
 # ------------------
-# TODO: Consolidate extra variables (e.g. there's "Country", "country.name", and "country_name")
-
 # Create panel based on all countries in V-Dem from 1990 to present
 full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   # Join *everything* to the empty panel
@@ -1101,7 +1099,25 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   left_join(icews.eois, by=c("cowcode" = "ccode", "year")) %>%
   left_join(gwf.simplfied.extended, by=c("cowcode", "year")) %>%
   rename(year.num = year) %>%
-  mutate(year.factor = factor(year.num))
+  mutate(year.factor = factor(year.num)) %>%
+  # Standardize all country names and ISO codes
+  select(-dplyr::contains("country"), -iso) %>%
+  mutate(country = countrycode(cowcode, "cown", "country.name"),
+         iso3 = countrycode(cowcode, "cown", "iso3c")) %>%
+  mutate(country = case_when(
+    .$cowcode == 521 ~ "Somaliland",
+    .$cowcode == 667 ~ "Palestine (West Bank)",
+    .$cowcode == 668 ~ "Palestine (Gaza)",
+    TRUE ~ .$country
+  )) %>%
+  mutate(iso3 = case_when(
+    .$cowcode == 347 ~ "XKX",
+    .$cowcode == 521 ~ "SML",
+    .$cowcode == 667 ~ "PSE",
+    .$cowcode == 668 ~ "GAZ",
+    TRUE ~ .$iso3
+  )) %>%
+  select(year.num, year.factor, cowcode, country, iso3, everything())
 
 # Make sure the joining didn't add any extra rows
 expect_equal(nrow(full.data), nrow(tidyr::expand(vdem.cso, year, cowcode)))
