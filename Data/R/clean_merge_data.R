@@ -1118,7 +1118,7 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
     .$cowcode == 668 ~ "GAZ",
     TRUE ~ .$iso3
   )) %>%
-  select(year.num, year.factor, cowcode, country, iso3, everything())
+  select(year.num, year.factor, year.actual, cowcode, country, iso3, everything())
 
 # Make sure the joining didn't add any extra rows
 expect_equal(nrow(full.data), nrow(tidyr::expand(vdem.cso, year, cowcode)))
