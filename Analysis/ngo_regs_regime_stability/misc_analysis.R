@@ -37,6 +37,7 @@ library(gridExtra)
 library(scales)
 library(Cairo)
 library(pander)
+library(countrycode)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
@@ -52,48 +53,87 @@ set.seed(my.seed)
 #' # General data summary
 #' 
 #' Number of countries:
-length(unique(full.data$Country))
+length(unique(full.data$cowcode))
 
 #' Range of years:
 min(full.data$year.num)
 max(full.data$year.num)
 
-#' # Understanding and visualizing civil society environment
+
+#' # Regime type selection
+#' 
+#' There are lots of different ways to define autocracy, including Polity, UDS,
+#' or Geddes et al.'s manual classification. Here, I follow Geddes et al., but
+#' slightly expanded—for the sake of completeness of data (and in case I run
+#' survival models in the future), I include a country in the data if it has
+#' ever been an autocracy since 1991. This means countries that democratize or
+#' backslide are included.
+#' 
+autocracies.gwf <- filter(full.data, gwf.ever.autocracy)
+
+#' Number of GWF autocracies included:
+#' 
+cows.gwf <- unique(autocracies.gwf$cowcode)
+cows.gwf %>% length()
+
+#' I also use UDS scores of less than 0 as an alternative definition of
+#' autocracy. Again, I consider a country to be an autocracy if it has ever
+#' been one since 1991.
+autocracies.uds <- filter(full.data, uds.ever.autocracy)
+
+#' Number of UDS autocracies included:
+#' 
+cows.uds <- unique(autocracies.uds$cowcode)
+cows.uds %>% length()
+
+#' Countries in GWF autocracies not in UDS:
+#' 
+autocracies.gwf %>%
+  distinct(cowcode, country) %>%
+  filter(!(cowcode %in% cows.uds))
+
+#' Countries in UDS autocracies not in GWF:
+#' 
+autocracies.uds %>%
+  distinct(cowcode, country) %>%
+  filter(!(cowcode %in% cows.gwf))
+
+#' To fix this discrepancy, in the final analysis I include any country that 
+#' appears in either dataset.
+#' 
+cows.autocracies <- unique(c(cows.uds, cows.gwf))
+cows.autocracies %>% length()
+
+autocracies <- full.data %>%
+  filter(cowcode %in% cows.autocracies)
+
+
+#' # Dependent variable: civil society regulatory environment (CSRE)
+#' 
+#' ## Understanding and visualizing the CSRE
 #' 
 #' The V-Dem Bayesian measurement model is cool and all, but it's really hard
 #' to interpret by itself. Showing a few example countries can help. 
+#' 
 cs.plot.all <- full.data %>%
   filter(year.num > 2000) %>%
-  group_by(Country) %>%
+  group_by(country) %>%
   summarise(env.mean = mean(cs_env_sum, na.rm=TRUE)) %>%
   filter(!is.na(env.mean)) %>%
   arrange(env.mean) %>%
   ungroup()
 
 cs.plot <- bind_rows(cs.plot.all %>% slice(1:5),
-                     data_frame(Country = "—", env.mean = 0),
+                     data_frame(country = "—", env.mean = 0),
                      cs.plot.all %>% slice((nrow(.) - 4):nrow(.))) %>%
-  mutate(Country = factor(Country, levels=unique(Country), ordered=TRUE))
+  mutate(country = factor(country, levels=unique(country), ordered=TRUE))
 
 #' The usual suspects get their scores
 cs.plot
 
-#' Average volatility/range by regime type:
-cs.plot.all %>% 
-  left_join(select(full.data, Country, polity_ord), by="Country") %>%
-  group_by(polity_ord) %>% summarise(index.change.avg = mean(env.mean))
-
-cs.plot.all %>% 
-  left_join(select(full.data, Country, polity_ord2), by="Country") %>%
-  group_by(polity_ord2) %>% summarise(index.change.avg = mean(env.mean))
-
-cs.plot.all %>% 
-  left_join(select(full.data, Country, gwf.binary), by="Country") %>%
-  group_by(gwf.binary) %>% summarise(index.change.avg = mean(env.mean))
-
-plot.csre.top.bottom <- ggplot(cs.plot, aes(x=Country, y=env.mean)) +
+plot.csre.top.bottom <- ggplot(cs.plot, aes(x=country, y=env.mean)) +
   geom_point(size=2) + 
-  geom_segment(aes(yend=0, xend=Country), size=1) + 
+  geom_segment(aes(yend=0, xend=country), size=1) + 
   labs(x=NULL, y="Mean civil society regulatory environment index (CSRE)") +
   coord_flip() +
   theme_ath()
@@ -103,11 +143,11 @@ fig.save.cairo(plot.csre.top.bottom, filename="1-csre-top-bottom",
                width=5, height=2.5)
 
 
-#' # CSRE and other measures of restriction?
+#' ## CSRE and other measures of restriction?
 #' 
 #' How does the CSRE compare to other measures of civil society restriction?
 #' 
-#' ## Christensen and Weinstein NGO laws
+#' ### Christensen and Weinstein NGO laws
 #' 
 #' The DCJW data shows the rough onset of different types of foreign-ish NGO
 #' restriction, including barriers to (1) entry, (2) funding, and (3) advocacy.
@@ -156,7 +196,7 @@ fig.save.cairo(plot.csre.top.bottom, filename="1-csre-top-bottom",
 #' funding have a stronger negative effect.
 #' 
 #+ warning=FALSE
-dcjw.barriers.plot.data <- full.data %>%
+dcjw.barriers.plot.data <- autocracies %>%
   select(cs_env_sum, starts_with("dcjw")) %>%
   gather(barrier, value, starts_with("dcjw")) %>%
   filter(!is.na(value)) %>%
@@ -201,7 +241,7 @@ cat(pandoc.table.return(dcjw.type.models, caption=caption),
 
 
 #' This relationship holds up over time too. 
-dcjw.time.plot.data <- full.data %>%
+dcjw.time.plot.data <- autocracies %>%
   select(cowcode, year.num, cs_env_sum, cs_env_sum.lead, starts_with("dcjw"))
 
 dcjw.agg.levels <- data_frame(barrier = c("cs_env_sum_avg",
@@ -234,14 +274,18 @@ ggplot(dcjw.time.agg, aes(x=year.num, y=value, colour=barrier.clean)) +
 
 
 #' So, overall, the CSRE tracks pretty well with DCJW's collection of legal
-#' restrictions
+#' restrictions.
 #' 
 
-#' ## "Stop Meddling in My Country!" (DupuyRonPrakash:2014a)
+#' ### "Stop Meddling in My Country!" (DupuyRonPrakash:2014a)
 #' 
-#' Dupuy, Ron, and Prakash predict the onset of foreign funding restrictions on NGOs in 45 countries, which is just one of the types tracked by Christensen and Weinstein. I'm guessing that because this is just a subset, it won't have *that* much of a relationship to the CSRE, since the CSRE is more expansive. But I check anyway.
+#' Dupuy, Ron, and Prakash predict the onset of foreign funding restrictions on
+#' NGOs in 45 countries, which is just one of the types tracked by Christensen
+#' and Weinstein. I'm guessing that because this is just a subset, it won't
+#' have *that* much of a relationship to the CSRE, since the CSRE is more
+#' expansive. But I check anyway.
 #' 
-dpr.plot.data <- full.data %>%
+dpr.plot.data <- autocracies %>%
   select(year.num, cs_env_sum, starts_with("foreign")) %>%
   filter(!is.na(foreign.funding.count))
 
@@ -256,12 +300,12 @@ ggplot(dpr.plot.data, aes(x=foreign.funding.count, y=cs_env_sum)) +
 dpr.time.agg <- dpr.plot.data %>%
   group_by(year.num) %>%
   summarise(cs_env_sum_avg = mean(cs_env_sum, na.rm=TRUE),
-            foreign.funding.count = sum(foreign.funding.count, na.rm=TRUE)) %>%
+            foreign.funding.avg = mean(foreign.funding.count, na.rm=TRUE)) %>%
   gather(measure, value, -year.num) %>%
   # left_join(dcjw.agg.levels, by="barrier") %>%
   filter(year.num <= 2012) %>%
   mutate(measure = ifelse(measure == "cs_env_sum_avg", "Average CSRE",
-                          "Cumulative total of foreign funding restrictions"))
+                          "Average number of foreign funding restrictions"))
 
 ggplot(dpr.time.agg, aes(x=year.num, y=value, colour=measure)) +
   geom_line(size=1) + 
@@ -271,9 +315,12 @@ ggplot(dpr.time.agg, aes(x=year.num, y=value, colour=measure)) +
   facet_wrap(~ measure, ncol=1, scales="free_y")
 
 
-#' # Visualizing basic correlation between regime type and CSRE
+#' # Regime type
+#' 
+#' ## Visualizing basic correlation between regime type and CSRE
 #' 
 #' Regime type and CSRE are quite correlated
+#' 
 plot.data <- full.data %>%
   select(cs_env_sum, uds_mean, e_polity2) %>% 
   na.omit()
@@ -328,23 +375,47 @@ fig.save.cairo(plot.regime.csre, filename="1-regime-csre",
                width=5, height=2)
 
 
-#' # Understanding and visualizing ICRG
+#' # Internal explanatory variables
+#' 
+#' ## Understanding and visualizing ICRG
 #' 
 #' Conceptualizing the political risk measure is a little tricky. Showing a few
 #' example countries can help. Figure out which countries have change the
-#' least/most since 2000:
+#' least/most since 2000.
+#' 
+#' Internal political risk:
 #' 
 risk.stats <- full.data %>%
   filter(year.num > 2000) %>%
-  group_by(Country) %>%
-  summarise(index.change = max(icrg.pol.risk.internal.scaled) - 
-              min(icrg.pol.risk.internal.scaled)) %>%
-  filter(!is.na(index.change)) %>%
-  arrange(index.change) %T>%
+  group_by(cowcode) %>%
+  summarise(index.change.internal = max(icrg.pol.risk.internal.scaled, na.rm=TRUE) - 
+              min(icrg.pol.risk.internal.scaled, na.rm=TRUE),
+            index.change.stability = max(icrg.stability, na.rm=TRUE) - 
+              min(icrg.stability, na.rm=TRUE)) %>%
+  
+
+risk.stats %>%
+  select(-index.change.stability) %>%
+  filter(!is.na(index.change.internal)) %>%
+  arrange(index.change.internal) %T>%
   {print(head(., 5))} %>% {print(tail(., 5))}
 
 #' Norway and Congo are the most consistent; Syria saw the biggest change.
-#'
+
+#' Government stability only (just the ICRG subcomponent):
+#' 
+risk.stats %>%
+  select(-index.change.internal) %>%
+  filter(!is.na(index.change.stability)) %>%
+  arrange(index.change.stability) %T>%
+  {print(head(., 5))} %>% {print(tail(., 5))}
+
+#' Ireland is suprisingly there, but that's because this measures government stability only and not corruption, military threats, or 
+#' 
+#' 
+
+ireland <- full.data %>% 
+  filter(Country ==)
 #' Average volatility/range by regime type:
 #' 
 risk.stats %>% 
@@ -386,7 +457,14 @@ fig.save.cairo(plot.icrg.examples, filename="1-icrg-examples",
                width=5, height=2)
 
 
-#' # ICRG across regime type
+#' ## ICRG and CSRE
+#' 
+#' What does the relationship between internal stability and CSRE look like?
+#' 
+plot.data <- full.data
+  
+
+#' ## ICRG across regime type
 #' 
 #' Are autocracies necessarily more unstable than democracies? They are more
 #' volatile, as shown above with `risk.stats` summaries…
@@ -430,7 +508,7 @@ year.diffs %>% select(1:6) %>% print(n=nrow(.))
 #' 
 
 
-#' # Other authoritarian stability variables and CSRE
+#' ## Other authoritarian stability variables and CSRE
 #' 
 #' All three variables seem moderately correlated with the CSRE
 #' 
@@ -473,7 +551,7 @@ grid::grid.draw(plot.auth.vars)
 fig.save.cairo(plot.auth.vars, filename="1-auth-vars", 
                width=6, height=2)
 
-#' ## ICRG stability and competition
+#' ### ICRG stability and competition
 plot.data <- full.data %>%
   select(icrg.pol.risk.internal.scaled, yrsoffc, years.since.comp, opp1vote) %>% 
   na.omit()
@@ -510,7 +588,9 @@ plot.auth.vars <- arrangeGrob(plot.yrs.offc, plot.yrs.since.comp,
 grid::grid.draw(plot.auth.vars)
 
 
-#' # Neighboring and regional ICRG risk
+#' # External explanatory variables
+#' 
+#' ## Neighboring and regional ICRG risk
 #' 
 #' Example of Kenya's neighborhood in 2012
 #' 
@@ -524,7 +604,7 @@ full.data %>%
   select(Country, icrg.pol.risk.internal.scaled)
 
 
-#' # Visualize neighbor and subregional instability
+#' ## Visualize neighbor and subregional instability
 plot.data <- full.data %>%
   select(cs_env_sum, neighbor.pol.risk.min, icrg.pol.risk.subregional)
 
@@ -568,7 +648,7 @@ plot.risk.cor <- ggplot(plot.data, aes(x=icrg.pol.risk.subregional,
   theme_ath()
 plot.risk.cor
 
-#' # Visualize coups
+#' ## Visualize coups
 plot.data <- full.data %>%
   select(cs_env_sum, neighbor.coups.activity.bin, coups.activity.subregional) %>%
   na.omit %>%
@@ -604,7 +684,7 @@ fig.save.cairo(plot.coup.vars, filename="1-ext-coup-vars",
                width=6, height=2)
 
 
-#' # Event data visualization
+#' ## Event data visualization
 #' 
 #' This is all old stuff that I've replaced with more accurate data.
 #' 
