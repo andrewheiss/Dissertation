@@ -451,6 +451,11 @@ grid::grid.draw(plot.icrg.examples)
 fig.save.cairo(plot.icrg.examples, filename="1-icrg-examples", 
                width=5, height=2)
 
+#' Average change across regimes (since not everyone is like Syria):
+#' 
+risk.stats %>% 
+  summarise(risk.change.avg = mean(change.risk, na.rm=TRUE),
+            stability.change.avg = mean(change.stability, na.rm=TRUE))
 
 #' ## ICRG and CSRE
 #' 
