@@ -38,6 +38,7 @@ library(scales)
 library(Cairo)
 library(pander)
 library(countrycode)
+library(DT)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
@@ -375,13 +376,6 @@ ggplot(dpr.time.agg, aes(x=year.num, y=value, colour=measure)) +
 #' # Internal explanatory variables
 #' 
 #' ## Understanding and visualizing ICRG
-#' 
-#' Conceptualizing the political risk measure is a little tricky. Showing a few
-#' example countries can help. Figure out which countries have change the
-#' least/most since 2000.
-#' 
-#' Internal political risk:
-#' 
 risk.stats <- autocracies %>%
   filter(year.num > 2000) %>%
   group_by(country) %>%
@@ -392,6 +386,14 @@ risk.stats <- autocracies %>%
             change.risk = risk.max - risk.min,
             change.stability = stability.max - stability.min)
 
+datatable(risk.stats)
+
+#' Conceptualizing the political risk measure is a little tricky. Showing a few
+#' example countries can help. Figure out which countries have change the
+#' least/most since 2000.
+#' 
+#' Internal political risk:
+#' 
 risk.stats %>%
   select(country, change.risk) %>%
   filter(!is.na(change.risk)) %>%
@@ -399,7 +401,7 @@ risk.stats %>%
   {print(head(., 5))} %>% {print(tail(., 5))}
 
 #' Congo most consistent; Middle East saw the biggest change.
-
+#' 
 #' Government stability only (just the ICRG subcomponent):
 #' 
 risk.stats %>%
