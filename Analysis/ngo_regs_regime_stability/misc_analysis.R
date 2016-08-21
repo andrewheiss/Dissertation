@@ -675,7 +675,7 @@ fig.save.cairo(plot.coup.vars, filename="1-ext-coup-vars",
                width=6, height=2)
 
 
-#' ## Event data visualization
+#' # Shaming explanatory variables
 #' 
 #' This is all old stuff that I've replaced with more accurate data.
 #' 
