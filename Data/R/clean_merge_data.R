@@ -834,7 +834,12 @@ all.distances <- expand.grid(year = 1991:2015,
 # later.
 #
 # Define the continuous and binary vars to be summarized neighborly/distancely
-vars.to.summarize.cont <- c("icrg.stability", "icrg.internal", "icrg.pol.risk",
+vars.to.summarize.cont <- c("icrg.stability", "icrg.internal",
+                            "icrg.pol.risk",
+                            "icrg.pol.risk.internal",
+                            "icrg.pol.risk.internal.nostab",
+                            "icrg.pol.risk.internal.scaled",
+                            "icrg.pol.risk.internal.nostab.scaled",
                             "protests.all", "protests.all.log",
                             "protests.violent", "protests.violent.log",
                             "protests.nonviolent", "protests.nonviolent.log",
