@@ -31,6 +31,7 @@ library(tidyr)
 library(purrr)
 library(broom)
 library(lubridate)
+library(stringr)
 library(ggplot2)
 library(ggstance)
 library(gridExtra)
@@ -581,99 +582,168 @@ grid::grid.draw(plot.auth.vars)
 
 #' # External explanatory variables
 #' 
-#' ## Neighboring and regional ICRG risk
+#' ## ICRG risk
 #' 
-#' Example of Kenya's neighborhood in 2012
+#' Which countries are in the most stable/unstable areas?
 #' 
-kenya.neighbors <- full.data %>%
-  filter(year.num == 2012, cowcode == 501) %>%
-  mutate(neighbors.cow = strsplit(neighbors.cow, ",")) %>%
-  select(neighbors.cow) %>% unlist %>% map_dbl(as.numeric)
+neighbor.stability <- autocracies %>%
+  group_by(country) %>%
+  summarise(stability.mean_wt = mean(icrg.pol.risk.internal.scaled_wt, na.rm=TRUE),
+            stability.mean_nb = mean(icrg.pol.risk.internal.scaled_mean_nb, na.rm=TRUE)) %>%
+  arrange(desc(stability.mean_wt))
 
-full.data %>%
-  filter(year.num == 2012, cowcode %in% kenya.neighbors) %>%
-  select(country, icrg.pol.risk.internal.scaled)
+datatable(neighbor.stability)
 
 
-#' ## Visualize neighbor and subregional instability
-plot.data <- full.data %>%
-  select(cs_env_sum, neighbor.pol.risk.min, icrg.pol.risk.subregional)
-
-#' Plot the correlations
+#' ## Coups
 #' 
-plot.neighbor.risk <- ggplot(plot.data, aes(x=neighbor.pol.risk.min, 
-                                            y=cs_env_sum)) + 
-  geom_point(size=0.25, alpha=0.25) + 
-  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
-  labs(x="Minimum political risk in neighboring country", 
-       y="Civil society regulatory environment\n(CSRE)") +
-  scale_y_continuous(breaks=seq(-6, 6, 2)) +
-  theme_ath()
-
-plot.subregion.risk <- ggplot(plot.data, aes(x=icrg.pol.risk.subregional, 
-                                             y=cs_env_sum)) + 
-  geom_point(size=0.25, alpha=0.25) + 
-  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
-  labs(x="Mean political risk in subregion", 
-       y=NULL) +
-  scale_y_continuous(breaks=seq(-6, 6, 2)) +
-  theme_ath()
-
-plot.ext.vars <- arrangeGrob(plot.neighbor.risk, plot.subregion.risk, nrow=1)
-grid::grid.draw(plot.ext.vars)
-
-fig.save.cairo(plot.ext.vars, filename="1-ext-risk-vars", 
-               width=6, height=2)
-
-#' The two external risk variables are fairly correlated though
+#' Use data from the [Archigos database of political
+#' leaders](http://privatewww.essex.ac.uk/~ksg/archigos.html)
 #' 
-cor(plot.data$icrg.pol.risk.subregional, 
-    plot.data$neighbor.pol.risk.min, use="complete.obs")
+#+ warning=FALSE, message=FALSE
+leaders <- read_tsv("http://privatewww.essex.ac.uk/~ksg/data/1March_Archigos_4.1.txt")
+leaders.autocracies.all <- leaders %>%
+  filter(ccode %in% unique(autocracies$cowcode)) %>%
+  filter(enddate > ymd("1950-01-01")) %>%
+  filter(exit != "Still in Office") %>%
+  mutate(leader = iconv(leader, from="Windows-1252", to="UTF-8"))  # Convert to UTF-8
 
-plot.risk.cor <- ggplot(plot.data, aes(x=icrg.pol.risk.subregional, 
-                                       y=neighbor.pol.risk.min)) + 
-  geom_point(size=0.25, alpha=0.25) + 
-  geom_smooth(method="lm", se=TRUE, colour="#014358") + 
-  labs(x="Mean political risk in subregion", 
-       y="Minimum political risk in neighboring country") +
+leaders.removed.irregular <- leaders.autocracies.all %>%
+  filter(exit == "Irregular")
+
+leaders.removed.coup <- leaders.removed.irregular %>%
+  filter(str_detect(exitcode, "Removed by")) %>%
+  filter(!str_detect(exitcode, "with Foreign"))
+
+leaders.removed.protest <- leaders.removed.irregular %>%
+  filter(str_detect(exitcode, "Protest"))
+
+#' According to data from \\[@GoemansGleditschChiozza:2009\], in the
+#' `r length(unique(autocracies$cowcode))` countries I identify as autocracies,
+#' `r nrow(leaders.autocracies.all)` executives have left office since 1950. In
+#' `r nrow(leaders.removed.irregular)` cases, or nearly one third of all exits,
+#' the exit from office occurred irregularly (i.e. not due to term limits or
+#' natural death). A clear majority of these irregular collapses of executive
+#' power—`r nrow(leaders.removed.coup)`, or 75%—occurred as a result of
+#' military, political, or rebel coups.
+#' 
+#' So coups are a big worry.
+#' 
+#' Which countries are in the areas with the most coups? West Africa…
+#' 
+neighbor.coups <- autocracies %>%
+  group_by(country) %>%
+  summarise(coup.activity.sum_nb = sum(coups.activity.bin_sum_nb, na.rm=TRUE)) %>%
+  arrange(desc(coup.activity.sum_nb))
+
+datatable(neighbor.coups)
+
+
+#' When do coups happen? More in the 90s than in the 2000s…
+#' 
+coups.time <- autocracies %>%
+  group_by(year.actual) %>%
+  summarise(coup.activity = sum(coups.activity.bin, na.rm=TRUE),
+            coup.success = sum(coups.success.bin, na.rm=TRUE)) %>%
+  gather(coup.type, value, -year.actual) %>%
+  filter(!is.na(value), !is.na(year.actual))
+
+ggplot(coups.time, aes(x=year.actual, y=value, colour=coup.type)) +
+  geom_line() + 
+  coord_cartesian(xlim=ymd(c("1990-01-05", "2015-01-01"))) +
+  labs(x=NULL, y="Number of coups") + 
+  scale_colour_manual(values=ath.palette("palette1"), name=NULL) + 
   theme_ath()
-plot.risk.cor
 
-#' ## Visualize coups
-plot.data <- full.data %>%
-  select(cs_env_sum, neighbor.coups.activity.bin, coups.activity.subregional) %>%
-  na.omit %>%
-  mutate(neighbor.coups.activity.bin = factor(neighbor.coups.activity.bin, 
-                                              labels=c("No coup activity",
-                                                       "Coup activity")),
-         coups.activity.subregional = factor(coups.activity.subregional))
 
-plot.coups.neighbor <- ggplot(plot.data, aes(x=neighbor.coups.activity.bin, 
-                                             y=cs_env_sum)) + 
-  geom_violin() +
-  geom_point(size=0.15, alpha=0.15, position="jitter") +
-  geom_point(stat="summary", fun.y="mean", size=2) +
-  labs(x="Coup activity in neighboring countries", 
-       y="Civil society regulatory environment\n(CSRE)") +
-  scale_y_continuous(breaks=seq(-6, 6, 2)) +
+#' ## Protests
+#' 
+#' The second most common form of irregular autocratic exit is stepping down
+#' because of popular protest: `r nrow(leaders.removed.protest)` instances, or
+#' `r nrow(leaders.removed.protest) / nrow(leaders.removed.irregular)`%
+#' 
+#' ### Protests in autocracies
+autocracies.protests <- autocracies %>%
+  filter(year.num > 1994) %>%
+  select(year.actual, protests.violent, protests.nonviolent) %>%
+  gather(protest.type, value, -year.actual)
+
+#' Number of total protest events:
+#' 
+autocracies.protests %>% 
+  group_by(protest.type) %>% 
+  summarise(n = sum(value, na.rm=TRUE)) %>%
+  ungroup() %>%
+  mutate(total = sum(n))
+
+autocracies.protests.plot.data <- autocracies.protests %>%
+  group_by(protest.type, year.actual) %>%
+  summarise(n = sum(value, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(!is.na(year.actual)) %>%  # TODO: Why are there NAs anyway?
+  mutate(protest.type = str_replace(protest.type, "\\.std", ""),
+         protest.type = factor(protest.type,
+                               levels=c("protests.nonviolent",
+                                        "protests.violent"),
+                               labels=c("Nonviolent protests   ",
+                                        "Violent protests")))
+  
+p.protests.autocracies <- ggplot(autocracies.protests.plot.data, 
+                                 aes(x=year.actual, y=n, colour=protest.type)) + 
+  geom_line() +
+  scale_y_continuous(labels=comma) + 
+  coord_cartesian(xlim=ymd(c("1995-01-05", "2015-01-01"))) +
+  labs(x=NULL, y="Number of events") + 
+  scale_colour_manual(values=ath.palette("palette1"), name=NULL) + 
   theme_ath()
+p.protests.autocracies
 
-plot.coups.subregion <- ggplot(plot.data, aes(x=coups.activity.subregional, 
-                                              y=cs_env_sum)) + 
-  geom_violin() +
-  geom_point(size=0.15, alpha=0.15, position="jitter") +
-  geom_point(stat="summary", fun.y="mean", size=2) +
-  labs(x="Coup attemps in subregion", 
-       y=NULL) +
-  scale_y_continuous(breaks=seq(-6, 6, 2)) +
-  theme_ath()
 
-plot.coup.vars <- arrangeGrob(plot.coups.neighbor, plot.coups.subregion, nrow=1)
-grid::grid.draw(plot.coup.vars)
+#' What do Egypt and China's raw and standardized counts of protests look like?
+#' 
+#+ warning=FALSE
+example.protests <- autocracies %>%
+  filter(year.num > 1994) %>%
+  filter(country %in% c("Egypt", "China")) %>%
+  select(year.actual, country,
+         protests.violent, protests.violent.std, 
+         protests.nonviolent, protests.nonviolent.std) %>%
+  gather(protest.type, value, -year.actual, -country) %>%
+  mutate(overall.type = ifelse(str_detect(protest.type, "std"),
+                               "Standardized", "Count"),
+         protest.type = str_replace(protest.type, "\\.std", ""),
+         protest.type = factor(protest.type,
+                               levels=c("protests.nonviolent",
+                                        "protests.violent"),
+                               labels=c("Nonviolent protests   ",
+                                        "Violent protests")))
 
-fig.save.cairo(plot.coup.vars, filename="1-ext-coup-vars", 
-               width=6, height=2)
+p.protests.std <- ggplot(filter(example.protests, overall.type == "Standardized"), 
+                         aes(x=year.actual, y=value, colour=protest.type)) + 
+  geom_line() + 
+  scale_y_continuous(breaks=c(1:6)) +
+  scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
+  coord_cartesian(ylim=c(1, 6)) +
+  labs(x=NULL, y="Standardized index") +
+  facet_wrap(~ country) + 
+  theme_ath() +
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank())
 
+p.protests.num <- ggplot(filter(example.protests, overall.type == "Count"), 
+                         aes(x=year.actual, y=value, colour=protest.type)) + 
+  geom_line() + 
+  scale_colour_manual(values=ath.palette("palette1"), guide=FALSE) +
+  labs(x=NULL, y="Number of events") +
+  facet_wrap(~ country) + 
+  theme_ath() 
+
+p.protests.example <- rbind(ggplotGrob(p.protests.num),
+                            ggplotGrob(p.protests.std))
+grid::grid.draw(p.protests.example)
+
+fig.save.cairo(p.protests.example, filename="1-protests-egypt-china",
+               width=6, height=4)
 
 #' # Shaming explanatory variables
 #' 
