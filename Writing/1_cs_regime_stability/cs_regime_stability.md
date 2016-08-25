@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss&#x40;duke.edu
-date: August 22, 2016
+date: August 23, 2016
 published: First empirical chapter of dissertation. Please do not cite without permission.
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -96,6 +96,10 @@ Anecdotal evidence shows that regimes also care about how their civil society re
 
 To these hypotheses, I construct a new time-series, cross-sectional dataset of 97 autocracies from 1991–2014, compiling a set of variables from several well-established and new data sources.
 
+In spite of the methodological advances of the CSRE index and the comprehensive collections of NGO legislation, no measure fully reflects the regulatory environment for *international* NGOs. There is unfortunately no systematic way to quantitatively disentangle the application of the regulatory environment to domestic and international organizations—laws that govern civil society tend to cover both domestic and international organization, and regulations that are applied to international NGOs are often the same as those applied to domestic NGOs. With a few notable exceptions, regimes rarely craft legislation aimed primarily and exclusively at regulating *international* NGOs. 
+
+Thus, the analysis of the civil society regulatory environment in this chapter encompasses domestic, foreign-funded domestic, and foreign NGOs. In the following chapter I carefully examine each of my theory's hypotheses in the cases of Russia, China, and Egypt, look at each regime's imposition of legislation targeted specifically at international NGOs, and compare the conclusions of the case studies with the statistical results of this chapter.
+
 ## Dependent variable
 
 ### Measuring civil society restrictions
@@ -128,9 +132,6 @@ Because the data collected by Dupuy, Ron, and Prakash only includes one measure 
 
 !INCLUDE "../../Output/tables/1-csre-dcjw-coefs.md"
 
-In spite of the methodological advances of the CSRE index and the comprehensive collections of NGO legislation, no measure fully reflects the regulatory environment for *international* NGOs. There is unfortunately no systematic way to quantitatively disentangle the application of the regulatory environment to domestic and international organizations—laws that govern civil society tend to cover both domestic and international organization, and regulations that are applied to international NGOs are often the same as those applied to domestic NGOs. With a few notable exceptions, regimes rarely craft legislation aimed primarily and exclusively at regulating *international* NGOs. 
-
-Thus, the analysis of the civil society regulatory environment in this chapter encompasses domestic, foreign-funded domestic, and foreign NGOs. In the following chapter I carefully examine each of my theory's hypotheses in the cases of Russia, China, and Egypt, look at each regime's imposition of legislation targeted specifically at international NGOs, and compare the conclusions of the case studies with the statistical results of this chapter.
 
 ## Explanatory variables
 
@@ -141,7 +142,6 @@ I use two different methods to identify autocracies. First, I use the Unified De
 ![Civil society regulatory environment index across range of regime types](../../Output/figures/1-regime-csre.pdf){#fig:regime-csre}
 
 Classifying regime type with an arbitrary numeric threshold is convenient, but can lead to substantial analytic issues. In their research on autocratic breakdown, @GeddesWrightFrantz:2014 found that in previous studies on autocratic breakdowns, using Polity thresholds as a proxy for autocracy overestimated predictions of regime survival by 100 percent, indicating that Polity's parsimony and simplicity fails to capture the nuances of autocratic rule. Accordingly, I also identify autocracies using data from @GeddesWrightFrantz:2014, who categorize 154 countries as various varieties of autocracies, including oligarchies, monarchies, and various combinations of personal, party, and military rule. As expected, the average CSRE is significantly lower in autocracies (−0.1) than in democracies (3.9).
-
 
 ### Internal regime stability and conflict
 
@@ -171,8 +171,7 @@ Instead of using counts or ratios, I generate a standardized measure by centerin
 
 ![Protest events in Egypt and China—raw counts and standardized index](../../Output/figures/1-protests-egypt-china.pdf){#fig:protests-egypt-china}
 
-As with the general ICRG-based measure of neighbor instability, I calculated the distance-weighted average for protests, since reverberations of protests can be felt further off. Whereas a regime observing a faraway *coup* will not likely worry as much about contagion, the costs of participating in *popular protests* are generally lower than outright revolution and media coverage of foreign protests is more readily available, thus increasing the likelihood that dissidents will protest against the government.
-
+As with the general ICRG-based measure of neighbor instability, I calculated the distance-weighted average for protests, since the reverberations of protests can be felt further off. Whereas a regime observing a faraway *coup* will not likely worry as much about contagion, the costs of participating in *popular protests* are generally lower than outright revolution and media coverage of foreign protests is more readily available, thus increasing the likelihood that dissidents will protest against the government.
 
 ### International shaming
 
@@ -186,17 +185,13 @@ I include only events where the target actor (the "to whom") is a state and wher
 
 [@fig:events-both] shows the average proportion and intensity of interstate and INGO-state interactions in the ICEWS database. In general, a greater proportion of INGO-state events are conflictual, likely because INGOs are more likely to engage with a state to condemn regime action (also, there are far more interstate events, meaning that the average proportion of conflictual events is dampened). However, interstate conflictual events tend to be more intense, arguably because states have more powerful tools for coercing states (i.e. militaries), while INGOs are limited to reports and press releases. Notably, there is no statistically significant difference in conflictual proportion or intensity in autocracies or democracies.
 
-## Control variables
-
-I also control for a variety of domestic and international factors that could also influence a regime's decision to restrict civil society. Domestically, I control for a regime's propensity to violate the physical integrity rights of its citizens using data from the CIRI project. Governments that use torture, extrajudicial killing, disappearance, and other violent tactics are likely to restrict associational life. I also control for each country's GDP per capita (in constant 2005 dollars) and population, both measured by the World Bank [@WDI:2015]. I log both variables to account for their exponential distribution.
-
-Internationally, I check to see how embedded regimes are in the global community. Following @DupuyRonPrakash:2014a, I include the amount of development aid to determine the regime's dependency on foreign donors. I also include a count of the number people who are members or volunteers in international NGOs with branch offices in that country, following @Murdie:2014, using data from the Yearbook of International Organizations. More INGO involvement in a regime could mitigate the government's attempts at restricting civil society. Finally, I include the KOF Index of Globalization [@DreherGastonMartens:2008] to measure the regime's economic, social, and political international embeddedness. 
-
 ## Modeling decisions
 
-I estimate a series of frequentist ordinary least squares (OLS) models.[^18] The dependent variable in every model leads all covariates by one year to capture the lagged effect of all dependent variables. While this is admittedly a rough and naive identification strategy, these models are ultimately meant to demonstrate the conjoint determinants of the civil society regulatory environment and not the ultimate causal impact or treatment effect.
+Instead of testing my hypotheses with frequentist null hypothesis significance testing (NHST), the standard statistical approach in much of the existing research on international relations and comparative politics, I estimate a series of Bayesian generalized linear models. I use Bayesian methods primarily because they yield more meaningful inferences [@Kruschke:2010; @Korner-NievergeltRothFelten:2015; @GelmanCarlinStern:2013]. Frequentist analysis determines the *probability of the data* given a *null hypothesis* (i.e. $P(\text{data} | H_0)$), yielding results that are often unwieldy, phrased as the probability of rejecting the null if it is true. In contrast, Bayesian analysis determines the *probability of a hypothesis* given *the data* (i.e. $P(H | \text{data})$), resulting in probabilities that are directly interpretable, phrased simply as the probability that the hypothesis is true. Similarly, Bayesian analysis provides more interpretable measures of uncertainty. Given frequentist-estimated parameters, we can calculate a 95% confidence interval that indicates that if the data were generated several more times, 95% of the resulting confidence intervals would contain the true parameter.[^18]With Bayesian methods, uncertainty can be described with a credible interval, which simply indicates that we can be 95% sure that the true parameter is with that interval. Bayesian analysis is not a silver bullet for inference—the linear models I fit must still be well specified and fit standard statistical assumptions (i.e. homoskedasticity of errors, absence multicollinearity, etc.). However, the framework usefully provides a more interpretable set of results.
 
-Parsimony, simple models for LNA
+I use weakly informative prior distributions for each of the coefficient parameters, based on a normal distribution with a mean of 0 and a standard deviation of 1. I obtain the posterior distribution of the CSRE I use Markov Chain Monte Carlo (MCMC) sampling and simulate values from the joint posterior distribution of the coefficient parameters.[^19] I use the means of the simulated values from the MCMC samples as coefficient estimates, and use the 2.5% and 97.5% quantiles as lower and upper limits for 95% credible intervals. Finally, I declare an effect statistically significant if the posterior probability of being different from zero is larger than 0.99.
+
+As discussed earlier, I employ large-*n* analysis (LNA), which entails parsimonious model specification with minimal controls. I lead the CSRE by one year in each model to capture the lagged effect of all dependent variables, and I include year fixed effects as the only control variable. While this is admittedly a rough and naive identification strategy, these models are ultimately meant to demonstrate the conjoint determinants of the civil society regulatory environment in general, and not a precisely estimated treatment effect. Again, these results inform and complement the small-*n* analysis (SNA) of the following chapters, where I explore each causal mechanism in more depth.
 
 # Results
 
@@ -249,7 +244,7 @@ Given these findings, support for hypothesis 3 is once again mixed. Formal, high
 
 While the preceding statistical models provide some observational evidence for the internal, external, and reputational determinants of authoritarian restrictions on global civil society, there are limits in what the statistics can reveal. Most importantly, as explained previously, there is no good way to disentangle the regulatory environment for domestic NGOS from international NGOs. Examining changes in the civil society regulatory environment in a specific case over time is instructive, as it allows us to (1) unravel the specific regulations for INGOs, and (2) determine how well the statistical findings reflect reality.
 
-Russia is a prime case for studying authoritarian restrictions on international NGOs. Though it is not formally defined as an autocracy (as its Polity IV score ranges between 0–6 since 1991), Russia—especially under the rule of Vladimir Putin—has long been accused of harboring authoritarian tendencies by both right- and left-leaning media and scholars.[^19] Post-Soviet Russia was also a proving ground for an emerging global civil society, and as thousands of Western funded NGOs began operations in the 1990s, tensions between domestic state sovereignty, foreign states, and international non-state actors boiled up, leading directly to a series of laws strategically tailored to curb international influence in Russia's domestic affairs. In this brief case study, I trace the development of Russia's regulatory environment for international and foreign-based NGOs since 1990, connecting key legislative restrictions with the most prominent internal, external, and reputational factors from the statistical models (see [@fig:russia-timeline]).
+Russia is a prime case for studying authoritarian restrictions on international NGOs. Though it is not formally defined as an autocracy (as its Polity IV score ranges between 0–6 since 1991), Russia—especially under the rule of Vladimir Putin—has long been accused of harboring authoritarian tendencies by both right- and left-leaning media and scholars.[^20] Post-Soviet Russia was also a proving ground for an emerging global civil society, and as thousands of Western funded NGOs began operations in the 1990s, tensions between domestic state sovereignty, foreign states, and international non-state actors boiled up, leading directly to a series of laws strategically tailored to curb international influence in Russia's domestic affairs. In this brief case study, I trace the development of Russia's regulatory environment for international and foreign-based NGOs since 1990, connecting key legislative restrictions with the most prominent internal, external, and reputational factors from the statistical models (see [@fig:russia-timeline]).
 
 ![Timeline of international NGO restrictions in Russia](../../Output/figures/1-russia-timeline.pdf){#fig:russia-timeline}
 
@@ -299,11 +294,11 @@ However, this newfound openness did not last long. The Medvedev regime's interna
 
 Though data for the CSRE is only available through 2012, two important and highly restrictive pieces of legislation passed in 2012 and 2015 which have undoubtedly further diminished the index. All three hypothesized mechanisms appear to play a role in this most recent push to regulate and restrict international NGOs working in Russia. 
 
-Reprising his fear of NGOs from his first term, in just a few months following his second inauguration, Vladimir Putin signed the 2012 Foreign Agents Law, which contained a set of strict regulations aimed specifically at stigmatizing international NGOs and any domestic NGOs that receive funds from abroad. Similar to the original 1995 Law on Associations, the 2012 law required that any NGO that either (1) received funding from or was based in a foreign country, or (2) engaged in any form of "political activity" (broadly defined) had to reregister with the government as a иностранный агент, or "foreign agent", a legal term of art laden with powerful symbolic meaning—traitorous spies working against the Soviet regime during the Cold War received the same appellation.[^20] Beyond the registration requirement, the law also required that foreign-connected NGOs prominently advertise the fact that they were foreign agents on all publications, pamphlets, and marketing. Failing to disclose this status carried a fine of up to 500,000 rubles—roughly US $7,000 [@Flikke:2015, 9]. 
+Reprising his fear of NGOs from his first term, in just a few months following his second inauguration, Vladimir Putin signed the 2012 Foreign Agents Law, which contained a set of strict regulations aimed specifically at stigmatizing international NGOs and any domestic NGOs that receive funds from abroad. Similar to the original 1995 Law on Associations, the 2012 law required that any NGO that either (1) received funding from or was based in a foreign country, or (2) engaged in any form of "political activity" (broadly defined) had to reregister with the government as a иностранный агент, or "foreign agent", a legal term of art laden with powerful symbolic meaning—traitorous spies working against the Soviet regime during the Cold War received the same appellation.[^21] Beyond the registration requirement, the law also required that foreign-connected NGOs prominently advertise the fact that they were foreign agents on all publications, pamphlets, and marketing. Failing to disclose this status carried a fine of up to 500,000 rubles—roughly US $7,000 [@Flikke:2015, 9]. 
 
-Since the law was implemented in 2012, Russian authorities have enforced it far more vigorously than previous NGO regulations, increasing spontaneous inspections and shuttering and harassing organizations that did not voluntarily register [@Flikke:2015, 10]. By 2015, a third of foreign-connected NGOs in Russia had shut down and left the country.[^21] Subsequent regulations passed in 2014 sought to co-opt international NGOs, as Putin restored and transformed the Public Chamber as the primary domestic source for NGO funding, thereby attempting to dissuade domestic organizations from linking with foreign powers.
+Since the law was implemented in 2012, Russian authorities have enforced it far more vigorously than previous NGO regulations, increasing spontaneous inspections and shuttering and harassing organizations that did not voluntarily register [@Flikke:2015, 10]. By 2015, a third of foreign-connected NGOs in Russia had shut down and left the country.[^22] Subsequent regulations passed in 2014 sought to co-opt international NGOs, as Putin restored and transformed the Public Chamber as the primary domestic source for NGO funding, thereby attempting to dissuade domestic organizations from linking with foreign powers.
 
-Most recently, the Duma (under Putin's influence) passed a set of amendments to the 2012 law—the 2015 Undesirable Organizations Law, which allowed the government to blacklist any foreign-connected NGO that it considered exceptionally undesirable. Prominent Western INGOs such as the Open Society Foundations, the MacArthur Foundation, Freedom House, Amnesty International, and the National Endowment for Democracy were all deemed undesirable and subsequently expelled from the country.[^22]
+Most recently, the Duma (under Putin's influence) passed a set of amendments to the 2012 law—the 2015 Undesirable Organizations Law, which allowed the government to blacklist any foreign-connected NGO that it considered exceptionally undesirable. Prominent Western INGOs such as the Open Society Foundations, the MacArthur Foundation, Freedom House, Amnesty International, and the National Endowment for Democracy were all deemed undesirable and subsequently expelled from the country.[^23]
 
 Given the internal political context, as well as persistent external threats to stability, Russia's rapid crackdown on the environment for foreign civil society organizations is not unexpected. By the time Putin resumed the presidency in 2012, Russia's internal political risk had fallen to its worst level since the first few years of Putin's first term. A confluence of economic and political factors stoked this internal instability, including a flagging economy, Putin's ambitions to expand Russian influence into the Middle East and China, and a latent interest in irredentism (which would come to full fruition with Russia's annexation of Crimea in 2014). 
 
@@ -317,9 +312,9 @@ In parallel with 2006, fears of foreign meddling appear to be the overriding fac
 
 One of the law's cosponsors, Aleksandr Tarnavsky, linked the harshness of the new INGO restrictions with the external threats of foreign meddling in Ukraine, stating that
 
-> Events in Ukraine have offended me, like many other Russians. Western countries audaciously spoke to us of friendship, while their secret services staged a coup hoping to tear Ukraine away from us. You act like that to us, then we’ll treat you the same. It’s pure pragmatism—nothing personal.[^23]
+> Events in Ukraine have offended me, like many other Russians. Western countries audaciously spoke to us of friendship, while their secret services staged a coup hoping to tear Ukraine away from us. You act like that to us, then we’ll treat you the same. It’s pure pragmatism—nothing personal.[^24]
 
-Tarnavsky argued that the strict regulations would loom large for INGOs, like a "weapon hanging on the wall and that never fires,"[^24] forcing them to toe the government line. The law was thus conceived of as a sort of defensive weapon against undue foreign influence, necessitated by ongoing fears of external instability.
+Tarnavsky argued that the strict regulations would loom large for INGOs, like a "weapon hanging on the wall and that never fires,"[^25] forcing them to toe the government line. The law was thus conceived of as a sort of defensive weapon against undue foreign influence, necessitated by ongoing fears of external instability.
 
 Events leading to the 2012 Foreign Agents and 2015 Undesirable Organizations laws provide moderate evidence for my hypotheses. As internal political stability decreased (especially in response to Putin's irredentist annexation of Crimea and subsequent war with Ukraine) and threats of revolutionary contagion and external political stability increased, civil society restrictions intensified correspondingly, as anticipated. However, the regime was apparently not responsive to international shaming and condemnation.
 
@@ -394,16 +389,18 @@ Wickham, Hadley. 2009. *ggplot2: Elegant Graphics for Data Analysis.* Springer N
 
 [^17]:	Specifically, I transform the raw count of each variable of interest using the following: $\frac{\mathbf{x} - \mu_x}{\sigma_x} + \left \lvert \min \left (\frac{\mathbf{x} - \mu_x}{\sigma_x} \right ) \right \rvert + 1$. I thank Shahryar Minhas for this idea.
 
-[^18]:	Though in the future I will use Bayesian generalized linear regression models.
+[^18]:	It is often tempting to interpret frequentist confidence intervals in a Bayesian manner. In one study, students and seasoned researchers alike failed to identify incorrect statements about the definition of confidence intervals, and roughly half of the participants confused confidence intervals with credible intervals [@HoekstraMoreyRouder:2014]. 
 
-[^19]:	[http://www.washingtontimes.com/news/2007/sep/20/putinism/](http://www.washingtontimes.com/news/2007/sep/20/putinism/) and [http://www.theguardian.com/commentisfree/2016/jan/26/vladimir-putin-russia-oligarch-british-left-speak-out](http://www.theguardian.com/commentisfree/2016/jan/26/vladimir-putin-russia-oligarch-british-left-speak-out)
+[^19]:	I use Stan [@stan] through R [@rstan; @r-project] to generate 4 MCMC chains with 2,000 iterations in each chain, 1,000 of which are used for warmup. All chains converge; I assess convergence with visual inspection, and diagnostic plots are included the dissertation appendix.
 
-[^20]:	See [http://www.theguardian.com/world/2015/apr/26/harassed-and-shunned-the-russians-labelled-foreign-agents-by-kremlin](http://www.theguardian.com/world/2015/apr/26/harassed-and-shunned-the-russians-labelled-foreign-agents-by-kremlin)
+[^20]:	[http://www.washingtontimes.com/news/2007/sep/20/putinism/](http://www.washingtontimes.com/news/2007/sep/20/putinism/) and [http://www.theguardian.com/commentisfree/2016/jan/26/vladimir-putin-russia-oligarch-british-left-speak-out](http://www.theguardian.com/commentisfree/2016/jan/26/vladimir-putin-russia-oligarch-british-left-speak-out)
 
-[^21]:	[http://bellona.org/news/russian-human-rights-issues/russian-ngo-law/2015-10-foreign-agent-law-has-put-33-percent-of-russias-ngos-out-of-business](http://bellona.org/news/russian-human-rights-issues/russian-ngo-law/2015-10-foreign-agent-law-has-put-33-percent-of-russias-ngos-out-of-business)
+[^21]:	See [http://www.theguardian.com/world/2015/apr/26/harassed-and-shunned-the-russians-labelled-foreign-agents-by-kremlin](http://www.theguardian.com/world/2015/apr/26/harassed-and-shunned-the-russians-labelled-foreign-agents-by-kremlin)
 
-[^22]:	[https://meduza.io/en/news/2015/07/08/soros-and-macarthur-foundations-among-12-ngos-in-patriotic-stop-list](https://meduza.io/en/news/2015/07/08/soros-and-macarthur-foundations-among-12-ngos-in-patriotic-stop-list)
+[^22]:	[http://bellona.org/news/russian-human-rights-issues/russian-ngo-law/2015-10-foreign-agent-law-has-put-33-percent-of-russias-ngos-out-of-business](http://bellona.org/news/russian-human-rights-issues/russian-ngo-law/2015-10-foreign-agent-law-has-put-33-percent-of-russias-ngos-out-of-business)
 
-[^23]:	[https://meduza.io/en/feature/2015/05/21/pure-pragmatism-nothing-personal](https://meduza.io/en/feature/2015/05/21/pure-pragmatism-nothing-personal)
+[^23]:	[https://meduza.io/en/news/2015/07/08/soros-and-macarthur-foundations-among-12-ngos-in-patriotic-stop-list](https://meduza.io/en/news/2015/07/08/soros-and-macarthur-foundations-among-12-ngos-in-patriotic-stop-list)
 
 [^24]:	[https://meduza.io/en/feature/2015/05/21/pure-pragmatism-nothing-personal](https://meduza.io/en/feature/2015/05/21/pure-pragmatism-nothing-personal)
+
+[^25]:	[https://meduza.io/en/feature/2015/05/21/pure-pragmatism-nothing-personal](https://meduza.io/en/feature/2015/05/21/pure-pragmatism-nothing-personal)
