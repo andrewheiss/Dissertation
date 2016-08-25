@@ -364,3 +364,14 @@ plot.sna.selection.b <- ggplot(plot.data.sna.selection.b,
   coord_cartesian(xlim=c(-4, 4), ylim=c(-6, 6)) +
   theme_ath()
 plot.sna.selection.b
+
+#' ## Data for case studies
+#' 
+#' Better to look at this with the timelines though.
+#' 
+final.case.studies <- autocracies.modeled %>%
+  filter(cowcode %in% cases$cowcode) %>%
+  group_by(country) %>%
+  summarise_each(funs(mean = mean(., na.rm=TRUE)), one_of(vars.used))
+
+datatable(final.case.studies)
