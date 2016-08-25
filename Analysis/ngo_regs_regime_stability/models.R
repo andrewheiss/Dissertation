@@ -328,6 +328,8 @@ cases <- data_frame(cowcode = c(710, 651, 365, 663, 775, 705),
 
 plot.data.sna.selection.b <- model.for.case.selection %>%
   augment() %>%
+  mutate(post.pred.fit = colMeans(posterior_predict(model.for.case.selection, 
+                                                    seed=my.seed))) %>%
   mutate(.rownames = as.numeric(.rownames)) %>%
   left_join(select(autocracies.modeled, rowname, cowcode, country),
             by=c(".rownames" = "rowname")) %>%
@@ -346,7 +348,7 @@ plot.data.sna.selection.b <- model.for.case.selection %>%
                          ordered=TRUE))
 
 plot.sna.selection.b <- ggplot(plot.data.sna.selection.b,
-                               aes(x=.fitted, y=cs_env_sum.lead,
+                               aes(x=post.pred.fit, y=cs_env_sum.lead,
                                    colour=colour)) +
   geom_segment(x=-6, xend=6, y=-6, yend=6, colour="grey75", size=0.5) +
   geom_point(aes(alpha=alpha, size=point.size)) +
@@ -362,95 +364,3 @@ plot.sna.selection.b <- ggplot(plot.data.sna.selection.b,
   coord_cartesian(xlim=c(-4, 4), ylim=c(-6, 6)) +
   theme_ath()
 plot.sna.selection.b
-
-# 
-# 
-# 
-# lna.all.simple.b <- stan_glm(cs_env_sum.lead ~ 
-#                        icrg.stability + icrg.internal +
-#                        icrg.pol.risk_wt +
-#                        shaming.states.std +
-#                        shaming.ingos.std + 
-#                        as.factor(year.num),
-#                      data=autocracies.gwf, family=gaussian(), 
-#                      prior=cauchy(), prior_intercept=cauchy(), 
-#                      seed=my.seed)
-# 
-# print(lna.all.simple.b)
-# plot(lna.all.simple.b) + geom_vline(xintercept=0)
-# pp_check(lna.all.simple.b, check="distributions", overlay=FALSE, nreps=5)
-# 
-# 
-# lna.all.full.b <- stan_glm(cs_env_sum.lead ~ 
-#                              # Internal
-#                              icrg.stability + icrg.internal +
-#                              yrsoffc + years.since.comp + opp1vote +
-#                              # External
-#                              # any.crisis_pct_wt +
-#                              # insurgency_pct_mean_nb +
-#                              icrg.pol.risk_wt + 
-#                              any.crisis_pct_mean_nb +
-#                              coups.activity.bin_sum_nb +
-#                              protests.violent.std_wt +
-#                              protests.nonviolent.std_wt +
-#                              # Shaming
-#                              shaming.states.std +
-#                              shaming.ingos.std +
-#                              # Minimal controls
-#                              as.factor(year.num),
-#                            data=autocracies, family=gaussian(), 
-#                            prior=cauchy(), prior_intercept=cauchy(), 
-#                            seed=my.seed)
-# 
-# print(lna.all.full.b)
-# plot(lna.all.full.b, pars=c("icrg.stability", "icrg.internal", "yrsoffc")) + geom_vline(xintercept=0) + theme_ath()
-# pp_check(lna.all.full.b, check="distributions", overlay=FALSE, nreps=5)
-# 
-# ci95 <- posterior_interval(lna.all.full.b, prob = 0.95)
-# round(ci95, 2)
-# 
-# cases <- data_frame(cowcode = c(710, 651, 365, 663, 775, 705),
-#                     country.name = countrycode(cowcode, "cown", "country.name"),
-#                     colour = ath.palette("palette1", n=6),
-#                     linetype = 1, alpha = 1, point.size = 1)
-# 
-# lna.selection.data.b <- lna.all.simple.b %>%
-#   augment() %>%
-#   left_join(select(autocracies, .rownames, cowcode), by=".rownames") %>%
-#   left_join(cases, by="cowcode") %>%
-#   mutate(country.name = ifelse(is.na(country.name), "Other", country.name),
-#          colour = ifelse(is.na(colour), "grey70", colour),
-#          linetype = ifelse(is.na(linetype), 0, linetype),
-#          alpha = ifelse(is.na(alpha), 0.25, alpha),
-#          point.size = ifelse(is.na(point.size), 0.55, point.size)) %>%
-#   mutate(country.name = factor(country.name, levels=c(cases$country.name, "Other"),
-#                                ordered=TRUE),
-#          colour = factor(colour, levels=c(cases$colour, "grey70"),
-#                          ordered=TRUE))
-# 
-# plot.lna.selection.b <- ggplot(lna.selection.data.b,
-#                                aes(x=.fitted, y=cs_env_sum.lead,
-#                                    colour=colour)) +
-#   geom_segment(x=-6, xend=6, y=-6, yend=6, colour="grey75", size=0.5) +
-#   geom_point(aes(alpha=alpha, size=point.size)) +
-#   stat_ellipse(aes(linetype=linetype), type="norm", size=0.5) +
-#   scale_color_identity(guide="legend", labels=c(cases$country.name, "Other"), 
-#                        name=NULL) +
-#   scale_size_identity() +
-#   scale_alpha_identity() +
-#   scale_linetype_identity() +
-#   labs(x="Predicted CSRE", y="Actual CSRE") +
-#   coord_cartesian(xlim=c(-3, 3), ylim=c(-6, 6)) +
-#   theme_ath()
-# 
-# plot.lna.selection.b
-# 
-# # cat(lna.all.simple.b$stanfit@stanmodel@model_code, file="~/Desktop/blah.txt")
-# #
-# # model.simple.b <- stan_glm(cs_env_sum.lead ~ icrg.stability + e_polity2,
-# #                           data=full.data, family=gaussian(),
-# #                           prior=cauchy(), prior_intercept=cauchy(),
-# #                           seed=my.seed)
-# # print(model.simple.b, digits=2)
-# # plot(model.simple.b, pars=c("icrg.stability", "e_polity2"))
-# # pp_check(model.simple.b, check="distributions", overlay=FALSE, nreps=5)
