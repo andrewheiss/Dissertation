@@ -9,7 +9,11 @@ library(ggstance)
 
 coef.names <- read_csv(file.path(PROJHOME, "Analysis", 
                                  "ngo_regs_regime_stability", 
-                                 "coef_names.csv"))
+                                 "coef_names.csv")) %>%
+  mutate(term.clean = factor(term.clean, levels=unique(term.clean), ordered=TRUE),
+         category = factor(category, levels=unique(category), ordered=TRUE),
+         term.clean.rev = factor(term.clean, levels=rev(levels(term.clean))),
+         category.rev = factor(category, levels=rev(levels(category))))
 
 col.auth <- "#441152"
 col.dem <- "#BEDB3A"

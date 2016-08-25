@@ -1,36 +1,13 @@
-term,clean.name
-icrg.pol.risk.internal.scaled,Internal political risk (ICRG)
-yrsoffc,Years executive in office
-years.since.comp,Years since competitive election
-opp1vote,Opposition vote share
-physint,Physical integrity rights
-gdpcap.log,GDP per capita (log)
-population.log,Population (log)
-oda.log,Foreign aid (log)
-countngo,Number of INGO members
-globalization,Globalization
-neighbor.pol.risk.min,Lowest political risk in all neighboring countries
-icrg.pol.risk.subregional.loo,Average political risk in subregion
-icrg.pol.risk.regional.loo,Average political risk in region
-neighbor.coups.activity.bin,Coup activity in neighboring countries (binary)
-neighbor.coups.activity.binTRUE,Coup activity in neighboring countries (binary)
-coups.activity.subregional,Coup activity in subregion (binary)
-coups.activity.regional,Coup activity in region (binary)
-icews.conflict.severity.abs,Severity of conflictual events (interstate)
-icews.pct.shame,Percent of all events that are conflictual (interstate)
-icews.conflict.severity.abs.ingos,Severity of conflictual events (INGOs)
-icews.pct.shame.ingos,Percent of all events that are conflictual (INGOs)
-icrg.stability,Internal stability (ICRG)
-icrg.internal,Internal conflict (ICRG)
-coups.activity.bin_sum_nb,Coup activity in neighboring countries (binary)
-any.crisis_pct_mean_nb,Average time in crisis in neighboring countries (% of a year)
-protests.violent.pct.all_wt,"Violent protests, weighted by distance (% of all events)"
-protests.nonviolent.pct.all_wt,"Nonviolent protests, weighted by distance (% of all events)"
-icrg.pol.risk_mean_nb,Average political risk in neighboring countries (ICRG)
-shaming.states.pct.all,Government-based shaming reports (% of all events)
-shaming.ingos.pct.all,INGO-based shaming reports (% of all events)
-protests.violent.std_wt,"Violent protests, weighted by distance (relative within country)"
-protests.nonviolent.std_wt,"Nonviolent protests, weighted by distance (relative within country)"
-icrg.pol.risk_wt,"Average political risk, weighted by distance (ICRG)"
-shaming.states.std,Government-based shaming reports (relative within country)
-shaming.ingos.std,INGO-based shaming reports (relative within country)
+term,term.clean,category
+icrg.stability,Government stability,Internal
+icrg.pol.risk.internal.scaled,Internal political risk,Internal
+icrg.pol.risk.internal.nostab,"Internal political risk, stability omitted",Internal
+yrsoffc,Years executive in office,Internal
+years.since.comp,Years since competitive election,Internal
+opp1vote,Opposition vote share,Internal
+icrg.pol.risk_wt,"Internal political risk of neighbors, weighted by distance",External
+coups.activity.bin_sum_nb,Count of coup activity of neighbors within 900 km,External
+protests.violent.std_wt,"Relative violent protest activity, weighted by distance",External
+protests.nonviolent.std_wt,"Relative nonviolent protest activity, weighted by distance",External
+shaming.states.std,Relative state-based shaming,Shaming
+shaming.ingos.std,Relative INGO-based shaming,Shaming
