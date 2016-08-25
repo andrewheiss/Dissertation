@@ -264,12 +264,15 @@ dcjw.barriers.plot.data <- autocracies %>%
                           labels=c("Barriers to entry", "Barriers to funding",
                                    "Barriers to advocacy", "All barriers")))
 
-ggplot(dcjw.barriers.plot.data, aes(x=value, y=cs_env_sum)) + 
+p.csre.dcjw <- ggplot(dcjw.barriers.plot.data, aes(x=value, y=cs_env_sum)) + 
   geom_point(alpha=0.15, size=1) + 
   geom_smooth(method="loess") +
   labs(x="Number of legal restrictions on NGOs", y="CSRE") + 
   theme_ath() + 
   facet_wrap(~ barrier, scales="free_x")
+
+fig.save.cairo(p.csre.dcjw, filename="1-csre-dcjw", 
+               width=6, height=4)
 
 
 dcjw.type.models <- dcjw.barriers.plot.data %>%
