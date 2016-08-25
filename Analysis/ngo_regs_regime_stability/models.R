@@ -265,6 +265,32 @@ models.bayes <- models.raw.bayes %>%
          tidy = model %>% map(broom::tidy, intervals=TRUE, prob=0.95),
          augment = model %>% map(broom::augment))
 
+#' ## Model results
+#' 
+#' Most important combination of models. Internal stability + risk with/without
+#' electoral variables + internal risk of neighbors + coups and protests
+#' with/without neighbor risk + shaming
+#' 
+models.to.keep <- c("lna.JFI.b", "lna.JGI.b",
+                    "lna.EFI.b", "lna.EHI.b")
+
+plot.data <- models.bayes %>%
+  select(model.name, tidy) %>%
+  unnest(tidy) %>%
+  filter(!str_detect(term, "year\\.num")) %>%
+  filter(term != "(Intercept)") %>%
+  filter(model.name %in% models.to.keep) %>%
+  left_join(coef.names, by="term")
+
+ggplot(plot.data,
+       aes(x=estimate, y=term.clean.rev,
+           xmin=lower, xmax=upper, colour=model.name)) +
+  geom_vline(xintercept=0) +
+  geom_pointrangeh(position=position_dodge(width=1)) +
+  labs(x="Posterior median change in CSRE", y=NULL) +
+  theme_ath() + 
+  facet_wrap(~ category, ncol=1, scales="free_y")
+
 # 
 # 
 # 
