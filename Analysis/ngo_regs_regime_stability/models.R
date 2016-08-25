@@ -16,7 +16,6 @@
 #'       after_body: ../html/add_home_link.html
 #' ---
 
-#' Load libraries and data
 #+ load_data_libraries, message=FALSE
 knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
                       tidy.opts=list(width.cutoff=120),  # For code
@@ -96,28 +95,23 @@ options(mc.cores = parallel::detectCores())  # Use all possible cores
 #' 
 #' External stability:
 #' 
-#' - `neighbor.pol.risk.XXX`
+#' - `icrg.pol.risk_wt`: `icrg.pol.risk.internal` of all other countries,
+#'   weighted by distance
+#' - `coups.activity.bin_sum_nb`: Count of coup attempts and actual coups in
+#'   countries within 900 km of closest border
+#' - `protests.violent.std_wt`: Relative measure of violent protests in all
+#'   other countries, weighted by distance
+#' - `protests.nonviolent.std_wt`: Relative measure of nonviolent protests in
+#'   all other countries, weighted by distance
 #' 
 #' International reputation: 
 #' 
-#' - Variable from ICEWS / shaming data from Murdie
-#' 
-#' Controls:
-#' 
-#' - `e_polity2`: 
-#' - `physint`: 
-#' - `gdpcap.log`: 
-#' - `population.log`: 
-#' - `oda.log`: 
-#' - `countngo`: 
-#' - `globalization`: 
+#' - `shaming.states.std`: Relative measure of shaming events targeted at a
+#'   country, originating from other states
+#' - `shaming.ingos.std`: Relative measure of shaming events targeted at a
+#'   country, originating from INGOs
 #' 
 #' [vdem13]: https://www.v-dem.net/media/filer_public/47/2e/472eec11-830f-4578-9a09-d9f8d43cee3a/v-dem_working_paper_2015_13_edited.pdf
-
-
-#' # Large-N analysis (LNA) and modeling
-#' 
-#' ## Model construction
 #' 
 #' Note on time frame of variables: Not all variables overlap perfectly with
 #' V-Dem. Models that include any of the following variables will be inherently
