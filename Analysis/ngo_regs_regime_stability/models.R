@@ -159,6 +159,39 @@ source(file.path(PROJHOME, "Analysis",
                  "ngo_regs_regime_stability", 
                  "model_definitions.R"))
 
+bayesgazer <- function(model) {
+  model.posterior.probs <- as.data.frame(model) %>%
+    summarise_each(funs(pp.greater0 = mean(. > 0),
+                        pp.less0 = mean(. < 0))) %>%
+    gather(key, value) %>%
+    separate(key, c("term", "key"), sep="_p") %>%
+    spread(key, value)
+  
+  model.credible.intervals <- posterior_interval(model, prob=0.95) %>%
+    as.data.frame() %>%
+    mutate(term = rownames(.))
+  
+  model.n <- nrow(model$model)
+  
+  model.output <- tidy(model) %>%
+    filter(!str_detect(term, "as\\.factor")) %>%
+    left_join(model.credible.intervals, by="term") %>%
+    left_join(model.posterior.probs, by="term") %>%
+    left_join(coef.names, by="term") %>%
+    arrange(term.clean) %>%
+    select(`Term` = term.clean, `Posterior median` = estimate, 
+           `Posterior SD` = std.error, `2.5%`, `97.5%`,
+           `P(β > 0)` = p.greater0, `P(β < 0)` = p.less0) %>%
+    mutate(Term = as.character(Term))
+  
+  model.bottom.row <- tibble::tribble(
+    ~Term, ~`Posterior median`,
+    "N",   model.n
+  )
+  
+  final.output <- bind_rows(model.output, model.bottom.row)
+}
+
 #' ## Selection of autocracies
 #' 
 #' Combining the definition of autocracies from GWF and UDS doesn't really have
@@ -264,7 +297,8 @@ models.bayes <- models.raw.bayes %>%
   gather(model.name, model, -subset.type, -data) %>%
   mutate(glance = model %>% map(broom::glance),
          tidy = model %>% map(broom::tidy, intervals=TRUE, prob=0.95),
-         augment = model %>% map(broom::augment))
+         augment = model %>% map(broom::augment),
+         output = model %>% map(bayesgazer))
 
 #' ## Model results
 #' 
@@ -291,6 +325,12 @@ ggplot(plot.data,
   labs(x="Posterior median change in CSRE", y=NULL) +
   theme_ath() + 
   facet_wrap(~ category, ncol=1, scales="free_y")
+
+#' Results just for `lna.JGI.b`:
+#' 
+#+ results="asis"
+stargazer(filter(models.bayes, model.name == "lna.JGI.b")$output[[1]],
+          type="html", summary=FALSE, digits=2, rownames=FALSE)
 
 #' # LNA-based case selection
 #' 
