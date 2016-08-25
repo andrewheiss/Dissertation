@@ -332,6 +332,27 @@ ggplot(plot.data,
 stargazer(filter(models.bayes, model.name == "lna.JGI.b")$output[[1]],
           type="html", summary=FALSE, digits=2, rownames=FALSE)
 
+
+#' # Criticize the model
+model.to.check <- filter(models.bayes,
+                         model.name == "lna.JGI.b")$model[[1]]
+# launch_shinystan(model.to.check)
+
+#' How well does the posterior predictive distribution fit the observed
+#' outcome?
+#' 
+#' Not great, but not that terrible either. The biggest issue is the
+#' bimodalness of the distribution, with peaks at 0 and 3/4ish. The posterior
+#' distribution just averages out those peaks. I can live with it, though.
+#' 
+pp_check(model.to.check, check="dist", overlay=TRUE, nreps = 5) + 
+  theme_ath()
+
+#' What about chain convergence? These should look like tops if everything
+#' converges, with no observations at 0 in the mean metrop. acceptance
+#' 
+rstan::stan_diag(model.to.check, information="divergence")
+
 #' # LNA-based case selection
 #' 
 #' ## Issues with list-wise deletion
