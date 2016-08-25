@@ -1,4 +1,5 @@
 term,term.clean,category
+(Intercept),Intercept,
 icrg.stability,Government stability,Internal
 icrg.pol.risk.internal.scaled,Internal political risk,Internal
 icrg.pol.risk.internal.nostab,"Internal political risk, stability omitted",Internal
