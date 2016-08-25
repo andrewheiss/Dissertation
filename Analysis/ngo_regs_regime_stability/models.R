@@ -328,8 +328,8 @@ cases <- data_frame(cowcode = c(710, 651, 365, 663, 775, 705),
 
 plot.data.sna.selection.b <- model.for.case.selection %>%
   augment() %>%
-  mutate(post.pred.fit = colMeans(posterior_predict(model.for.case.selection, 
-                                                    seed=my.seed))) %>%
+  mutate(post.pred.fit = apply(posterior_predict(model.for.case.selection, 
+                                                 seed=my.seed), 2, median)) %>%
   mutate(.rownames = as.numeric(.rownames)) %>%
   left_join(select(autocracies.modeled, rowname, cowcode, country),
             by=c(".rownames" = "rowname")) %>%
