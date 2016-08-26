@@ -317,14 +317,18 @@ plot.data <- models.bayes %>%
   filter(model.name %in% models.to.keep) %>%
   left_join(coef.names, by="term")
 
-ggplot(plot.data,
-       aes(x=estimate, y=term.clean.rev,
-           xmin=lower, xmax=upper, colour=model.name)) +
+plot.coefs <- ggplot(plot.data,
+                     aes(x=estimate, y=term.clean.rev,
+                         xmin=lower, xmax=upper, colour=model.name)) +
   geom_vline(xintercept=0) +
   geom_pointrangeh(position=position_dodge(width=1)) +
+  scale_colour_manual(values=ath.palette("palette1"), guide=FALSE) +
   labs(x="Posterior median change in CSRE", y=NULL) +
   theme_ath() + 
   facet_wrap(~ category, ncol=1, scales="free_y")
+
+fig.save.cairo(plot.coefs, filename="1-coefs-bayes",
+               width=6, height=5)
 
 #' Results just for `lna.JGI.b`:
 #' 
@@ -352,6 +356,118 @@ pp_check(model.to.check, check="dist", overlay=TRUE, nreps = 5) +
 #' converges, with no observations at 0 in the mean metrop. acceptance
 #' 
 rstan::stan_diag(model.to.check, information="divergence")
+
+
+#' # Analyze effects of predictors
+#' 
+#' ## Internal
+#' 
+#' ### Political risk
+#' 
+#' ICRG political risk by itself
+#' 
+model.to.use <- filter(models.bayes,
+       model.name == "lna.EHI.b")$model[[1]]
+
+new.data.int.risk <- model.to.use$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, icrg.pol.risk.internal.nostab)) %>%
+  right_join(expand.grid(icrg.pol.risk.internal.nostab =
+                           seq(0, 100, by=1),
+                         index = 1),
+             by="index") %>%
+  select(-index)
+
+#' This isn't 100% accurate because I should be using `posterior_predict`
+#' instead of `predict.stanreg` since I'm using MCMC, but `posterior_predict`
+#' doesn't automatically create standard errors and I can't figure out how to
+#' calculate them manually.
+#' 
+plot.predict.int.risk <- augment(model.to.use,
+                                 newdata=new.data.int.risk) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit))
+
+# What should happen, in theory:
+# new.post.pred <- posterior_predict(model.to.use, new.data.int.stability,
+#                                    seed=my.seed)
+# 
+# plot.predict.int.stability <- new.data.int.stability %>%
+#   mutate(pred = apply(new.post.pred, 2, mean),
+#          pred.lower = apply(new.post.pred, 2,
+#                             function(x) quantile(x, probs = c(0.025))),
+#          pred.upper = apply(new.post.pred, 2,
+#                             function(x) quantile(x, probs = c(0.975))))
+
+plot.icrg.int.risk.pred <- ggplot(plot.predict.int.risk,
+                                  aes(x=icrg.pol.risk.internal.nostab, y=pred)) +
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
+              alpha=0.3, colour=NA, fill="#0074D9") +
+  geom_line(size=1.5, colour="#0074D9") +
+  labs(x="Internal political risk", y="Predicted CSRE in following year") +
+  theme_ath()
+plot.icrg.int.risk.pred
+
+fig.save.cairo(plot.icrg.int.risk.pred, filename="1-icrg-int-risk-pred",
+               width=5, height=3)
+
+#' ### Government stability
+#' 
+#' ICRG stability + years in office
+#' 
+model.to.use <- filter(models.bayes,
+                       model.name == "lna.EHI.b")$model[[1]]
+
+new.data.int.stability <- model.to.use$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, icrg.stability, yrsoffc)) %>%
+  right_join(expand.grid(icrg.stability =
+                           seq(0, 12, by=0.1),
+                         yrsoffc = c(2, 30),
+                         index = 1),
+             by="index") %>%
+  select(-index)
+
+plot.predict.int.stability <- augment(model.to.use,
+                                      newdata=new.data.int.stability) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
+  mutate(yrsoffc = factor(yrsoffc, levels=c(2, 30),
+                          labels=paste(c(2, 30), "years in office")))
+
+plot.icrg.int.stability <- ggplot(plot.predict.int.stability,
+                                  aes(x=icrg.stability, y=pred,
+                                      fill=yrsoffc, colour=yrsoffc)) +
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) +
+  scale_colour_manual(values=ath.palette("contention"), name=NULL) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL, guide=FALSE) +
+  labs(x="Government stability", y="Predicted CSRE in following year") +
+  theme_ath()
+plot.icrg.int.stability
+
+fig.save.cairo(plot.icrg.int.stability, filename="1-icrg-int-stability-pred",
+               width=5, height=3)
+
+#' ## External
+#' 
+#' ### General risk of neighbors
+#' 
+#' ### Coup activity (yes/no)
+#' 
+#' ### Relative protests, violent/nonviolent
+
+#' ## Reputation
+#' 
+#' ### Relative shaming
+
 
 #' # LNA-based case selection
 #' 
