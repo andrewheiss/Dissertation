@@ -735,7 +735,7 @@ example.protests <- autocracies %>%
 
 p.protests.std <- ggplot(filter(example.protests, overall.type == "Standardized"), 
                          aes(x=year.actual, y=value, colour=protest.type)) + 
-  geom_line() + 
+  geom_line(size=1) + 
   scale_y_continuous(breaks=c(1:6)) +
   scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
   coord_cartesian(ylim=c(1, 6)) +
@@ -747,7 +747,7 @@ p.protests.std <- ggplot(filter(example.protests, overall.type == "Standardized"
 
 p.protests.num <- ggplot(filter(example.protests, overall.type == "Count"), 
                          aes(x=year.actual, y=value, colour=protest.type)) + 
-  geom_line() + 
+  geom_line(size=1) + 
   scale_colour_manual(values=ath.palette("palette1"), guide=FALSE) +
   labs(x=NULL, y="Number of events") +
   facet_wrap(~ country) + 
