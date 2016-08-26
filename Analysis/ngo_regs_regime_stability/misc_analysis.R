@@ -337,6 +337,18 @@ ggplot(dcjw.time.agg, aes(x=year.num, y=value, colour=barrier.clean)) +
 #' So, overall, the CSRE tracks pretty well with DCJW's collection of legal
 #' restrictions.
 #' 
+#' And how does DCJW data look in general over time?
+#' 
+dcjw.time.agg1 <- dcjw.time.agg %>%
+  filter(barrier.clean != "CSRE")
+
+ggplot(dcjw.time.agg1, aes(x=year.num, y=value, colour=barrier.clean)) +
+  geom_line(size=1) + 
+  labs(x=NULL, y="Average value", title="Legal barriers for NGOs in autocracies", 
+       caption="Data source: Christensen and Weinstein, 2013") + 
+  scale_color_manual(values=ath.palette("palette1"), name=NULL) +
+  theme_ath()
+
 
 #' ### "Stop Meddling in My Country!" (DupuyRonPrakash:2014a)
 #' 
