@@ -501,8 +501,69 @@ plot.icrg.ext.risk.coups
 fig.save.cairo(plot.icrg.ext.risk.coups, filename="1-icrg-ext-risk-coups",
                width=5, height=3)
 
-
 #' ### Relative protests, violent/nonviolent
+model.to.use <- filter(models.bayes,
+                       model.name == "lna.EHI.b")$model[[1]]
+
+new.data.ext.protests.violent <- model.to.use$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, protests.violent.std_wt)) %>%
+  right_join(expand.grid(protests.violent.std_wt =
+                           seq(1, 5, by=0.1),
+                         index = 1),
+             by="index") %>%
+  select(-index)
+
+new.data.ext.protests.nonviolent <- model.to.use$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, protests.nonviolent.std_wt)) %>%
+  right_join(expand.grid(protests.nonviolent.std_wt =
+                           seq(1, 5, by=0.1),
+                         index = 1),
+             by="index") %>%
+  select(-index)
+
+plot.predict.ext.protests.violent <- augment(model.to.use,
+                                       newdata=new.data.ext.protests.violent) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
+  rename(protest.std = protests.violent.std_wt) %>%
+  mutate(protest.type = "Violent")
+
+plot.predict.ext.protests.nonviolent <- augment(model.to.use,
+                                     newdata=new.data.ext.protests.nonviolent) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
+  rename(protest.std = protests.nonviolent.std_wt) %>%
+  mutate(protest.type = "Nonviolent")
+
+plot.predict.ext.protests <- bind_rows(plot.predict.ext.protests.violent,
+                                       plot.predict.ext.protests.nonviolent)
+
+plot.icrg.ext.protests <- ggplot(plot.predict.ext.protests,
+                                   aes(x=protest.std, y=pred,
+                                       fill=protest.type,
+                                       colour=protest.type)) +
+  geom_vline(xintercept=3, linetype="dotted", colour="grey50") +
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) +
+  scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
+  scale_fill_manual(values=ath.palette("palette1"), name=NULL, guide=FALSE) +
+  scale_x_continuous(labels=c("Less than normal\n(1)", "", "Normal\n(3)", "", 
+                              "More than normal\n(5)")) +
+  labs(x="Relative protest activity", y="Predicted CSRE in following year") +
+  theme_ath()
+plot.icrg.ext.protests
+
+fig.save.cairo(plot.icrg.ext.protests, filename="1-icrg-ext-protests",
+               width=5, height=3)
 
 #' ## Reputation
 #' 
