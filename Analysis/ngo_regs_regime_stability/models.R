@@ -568,7 +568,69 @@ fig.save.cairo(plot.icrg.ext.protests, filename="1-icrg-ext-protests",
 #' ## Reputation
 #' 
 #' ### Relative shaming
+model.to.use <- filter(models.bayes,
+                       model.name == "lna.EHI.b")$model[[1]]
 
+new.data.shaming.1 <- model.to.use$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, shaming.states.std)) %>%
+  right_join(expand.grid(shaming.states.std =
+                           seq(1, 5, by=0.1),
+                         index = 1),
+             by="index") %>%
+  select(-index)
+
+plot.predict.shaming.1 <- augment(model.to.use,
+                                  newdata=new.data.shaming.1) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
+  mutate(shaming.type = "With extra internal variables")
+
+model.to.use <- filter(models.bayes,
+                       model.name == "lna.JFI.b")$model[[1]]
+
+new.data.shaming.2 <- model.to.use$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, shaming.states.std)) %>%
+  right_join(expand.grid(shaming.states.std =
+                           seq(1, 5, by=0.1),
+                         index = 1),
+             by="index") %>%
+  select(-index)
+
+plot.predict.shaming.2 <- augment(model.to.use,
+                                  newdata=new.data.shaming.2) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
+  mutate(shaming.type = "Without extra internal variables")
+
+plot.predict.shaming <- bind_rows(plot.predict.shaming.1,
+                                  plot.predict.shaming.2)
+
+plot.shaming <- ggplot(plot.predict.shaming,
+                                 aes(x=shaming.states.std, y=pred,
+                                     fill=shaming.type,
+                                     colour=shaming.type)) +
+  geom_vline(xintercept=3, linetype="dotted", colour="grey50") +
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) +
+  scale_colour_manual(values=ath.palette("leaders"), name=NULL) +
+  scale_fill_manual(values=ath.palette("leaders"), name=NULL, guide=FALSE) +
+  scale_x_continuous(labels=c("Less than normal\n(1)", "", "Normal\n(3)", "", 
+                              "More than normal\n(5)")) +
+  labs(x="Relative state-based shaming", y="Predicted CSRE in following year") +
+  theme_ath()
+plot.shaming
+
+fig.save.cairo(plot.shaming, filename="1-shaming-pred",
+               width=5, height=3)
 
 #' # LNA-based case selection
 #' 
