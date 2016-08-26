@@ -458,10 +458,50 @@ fig.save.cairo(plot.icrg.int.stability, filename="1-icrg-int-stability-pred",
 
 #' ## External
 #' 
-#' ### General risk of neighbors
-#' 
-#' ### Coup activity (yes/no)
-#' 
+#' ### General risk of neighbors + coups
+model.to.use <- filter(models.bayes,
+                       model.name == "lna.EHI.b")$model[[1]]
+
+new.data.ext.risk.coups <- model.to.use$model %>%
+  summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
+  mutate(year.num = 2005,
+         index = 1) %>%
+  select(-c(cs_env_sum.lead, icrg.pol.risk_wt, coups.activity.bin_sum_nb)) %>%
+  right_join(expand.grid(icrg.pol.risk_wt =
+                           seq(0, 100, by=1),
+                         coups.activity.bin_sum_nb = c(0, 2),
+                         index = 1),
+             by="index") %>%
+  select(-index)
+
+plot.predict.ext.risk.coups <- augment(model.to.use,
+                                       newdata=new.data.ext.risk.coups) %>%
+  mutate(pred = .fitted,
+         pred.lower = pred + (qnorm(0.025) * .se.fit),
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
+  mutate(coups.activity.bin_sum_nb = factor(coups.activity.bin_sum_nb,
+                                            levels=c(0, 2),
+                                            labels=c("No coups in neighboring countries",
+                                                     "Coup activity in neigboring countries"),
+                                            ordered=TRUE))
+
+plot.icrg.ext.risk.coups <- ggplot(plot.predict.ext.risk.coups,
+                                   aes(x=icrg.pol.risk_wt, y=pred,
+                                       fill=coups.activity.bin_sum_nb,
+                                       colour=coups.activity.bin_sum_nb)) +
+  geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
+              alpha=0.3, colour=NA) +
+  geom_line(size=1.5) +
+  scale_colour_manual(values=ath.palette("contention"), name=NULL) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL, guide=FALSE) +
+  labs(x="Government stability", y="Predicted CSRE in following year") +
+  theme_ath()
+plot.icrg.ext.risk.coups
+
+fig.save.cairo(plot.icrg.ext.risk.coups, filename="1-icrg-ext-risk-coups",
+               width=5, height=3)
+
+
 #' ### Relative protests, violent/nonviolent
 
 #' ## Reputation
