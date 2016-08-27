@@ -342,12 +342,15 @@ ggplot(dcjw.time.agg, aes(x=year.num, y=value, colour=barrier.clean)) +
 dcjw.time.agg1 <- dcjw.time.agg %>%
   filter(barrier.clean != "CSRE")
 
-ggplot(dcjw.time.agg1, aes(x=year.num, y=value, colour=barrier.clean)) +
+p.dcjw.time.agg1 <- ggplot(dcjw.time.agg1, aes(x=year.num, y=value, colour=barrier.clean)) +
   geom_line(size=1) + 
   labs(x=NULL, y="Average value", title="Legal barriers for NGOs in autocracies", 
        caption="Data source: Christensen and Weinstein, 2013") + 
   scale_color_manual(values=ath.palette("palette1"), name=NULL) +
   theme_ath()
+
+fig.save.cairo(p.dcjw.time.agg1, filename="1-dcjw-agg-1", 
+               width=5, height=3)
 
 
 #' ### "Stop Meddling in My Country!" (DupuyRonPrakash:2014a)
