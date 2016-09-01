@@ -321,13 +321,17 @@ plot.coefs <- ggplot(plot.data,
                      aes(x=estimate, y=term.clean.rev,
                          xmin=lower, xmax=upper, colour=model.name)) +
   geom_vline(xintercept=0) +
-  geom_pointrangeh(position=position_dodge(width=1)) +
-  scale_colour_manual(values=ath.palette("palette1"), guide=FALSE) +
+  geom_pointrangeh(position=position_dodge(width=0.5)) +
+  scale_colour_manual(values=ath.palette("contention"), guide=FALSE) +
+  coord_cartesian(xlim=c(-0.5, 1)) +
   labs(x="Posterior median change in CSRE", y=NULL) +
   theme_ath() + 
-  facet_wrap(~ category, ncol=1, scales="free_y")
+  facet_wrap(~ category, ncol=1, scales="free")
 
-fig.save.cairo(plot.coefs, filename="1-coefs-bayes",
+grid.newpage()
+grid.draw(correct_panel_size(plot.coefs))
+
+fig.save.cairo(correct_panel_size(plot.coefs), filename="1-coefs-bayes",
                width=6, height=5)
 
 #' Results just for `lna.JGI.b`:
