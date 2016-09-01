@@ -146,7 +146,7 @@ correct_panel_size <- function(p) {
   # Replace the default panel heights (currently 1null) with relative sizes
   # based on number of variables in each tile (1null, 3null, etc.). ggplot/grid
   # will scale the tile height accordingly
-  p.grob$heights[p.panel_index] <- unit::unit(nvars.in.tiles, "null")
+  p.grob$heights[p.panel_index] <- grid::unit(nvars.in.tiles, "null")
   
   # All done!
   return(p.grob)
