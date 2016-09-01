@@ -115,6 +115,43 @@ fig.save.cairo <- function(fig, filepath=file.path(PROJHOME, "Output", "figures"
          width=width, height=height, units=units, type="cairo", dpi=300, ...)
 }
 
+# facet_grid has a space="free*" parameter to close up unused levels in facet panels, but it doesn't have a way to specify the number of columns.
+# 
+# facet_wrap lets you specify the number of columns, but doesn't have the space parameter
+# 
+# Dilemma!
+# 
+# This function modifies the panel sizes in a plot that uses facet_wrap and
+# rescales them proportional to the number of variables in each panel. It's a
+# combination of suggestions at these SO posts:
+#
+# - http://stackoverflow.com/a/32583612/120898
+# - http://stackoverflow.com/a/20639481/120898
+# - http://stackoverflow.com/a/28099801/120898
+# - http://stackoverflow.com/q/31572239/120898
+#
+correct_panel_size <- function(p) {
+  # Figure out how many y breaks are in each panel
+  # Use ggplot_build object for plot parameters
+  p.object <- ggplot_build(p) 
+  nvars.in.tiles <- sapply(lapply(p.object$panel$ranges, "[[", "y.major"), length)
+  
+  # Manipulate underlying ggplot grob
+  p.grob <- ggplotGrob(p)
+  
+  # Identify the panel elements in the grob
+  p.panels <- grep("panel", p.grob$layout$name)
+  p.panel_index <- unique(p.grob$layout$t[p.panels])
+  
+  # Replace the default panel heights (currently 1null) with relative sizes
+  # based on number of variables in each tile (1null, 3null, etc.). ggplot/grid
+  # will scale the tile height accordingly
+  p.grob$heights[p.panel_index] <- unit::unit(nvars.in.tiles, "null")
+  
+  # All done!
+  return(p.grob)
+}
+
 fig.coef <- function(models, title=NULL, xlab=NULL, legend=TRUE, 
                      space.below=FALSE, var.order=NULL, vars.included="all") {
   
