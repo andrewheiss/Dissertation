@@ -55,9 +55,79 @@ WARMUP <- 1000
 
 options(mc.cores = parallel::detectCores())  # Use all possible cores
 
+bayesgazer <- function(model) {
+  model.posterior.probs <- as.data.frame(model) %>%
+    summarise_each(funs(pp.greater0 = mean(. > 0),
+                        pp.less0 = mean(. < 0))) %>%
+    gather(key, value) %>%
+    separate(key, c("term", "key"), sep="_p") %>%
+    spread(key, value)
+  
+  model.credible.intervals <- posterior_interval(model, prob=0.95) %>%
+    as.data.frame() %>%
+    mutate(term = rownames(.))
+  
+  # Calculate the median and MAD_SD for the posterior predictive distribution
+  # of y (the bottom part of summary(model) output)
+  model.sample.avg <- as.data.frame(model$stanfit) %>%
+    select(mean_PPD) %>%
+    summarise(Median = median(mean_PPD),
+              MAD_SD = mad(mean_PPD))
+  
+  model.glance <- glance(model)
+  
+  model.output <- tidy(model) %>%
+    filter(!str_detect(term, "as\\.factor")) %>%
+    left_join(model.credible.intervals, by="term") %>%
+    left_join(model.posterior.probs, by="term") %>%
+    left_join(coef.names, by="term") %>%
+    arrange(term.clean) %>%
+    select(`Term` = term.clean, `Posterior median` = estimate, 
+           `Posterior SD` = std.error, `2.5%`, `97.5%`,
+           `P(β > 0)` = p.greater0, `P(β < 0)` = p.less0) %>%
+    mutate(Term = as.character(Term))
+  
+  # N = number of observations
+  # PSS = posterior sample size
+  # Sigma = standard deviation of the normally-distributed errors
+  # MAD/MAD_SD = median absolute deviation
+  model.bottom.row <- tibble::tribble(
+    ~Term,                            ~`Posterior median`,
+    "—",                              NA,
+    "N",                              model.glance$nobs,
+    "σ",                              model.glance$sigma,
+    "Posterior sample size",          model.glance$pss,
+    "—",                              NA,
+    "Sample average posterior predictive distribution of y (X = x̄):", NA,
+    "Median",                         model.sample.avg$Median,
+    "Median absolute deviation (SD)", model.sample.avg$MAD_SD
+  )
+  
+  final.output <- bind_rows(model.output, model.bottom.row)
+}
+
 
 #' # Variables
 #' 
+#' ## Selection of autocracies
+#' 
+#' Combining the definition of autocracies from GWF and UDS doesn't really have
+#' a big effect on the results. It's possible to run all these models on
+#' datasets for just GWF, just UDS, and all combined, but it takes literally
+#' forever when run with Bayesian models. The code scaffolding for running
+#' these robustness checks is still here, though, in the commented-out
+#' `autocracies.list` below.
+#' 
+autocracies.gwf <- filter(full.data, gwf.ever.autocracy)
+cows.gwf <- unique(autocracies.gwf$cowcode)
+
+autocracies.uds <- filter(full.data, uds.ever.autocracy)
+cows.uds <- unique(autocracies.uds$cowcode)
+
+autocracies <- full.data %>%
+  filter(cowcode %in% unique(c(cows.uds, cows.gwf))) %>%
+  mutate(shaming.ingos.std = ifelse(is.nan(shaming.ingos.std), 0, shaming.ingos.std))
+
 #' ## Dependent variable
 #' 
 #' Civil society regulatory environment: 
@@ -82,7 +152,7 @@ options(mc.cores = parallel::detectCores())  # Use all possible cores
 #'
 #' ## Explanatory variables
 #' 
-#' Internal stability:
+#' ### Internal stability
 #' 
 #' - `icrg.stability`: Government stability (0-12; 12 is stable, 0 is unstable)
 #' - `icrg.pol.risk.internal`: `icrg.stability` + `icrg.socioeconomic` + 
@@ -101,7 +171,7 @@ options(mc.cores = parallel::detectCores())  # Use all possible cores
 #' - `years.since.comp`: Years since last competitve election
 #' - `opp1vote`: Opposition vote share
 #' 
-#' External stability:
+#' ### External stability
 #' 
 #' - `icrg.pol.risk_wt`: `icrg.pol.risk.internal` of all other countries,
 #'   weighted by distance
@@ -112,7 +182,7 @@ options(mc.cores = parallel::detectCores())  # Use all possible cores
 #' - `protests.nonviolent.std_wt`: Relative measure of nonviolent protests in
 #'   all other countries, weighted by distance
 #' 
-#' International reputation: 
+#' ### International reputation
 #' 
 #' - `shaming.states.std`: Relative measure of shaming events targeted at a
 #'   country, originating from other states
@@ -121,10 +191,11 @@ options(mc.cores = parallel::detectCores())  # Use all possible cores
 #' 
 #' [vdem13]: https://www.v-dem.net/media/filer_public/47/2e/472eec11-830f-4578-9a09-d9f8d43cee3a/v-dem_working_paper_2015_13_edited.pdf
 #' 
-#' Note on time frame of variables: Not all variables overlap perfectly with
-#' V-Dem. Models that include any of the following variables will be inherently
-#' limited to the corresponding years (since non-overlapping years are
-#' dropped):
+#' ### Time frame of variables
+#' 
+#' Not all variables overlap perfectly with V-Dem. Models that include any of
+#' the following variables will be inherently limited to the corresponding
+#' years (since non-overlapping years are dropped):
 #' 
 #' - ICRG: 1991-2014
 #' - ICEWS: 1995-2015
@@ -158,7 +229,7 @@ stargazer(vars.summarized, type="html",
           summary=FALSE, rownames=FALSE,
           digits=2, digit.separator=",")
 
-#' # Build Bayesian models
+#' # Model building
 #' 
 #' ## Combination of variables
 #' 
@@ -187,76 +258,8 @@ source(file.path(PROJHOME, "Analysis",
                  "ngo_regs_regime_stability", 
                  "model_definitions.R"))
 
-bayesgazer <- function(model) {
-  model.posterior.probs <- as.data.frame(model) %>%
-    summarise_each(funs(pp.greater0 = mean(. > 0),
-                        pp.less0 = mean(. < 0))) %>%
-    gather(key, value) %>%
-    separate(key, c("term", "key"), sep="_p") %>%
-    spread(key, value)
-  
-  model.credible.intervals <- posterior_interval(model, prob=0.95) %>%
-    as.data.frame() %>%
-    mutate(term = rownames(.))
-  
-  # Calculate the median and MAD_SD for the posterior predictive distribution
-  # of y (the bottom part of summary(model) output)
-  model.sample.avg <- as.data.frame(model$stanfit) %>%
-    select(mean_PPD) %>%
-    summarise(Median = median(mean_PPD),
-              MAD_SD = mad(mean_PPD))
-  
-  model.glance <- glance(model)
-
-  model.output <- tidy(model) %>%
-    filter(!str_detect(term, "as\\.factor")) %>%
-    left_join(model.credible.intervals, by="term") %>%
-    left_join(model.posterior.probs, by="term") %>%
-    left_join(coef.names, by="term") %>%
-    arrange(term.clean) %>%
-    select(`Term` = term.clean, `Posterior median` = estimate, 
-           `Posterior SD` = std.error, `2.5%`, `97.5%`,
-           `P(β > 0)` = p.greater0, `P(β < 0)` = p.less0) %>%
-    mutate(Term = as.character(Term))
-  
-  # N = number of observations
-  # PSS = posterior sample size
-  # Sigma = standard deviation of the normally-distributed errors
-  # MAD/MAD_SD = median absolute deviation
-  model.bottom.row <- tibble::tribble(
-    ~Term,                            ~`Posterior median`,
-    "—",                              NA,
-    "N",                              model.glance$nobs,
-    "σ",                              model.glance$sigma,
-    "Posterior sample size",          model.glance$pss,
-    "—",                              NA,
-    "Sample average posterior predictive distribution of y (X = x̄):", NA,
-    "Median",                         model.sample.avg$Median,
-    "Median absolute deviation (SD)", model.sample.avg$MAD_SD
-  )
-  
-  final.output <- bind_rows(model.output, model.bottom.row)
-}
-
-#' ## Selection of autocracies
+#' ## Frequentist results
 #' 
-#' Combining the definition of autocracies from GWF and UDS doesn't really have
-#' a big effect on the results. It's possible to run all these models on
-#' datasets for just GWF, just UDS, and all combined, but it takes literally
-#' forever when run with Bayesian models. The code scaffolding for running
-#' these robustness checks is still here, though, in the commented-out
-#' `autocracies.list` below
-#' 
-autocracies.gwf <- filter(full.data, gwf.ever.autocracy)
-cows.gwf <- unique(autocracies.gwf$cowcode)
-
-autocracies.uds <- filter(full.data, uds.ever.autocracy)
-cows.uds <- unique(autocracies.uds$cowcode)
-
-autocracies <- full.data %>%
-  filter(cowcode %in% unique(c(cows.uds, cows.gwf))) %>%
-  mutate(shaming.ingos.std = ifelse(is.nan(shaming.ingos.std), 0, shaming.ingos.std))
-
 # Amazing. Manage tons of models with dplyr, tidyr, and purrr (from Hadley's
 # presentation at https://www.youtube.com/watch?v=rz3_FDVt9eg - around 27:00ish)
 
@@ -298,7 +301,6 @@ models.freq <- models.raw.freq %>%
          tidy = model %>% map(broom::tidy, conf.int=TRUE),
          augment = model %>% map(broom::augment))
 
-#' ## Frequentist results
 #+ results="asis"
 stargazer(models.freq$model, type="html", omit="\\.factor",
           column.labels=c("lna.AFI", "lna.AGI", "lna.AHI",
