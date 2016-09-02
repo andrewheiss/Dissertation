@@ -25,6 +25,7 @@ library(printr)
 library(magrittr)
 library(dplyr)
 library(purrr)
+library(forcats)
 library(broom)
 library(feather)
 library(rstanarm)
@@ -271,6 +272,7 @@ models.freq <- models.raw.freq %>%
          tidy = model %>% map(broom::tidy, conf.int=TRUE),
          augment = model %>% map(broom::augment))
 
+#' ## Frequentist results
 #+ results="asis"
 stargazer(models.freq$model, type="html", omit="\\.factor",
           column.labels=c("lna.AFI", "lna.AGI", "lna.AHI",
@@ -319,14 +321,15 @@ models.bayes <- models.raw.bayes %>%
          augment = model %>% map(broom::augment),
          output = model %>% map(bayesgazer))
 
-#' ## Model results
+#' ## Bayesian results
 #' 
-#' Most important combination of models. Internal stability + risk with/without
-#' electoral variables + internal risk of neighbors + coups and protests
-#' with/without neighbor risk + shaming
-#' 
-models.to.keep <- c("lna.JFI.b", "lna.JGI.b",
-                    "lna.EFI.b", "lna.EHI.b")
+#' - Basic model = everything
+#' - Alternate model = just government stability and political risk internally,
+#'   just coups and protests externally (so those events don't get double 
+#'   counted in general ICRG risk)
+#'
+#' ### Coefficient plot
+models.to.keep <- c("lna.JGI.b", "lna.EHI.b")
 
 plot.data <- models.bayes %>%
   select(model.name, tidy) %>%
@@ -334,29 +337,41 @@ plot.data <- models.bayes %>%
   filter(!str_detect(term, "year\\.num")) %>%
   filter(term != "(Intercept)") %>%
   filter(model.name %in% models.to.keep) %>%
-  left_join(coef.names, by="term")
+  left_join(coef.names, by="term") %>%
+  mutate(model.name.clean = factor(model.name, levels=models.to.keep,
+                                   labels=c("Basic model", "Alternate model"),
+                                   ordered=TRUE))
 
 plot.coefs <- ggplot(plot.data,
                      aes(x=estimate, y=term.clean.rev,
-                         xmin=lower, xmax=upper, colour=model.name)) +
+                         xmin=lower, xmax=upper, colour=model.name.clean)) +
   geom_vline(xintercept=0) +
   geom_pointrangeh(position=position_dodge(width=0.5)) +
-  scale_colour_manual(values=ath.palette("contention"), guide=FALSE) +
+  scale_colour_manual(values=ath.palette("contention"), name=NULL) +
   coord_cartesian(xlim=c(-0.5, 1)) +
   labs(x="Posterior median change in CSRE", y=NULL) +
   theme_ath() + 
   facet_wrap(~ category, ncol=1, scales="free")
 
-grid.newpage()
-grid.draw(correct_panel_size(plot.coefs))
+grid::grid.newpage()
+grid::grid.draw(correct_panel_size(plot.coefs))
 
 fig.save.cairo(correct_panel_size(plot.coefs), filename="1-coefs-bayes",
                width=6, height=5)
 
-#' Results just for `lna.JGI.b`:
+#' ### Results for full model (`lna.JGI.b`)
 #' 
 #+ results="asis"
 stargazer(filter(models.bayes, model.name == "lna.JGI.b")$output[[1]],
+          type="html", summary=FALSE, digits=2, rownames=FALSE)
+
+#' ### Results for alternate model (`lna.EHI.b`)
+#' 
+#' The N is lower here because of missing data in the years in office, years
+#' since competitive election, and opposition vote share variables.
+#' 
+#+ results="asis"
+stargazer(filter(models.bayes, model.name == "lna.EHI.b")$output[[1]],
           type="html", summary=FALSE, digits=2, rownames=FALSE)
 
 
@@ -365,6 +380,8 @@ model.to.check <- filter(models.bayes,
                          model.name == "lna.JGI.b")$model[[1]]
 # launch_shinystan(model.to.check)
 
+#' Diagnostics based on model `lna.JGI.b`.
+#' 
 #' How well does the posterior predictive distribution fit the observed
 #' outcome?
 #' 
@@ -375,8 +392,9 @@ model.to.check <- filter(models.bayes,
 pp_check(model.to.check, check="dist", overlay=TRUE, nreps = 5) + 
   theme_ath()
 
-#' What about chain convergence? These should look like tops if everything
-#' converges, with no observations at 0 in the mean metrop. acceptance
+#' What about chain convergence? These should look like tops if everything 
+#' converges, with no observations at 0 in the mean Metropolis–Hastings
+#' acceptance
 #' 
 rstan::stan_diag(model.to.check, information="divergence")
 
