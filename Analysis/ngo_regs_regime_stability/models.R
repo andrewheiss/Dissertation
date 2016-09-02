@@ -151,7 +151,8 @@ options(mc.cores = parallel::detectCores())  # Use all possible cores
 #'     - G: `coups.activity.bin_sum_nb` + `protests.violent.std_wt` + `protests.nonviolent.std_wt`
 #'     - H: `icrg.pol.risk_wt` + `coups.activity.bin_sum_nb` + `protests.violent.std_wt` + `protests.nonviolent.std_wt`
 #' - Shaming:
-#'     - I: `shaming.states.std` + `shaming.ingos.std`
+#'     - I: `shaming.states.std` 
+#'     - (No INGO shaming because that variable is horribly unreliable and unstable)
 #' 
 
 # Load the model definitions from other file
