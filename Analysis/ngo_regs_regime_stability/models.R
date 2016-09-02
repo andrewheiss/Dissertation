@@ -130,7 +130,33 @@ options(mc.cores = parallel::detectCores())  # Use all possible cores
 #' - ICEWS: 1995-2015
 #' - ICEWS EOIs: 2000-2014
 #' 
+#' 
+#' ## Summary of variables in models
+vars.to.summarize <- coef.names %>%
+  filter(term != "(Intercept)", term != "shaming.ingos.std")
 
+vars.summarized <- autocracies %>%
+  filter(year.num > 1994) %>%
+  select(one_of(vars.to.summarize$term)) %>%
+  summarise_each(funs(XXMean = mean(., na.rm=TRUE),
+                      XXSD = sd(., na.rm=TRUE),
+                      XXMedian = median(., na.rm=TRUE),
+                      XXN = sum(!is.na(.)),
+                      XXMin = min(., na.rm=TRUE),
+                      XXMax = max(., na.rm=TRUE))) %>%
+  gather(key, value) %>%
+  separate(key, c("term", "key"), sep="_XX") %>%
+  spread(key, value) %>%
+  left_join(vars.to.summarize, by="term") %>%
+  arrange(term.clean) %>%
+  mutate(Variable = sprintf("%s (%s)", as.character(term.clean), source.clean)) %>%
+  select(Variable, Mean, SD, Median, Min, Max, N) %>%
+  as.data.frame()
+
+#+ results="asis"
+stargazer(vars.summarized, type="html",
+          summary=FALSE, rownames=FALSE,
+          digits=2, digit.separator=",")
 
 #' # Build Bayesian models
 #' 
