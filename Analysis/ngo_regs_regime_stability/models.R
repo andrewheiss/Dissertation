@@ -229,6 +229,7 @@ stargazer(vars.summarized, type="html",
           summary=FALSE, rownames=FALSE,
           digits=2, digit.separator=",")
 
+
 #' # Model building
 #' 
 #' ## Combination of variables
@@ -352,9 +353,9 @@ models.bayes <- models.raw.bayes %>%
 #' ## Bayesian results
 #' 
 #' - Basic model = everything
-#' - Alternate model = just government stability and political risk internally,
-#'   just coups and protests externally (so those events don't get double 
-#'   counted in general ICRG risk)
+#' - Alternate model = just government stability and internal political
+#'   stability, just coups and protests externally (so those events don't get
+#'   double counted in general ICRG stability)
 #'
 #' ### Coefficient plot
 models.to.keep <- c("lna.JGI.b", "lna.EHI.b")
@@ -431,9 +432,9 @@ rstan::stan_diag(model.to.check, information="divergence")
 #' 
 #' ## Internal
 #' 
-#' ### Political risk
+#' ### Internal political stability
 #' 
-#' ICRG political risk by itself
+#' ICRG political stability by itself
 #' 
 model.to.use <- filter(models.bayes,
        model.name == "lna.EHI.b")$model[[1]]
@@ -476,7 +477,7 @@ plot.icrg.int.risk.pred <- ggplot(plot.predict.int.risk,
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA, fill="#0074D9") +
   geom_line(size=1.5, colour="#0074D9") +
-  labs(x="Internal political risk", y="Predicted CSRE in following year") +
+  labs(x="Internal political stability", y="Predicted CSRE in following year") +
   theme_ath()
 plot.icrg.int.risk.pred
 
@@ -563,7 +564,7 @@ plot.icrg.ext.risk.coups <- ggplot(plot.predict.ext.risk.coups,
   geom_line(size=1.5) +
   scale_colour_manual(values=ath.palette("contention"), name=NULL) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL, guide=FALSE) +
-  labs(x="Government stability", y="Predicted CSRE in following year") +
+  labs(x="Political stability of neighbors", y="Predicted CSRE in following year") +
   theme_ath()
 plot.icrg.ext.risk.coups
 
@@ -700,6 +701,7 @@ plot.shaming
 
 fig.save.cairo(plot.shaming, filename="1-shaming-pred",
                width=5, height=3)
+
 
 #' # LNA-based case selection
 #' 

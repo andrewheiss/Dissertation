@@ -407,11 +407,11 @@ risk.stats <- autocracies %>%
 
 datatable(risk.stats)
 
-#' Conceptualizing the political risk measure is a little tricky. Showing a few
-#' example countries can help. Figure out which countries have change the
+#' Conceptualizing the political stability measure is a little tricky. Showing
+#' a few example countries can help. Figure out which countries have change the
 #' least/most since 2000.
 #' 
-#' Internal political risk:
+#' Internal political stability:
 #' 
 risk.stats %>%
   select(country, change.risk) %>%
@@ -445,7 +445,7 @@ plot.icrg.risk.examples <- ggplot(example.countries,
                                       y=icrg.pol.risk.internal.scaled,
                                       colour=country)) + 
   geom_line(size=1) +
-  labs(x=NULL, y="Internal political risk (ICRG)") + 
+  labs(x=NULL, y="Internal political stability (ICRG)") + 
   coord_cartesian(xlim=ymd(c("2000-01-01", "2015-01-01"))) +
   scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
   theme_ath()
@@ -478,11 +478,12 @@ risk.stats %>%
 
 #' ## ICRG and CSRE
 #' 
-#' What does the relationship between internal stability, internal risk, and 
+#' What does the relationship between internal stability, government risk, and 
 #' the CSRE look like?
 #' 
-#' The CSRE is positively correlated with general internal risk. That is, as
-#' the country becomes less risky, the CSRE get better in the following year.
+#' The CSRE is positively correlated with general internal stability That is, 
+#' as the country becomes more stable, the CSRE get better in the following 
+#' year.
 #' 
 #+ warning=FALSE
 ggplot(autocracies, aes(x=icrg.pol.risk.internal.scaled, y=cs_env_sum.lead)) + 
@@ -502,9 +503,9 @@ ggplot(autocracies, aes(x=icrg.stability, y=cs_env_sum.lead)) +
   geom_smooth(method="loess") + 
   theme_ath()
 
-#' This holds when removing stability from the internal political risk index,
-#' too. The general risk score is still positively correlated; stability is
-#' negatively correlated.
+#' This holds when removing stability from the internal political stability
+#' index, too. The general risk score is still positively correlated; stability
+#' is negatively correlated.
 #' 
 #+ warning=FALSE
 ggplot(autocracies, aes(x=icrg.pol.risk.internal.nostab.scaled, y=cs_env_sum.lead)) + 
@@ -600,7 +601,7 @@ grid::grid.draw(plot.auth.vars)
 
 #' # External explanatory variables
 #' 
-#' ## ICRG risk
+#' ## ICRG political stability
 #' 
 #' Which countries are in the most stable/unstable areas?
 #' 

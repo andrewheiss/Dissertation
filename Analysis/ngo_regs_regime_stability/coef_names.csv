@@ -2,12 +2,12 @@ term,term.clean,category,source.clean
 cs_env_sum.lead,Civil society regulatory environment,,based on V-Dem
 (Intercept),Intercept,,
 icrg.stability,Government stability,Internal,ICRG
-icrg.pol.risk.internal.scaled,"Internal political risk, rescaled",Internal,ICRG
-icrg.pol.risk.internal.nostab.scaled,"Internal political risk, stability omitted, rescaled",Internal,ICRG
+icrg.pol.risk.internal.scaled,"Internal political stability, rescaled",Internal,ICRG
+icrg.pol.risk.internal.nostab.scaled,"Internal political stability, government stability omitted, rescaled",Internal,ICRG
 yrsoffc,Years executive in office,Internal,DPI
 years.since.comp,Years since competitive election,Internal,NELDA
 opp1vote,Opposition vote share,Internal,DPI
-icrg.pol.risk_wt,"Internal political risk of neighbors, weighted by distance",External,ICRG
+icrg.pol.risk_wt,"Political stability of neighbors, weighted by distance",External,ICRG
 coups.activity.bin_sum_nb,Count of coup activity of neighbors within 900 km,External,Powell and Thyne 2011
 protests.violent.std_wt,"Relative violent protest activity, weighted by distance",External,ICEWS
 protests.nonviolent.std_wt,"Relative nonviolent protest activity, weighted by distance",External,ICEWS
