@@ -127,7 +127,7 @@ lna.DHI <- function(df) {
 
 lna.EFI <- function(df) {
   lm(cs_env_sum.lead ~
-       icrg.stability + icrg.pol.risk.internal.nostab +
+       icrg.stability + icrg.pol.risk.internal.nostab.scaled +
        yrsoffc + years.since.comp + opp1vote +
        icrg.pol.risk_wt +
        shaming.states.std +
@@ -137,7 +137,7 @@ lna.EFI <- function(df) {
 
 lna.EGI <- function(df) {
   lm(cs_env_sum.lead ~
-       icrg.stability + icrg.pol.risk.internal.nostab +
+       icrg.stability + icrg.pol.risk.internal.nostab.scaled +
        yrsoffc + years.since.comp + opp1vote +
        coups.activity.bin_sum_nb +
        protests.violent.std_wt + protests.nonviolent.std_wt +
@@ -148,7 +148,7 @@ lna.EGI <- function(df) {
 
 lna.EHI <- function(df) {
   lm(cs_env_sum.lead ~
-       icrg.stability + icrg.pol.risk.internal.nostab +
+       icrg.stability + icrg.pol.risk.internal.nostab.scaled +
        yrsoffc + years.since.comp + opp1vote +
        icrg.pol.risk_wt +
        coups.activity.bin_sum_nb +
@@ -160,7 +160,7 @@ lna.EHI <- function(df) {
 
 lna.JFI <- function(df) {
   lm(cs_env_sum.lead ~
-       icrg.stability + icrg.pol.risk.internal.nostab +
+       icrg.stability + icrg.pol.risk.internal.nostab.scaled +
        icrg.pol.risk_wt +
        shaming.states.std +
        as.factor(year.num),
@@ -169,7 +169,7 @@ lna.JFI <- function(df) {
 
 lna.JGI <- function(df) {
   lm(cs_env_sum.lead ~
-       icrg.stability + icrg.pol.risk.internal.nostab +
+       icrg.stability + icrg.pol.risk.internal.nostab.scaled +
        coups.activity.bin_sum_nb +
        protests.violent.std_wt + protests.nonviolent.std_wt +
        shaming.states.std +
@@ -179,7 +179,7 @@ lna.JGI <- function(df) {
 
 lna.JHI <- function(df) {
   lm(cs_env_sum.lead ~
-       icrg.stability + icrg.pol.risk.internal.nostab +
+       icrg.stability + icrg.pol.risk.internal.nostab.scaled +
        icrg.pol.risk_wt +
        coups.activity.bin_sum_nb +
        protests.violent.std_wt + protests.nonviolent.std_wt +
@@ -353,7 +353,7 @@ lna.DHI.b <- function(df) {
 
 lna.EFI.b <- function(df) {
   stan_glm(cs_env_sum.lead ~
-             icrg.stability + icrg.pol.risk.internal.nostab +
+             icrg.stability + icrg.pol.risk.internal.nostab.scaled +
              yrsoffc + years.since.comp + opp1vote +
              icrg.pol.risk_wt +
              shaming.states.std +
@@ -366,7 +366,7 @@ lna.EFI.b <- function(df) {
 
 lna.EGI.b <- function(df) {
   stan_glm(cs_env_sum.lead ~
-             icrg.stability + icrg.pol.risk.internal.nostab +
+             icrg.stability + icrg.pol.risk.internal.nostab.scaled +
              yrsoffc + years.since.comp + opp1vote +
              coups.activity.bin_sum_nb +
              protests.violent.std_wt + protests.nonviolent.std_wt +
@@ -380,7 +380,7 @@ lna.EGI.b <- function(df) {
 
 lna.EHI.b <- function(df) {
   stan_glm(cs_env_sum.lead ~
-             icrg.stability + icrg.pol.risk.internal.nostab +
+             icrg.stability + icrg.pol.risk.internal.nostab.scaled +
              yrsoffc + years.since.comp + opp1vote +
              icrg.pol.risk_wt +
              coups.activity.bin_sum_nb +
@@ -395,7 +395,7 @@ lna.EHI.b <- function(df) {
 
 lna.JFI.b <- function(df) {
   stan_glm(cs_env_sum.lead ~
-             icrg.stability + icrg.pol.risk.internal.nostab +
+             icrg.stability + icrg.pol.risk.internal.nostab.scaled +
              icrg.pol.risk_wt +
              shaming.states.std +
              as.factor(year.num),
@@ -407,7 +407,7 @@ lna.JFI.b <- function(df) {
 
 lna.JGI.b <- function(df) {
   stan_glm(cs_env_sum.lead ~
-             icrg.stability + icrg.pol.risk.internal.nostab +
+             icrg.stability + icrg.pol.risk.internal.nostab.scaled +
              coups.activity.bin_sum_nb +
              protests.violent.std_wt + protests.nonviolent.std_wt +
              shaming.states.std +
@@ -420,7 +420,7 @@ lna.JGI.b <- function(df) {
 
 lna.JHI.b <- function(df) {
   stan_glm(cs_env_sum.lead ~
-             icrg.stability + icrg.pol.risk.internal.nostab +
+             icrg.stability + icrg.pol.risk.internal.nostab.scaled +
              icrg.pol.risk_wt +
              coups.activity.bin_sum_nb +
              protests.violent.std_wt + protests.nonviolent.std_wt +
