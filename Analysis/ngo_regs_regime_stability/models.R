@@ -242,8 +242,8 @@ stargazer(vars.summarized, type="html",
 #'     - B: `icrg.pol.risk.internal.scaled`
 #'     - C: `icrg.stability` + `yrsoffc` + `years.since.comp` + `opp1vote`
 #'     - D: `icrg.pol.risk.internal.scaled` + `yrsoffc` + `years.since.comp` + `opp1vote`
-#'     - E: `icrg.stability` + `icrg.pol.risk.internal.nostab` + `yrsoffc` + `years.since.comp` + `opp1vote`
-#'     - J: `icrg.stability` + `icrg.pol.risk.internal.nostab`
+#'     - E: `icrg.stability` + `icrg.pol.risk.internal.nostab.scaled` + `yrsoffc` + `years.since.comp` + `opp1vote`
+#'     - J: `icrg.stability` + `icrg.pol.risk.internal.nostab.scaled`
 #' - External
 #'     - F: `icrg.pol.risk_wt`
 #'     - G: `coups.activity.bin_sum_nb` + `protests.violent.std_wt` + `protests.nonviolent.std_wt`
@@ -442,8 +442,8 @@ new.data.int.risk <- model.to.use$model %>%
   summarise_each(funs(mean), -c(`as.factor(year.num)`)) %>%
   mutate(year.num = 2005,
          index = 1) %>%
-  select(-c(cs_env_sum.lead, icrg.pol.risk.internal.nostab)) %>%
-  right_join(expand.grid(icrg.pol.risk.internal.nostab =
+  select(-c(cs_env_sum.lead, icrg.pol.risk.internal.nostab.scaled)) %>%
+  right_join(expand.grid(icrg.pol.risk.internal.nostab.scaled =
                            seq(0, 100, by=1),
                          index = 1),
              by="index") %>%
@@ -472,7 +472,7 @@ plot.predict.int.risk <- augment(model.to.use,
 #                             function(x) quantile(x, probs = c(0.975))))
 
 plot.icrg.int.risk.pred <- ggplot(plot.predict.int.risk,
-                                  aes(x=icrg.pol.risk.internal.nostab, y=pred)) +
+                                  aes(x=icrg.pol.risk.internal.nostab.scaled, y=pred)) +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA, fill="#0074D9") +
   geom_line(size=1.5, colour="#0074D9") +
