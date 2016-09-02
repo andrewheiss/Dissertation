@@ -172,8 +172,15 @@ bayesgazer <- function(model) {
     as.data.frame() %>%
     mutate(term = rownames(.))
   
-  model.n <- nrow(model$model)
+  # Calculate the median and MAD_SD for the posterior predictive distribution
+  # of y (the bottom part of summary(model) output)
+  model.sample.avg <- as.data.frame(model$stanfit) %>%
+    select(mean_PPD) %>%
+    summarise(Median = median(mean_PPD),
+              MAD_SD = mad(mean_PPD))
   
+  model.glance <- glance(model)
+
   model.output <- tidy(model) %>%
     filter(!str_detect(term, "as\\.factor")) %>%
     left_join(model.credible.intervals, by="term") %>%
@@ -185,9 +192,20 @@ bayesgazer <- function(model) {
            `P(β > 0)` = p.greater0, `P(β < 0)` = p.less0) %>%
     mutate(Term = as.character(Term))
   
+  # N = number of observations
+  # PSS = posterior sample size
+  # Sigma = standard deviation of the normally-distributed errors
+  # MAD/MAD_SD = median absolute deviation
   model.bottom.row <- tibble::tribble(
-    ~Term, ~`Posterior median`,
-    "N",   model.n
+    ~Term,                            ~`Posterior median`,
+    "—",                              NA,
+    "N",                              model.glance$nobs,
+    "σ",                              model.glance$sigma,
+    "Posterior sample size",          model.glance$pss,
+    "—",                              NA,
+    "Sample average posterior predictive distribution of y (X = x̄):", NA,
+    "Median",                         model.sample.avg$Median,
+    "Median absolute deviation (SD)", model.sample.avg$MAD_SD
   )
   
   final.output <- bind_rows(model.output, model.bottom.row)
