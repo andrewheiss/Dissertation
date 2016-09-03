@@ -42,6 +42,7 @@ panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
 panderOptions('missing', '')
 panderOptions('big.mark', ',')
+panderOptions('digits', 2)
 panderOptions('table.alignment.default', 'left')
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
@@ -232,8 +233,13 @@ vars.summarized <- autocracies %>%
   as.data.frame()
 
 #+ results="asis"
-pandoc.table(vars.summarized, digits=2, big.mark=",",
-             justify="lcccccc")
+caption <- "Summary of all variables included in regression models {#tbl:var-summary}"
+var.summary <- pandoc.table.return(vars.summarized,
+                                   justify="lcccccc", caption=caption)
+
+cat(var.summary)
+cat(var.summary, file=file.path(PROJHOME, "Output", "tables", 
+                                "1-var-summary.md"))
 
 
 #' # Model building
@@ -394,11 +400,16 @@ grid::grid.draw(correct_panel_size(plot.coefs))
 fig.save.cairo(correct_panel_size(plot.coefs), filename="1-coefs-bayes",
                width=6, height=5)
 
-#' ### Results for full model (`lna.JGI.b`)
+#' ### Results for basic model (`lna.JGI.b`)
 #' 
 #+ results="asis"
-pandoc.table(filter(models.bayes, model.name == "lna.JGI.b")$output[[1]],
-             digits=2, justify="lcccccc")
+caption <- "Results from basic Bayesian generalized linear regression model {#tbl:results-basic}"
+tbl.full.model <- pandoc.table.return(filter(models.bayes, 
+                                             model.name == "lna.JGI.b")$output[[1]],
+                                      justify="lcccccc", caption=caption)
+cat(tbl.full.model)
+cat(tbl.full.model, file=file.path(PROJHOME, "Output", "tables", 
+                                   "1-results-basic.md"))
 
 #' ### Results for alternate model (`lna.EHI.b`)
 #' 
@@ -406,8 +417,13 @@ pandoc.table(filter(models.bayes, model.name == "lna.JGI.b")$output[[1]],
 #' since competitive election, and opposition vote share variables.
 #' 
 #+ results="asis"
-pandoc.table(filter(models.bayes, model.name == "lna.EHI.b")$output[[1]],
-             digits=2, justify="lcccccc")
+caption <- "Results from alternate Bayesian generalized linear regression model {#tbl:results-alternate}"
+tbl.alt.model <- pandoc.table.return(filter(models.bayes, 
+                                            model.name == "lna.EHI.b")$output[[1]],
+                                     justify="lcccccc", caption=caption)
+cat(tbl.alt.model)
+cat(tbl.alt.model, file=file.path(PROJHOME, "Output", "tables", 
+                                  "1-results-alternate.md"))
 
 
 #' # Criticize the model
@@ -771,6 +787,7 @@ plot.sna.selection.b <- ggplot(plot.data.sna.selection.b,
   geom_point(aes(alpha=alpha, size=point.size)) +
   # stat_ellipse(aes(linetype=linetype), type="norm", size=0.5) +
   stat_chull(aes(linetype=linetype, fill=fill), alpha=0.1, show.legend=FALSE) +
+  stat_smooth(aes(linetype=linetype, colour=colour), method="lm", se=FALSE) +
   scale_color_identity(guide="legend", labels=c(cases$country.name, "Other"),
                        name=NULL) +
   scale_fill_identity() +

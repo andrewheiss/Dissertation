@@ -45,6 +45,7 @@ panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
 panderOptions('missing', '')
 panderOptions('big.mark', ',')
+panderOptions('digits', 2)
 panderOptions('table.alignment.default', 'left')
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
@@ -123,7 +124,11 @@ autocracies.output <- matrix(c(autocracies.countries, rep(NA, 3)),
 #' Full list of autocracies:
 #' 
 #+ results="asis"
-pandoc.table(autocracies.output)
+caption <- "Countries identified as autocracies by either Geddes et. al or scoring less than zero in UDS {#tbl:autocracies}"
+tbl.autocracies <- pandoc.table.return(autocracies.output, caption=caption)
+cat(tbl.autocracies)
+cat(tbl.autocracies, file=file.path(PROJHOME, "Output", "tables", 
+                                    "1-autocracies.md"))
 
 
 #' ## Visualizing basic correlation between regime type and CSRE
@@ -311,12 +316,12 @@ dcjw.type.models <- dcjw.barriers.plot.data %>%
   select(Barrier = barrier, Coefficient = clean.estimate)
 
 #+ results="asis"
-pandoc.table(dcjw.type.models)
-
 caption <- "Coefficients from OLS models predicting the CSRE with the count of legal barriers to NGOs {#tbl:csre-dcjw-coefs}"
-cat(pandoc.table.return(dcjw.type.models, caption=caption), 
-    file=file.path(PROJHOME, "Output", "tables", "1-csre-dcjw-coefs.md"))
-
+tbl.djcw.types <- pandoc.table.return(dcjw.type.models,
+                                      justify="lc", caption=caption)
+cat(tbl.djcw.types)
+cat(tbl.djcw.types, file=file.path(PROJHOME, "Output", "tables", 
+                                   "1-csre-dcjw-coefs.md"))
 
 #' This relationship holds up over time too. 
 dcjw.time.plot.data <- autocracies %>%
