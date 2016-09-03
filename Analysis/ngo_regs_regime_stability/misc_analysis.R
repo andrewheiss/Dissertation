@@ -41,6 +41,12 @@ library(pander)
 library(countrycode)
 library(DT)
 
+panderOptions('table.split.table', Inf)
+panderOptions('table.split.cells', Inf)
+panderOptions('missing', '')
+panderOptions('big.mark', ',')
+panderOptions('table.alignment.default', 'left')
+
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
 full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
@@ -117,7 +123,7 @@ autocracies.output <- matrix(c(autocracies.countries, rep(NA, 3)),
 #' Full list of autocracies:
 #' 
 #+ results="asis"
-pandoc.table(autocracies.output, split.tables=Inf, missing="")
+pandoc.table(autocracies.output)
 
 
 #' ## Visualizing basic correlation between regime type and CSRE
