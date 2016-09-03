@@ -33,9 +33,16 @@ library(ggplot2)
 library(scales)
 library(gridExtra)
 library(Cairo)
+library(pander)
 library(stargazer)
 library(countrycode)
 library(DT)
+
+panderOptions('table.split.table', Inf)
+panderOptions('table.split.cells', Inf)
+panderOptions('missing', '')
+panderOptions('big.mark', ',')
+panderOptions('table.alignment.default', 'left')
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
@@ -98,7 +105,7 @@ bayesgazer <- function(model) {
     "σ",                              model.glance$sigma,
     "Posterior sample size",          model.glance$pss,
     "—",                              NA,
-    "Sample average posterior predictive distribution of y (X = x̄):", NA,
+    "Sample average posterior predictive distribution of y ($X = \\bar{x}$):", NA,
     "Median",                         model.sample.avg$Median,
     "Median absolute deviation (SD)", model.sample.avg$MAD_SD
   )
@@ -225,9 +232,8 @@ vars.summarized <- autocracies %>%
   as.data.frame()
 
 #+ results="asis"
-stargazer(vars.summarized, type="html",
-          summary=FALSE, rownames=FALSE,
-          digits=2, digit.separator=",")
+pandoc.table(vars.summarized, digits=2, big.mark=",",
+             justify="lcccccc")
 
 
 #' # Model building
@@ -391,8 +397,8 @@ fig.save.cairo(correct_panel_size(plot.coefs), filename="1-coefs-bayes",
 #' ### Results for full model (`lna.JGI.b`)
 #' 
 #+ results="asis"
-stargazer(filter(models.bayes, model.name == "lna.JGI.b")$output[[1]],
-          type="html", summary=FALSE, digits=2, rownames=FALSE)
+pandoc.table(filter(models.bayes, model.name == "lna.JGI.b")$output[[1]],
+             digits=2, justify="lcccccc")
 
 #' ### Results for alternate model (`lna.EHI.b`)
 #' 
@@ -400,8 +406,8 @@ stargazer(filter(models.bayes, model.name == "lna.JGI.b")$output[[1]],
 #' since competitive election, and opposition vote share variables.
 #' 
 #+ results="asis"
-stargazer(filter(models.bayes, model.name == "lna.EHI.b")$output[[1]],
-          type="html", summary=FALSE, digits=2, rownames=FALSE)
+pandoc.table(filter(models.bayes, model.name == "lna.EHI.b")$output[[1]],
+             digits=2, justify="lcccccc")
 
 
 #' # Criticize the model
