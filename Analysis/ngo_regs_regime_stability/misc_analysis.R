@@ -109,6 +109,17 @@ cows.autocracies %>% length()
 autocracies <- full.data %>%
   filter(cowcode %in% cows.autocracies)
 
+autocracies.countries <- sort(unique(autocracies$country))
+
+autocracies.output <- matrix(c(autocracies.countries, rep(NA, 3)),
+                             ncol=4, byrow=FALSE)
+
+#' Full list of autocracies:
+#' 
+#+ results="asis"
+pandoc.table(autocracies.output, split.tables=Inf, missing="")
+
+
 #' ## Visualizing basic correlation between regime type and CSRE
 #' 
 #' Regime type and CSRE are quite correlated
