@@ -146,8 +146,8 @@ autocracies <- full.data %>%
 
 autocracies.countries <- sort(unique(autocracies$country))
 
-autocracies.output <- matrix(c(autocracies.countries, rep(NA, 3)),
-                             ncol=4, byrow=FALSE)
+autocracies.output <- matrix(c(autocracies.countries, rep(NA, 2)),
+                             ncol=3, byrow=FALSE)
 
 #' Full list of autocracies:
 #' 
