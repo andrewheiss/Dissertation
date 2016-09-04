@@ -40,6 +40,7 @@ library(Cairo)
 library(pander)
 library(countrycode)
 library(DT)
+library(rstanarm)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -58,6 +59,33 @@ dcjw <- read_feather(file.path(PROJHOME, "Data", "data_processed",
 
 my.seed <- 1234
 set.seed(my.seed)
+
+CHAINS <- 4
+ITER <-2000
+WARMUP <- 1000
+
+options(mc.cores = parallel::detectCores())  # Use all possible cores
+
+bayesgazer.dcjw <- function(model, barrier.name) {
+  model.posterior.probs <- as.data.frame(model) %>%
+    summarise_each(funs(pp.less0 = mean(. < 0))) %>%
+    gather(key, value) %>%
+    separate(key, c("term", "key"), sep="_p") %>%
+    spread(key, value) %>%
+    filter(term == "value")
+  
+  p.less0 <- model.posterior.probs$p.less0
+  
+  model.output <- tidy(model) %>%
+    filter(term == "value") %>%
+    mutate(p.less0 = p.less0,
+           Barrier = barrier.name) %>%
+    mutate(combined = sprintf("%.3f (%.3f)", estimate, std.error)) %>%
+    select(Barrier, `Posterior median β (SD)` = combined,
+           `P(β < 0)` = p.less0)
+  
+  return(model.output)
+}
 
 #' # General data summary
 #' 
@@ -293,32 +321,40 @@ p.csre.dcjw <- ggplot(dcjw.barriers.plot.data, aes(x=value, y=cs_env_sum)) +
   theme_ath() + 
   facet_wrap(~ barrier, scales="free_x")
 
+p.csre.dcjw
+
 fig.save.cairo(p.csre.dcjw, filename="1-csre-dcjw", 
                width=6, height=4)
 
+#+ dcjw_bayes
+dcjw.raw.bayes.rds <- file.path(PROJHOME, "Data", "data_processed",
+                           "dcjw_raw_bayes.rds")
 
-dcjw.type.models <- dcjw.barriers.plot.data %>%
-  filter(barrier != "All barriers") %>%
-  group_by(barrier) %>%
-  nest() %>%
-  mutate(model = data %>% map(~ lm(cs_env_sum ~ value, data=.))) %>%
-  mutate(tidy = model %>% map(broom::tidy),
-         estimate = tidy %>% map_dbl(c(2, 2)),
-         std.error = tidy %>% map_dbl(c(3, 2)),
-         p.value = tidy %>% map_dbl(c(5, 2))) %>%
-  mutate(p.stars = case_when(
-    .$p.value <= 0.001 ~ "***",
-    .$p.value <= 0.01 ~ "**",
-    .$p.value <= 0.05 ~ "*",
-    TRUE ~ ""
-  )) %>%
-  mutate(clean.estimate = sprintf("%.3f (%.3f)%s", estimate, std.error, p.stars)) %>%
-  select(Barrier = barrier, Coefficient = clean.estimate)
+if (file.exists(dcjw.raw.bayes.rds)) {
+  dcjw.raw.bayes <- readRDS(dcjw.raw.bayes.rds)
+} else {
+  dcjw.raw.bayes <- dcjw.barriers.plot.data %>%
+    group_by(barrier) %>%
+    nest() %>%
+    mutate(model = data %>% map(~ stan_glm(cs_env_sum ~ value, data=.,
+                                           family=gaussian(),
+                                           prior=cauchy(),
+                                           prior_intercept=cauchy(),
+                                           chains=CHAINS, iter=ITER, warmup=WARMUP,
+                                           algorithm="sampling", seed=my.seed)))
+  saveRDS(dcjw.raw.bayes, file=dcjw.raw.bayes.rds)
+}
+
+dcjw.models <- dcjw.raw.bayes %>%
+  gather(model.name, model, -barrier, -data) %>%
+  mutate(output = map2(model, barrier, ~ bayesgazer.dcjw(.x, .y)))
+
+dcjw.type.models <- bind_rows(dcjw.models$output)
 
 #+ results="asis"
-caption <- "Coefficients from OLS models predicting the CSRE with the count of legal barriers to NGOs {#tbl:csre-dcjw-coefs}"
+caption <- "Coefficients from Bayesian OLS models predicting the CSRE with the count of legal barriers to NGOs {#tbl:csre-dcjw-coefs}"
 tbl.djcw.types <- pandoc.table.return(dcjw.type.models,
-                                      justify="lc", caption=caption)
+                                      justify="lcc", caption=caption)
 cat(tbl.djcw.types)
 cat(tbl.djcw.types, file=file.path(PROJHOME, "Output", "tables", 
                                    "1-csre-dcjw-coefs.md"))
