@@ -321,13 +321,33 @@ The statistical models presented in this paper provide mixed support for each of
 
 # Appendix
 
+## Autocracies included in analysis
 
-\input{../../Output/tables/1-internal-models-all.tex}
+\small
+!INCLUDE "../../Output/tables/1-autocracies.md"
+\normalsize
 
-\input{../../Output/tables/1-external-models-all.tex}
-\begin{landscape}
-\input{../../Output/tables/1-shaming-models-all.tex}
-\end{landscape}
+\newpage
+
+## Summary of variables used in models
+
+\begingroup
+\renewcommand\arraystretch{1.6}
+!INCLUDE "../../Output/tables/1-var-summary.md"
+\endgroup
+
+\newpage
+
+## Regression results
+
+\begingroup
+\renewcommand\arraystretch{1.6}
+!INCLUDE "../../Output/tables/1-results-basic.md"
+
+\newpage
+!INCLUDE "../../Output/tables/1-results-alternate.md"
+\endgroup
+
 \newpage
 
 # Software
