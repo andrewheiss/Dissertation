@@ -1,15 +1,15 @@
-term,term.clean,category,source.clean
-cs_env_sum.lead,Civil society regulatory environment,,based on V-Dem
-(Intercept),Intercept,,
-icrg.stability,Government stability,Internal,ICRG
-icrg.pol.risk.internal.scaled,"Internal political stability, rescaled",Internal,ICRG
-icrg.pol.risk.internal.nostab.scaled,"Internal political stability, government stability omitted, rescaled",Internal,ICRG
-yrsoffc,Years executive in office,Internal,DPI
-years.since.comp,Years since competitive election,Internal,NELDA
-opp1vote,Opposition vote share,Internal,DPI
-icrg.pol.risk_wt,"Political stability of neighbors, weighted by distance",External,ICRG
-coups.activity.bin_sum_nb,Count of coup activity of neighbors within 900 km,External,Powell and Thyne 2011
-protests.violent.std_wt,"Relative violent protest activity, weighted by distance",External,ICEWS
-protests.nonviolent.std_wt,"Relative nonviolent protest activity, weighted by distance",External,ICEWS
-shaming.states.std,Relative state-based shaming,Shaming,ICEWS
-shaming.ingos.std,Relative INGO-based shaming,Shaming,ICEWS
+term,category,term.clean,source.clean,term.clean.breaks
+cs_env_sum.lead,,Civil society regulatory environment,based on V-Dem,Civil society regulatory environmentXXX
+(Intercept),,Intercept,,Intercept
+icrg.stability,Internal,Government stability,ICRG,Government stability
+icrg.pol.risk.internal.scaled,Internal,"Internal political stability, rescaled",ICRG,"Internal political stability, rescaledXXX"
+icrg.pol.risk.internal.nostab.scaled,Internal,"Internal political stability, government stability omitted, rescaled",ICRG,"Internal political stability, governmentXXXstability omitted, rescaled"
+yrsoffc,Internal,Years executive in office,DPI,Years executive in office
+years.since.comp,Internal,Years since competitive election,NELDA,Years since competitiveXXXelection
+opp1vote,Internal,Opposition vote share,DPI,Opposition vote share
+icrg.pol.risk_wt,External,"Political stability of neighbors, weighted by distance",ICRG,"Political stability of neighbors,XXXweighted by distance"
+coups.activity.bin_sum_nb,External,Count of coup activity of neighbors within 900 km,Powell and Thyne 2011,Count of coup activity of neighborsXXXwithin 900 km
+protests.violent.std_wt,External,"Relative violent protest activity, weighted by distance",ICEWS,"Relative violent protest activity,XXXweighted by distance"
+protests.nonviolent.std_wt,External,"Relative nonviolent protest activity, weighted by distance",ICEWS,"Relative nonviolent protest activity,XXXweighted by distance"
+shaming.states.std,Shaming,Relative state-based shaming,ICEWS,Relative state-based shaming
+shaming.ingos.std,Shaming,Relative INGO-based shaming,ICEWS,Relative INGO-based shaming
