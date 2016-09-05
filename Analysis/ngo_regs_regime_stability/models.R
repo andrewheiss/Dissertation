@@ -89,8 +89,9 @@ bayesgazer <- function(model) {
     left_join(model.credible.intervals, by="term") %>%
     left_join(model.posterior.probs, by="term") %>%
     left_join(coef.names, by="term") %>%
+    mutate(term.final = str_replace(term.clean.breaks.models, "XXX", "\\\n")) %>%
     arrange(term.clean) %>%
-    select(`Term` = term.clean, `Posterior median` = estimate, 
+    select(`Term` = term.final, `Posterior median` = estimate, 
            `Posterior SD` = std.error, `2.5%`, `97.5%`,
            `P(β > 0)` = p.greater0, `P(β < 0)` = p.less0) %>%
     mutate(Term = as.character(Term))
@@ -102,11 +103,12 @@ bayesgazer <- function(model) {
   model.bottom.row <- tibble::tribble(
     ~Term,                            ~`Posterior median`,
     "—",                              NA,
+    "Year fixed effects included",    NA,
     "N",                              model.glance$nobs,
     "σ",                              model.glance$sigma,
     "Posterior sample size",          model.glance$pss,
     "—",                              NA,
-    "Sample average posterior predictive distribution of y ($X = \\bar{x}$):", NA,
+    "Sample average posterior\\\npredictive distribution of y ($X = \\bar{x}$):", NA,
     "Median",                         model.sample.avg$Median,
     "Median absolute deviation (SD)", model.sample.avg$MAD_SD
   )
@@ -228,14 +230,15 @@ vars.summarized <- autocracies %>%
   spread(key, value) %>%
   left_join(vars.to.summarize, by="term") %>%
   arrange(term.clean) %>%
-  mutate(Variable = sprintf("%s (%s)", as.character(term.clean), source.clean)) %>%
+  mutate(Variable = sprintf("%s (%s)", as.character(term.clean.breaks), source.clean),
+         Variable = str_replace(Variable, "XXX", "\\\n")) %>%
   select(Variable, Mean, SD, Median, Min, Max, N) %>%
   as.data.frame()
 
 #+ results="asis"
 caption <- "Summary of all variables included in regression models {#tbl:var-summary}"
-var.summary <- pandoc.table.return(vars.summarized,
-                                   justify="lcccccc", caption=caption)
+var.summary <- pandoc.table.return(vars.summarized, keep.line.breaks=TRUE,
+                                   justify="lcccccc", caption=caption, style="multiline")
 
 cat(var.summary)
 cat(var.summary, file=file.path(PROJHOME, "Output", "tables", 
@@ -406,6 +409,7 @@ fig.save.cairo(correct_panel_size(plot.coefs), filename="1-coefs-bayes",
 caption <- "Results from basic Bayesian generalized linear regression model {#tbl:results-basic}"
 tbl.full.model <- pandoc.table.return(filter(models.bayes, 
                                              model.name == "lna.JGI.b")$output[[1]],
+                                      keep.line.breaks=TRUE,
                                       justify="lcccccc", caption=caption)
 cat(tbl.full.model)
 cat(tbl.full.model, file=file.path(PROJHOME, "Output", "tables", 
@@ -420,6 +424,7 @@ cat(tbl.full.model, file=file.path(PROJHOME, "Output", "tables",
 caption <- "Results from alternate Bayesian generalized linear regression model {#tbl:results-alternate}"
 tbl.alt.model <- pandoc.table.return(filter(models.bayes, 
                                             model.name == "lna.EHI.b")$output[[1]],
+                                     keep.line.breaks=TRUE,
                                      justify="lcccccc", caption=caption)
 cat(tbl.alt.model)
 cat(tbl.alt.model, file=file.path(PROJHOME, "Output", "tables", 
