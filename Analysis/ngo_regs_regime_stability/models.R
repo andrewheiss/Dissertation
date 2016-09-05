@@ -390,7 +390,7 @@ plot.coefs <- ggplot(plot.data,
                      aes(x=estimate, y=term.clean.rev,
                          xmin=lower, xmax=upper, colour=model.name.clean)) +
   geom_vline(xintercept=0) +
-  geom_pointrangeh(position=position_dodge(width=0.5)) +
+  geom_pointrangeh(position=position_dodge(width=0.5), size=0.5) +
   scale_colour_manual(values=ath.palette("contention"), name=NULL) +
   coord_cartesian(xlim=c(-0.5, 1)) +
   labs(x="Posterior median change in CSRE", y=NULL) +
@@ -401,7 +401,7 @@ grid::grid.newpage()
 grid::grid.draw(correct_panel_size(plot.coefs))
 
 fig.save.cairo(correct_panel_size(plot.coefs), filename="1-coefs-bayes",
-               width=6, height=5)
+               width=6, height=4)
 
 #' ### Results for basic model (`lna.JGI.b`)
 #' 
@@ -486,7 +486,8 @@ plot.predict.int.risk <- augment(model.to.use,
                                  newdata=new.data.int.risk) %>%
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
-         pred.upper = pred + (qnorm(0.975) * .se.fit))
+         pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
+  mutate(stability = "ICRG internal stability (scaled)")
 
 # What should happen, in theory:
 # new.post.pred <- posterior_predict(model.to.use, new.data.int.stability,
@@ -499,16 +500,22 @@ plot.predict.int.risk <- augment(model.to.use,
 #          pred.upper = apply(new.post.pred, 2,
 #                             function(x) quantile(x, probs = c(0.975))))
 
-plot.icrg.int.risk.pred <- ggplot(plot.predict.int.risk,
-                                  aes(x=icrg.pol.risk.internal.nostab.scaled, y=pred)) +
+# Have to add a single-valued aes so that something shows up in the legend so
+# that the figure can be aligned in a row with plot.int.stability.pred
+plot.int.risk.pred <- ggplot(plot.predict.int.risk,
+                             aes(x=icrg.pol.risk.internal.nostab.scaled, y=pred,
+                                 colour=stability, fill=stability)) +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA, fill="#0074D9") +
-  geom_line(size=1.5, colour="#0074D9") +
+  geom_line(size=1.5) +
+  coord_cartesian(xlim=c(15, 70)) +
+  scale_colour_manual(values="#0074D9", name=NULL) +
+  scale_fill_manual(values="#0074D9", name=NULL, guide=FALSE) +
   labs(x="Internal political stability", y="Predicted CSRE in following year") +
   theme_ath()
-plot.icrg.int.risk.pred
+plot.int.risk.pred
 
-fig.save.cairo(plot.icrg.int.risk.pred, filename="1-icrg-int-risk-pred",
+fig.save.cairo(plot.int.risk.pred, filename="1-int-risk-pred",
                width=5, height=3)
 
 #' ### Government stability
@@ -538,20 +545,33 @@ plot.predict.int.stability <- augment(model.to.use,
   mutate(yrsoffc = factor(yrsoffc, levels=c(2, 30),
                           labels=paste(c(2, 30), "years in office")))
 
-plot.icrg.int.stability <- ggplot(plot.predict.int.stability,
+plot.int.stability.pred <- ggplot(plot.predict.int.stability,
                                   aes(x=icrg.stability, y=pred,
                                       fill=yrsoffc, colour=yrsoffc)) +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) +
+  coord_cartesian(xlim=c(3, 12)) +
+  scale_x_continuous(breaks=seq(3, 12, 3)) +
   scale_colour_manual(values=ath.palette("contention"), name=NULL) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL, guide=FALSE) +
   labs(x="Government stability", y="Predicted CSRE in following year") +
   theme_ath()
-plot.icrg.int.stability
+plot.int.stability.pred
 
-fig.save.cairo(plot.icrg.int.stability, filename="1-icrg-int-stability-pred",
+fig.save.cairo(plot.int.stability.pred, filename="1-int-stability-pred",
                width=5, height=3)
+
+#' ### Both together
+plot.int.pred <- arrangeGrob(plot.int.risk.pred, 
+                             grob.blank,
+                             plot.int.stability.pred + ylab(NULL), 
+                             nrow=1, widths=c(0.475, 0.05, 0.475))
+grid::grid.newpage()
+grid::grid.draw(plot.int.pred)
+
+fig.save.cairo(plot.int.pred, filename="1-int-pred",
+               width=5, height=2.5)
 
 #' ## External
 #' 
