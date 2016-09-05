@@ -188,7 +188,7 @@ As discussed previously, I employ large-*n* analysis (LNA), which entails parsim
 
 [@fig:coefs-bayes] presents the estimates two variations of model specifications. In the basic, most parsimonious model, I measure the effect of internal determinants using only political risk and government risk measures, external determinants using only coups and protest activity in neighboring countries, and reputational determinants using the relative measure of international shaming. In the alternate model, I include additional measures of regime stability and longevity as internal determinants and a more general distance-weighted measure of neighbor instability. The full results of both models are included in [@tbl:results-basic] and [@tbl:results-alternate] in the appendix.
 
-![Determinants of the civil society regulatory environment](../../Output/figures/1-coefs-bayes){#fig:coefs-bayes}
+![Determinants of the civil society regulatory environment. Points indicate median estimates of β; error bars indicate 95% credible interval](../../Output/figures/1-coefs-bayes){#fig:coefs-bayes}
 
 ## Internal determinants
 
@@ -196,7 +196,7 @@ I begin by examining my first hypothesis—that autocrats restrict the regulator
 
 ![(L) Predicted CSRE across range of possible internal political risk scores; (R) predicted CSRE across range of government risk scores and length of executive tenure. All model covariates held at their means.](../../Output/figures/1-int-pred){#fig:int-pred}
 
-The model offers contradictory evidence for H~1b~. I had hypothesized that autocrats would restrict the CSRE as the internal cohesion of the regime deteriorated. However, across both specifications of the model, autocratic government stability is significantly and *negatively* associated with the CSRE in the following year, resulting in a decrease of nearly 0.2 (P(β \< 0) = 1). That is, as a regime consulates its power and internal unity, it does not, in fact, increase the space for institutional dissonance for civil society organizations. Instead, it appears that autocratic entrenchment and stabilization leads to a more restrictive regulatory environment. 
+The model offers contradictory evidence for H~1b~. I had hypothesized that autocrats would restrict the CSRE as the internal cohesion of the regime deteriorated. However, across both specifications of the model, autocratic government stability is significantly and *negatively* associated with the CSRE in the following year, resulting in a decrease of nearly 0.2 (P(β \< 0) = 1). That is, as a regime consolidates its power and internal unity, it does not, in fact, increase the space for institutional dissonance for civil society organizations. Instead, it appears that autocratic entrenchment and stabilization leads to a more restrictive regulatory environment. 
 
 The three additional measures of regime longevity bolster this evidence. Executive tenure is significantly and negatively associated with civil society regulations, and for every year in office, the CSRE will decrease by 0.1 on average (P(β \< 0) = 1). The number of years that elapse between competitive executive elections has a similar effect, decreasing the CSRE by nearly 0.05 each year, *ceteris paribus*. The right panel of [@fig:int-pred] shows the substantial effects of these coefficients, demonstrating the predicted CSRE across a range of possible government stability values for countries with executives in office for 2 and 30 years. Contra my hypothesis, the CSRE clearly decreases both when regime stability increases and as autocrats remain in office longer.
 
@@ -315,11 +315,11 @@ Wickham, Hadley. 2009. *ggplot2: Elegant Graphics for Data Analysis.* Springer N
 
 [^16]:	[https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/28075](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/28075)
 
-[^17]:	I use the machine-coded classification of events, or CAMEO codes, to identify protests, with *nonviolent protests* = general political dissent (CAMEO code 140), demonstrate or rally (141X), hunger strike (142X), strike or boycott (143X), and obstruct passage, block (144X), and *violent protests* = protest violently or riot (145X).
+[^17]:	I use the machine-coded classification of events, or CAMEO codes, to identify protests, with *nonviolent protests* = general political dissent (CAMEO code 140), demonstrate or rally (141\*), hunger strike (142\*), strike or boycott (143\*), and obstruct passage, block (144\*), and *violent protests* = protest violently or riot (145\*).
 
 [^18]:	Specifically, I transform the raw count of each variable of interest using the following: $\frac{\mathbf{x} - \mu_x}{\sigma_x} + \left \lvert \min \left (\frac{\mathbf{x} - \mu_x}{\sigma_x} \right ) \right \rvert + 1$. I thank Shahryar Minhas for this idea.
 
-[^19]:	I include all events categorized with CAMEO codes 11X, which includes accusations, disapprovals, criticisms, and denouncements. 
+[^19]:	I include all events categorized with CAMEO codes 11\*, which includes accusations, disapprovals, criticisms, and denouncements. 
 
 [^20]:	It is often tempting to interpret frequentist confidence intervals in a Bayesian manner. In one study, students and seasoned researchers alike failed to identify incorrect statements about the definition of confidence intervals, and roughly half of the participants confused confidence intervals with credible intervals [@HoekstraMoreyRouder:2014]. 
 
