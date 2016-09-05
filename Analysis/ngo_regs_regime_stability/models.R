@@ -716,7 +716,7 @@ plot.predict.shaming.1 <- augment(model.to.use,
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
          pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
-  mutate(shaming.type = "With extra internal variables")
+  mutate(shaming.type = "Alternate model")
 
 model.to.use <- filter(models.bayes,
                        model.name == "lna.JFI.b")$model[[1]]
@@ -737,10 +737,12 @@ plot.predict.shaming.2 <- augment(model.to.use,
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
          pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
-  mutate(shaming.type = "Without extra internal variables")
+  mutate(shaming.type = "Basic model")
 
 plot.predict.shaming <- bind_rows(plot.predict.shaming.1,
-                                  plot.predict.shaming.2)
+                                  plot.predict.shaming.2) %>%
+  mutate(shaming.type = factor(shaming.type,
+                               levels=c("Basic model", "Alternate model")))
 
 plot.shaming <- ggplot(plot.predict.shaming,
                                  aes(x=shaming.states.std, y=pred,
@@ -750,10 +752,10 @@ plot.shaming <- ggplot(plot.predict.shaming,
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
   geom_line(size=1) +
-  scale_colour_manual(values=ath.palette("leaders"), name=NULL) +
-  scale_fill_manual(values=ath.palette("leaders"), name=NULL, guide=FALSE) +
-  scale_x_continuous(labels=c("Less than normal\n(1)", "", "Normal\n(3)", "", 
-                              "More than normal\n(5)")) +
+  scale_colour_manual(values=ath.palette("contention"), name=NULL) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL, guide=FALSE) +
+  scale_x_continuous(labels=c("Less\n(1)", "", "Normal\n(3)", "", 
+                              "More\n(5)")) +
   labs(x="Relative state-based shaming", y="Predicted CSRE in following year") +
   theme_ath()
 plot.shaming
