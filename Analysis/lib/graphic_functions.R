@@ -61,6 +61,8 @@ ath.palette <- function(name, n, type = c("discrete", "continuous")) {
   structure(out, class = "palette", name = name)
 }
 
+# Blank plot for spacing things in arrangeGrob()
+grob.blank <- grid::rectGrob(gp=grid::gpar(col="white"))
 
 theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
   update_geom_defaults("bar", list(fill = "grey30"))
