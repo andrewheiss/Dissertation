@@ -1,5 +1,5 @@
 #' ---
-#' title: "Determinants of international civil society restrictions"
+#' title: "Modeling the determinants of the CSRE"
 #' author: "Andrew Heiss"
 #' date: "`r format(Sys.time(), '%B %e, %Y')`"
 #' output: 
@@ -89,9 +89,8 @@ bayesgazer <- function(model) {
     left_join(model.credible.intervals, by="term") %>%
     left_join(model.posterior.probs, by="term") %>%
     left_join(coef.names, by="term") %>%
-    mutate(term.final = str_replace(term.clean.breaks.models, "XXX", "\\\n")) %>%
     arrange(term.clean) %>%
-    select(`Term` = term.final, `Posterior median` = estimate, 
+    select(`Term` = term.clean, `Posterior median` = estimate, 
            `Posterior SD` = std.error, `2.5%`, `97.5%`,
            `P(β > 0)` = p.greater0, `P(β < 0)` = p.less0) %>%
     mutate(Term = as.character(Term))
