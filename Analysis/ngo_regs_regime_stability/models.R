@@ -506,7 +506,7 @@ plot.int.risk.pred <- ggplot(plot.predict.int.risk,
                                  colour=stability, fill=stability)) +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA, fill="#0074D9") +
-  geom_line(size=1.5) +
+  geom_line(size=1) +
   coord_cartesian(xlim=c(15, 70)) +
   scale_colour_manual(values="#0074D9", name=NULL) +
   scale_fill_manual(values="#0074D9", name=NULL, guide=FALSE) +
@@ -549,7 +549,7 @@ plot.int.stability.pred <- ggplot(plot.predict.int.stability,
                                       fill=yrsoffc, colour=yrsoffc)) +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
-  geom_line(size=1.5) +
+  geom_line(size=1) +
   coord_cartesian(xlim=c(3, 12)) +
   scale_x_continuous(breaks=seq(3, 12, 3)) +
   scale_colour_manual(values=ath.palette("contention"), name=NULL) +
@@ -608,7 +608,7 @@ plot.ext.risk.coups <- ggplot(plot.predict.ext.risk.coups,
                                   colour=coups.activity.bin_sum_nb)) +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
-  geom_line(size=1.5) +
+  geom_line(size=1) +
   scale_colour_manual(values=ath.palette("contention"), name=NULL) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL, guide=FALSE) +
   labs(x="Political stability of neighbors", y="Predicted CSRE in following year") +
@@ -669,7 +669,7 @@ plot.ext.protests <- ggplot(plot.predict.ext.protests,
   geom_vline(xintercept=3, linetype="dotted", colour="grey50") +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
-  geom_line(size=1.5) +
+  geom_line(size=1) +
   scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
   scale_fill_manual(values=ath.palette("palette1"), name=NULL, guide=FALSE) +
   scale_x_continuous(labels=c("Less\n(1)", "", "Normal\n(3)", "", 
@@ -749,7 +749,7 @@ plot.shaming <- ggplot(plot.predict.shaming,
   geom_vline(xintercept=3, linetype="dotted", colour="grey50") +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
-  geom_line(size=1.5) +
+  geom_line(size=1) +
   scale_colour_manual(values=ath.palette("leaders"), name=NULL) +
   scale_fill_manual(values=ath.palette("leaders"), name=NULL, guide=FALSE) +
   scale_x_continuous(labels=c("Less than normal\n(1)", "", "Normal\n(3)", "", 
