@@ -62,7 +62,7 @@ wars.cases <- read_csv(file.path(PROJHOME, "Data", "data_base",
 plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31") {
   # Filtered data
   df.country <- full.data %>%
-    filter(iso == ISO)
+    filter(iso3 == ISO)
   
   df.icrg <- icrg.monthly %>%
     filter(iso == ISO, !is.na(icrg.internal))
