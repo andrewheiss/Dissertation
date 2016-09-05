@@ -572,6 +572,7 @@ grid::grid.draw(plot.int.pred)
 fig.save.cairo(plot.int.pred, filename="1-int-pred",
                width=5, height=2.5)
 
+
 #' ## External
 #' 
 #' ### General risk of neighbors + coups
@@ -601,10 +602,10 @@ plot.predict.ext.risk.coups <- augment(model.to.use,
                                                      "Coup activity in neigboring countries"),
                                             ordered=TRUE))
 
-plot.icrg.ext.risk.coups <- ggplot(plot.predict.ext.risk.coups,
-                                   aes(x=icrg.pol.risk_wt, y=pred,
-                                       fill=coups.activity.bin_sum_nb,
-                                       colour=coups.activity.bin_sum_nb)) +
+plot.ext.risk.coups <- ggplot(plot.predict.ext.risk.coups,
+                              aes(x=icrg.pol.risk_wt, y=pred,
+                                  fill=coups.activity.bin_sum_nb,
+                                  colour=coups.activity.bin_sum_nb)) +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) +
@@ -612,9 +613,9 @@ plot.icrg.ext.risk.coups <- ggplot(plot.predict.ext.risk.coups,
   scale_fill_manual(values=ath.palette("contention"), name=NULL, guide=FALSE) +
   labs(x="Political stability of neighbors", y="Predicted CSRE in following year") +
   theme_ath()
-plot.icrg.ext.risk.coups
+plot.ext.risk.coups
 
-fig.save.cairo(plot.icrg.ext.risk.coups, filename="1-icrg-ext-risk-coups",
+fig.save.cairo(plot.ext.risk.coups, filename="1-ext-risk-coups",
                width=5, height=3)
 
 #' ### Relative protests, violent/nonviolent
@@ -662,24 +663,36 @@ plot.predict.ext.protests.nonviolent <- augment(model.to.use,
 plot.predict.ext.protests <- bind_rows(plot.predict.ext.protests.violent,
                                        plot.predict.ext.protests.nonviolent)
 
-plot.icrg.ext.protests <- ggplot(plot.predict.ext.protests,
-                                   aes(x=protest.std, y=pred,
-                                       fill=protest.type,
-                                       colour=protest.type)) +
+plot.ext.protests <- ggplot(plot.predict.ext.protests,
+                            aes(x=protest.std, y=pred,
+                                fill=protest.type, colour=protest.type)) +
   geom_vline(xintercept=3, linetype="dotted", colour="grey50") +
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
   geom_line(size=1.5) +
   scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
   scale_fill_manual(values=ath.palette("palette1"), name=NULL, guide=FALSE) +
-  scale_x_continuous(labels=c("Less than normal\n(1)", "", "Normal\n(3)", "", 
-                              "More than normal\n(5)")) +
+  scale_x_continuous(labels=c("Less\n(1)", "", "Normal\n(3)", "", 
+                              "More\n(5)")) +
   labs(x="Relative protest activity", y="Predicted CSRE in following year") +
   theme_ath()
-plot.icrg.ext.protests
+plot.ext.protests
 
-fig.save.cairo(plot.icrg.ext.protests, filename="1-icrg-ext-protests",
+fig.save.cairo(plot.ext.protests, filename="1-ext-protests",
                width=5, height=3)
+
+
+#' ### Both together
+plot.ext.pred <- arrangeGrob(plot.ext.risk.coups + guides(col=guide_legend(nrow=2)), 
+                             grob.blank,
+                             plot.ext.protests + ylab(NULL), 
+                             nrow=1, widths=c(0.475, 0.05, 0.475))
+grid::grid.newpage()
+grid::grid.draw(plot.ext.pred)
+
+fig.save.cairo(plot.ext.pred, filename="1-ext-pred",
+               width=5, height=2.75)
+
 
 #' ## Reputation
 #' 
