@@ -761,7 +761,23 @@ plot.shaming <- ggplot(plot.predict.shaming,
 plot.shaming
 
 fig.save.cairo(plot.shaming, filename="1-shaming-pred",
-               width=5, height=3)
+               width=3, height=2.75)
+
+
+#' # Summary of hypotheses
+#+ message=FALSE, results="asis"
+hypotheses <- read_csv(file.path(PROJHOME, "Analysis", 
+                                 "ngo_regs_regime_stability", 
+                                 "hypothesis_summary.csv")) %>%
+  mutate_each(funs(str_replace(., "XXX", "\\\n")))
+
+caption <- "Summary of all hypotheses {#tbl:hypothesis-summary}"
+h.summary <- pandoc.table.return(hypotheses, keep.line.breaks=TRUE,
+                                 justify="lll", caption=caption, style="multiline")
+
+cat(h.summary)
+cat(h.summary, file=file.path(PROJHOME, "Output", "tables", 
+                              "1-hypothesis-summary.md"))
 
 
 #' # LNA-based case selection
