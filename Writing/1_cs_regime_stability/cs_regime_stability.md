@@ -218,18 +218,9 @@ Taken together, though these findings contradict my second hypothesis, they reve
 
 ## Shaming
 
-Finally, [@fig:coefs-shame] shows the relationship between reputational and shame-based factors and civil society regulations.
+Finally, in my third hypothesis, I posit that autocrats expand the regulatory environment for civil society in response to international shaming and condemnation of their regime increases. The evidence for this hypothesis is inconclusive, however. In the basic model, an increase in relative state-based shaming is associated with a lower CSRE index in the following year (β = −0.22; P(β \< 0) = 1), suggesting that autocrats respond to shaming by with additional restrictions. However, when accounting for regime-based characteristics such as time in office and the competitiveness of elections, this effect reverses, concluding that the CSRE improves in response to increase relative shaming (β = 0.11, P(β \> 0) = 0.95). [@fig:shaming-pred] shows this uncertainty and inconsistency across models, with the CSRE alternately improving and worsening depending on model specification. Given these findings, there is no support for or against H~3~. 
 
-![Reputational determinants of the civil society regulatory environment](../../Output/figures/1-coefs-shame.pdf){#fig:coefs-shame}
-
-When not controlling for any other factors, interstate shaming (as measured by the percent of all reported events that are categorized as either materially or verbally conflictual) appears to have a powerful negative relationship with civil society regulations. Higher proportions of conflictual interactions are negatively associated with the CSRE—at first glance, more shaming leads to more restrictions. After other factors are included in the model, though, this interstate shaming effect disappears. Similarly, the severity of interstate shaming is not significantly related to the CSRE.
-
-INGO-based shaming, on the other hand, does appear to have a significant relationship with civil society regulations. Higher proportions of INGO-led conflictual events lead to large and substantial improvements in the CSRE, perhaps indicating that INGOs may sometimes circumvent the boomerang model of activism, targeting recalcitrant regimes directly rather than working through a friendly state. The nature of the conflict appears to matter too—more severe types of INGO-led conflict are negatively associated with the CSRE, possibly demonstrating a need for more reticence in shaming campaigns (see [@fig:shame-severity-pred]).
-
-![Reputational determinants of the civil society regulatory environment](../../Output/figures/1-shame-severity-pred.pdf){#fig:shame-severity-pred}
-
-Given these findings, support for hypothesis 3 is once again mixed. Formal, high-level diplomatic shaming and conflict from other states does not appear to be associated with any changes in the regulatory environment for civil society. Conflict initiated by human rights INGOs against states, however, may have a positive relationship with the CSRE. It thus appears that authoritarian regimes are less responsive to diplomatic pressure and more responsive to INGO activism. It is important to note that much of this effect might be due to the fact that interstate shaming is too broad a variable—INGOs are more likely to clash with states over their treatment of civil society actors, condemning regimes for imprisoning activists or restricting freedom of assembly, while states clash with other states over a much wider range of issues (e.g. monetary policy, trade disputes, diplomatic rows, etc.). 
-
+![Predicted CSRE across range of possible levels of state-based shaming in basic and alternate models. All model covariates held at their means.](../../Output/figures/1-shaming-pred){#fig:shaming-pred}
 
 # Conclusion
 
