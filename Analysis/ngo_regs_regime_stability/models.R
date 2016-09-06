@@ -609,6 +609,7 @@ plot.ext.risk.coups <- ggplot(plot.predict.ext.risk.coups,
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
   geom_line(size=1) +
+  coord_cartesian(xlim=c(30, 90), ylim=c(0, 4.5)) +
   scale_colour_manual(values=ath.palette("contention"), name=NULL) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL, guide=FALSE) +
   labs(x="Political stability of neighbors", y="Predicted CSRE in following year") +
@@ -670,6 +671,7 @@ plot.ext.protests <- ggplot(plot.predict.ext.protests,
   geom_ribbon(aes(ymin=pred.lower, ymax=pred.upper),
               alpha=0.3, colour=NA) +
   geom_line(size=1) +
+  coord_cartesian(ylim=c(0, 4.5)) +
   scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
   scale_fill_manual(values=ath.palette("palette1"), name=NULL, guide=FALSE) +
   scale_x_continuous(labels=c("Less\n(1)", "", "Normal\n(3)", "", 
