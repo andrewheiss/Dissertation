@@ -80,7 +80,7 @@ bayesgazer.dcjw <- function(model, barrier.name) {
     filter(term == "value") %>%
     mutate(p.less0 = p.less0,
            Barrier = barrier.name) %>%
-    mutate(combined = sprintf("%.3f (%.3f)", estimate, std.error)) %>%
+    mutate(combined = sprintf("%.2f (%.2f)", estimate, std.error)) %>%
     select(Barrier, `Posterior median β (SD)` = combined,
            `P(β < 0)` = p.less0)
   
