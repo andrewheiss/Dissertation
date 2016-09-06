@@ -5,7 +5,7 @@ author:
   affiliation: Sanford School of Public Policy, Duke University
   email: andrew.heiss&#x40;duke.edu
 date: September 2016
-published: "Please download the latest version at [ingoresearch.org/files/csre-regime-stability.pdf](https://ingoresearch.org/files/cs-regime-stability.pdf)."
+published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
 abstract: >-
