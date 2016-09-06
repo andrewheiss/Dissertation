@@ -765,6 +765,8 @@ plot.shaming
 
 fig.save.cairo(plot.shaming, filename="1-shaming-pred",
                width=3, height=2.75)
+fig.save.cairo(plot.shaming, filename="1-shaming-pred-wide",
+               width=5, height=3)
 
 
 #' # Summary of hypotheses
