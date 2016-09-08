@@ -140,6 +140,10 @@ cows.autocracies %>% length()
 autocracies <- full.data %>%
   filter(cowcode %in% cows.autocracies)
 
+# Save for easier access later
+saveRDS(autocracies, file.path(PROJHOME, "Data", "data_processed",
+                               "autocracies.rds"))
+
 #' Map of final autocracies (hello Africa and Asia, basically):
 #' 
 df.autocracy.countries <- possible.countries %>%
