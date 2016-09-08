@@ -24,15 +24,12 @@ knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
                       options(width=120))  # For output
 
 library(printr)
+library(tidyverse)
 library(magrittr)
-library(dplyr)
 library(feather)
-library(tidyr)
-library(purrr)
 library(broom)
 library(lubridate)
 library(stringr)
-library(ggplot2)
 library(ggstance)
 library(gridExtra)
 library(scales)
