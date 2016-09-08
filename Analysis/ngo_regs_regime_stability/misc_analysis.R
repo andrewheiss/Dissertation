@@ -57,6 +57,13 @@ full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
 dcjw <- read_feather(file.path(PROJHOME, "Data", "data_processed",
                                "dcjw.feather"))
 
+# Load Robinson map projection
+countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                                     "countries110_robinson_ggmap.rds"))
+
+# All mappable countries
+possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
+
 my.seed <- 1234
 set.seed(my.seed)
 
@@ -144,14 +151,31 @@ cows.autocracies %>% length()
 autocracies <- full.data %>%
   filter(cowcode %in% cows.autocracies)
 
+#' Map of final autocracies (hello Africa and Asia, basically):
+#' 
+df.autocracy.countries <- possible.countries %>%
+  mutate(autocracy = id %in% unique(autocracies$iso3))
+  
+plot.autocracy.map <- ggplot(df.autocracy.countries,
+                             aes(fill=autocracy, map_id=id)) +
+  geom_map(map=countries.ggmap, size=0.15, colour="black") + 
+  expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
+  coord_equal() +
+  scale_fill_manual(values=c("#FFFFFF", "grey50"), na.value="#FFFFFF", guide=FALSE) +
+  theme_ath_map()
+plot.autocracy.map
+
+fig.save.cairo(plot.autocracy.map, filename="1-autocracies-map", 
+               width=5, height=3)
+
+#' Full list of autocracies:
+#' 
+#+ results="asis"
 autocracies.countries <- sort(unique(autocracies$country))
 
 autocracies.output <- matrix(c(autocracies.countries, rep(NA, 2)),
                              ncol=3, byrow=FALSE)
 
-#' Full list of autocracies:
-#' 
-#+ results="asis"
 caption <- "Countries identified as autocracies by either Geddes et. al or scoring less than zero in UDS {#tbl:autocracies}"
 tbl.autocracies <- pandoc.table.return(autocracies.output, caption=caption)
 cat(tbl.autocracies)
@@ -402,7 +426,8 @@ dcjw.time.agg1 <- dcjw.time.agg %>%
 
 p.dcjw.time.agg1 <- ggplot(dcjw.time.agg1, aes(x=year.num, y=value, colour=barrier.clean)) +
   geom_line(size=1) + 
-  labs(x=NULL, y="Average value", title="Legal barriers for NGOs in autocracies", 
+  labs(x=NULL, y="Average number of barriers", 
+       title="Legal barriers for NGOs in autocracies", 
        caption="Data source: Christensen and Weinstein, 2013") + 
   scale_color_manual(values=ath.palette("palette1"), name=NULL) +
   theme_ath()
