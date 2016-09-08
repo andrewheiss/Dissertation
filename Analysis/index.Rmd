@@ -14,6 +14,10 @@ output:
 - [Non-regression analysis](ngo_regs_regime_stability/misc_analysis.html)
 - [Models](ngo_regs_regime_stability/models.html)
 
+## Case studies of international aspect of CSRE
+
+- [LNA-based case selection](country_case_studies/case_selection.html)
+
 ## INGO survey
 
 - [Completion rates](ingo_survey/completion_rates.html)
