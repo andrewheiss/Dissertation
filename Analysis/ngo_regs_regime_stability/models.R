@@ -403,6 +403,11 @@ grid::grid.draw(correct_panel_size(plot.coefs))
 fig.save.cairo(correct_panel_size(plot.coefs), filename="1-coefs-bayes",
                width=6, height=4)
 
+# Save basic and alternate models for case selection analysis later
+saveRDS(filter(models.bayes, model.name %in% models.to.keep),
+        file.path(PROJHOME, "Data", "data_processed", "models_to_keep.rds"))
+
+
 #' ### Results for basic model (`lna.JGI.b`)
 #' 
 #+ results="asis"
