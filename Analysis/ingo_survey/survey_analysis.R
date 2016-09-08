@@ -1028,12 +1028,16 @@ plot.reg.effect.general.regime <- prodplot(df.reg.effect.general.regime,
   scale_fill_manual(values=ath.palette("regime"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="General restrictions, by regime type",
-       subtitle="Q4.17: Overall, how is your organization's work affected by government regulations in `target_country`?") +
+       subtitle="Q4.17: Overall, how is your organization's work affected by government regulations\nin `target_country`?") +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
 #+ fig.width=6, fig.height=4
 plot.reg.effect.general.regime
+
+fig.save.cairo(plot.reg.effect.general.regime + theme_ath(10), 
+               filename="3-restrictions-regime-type", 
+               width=6, height=4)
 
 reg.effect.general.regime.table <- survey.countries.clean %>%
   xtabs(~ Q4.17 + target.regime.type, .)
@@ -1062,12 +1066,16 @@ plot.reg.effect.general.issue <- prodplot(df.reg.effect.general.issue,
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   guides(fill=FALSE) +
   labs(title="General restrictions, by issue",
-       subtitle="Q4.17: Overall, how is your organization's work affected by government regulations in `target_country`?") +
+       subtitle="Q4.17: Overall, how is your organization's work affected by government regulations\nin `target_country`?") +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
 #+ fig.width=6, fig.height=4
 plot.reg.effect.general.issue
+
+fig.save.cairo(plot.reg.effect.general.issue + theme_ath(10), 
+               filename="3-restrictions-issue", 
+               width=6, height=4)
 
 reg.effect.general.issue.table <- survey.countries.clean %>%
   xtabs(~ Q4.17 + potential.contentiousness, .)
