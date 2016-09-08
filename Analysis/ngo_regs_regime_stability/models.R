@@ -31,18 +31,9 @@ library(rstanarm)
 library(scales)
 library(gridExtra)
 library(Cairo)
-library(pander)
 library(stargazer)
 library(countrycode)
 library(DT)
-
-panderOptions('table.split.table', Inf)
-panderOptions('table.split.cells', Inf)
-panderOptions('missing', '')
-panderOptions('big.mark', ',')
-panderOptions('digits', 2)
-panderOptions('round', 2)
-panderOptions('table.alignment.default', 'left')
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 

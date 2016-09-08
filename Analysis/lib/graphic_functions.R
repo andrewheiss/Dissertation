@@ -1,11 +1,15 @@
-library(dplyr)
-library(tidyr)
-library(purrr)
 library(broom)
 library(stringr)
-library(readr)
-library(ggplot2)
 library(ggstance)
+library(pander)
+
+panderOptions('table.split.table', Inf)
+panderOptions('table.split.cells', Inf)
+panderOptions('missing', '')
+panderOptions('big.mark', ',')
+panderOptions('digits', 2)
+panderOptions('round', 2)
+panderOptions('table.alignment.default', 'left')
 
 coef.names <- read_csv(file.path(PROJHOME, "Analysis", 
                                  "ngo_regs_regime_stability", 
