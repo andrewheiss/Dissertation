@@ -76,7 +76,7 @@ cases <- data_frame(cowcode = c(710, 651, 365, 663, 775, 705),
                     linetype = 1, alpha = 1, point.size = 1) %>%
   mutate(country.name = ifelse(cowcode == 365, "Russia", country.name))
 
-plot.data.sna.selection.b <- model.for.case.selection %>%
+plot.data.sna.selection <- model.for.case.selection %>%
   augment() %>%
   mutate(post.pred.fit = apply(posterior_predict(model.for.case.selection, 
                                                  seed=my.seed), 2, median)) %>%
@@ -97,9 +97,9 @@ plot.data.sna.selection.b <- model.for.case.selection %>%
          fill = factor(fill, levels=c(cases$fill, NA),
                        ordered=TRUE))
 
-plot.sna.selection.b <- ggplot(plot.data.sna.selection.b,
-                               aes(x=post.pred.fit, y=cs_env_sum.lead,
-                                   colour=colour)) +
+plot.sna.selection <- ggplot(plot.data.sna.selection,
+                             aes(x=post.pred.fit, y=cs_env_sum.lead,
+                                 colour=colour)) +
   geom_segment(x=-6, xend=6, y=-6, yend=6, colour="grey75", size=0.5) +
   geom_point(aes(alpha=alpha, size=point.size)) +
   # stat_ellipse(aes(linetype=linetype), type="norm", size=0.5) +
@@ -114,15 +114,103 @@ plot.sna.selection.b <- ggplot(plot.data.sna.selection.b,
   labs(x="Predicted CSRE", y="Actual CSRE") +
   coord_cartesian(xlim=c(-4, 4), ylim=c(-6, 6)) +
   theme_ath()
-plot.sna.selection.b
+plot.sna.selection
 
 #' ## Data for case studies
 #' 
-#' Better to look at this with the timelines though.
-#' 
-final.case.studies <- autocracies.modeled %>%
-  filter(cowcode %in% cases$cowcode) %>%
-  group_by(country) %>%
-  summarise_each(funs(mean = mean(., na.rm=TRUE)), one_of(vars.used))
+#' Calculate the average level of each variable used in the two models and the
+#' corresponding percentile to determine how low/high the value is compared to
+#' all other average countries. This isn't the most accurate way, since it
+#' doesn't account for time, but it's a good start. To create the final
+#' typological table of expected outcomes, [consult the timelines for each
+#' country](timelines.html).
+#'
+# Get all variables from both models
+both.models <- filter(models.bayes, model.name %in% c("lna.JGI.b", "lna.EHI.b"))$model
+all.column.names <- sapply(1:length(both.models),
+                           function(x) colnames(both.models[[x]]$model)) %>%
+  unlist() %>% Filter(function(x) !str_detect(x, "as\\.factor"), .) %>% unique()
 
-datatable(final.case.studies)
+# Calculate summary statistics and rankings/percentiles for all countries
+var.summaries.rankings <- autocracies %>%
+  group_by(country) %>%
+  summarise_at(funs(XXmin = min(., na.rm=TRUE),
+                    XXmax = max(., na.rm=TRUE),
+                    XXmean = mean(., na.rm=TRUE),
+                    XXsd = sd(., na.rm=TRUE)),
+               .cols=vars(one_of(all.column.names))) %>%
+  mutate_at(funs(percentile = cume_dist(.),  # basically ecdf()
+                 pct_rank = percent_rank(.)),
+            .cols=vars(dplyr::contains("mean"))) %>%
+  gather(key, value, -country) %>%
+  separate(key, c("term", "key"), sep="_XX")
+
+# Create really really wide dataframe with one row per case and all summary
+# variables as columns
+case.studies <- var.summaries.rankings %>%
+  filter(country %in% cases$country.name) %>%
+  unite(bloop, term, key) %>%
+  spread(bloop, value)
+
+# Only look at the percentile columns
+final.case.studies <- case.studies %>%
+  select(country, dplyr::contains("percentile")) %>%
+  mutate_at(funs(round(., 2)), .cols=vars(-country))
+
+# Remove the _mean_percentile string from each column name so I can use
+# one_of() to select the appropriate columns (since there's no
+# starts_with_one_of() verb in dplyr)
+final.case.studies.temp <- final.case.studies %>%
+  rename_(.dots = setNames(colnames(.), 
+                           str_replace(colnames(.), "_mean_percentile", "")))
+
+#' ### Actual and predicted CSRE
+#' 
+# TODO: Get predicted CSRE too
+plot.data.sna.selection %>%
+  select(country, cs_env_sum.lead, post.pred.fit) %>%
+  filter(country %in% cases$country.name) %>%
+  group_by(country) %>%
+  summarise_at(funs(mean = mean(., na.rm=TRUE)), .cols=vars(-country)) %>%
+  left_join(select(final.case.studies.temp, country,
+                   cs_env_sum.lead.full.data = cs_env_sum.lead),
+            by="country") %>%
+  datatable() %>% formatRound(2:4)
+
+#' ### Internal risk
+#' 
+final.case.studies.temp %>%
+  select(country, one_of(filter(coef.names, category == "Internal")$term)) %>%
+  datatable()
+
+#' ### External risk
+#' 
+final.case.studies.temp %>%
+  select(country, one_of(filter(coef.names, category == "External")$term)) %>%
+  datatable()
+
+#' ### International shaming
+#' 
+final.case.studies.temp %>%
+  select(country, one_of(filter(coef.names, category == "Shaming")$term)) %>%
+  datatable()
+
+
+#' ## Expected and actual outcomes
+#' 
+#' Based on this table and the timelines, here's the typological table of
+#' expected outcomes for each case study country:
+#' 
+#+ message=FALSE
+expected.outcomes <- read_csv(file.path(PROJHOME, "Analysis", 
+                                        "country_case_studies", 
+                                        "expected_outcomes.csv"))
+
+caption <- "Expected and actual outcomes {#tbl:expected-outcomes}"
+outcomes <- pandoc.table.return(expected.outcomes, keep.line.breaks=TRUE,
+                                justify="llllll", caption=caption, style="multiline")
+
+#+ results="asis"
+cat(outcomes)
+cat(outcomes, file=file.path(PROJHOME, "Output", "tables", 
+                             "2-expected-outcomes.md"))
