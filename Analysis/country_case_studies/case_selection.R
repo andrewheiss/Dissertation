@@ -66,7 +66,8 @@ autocracies.modeled <- autocracies %>%
   filter(year.num > 1994) %>%
   select(rowname, in.model, cowcode, country, year.num, one_of(vars.used))
 
-datatable(autocracies.modeled)
+datatable(autocracies.modeled) %>%
+  formatRound(vars.used)
 
 #' ## Predicted vs. actual CSRE
 cases <- data_frame(cowcode = c(710, 651, 365, 663, 775, 705),
@@ -154,8 +155,7 @@ case.studies <- var.summaries.rankings %>%
 
 # Only look at the percentile columns
 final.case.studies <- case.studies %>%
-  select(country, dplyr::contains("percentile")) %>%
-  mutate_at(funs(round(., 2)), .cols=vars(-country))
+  select(country, dplyr::contains("percentile"))
 
 # Remove the _mean_percentile string from each column name so I can use
 # one_of() to select the appropriate columns (since there's no
@@ -179,21 +179,23 @@ plot.data.sna.selection %>%
 
 #' ### Internal risk
 #' 
+#+ warning=FALSE
 final.case.studies.temp %>%
   select(country, one_of(filter(coef.names, category == "Internal")$term)) %>%
-  datatable()
+  datatable() %>% formatRound(2:6)
 
 #' ### External risk
 #' 
 final.case.studies.temp %>%
   select(country, one_of(filter(coef.names, category == "External")$term)) %>%
-  datatable()
+  datatable() %>% formatRound(2:5)
 
 #' ### International shaming
 #' 
+#+ warning=FALSE
 final.case.studies.temp %>%
   select(country, one_of(filter(coef.names, category == "Shaming")$term)) %>%
-  datatable()
+  datatable() %>% formatRound(2)
 
 
 #' ## Expected and actual outcomes
