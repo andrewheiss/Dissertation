@@ -66,7 +66,7 @@ autocracies.modeled <- autocracies %>%
   filter(year.num > 1994) %>%
   select(rowname, in.model, cowcode, country, year.num, one_of(vars.used))
 
-datatable(autocracies.modeled) %>%
+datatable(autocracies.modeled, extensions="Responsive") %>%
   formatRound(vars.used)
 
 #' ## Predicted vs. actual CSRE
@@ -167,35 +167,55 @@ final.case.studies.temp <- final.case.studies %>%
 #' ### Actual and predicted CSRE
 #' 
 # TODO: Get predicted CSRE too
-plot.data.sna.selection %>%
+csre.pred.table <- plot.data.sna.selection %>%
   select(country, cs_env_sum.lead, post.pred.fit) %>%
   filter(country %in% cases$country.name) %>%
   group_by(country) %>%
   summarise_at(funs(mean = mean(., na.rm=TRUE)), .cols=vars(-country)) %>%
   left_join(select(final.case.studies.temp, country,
                    cs_env_sum.lead.full.data = cs_env_sum.lead),
-            by="country") %>%
-  datatable() %>% formatRound(2:4)
+            by="country") 
+
+csre.pred.table %>%
+  datatable() %>% formatRound(2:4) %>%
+  formatStyle("cs_env_sum.lead_mean", 
+              background=styleColorBarCentered(csre.pred.table$cs_env_sum.lead_mean, 
+                                               "#FF4136", "#2ECC40")) %>%
+  formatStyle("post.pred.fit_mean", 
+              background=styleColorBar(csre.pred.table$post.pred.fit_mean,
+                                       "#0074D9", angle=-90)) %>%
+  formatStyle("cs_env_sum.lead.full.data", 
+              background=styleColorBar(csre.pred.table$cs_env_sum.lead.full.data,
+                                       "#0074D9", angle=-90))
 
 #' ### Internal risk
 #' 
 #+ warning=FALSE
-final.case.studies.temp %>%
-  select(country, one_of(filter(coef.names, category == "Internal")$term)) %>%
-  datatable() %>% formatRound(2:6)
+percentile.table.internal <- final.case.studies.temp %>%
+  select(country, one_of(filter(coef.names, category == "Internal")$term))
+
+percentile.table.internal %>%
+  datatable() %>% formatRound(2:6) %>%
+  formatStyle(2:6, background=styleColorBar(0:1, "#0074D9", angle=-90))
 
 #' ### External risk
 #' 
-final.case.studies.temp %>%
-  select(country, one_of(filter(coef.names, category == "External")$term)) %>%
-  datatable() %>% formatRound(2:5)
+precentile.table.external <- final.case.studies.temp %>%
+  select(country, one_of(filter(coef.names, category == "External")$term))
+
+precentile.table.external %>%
+  datatable() %>% formatRound(2:5) %>%
+  formatStyle(2:5, background=styleColorBar(0:1, "#0074D9", angle=-90))
 
 #' ### International shaming
 #' 
 #+ warning=FALSE
-final.case.studies.temp %>%
-  select(country, one_of(filter(coef.names, category == "Shaming")$term)) %>%
-  datatable() %>% formatRound(2)
+percentile.table.shaming <- final.case.studies.temp %>%
+  select(country, one_of(filter(coef.names, category == "Shaming")$term)) 
+
+percentile.table.shaming %>%
+  datatable() %>% formatRound(2) %>%
+  formatStyle(2, background=styleColorBar(0:1, "#0074D9", angle=-90))
 
 
 #' ## Expected and actual outcomes

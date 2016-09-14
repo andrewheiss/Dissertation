@@ -236,3 +236,12 @@ stat_chull <- function(mapping = NULL, data = NULL, geom = "polygon",
     params = list(na.rm = na.rm, ...)
   )
 }
+
+# Add zero-based positive/negative color bars in DT::datatable
+# Adapted from http://stackoverflow.com/a/33524422/120898
+styleColorBarCentered <- function(column, color.negative, color.positive) {
+  max_val <- max(abs(column))
+  JS(sprintf("isNaN(parseFloat(value)) || value < 0 ? 'linear-gradient(90deg, transparent, transparent ' + (50 + value/%s * 50) + '%%, %s ' + (50 + value/%s * 50) + '%%,%s  50%%,transparent 50%%)': 'linear-gradient(90deg, transparent, transparent 50%%, %s 50%%, %s ' + (50 + value/%s * 50) + '%%, transparent ' + (50 + value/%s * 50) + '%%)'",
+             max_val, color.negative, max_val, color.negative, 
+             color.positive, color.positive, max_val, max_val))
+} 
