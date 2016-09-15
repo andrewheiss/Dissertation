@@ -254,9 +254,9 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
   
   plot.misc <- ggplot() +
     geom_segment(data=df.leaders, aes(x=Date_start, xend=Date_end, 
-                                      y=0.5, yend=0.5, colour=president), size=4) +
+                                      y=0.5, yend=0.5, colour=president), size=3) +
     geom_rect(data=df.wars, aes(x=NULL, y=NULL, xmin=Date_start, xmax=Date_end, 
-                             ymin=0, ymax=0.2, fill=war)) + 
+                             ymin=0, ymax=0.25, fill=war)) + 
     geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
                size=0.5, colour="grey50", linetype="dotted") +
     scale_colour_manual(values=ath.palette("leaders"), name=NULL) +
