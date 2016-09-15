@@ -181,9 +181,10 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
              hjust=0, vjust="top", size=2.5, alpha=0.8,
              colour="black", fill="grey70",
              family="Source Sans Pro Semibold",
-             label="Internal stability") +
+             label="Internal political stability") +
     labs(x=NULL, y=NULL) + 
-    coord_cartesian(xlim=ymd(c(start.date, end.date))) +
+    coord_cartesian(xlim=ymd(c(start.date, end.date)),
+                    ylim=c(20, 70)) +
     theme_ath()
   
   plot.icrg.external <- ggplot(df.country, aes(x=ymd(year.actual), 
