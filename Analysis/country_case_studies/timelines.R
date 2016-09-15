@@ -321,24 +321,48 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
 
 #' ## Egypt
 #+ warning=FALSE, fig.width=6, fig.height=7.5
-grid::grid.draw(plot.timeline("EGY"))
+country <- "EGY"
+grid::grid.draw(plot.timeline(country))
+fig.save.cairo(plot.timeline(country), 
+               filename=sprintf("2-timeline-%s", tolower(country)),
+               width=6, height=7.5)
 
 #' ## Jordan
 #+ warning=FALSE, fig.width=6, fig.height=7.5
-grid::grid.draw(plot.timeline("JOR"))
+country <- "JOR"
+grid::grid.draw(plot.timeline(country))
+fig.save.cairo(plot.timeline(country), 
+               filename=sprintf("2-timeline-%s", tolower(country)),
+               width=6, height=7.5)
 
 #' ## China
 #+ warning=FALSE, fig.width=6, fig.height=7.5
-grid::grid.draw(plot.timeline("CHN"))
+country <- "CHN"
+grid::grid.draw(plot.timeline(country))
+fig.save.cairo(plot.timeline(country), 
+               filename=sprintf("2-timeline-%s", tolower(country)),
+               width=6, height=7.5)
 
 #' ## Myanmar
 #+ warning=FALSE, fig.width=6, fig.height=7.5
-grid::grid.draw(plot.timeline("MMR"))
+country <- "MMR"
+grid::grid.draw(plot.timeline(country))
+fig.save.cairo(plot.timeline(country), 
+               filename=sprintf("2-timeline-%s", tolower(country)),
+               width=6, height=7.5)
 
 #' ## Russia
 #+ warning=FALSE, fig.width=6, fig.height=7.5
-grid::grid.draw(plot.timeline("RUS"))
+country <- "RUS"
+grid::grid.draw(plot.timeline(country))
+fig.save.cairo(plot.timeline(country), 
+               filename=sprintf("2-timeline-%s", tolower(country)),
+               width=6, height=7.5)
 
 #' ## Kazakhstan
 #+ warning=FALSE, fig.width=6, fig.height=7.5
-grid::grid.draw(plot.timeline("KAZ"))
+country <- "KAZ"
+grid::grid.draw(plot.timeline(country))
+fig.save.cairo(plot.timeline(country), 
+               filename=sprintf("2-timeline-%s", tolower(country)),
+               width=6, height=7.5)
