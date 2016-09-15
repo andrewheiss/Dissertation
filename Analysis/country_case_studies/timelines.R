@@ -128,6 +128,19 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
                                           "protests.nonviolent.std_wt"),
                                  labels=c("Violent", "Nonviolent")))
   
+  df.coups <- df.country %>%
+    select(year.actual, coups.activity.bin_sum_nb) %>%
+    filter(!is.na(year.actual)) %>%
+    mutate(coup.activity = case_when(
+      .$coups.activity.bin_sum_nb == 0 ~ NA_real_,
+      .$coups.activity.bin_sum_nb == 1 ~ 45,
+      .$coups.activity.bin_sum_nb == 2 ~ 45
+    )) %>%
+    mutate(point.size = case_when(
+      .$coups.activity.bin_sum_nb == 1 ~ 1,
+      .$coups.activity.bin_sum_nb == 2 ~ 2.25
+    ))
+  
   df.leaders <- leaders.cases %>%
     filter(ISO3 == ISO) %>%
     mutate(president = factor(president, levels=unique(president), ordered=TRUE))
@@ -192,16 +205,18 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     geom_line(size=1) + 
     geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
                size=0.5, colour="grey50", linetype="dotted") +
+    geom_point(data=df.coups, aes(y=coup.activity, size=point.size)) +
     annotate("label", x=ymd("1995-01-01"), y=Inf, 
              hjust=0, vjust="top", size=2.5, alpha=0.8,
              colour="black", fill="grey70",
              family="Source Sans Pro Semibold",
-             label="Weighted neighbor political risk") +
+             label="Political risk in neigbhors ( • = coup activity)") +
     labs(x=NULL, y=NULL) +
+    scale_size_identity(guide="none") +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
                     ylim=c(40, 90)) +
     theme_ath()
-  
+
   plot.protests <- ggplot(df.protests, aes(x=year.actual, y=value, linetype=protest.type)) +
     geom_hline(yintercept=3, colour="grey50") +
     geom_line(size=1) + 
