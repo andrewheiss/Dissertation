@@ -5,34 +5,38 @@ Date,ISO3,law,note,include_plot,plot_y,plot_h
 2006-01-10,RUS,Federal Law No. 18-FZ,,1,1.5,center
 2012-07-20,RUS,Foreign Agents Law,,1,1,center
 2015-05-19,RUS,Undesirable Organizations Law,,1,2,right
-2002-01-01,EGY,Law on Associations andXXXFoundations (no. 84/2002),,1,1,right
-2011-01-31,EGY,Draft NGO law announced,,1,2,right
-2013-11-24,EGY,"Law on the Right to Public Meetings, ProcessionsXXXand Peaceful Demonstrations (no. 107/2013)",,1,0.75,right
-2014-09-01,EGY,Amendments to Penal Code Article 78,,1,3,center
-2015-07-01,EGY,Draft NGO law finalized,,1,2,center
-1998-10-25,CHN,"Regulations on the Registration and Management of Social Organizations, Civil Non-Enterprise Institutions and Public Institutions",,1,1,left
-1999-06-28,CHN,Public Welfare Donations Law,,1,1,center
-2000-04-10,CHN,Provisional Measures Regarding the Management of Social Welfare Organizations,,1,1,center
-2001-04-28,CHN,Trust Law of People’s Republic of China,,1,1,center
-2004-03-08,CHN,Regulations on the Management of Foundations,,1,1,center
-2004-09-01,CHN,Accounting System for Nonprofit Organizations,,1,1,center
-2004-06-11,CHN,Ruling on tax exemption of foreign enterprises,,1,1,center
-2006-01-12,CHN,Measures for the Information Disclosure of Foundations and Measures for Annual Inspection of Foundations,,1,1,center
-2009-12-25,CHN,Ruling on foreign funding given to domestic institutions,,1,1,center
-2015-07-01,CHN,National Security Law,,1,1,center
-2015-12-01,CHN,Counterterrorism Law,,1,1,center
-2016-03-16,CHN,Charity Law,,1,1,center
-2016-04-28,CHN,Overseas NGO Law,,1,1,right
-2011-01-01,MMR,Law on Peaceful Assembly and Procession,,1,1,left
-2014-07-20,MMR,Association Registration Law,,1,1,right
+2002-01-01,EGY,Law on Associations andXXXFoundations (no. 84/2002),,1,1,center
+2011-01-31,EGY,Draft NGO law announced,,1,1.625,right
+2013-11-24,EGY,Anti-protest legislation (no. 107/2013),"Law on the Right to Public Meetings, Processions, and Peaceful Demonstrations (no. 107/2013)",1,0.75,right
+2014-09-01,EGY,Amendments to Penal Code Article 78,,1,2.5,right
+2015-07-01,EGY,Draft NGO law finalized,,1,1.625,center
+1998-10-25,CHN,"Registration and ManagementXXXof SAs, CNIs, and PIs",,1,1.15,center
+1999-06-28,CHN,Public Welfare Donations Law,,1,2.5,center
+2000-04-10,CHN,,Provisional Measures Regarding the Management of Social Welfare Organizations,1,,center
+2001-04-28,CHN,,Trust Law of People’s Republic of China,1,,
+2004-03-08,CHN,Regulations on the Management of Foundations,,0,,left
+2004-03-08,CHN,"Regulations on foundations (2004, 2006), foreignXXXenterprises (2004), and foreign funding (2009)",,1,1.15,left
+2004-09-01,CHN,Accounting System for Nonprofit Organizations,,0,,
+2004-06-11,CHN,,Ruling on tax exemption of foreign enterprises,1,,left
+2006-01-12,CHN,,Measures for the Information Disclosure of Foundations and Measures for Annual Inspection of Foundations,1,,center
+2009-12-25,CHN,,Foreign funding to domestic institutions,1,,center
+2015-07-01,CHN,National Security Law,,0,0.75,center
+2015-12-01,CHN,Counterterrorism Law,,0,2.5,center
+2015-09-01,CHN,National Security and Counterterrorism Laws,,1,2.5,right
+2016-03-16,CHN,Charity Law,,0,1.625,center
+2016-04-28,CHN,Overseas NGO Law,,0,0.75,center
+2016-04-01,CHN,Charity andXXXOverseas NGO Laws,,1,1.15,center
+2011-01-01,MMR,Law on Peaceful Assembly and Procession,,1,1,center
+2014-07-20,MMR,Association Registration Law,,1,2.25,center
 1966-01-01,JOR,Law on Societies and Social Bodies (Law 33 of 1966),,0,,
-2007-04-24,JOR,Non-Profit Companies Regulation,,1,1,left
-2008-01-01,JOR,Law on Societies (Law 51 of 2008),,1,1,center
-2009-01-01,JOR,Law Amending the Law on Societies (Law 22 of 2009),,1,1,right
-2016-03-17,JOR,Draft amendments to the 2008 Law No. 51,,1,1,right
+2007-04-24,JOR,Non-Profit Companies Regulation,,1,1,right
+2008-01-01,JOR,Law on Societies (Law 51 of 2008),,1,1,left
+2009-01-01,JOR,Law Amending the Law onXXXSocieties (Law 22 of 2009),,1,2.25,right
+2016-03-17,JOR,Draft amendments toXXXLaw 51 of 2008,,1,2.25,right
 1996-05-31,KAZ,Law on Public Associations,,1,1,left
-2001-01-16,KAZ,Law on Noncommerical Organizations,,1,1,center
-2012-01-12,KAZ,Amendments to the law on Public Associations,,1,1,center
-2012-04-27,KAZ,Amendments to the law on Noncommerical Organizations,,1,1,center
+2001-01-16,KAZ,Law on Noncommercial Organizations,,1,2.25,center
+2012-01-12,KAZ,Amendments to the law on Public Associations,,0,,
+2012-04-27,KAZ,Amendments to the law on Noncommercial Organizations,,0,,
+2012-03-01,KAZ,Amendments to the laws on Public AssociationsXXXand Noncommercial Organizations,,1,1,right
 2015-11-16,KAZ,Law on Charity,,1,1,center
-2015-12-01,KAZ,Rules for Providing Information by CSOs,,1,1,right
+2015-12-01,KAZ,Rules for Providing Information by CSOs,,1,2.25,right

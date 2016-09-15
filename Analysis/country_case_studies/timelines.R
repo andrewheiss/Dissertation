@@ -280,11 +280,11 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
                aes(x=Date, y=plot_y, label=law, hjust=plot_h),
                family="Source Sans Pro Semibold", size=2.5,
                fill="grey30", colour="white", label.padding=unit(0.3, "lines")) +
-    geom_point(size=3, colour="grey30") +
+    geom_point(size=2, colour="grey30") +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
-                    ylim=c(-1, 3)) +
+                    ylim=c(-0.5, 3)) +
     labs(x=NULL, y=NULL) +
-    theme_ath() + 
+    theme_ath() +
     theme(panel.grid.major=element_blank(),
           panel.grid.minor=element_blank(),
           axis.text=element_blank())
@@ -302,7 +302,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
   # Adjust panel sizes
   # via http://stackoverflow.com/a/24333504/120898
   panels <- plot.timeline$layout$t[grep("panel", plot.timeline$layout$name)]
-  plot.timeline$heights[panels] <- unit(c(0.9, 1, 1, 1, 1, 1, 1, 0.15), "null")
+  plot.timeline$heights[panels] <- unit(c(1.3, 1, 1, 1, 1, 0.8, 0.8, 0.15), "null")
   
   # All done!
   return(plot.timeline)
