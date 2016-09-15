@@ -226,7 +226,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
              hjust=0, vjust="top", size=2.5, alpha=0.8,
              colour="black", fill="grey70",
              family="Source Sans Pro Semibold",
-             label="Protest activity in neighbors (dotted = nonviolent)") +
+             label="Protest activity in neighbors (dashed = nonviolent)") +
     labs(x=NULL, y=NULL) + 
     scale_linetype_manual(values=c("solid", "21"), guide=FALSE) +
     scale_y_continuous(labels=c("Less", "Normal", "More"),
