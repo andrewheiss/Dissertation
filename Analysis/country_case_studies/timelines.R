@@ -1,3 +1,27 @@
+#' ---
+#' title: "Case study timelines"
+#' author: "Andrew Heiss"
+#' date: "`r format(Sys.time(), '%B %e, %Y')`"
+#' output: 
+#'   html_document: 
+#'     css: ../html/fixes.css
+#'     code_folding: hide
+#'     toc: yes
+#'     toc_float: true
+#'     toc_depth: 4
+#'     highlight: pygments
+#'     theme: cosmo
+#'     self_contained: no
+#'     includes:
+#'       after_body: ../html/add_home_link.html
+#' ---
+
+#+ load_data_libraries, message=FALSE
+knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
+                      tidy.opts=list(width.cutoff=120),  # For code
+                      options(width=120))  # For output
+
+# Load libraries
 library(dplyr)
 library(tidyr)
 library(readr)
@@ -12,15 +36,21 @@ library(Cairo)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
+# General settings
+my.seed <- 1234
+set.seed(my.seed)
+
 # Countries to plot
-cases <- c("EGY", "CHN", "RUS")
+cases <- c("EGY", "JOR", "CHN", "MMR", "RUS", "KAZ")
 
 
 # -----------
 # Load data
 # -----------
 icrg.monthly <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                       "icrg_monthly.feather"))
+                                       "icrg_monthly.feather")) %>%
+  filter(Country != "USSR")
+
 full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
                                     "full_data.feather"))
 
@@ -43,19 +73,41 @@ dcjw <- read_feather(file.path(PROJHOME, "Data", "data_processed",
 #                                         "leaders_archigos.csv"))
 
 leaders.cases <- read_csv(file.path(PROJHOME, "Data", "data_base",
-                                    "cases_presidents.csv")) %>%
+                                    "cases_presidents.csv"),
+                          col_types=cols(
+                            ISO3 = col_character(),
+                            Date_start = col_date(format = ""),
+                            Date_end = col_date(format = ""),
+                            president = col_character()
+                          )) %>%
   mutate(Date_start = ymd(Date_start), Date_end = ymd(Date_end)) %>%
   arrange(ISO3, Date_start)
 
 laws.cases <- read_csv(file.path(PROJHOME, "Data", "data_base", 
-                                 "cases_ngo_laws.csv")) %>%
+                                 "cases_ngo_laws.csv"),
+                       col_types=cols(
+                         Date = col_date(format = ""),
+                         ISO3 = col_character(),
+                         law = col_character(),
+                         note = col_character(),
+                         include_plot = col_integer(),
+                         plot_y = col_double(),
+                         plot_h = col_character()
+                       )) %>%
   filter(include_plot == 1) %>%
   mutate(Date = ymd(Date),
          law = gsub("XXX", "\n", law)) %>%
   arrange(ISO3, Date)
 
 wars.cases <- read_csv(file.path(PROJHOME, "Data", "data_base", 
-                                 "cases_wars.csv")) %>%
+                                 "cases_wars.csv"),
+                       col_types=cols(
+                         ISO3 = col_character(),
+                         Date_start = col_date(format = ""),
+                         Date_end = col_date(format = ""),
+                         war = col_character(),
+                         note = col_character()
+                       )) %>%
   mutate(Date_start = ymd(Date_start), Date_end = ymd(Date_end)) %>%
   arrange(ISO3, Date_start)
 
@@ -65,7 +117,16 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     filter(iso3 == ISO)
   
   df.icrg <- icrg.monthly %>%
-    filter(iso == ISO, !is.na(icrg.internal))
+    filter(iso == ISO)
+  
+  df.protests <- df.country %>%
+    select(year.actual, protests.violent.std_wt, protests.nonviolent.std_wt) %>%
+    gather(protest.type, value, -year.actual) %>%
+    filter(!is.nan(value)) %>%
+    mutate(protest.type = factor(protest.type, 
+                                 levels=c("protests.violent.std_wt", 
+                                          "protests.nonviolent.std_wt"),
+                                 labels=c("Violent", "Nonviolent")))
   
   df.leaders <- leaders.cases %>%
     filter(ISO3 == ISO) %>%
@@ -83,21 +144,46 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     geom_line(size=1) + 
     geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
                size=0.5, colour="grey50", linetype="dotted") +
-    labs(x=NULL, y="CSRE") + 
+    annotate("label", x=ymd("1995-01-01"), y=Inf, 
+             hjust=0, vjust="top", size=2.5, alpha=0.8,
+             colour="black", fill="grey70",
+             family="Source Sans Pro Semibold",
+             label="Civil Society Regulatory Environment") +
+    labs(x=NULL, y=NULL) + 
     scale_y_continuous(breaks=c(-2.5, 0, 2.5)) +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
                     ylim=c(-4, 4)) +
     theme_ath()
   
-  plot.icrg.internal <- ggplot(df.icrg, 
-                               aes(x=ymd(Date), y=icrg.internal)) +
+  plot.icrg.govt.stab <- ggplot(df.icrg, 
+                                aes(x=ymd(Date), y=icrg.stability)) +
     geom_line(size=1) + 
     geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
                size=0.5, colour="grey50", linetype="dotted") +
-    labs(x=NULL, y="Internal risk") + 
+    annotate("label", x=ymd("1995-01-01"), y=Inf, 
+             hjust=0, vjust="top", size=2.5, alpha=0.8,
+             colour="black", fill="grey70",
+             family="Source Sans Pro Semibold",
+             label="Government stability") +
+    labs(x=NULL, y=NULL) + 
     scale_y_continuous(breaks=c(0, 3, 6, 9, 12)) +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
                     ylim=c(0, 12)) +
+    theme_ath()
+
+  plot.icrg.internal.stab <- ggplot(df.icrg, 
+                                    aes(x=ymd(Date),
+                                        y=icrg.pol.risk.internal.nostab.scaled)) +
+    geom_line(size=1) + 
+    geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
+               size=0.5, colour="grey50", linetype="dotted") +
+    annotate("label", x=ymd("1995-01-01"), y=Inf, 
+             hjust=0, vjust="top", size=2.5, alpha=0.8,
+             colour="black", fill="grey70",
+             family="Source Sans Pro Semibold",
+             label="Internal stability") +
+    labs(x=NULL, y=NULL) + 
+    coord_cartesian(xlim=ymd(c(start.date, end.date))) +
     theme_ath()
   
   plot.icrg.external <- ggplot(df.country, aes(x=ymd(year.actual), 
@@ -105,9 +191,32 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     geom_line(size=1) + 
     geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
                size=0.5, colour="grey50", linetype="dotted") +
-    labs(x=NULL, y="Weighted neighbor political risk") +
+    annotate("label", x=ymd("1995-01-01"), y=Inf, 
+             hjust=0, vjust="top", size=2.5, alpha=0.8,
+             colour="black", fill="grey70",
+             family="Source Sans Pro Semibold",
+             label="Weighted neighbor political risk") +
+    labs(x=NULL, y=NULL) +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
-                    ylim=c(45, 90)) +
+                    ylim=c(40, 90)) +
+    theme_ath()
+  
+  plot.protests <- ggplot(df.protests, aes(x=year.actual, y=value, linetype=protest.type)) +
+    geom_hline(yintercept=3, colour="grey50") +
+    geom_line(size=1) + 
+    geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
+               size=0.5, colour="grey50", linetype="dotted") +
+    annotate("label", x=ymd("1995-01-01"), y=Inf, 
+             hjust=0, vjust="top", size=2.5, alpha=0.8,
+             colour="black", fill="grey70",
+             family="Source Sans Pro Semibold",
+             label="Protest activity in neighbors (dotted = nonviolent)") +
+    labs(x=NULL, y=NULL) + 
+    scale_linetype_manual(values=c("solid", "21"), guide=FALSE) +
+    scale_y_continuous(labels=c("Less", "Normal", "More"),
+                       breaks=c(1, 3, 5)) +
+    coord_cartesian(xlim=ymd(c(start.date, end.date)),
+                    ylim=c(1, 5)) +
     theme_ath()
   
   plot.shaming <- ggplot(df.country, aes(x=year.actual, y=shaming.states.std)) +
@@ -115,8 +224,14 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     geom_line(size=1) + 
     geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
                size=0.5, colour="grey50", linetype="dotted") +
-    labs(x=NULL, y="Relative shaming by states") + 
-    scale_y_continuous(labels=c("1\n(less)", 2, "3\n(normal)", 4, "5\n(more)")) +
+    annotate("label", x=ymd("1995-01-01"), y=Inf, 
+             hjust=0, vjust="top", size=2.5, alpha=0.8,
+             colour="black", fill="grey70",
+             family="Source Sans Pro Semibold",
+             label="Relative shaming by states") +
+    labs(x=NULL, y=NULL) + 
+    scale_y_continuous(labels=c("Less", "Normal", "More"),
+                       breaks=c(1, 3, 5)) +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
                     ylim=c(1, 5)) +
     theme_ath()
@@ -161,28 +276,53 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
   # Combine all the plots
   plot.timeline <- rbind(ggplotGrob(plot.laws),
                          ggplotGrob(plot.csre),
-                         ggplotGrob(plot.icrg.internal),
+                         ggplotGrob(plot.icrg.govt.stab),
+                         ggplotGrob(plot.icrg.internal.stab),
                          ggplotGrob(plot.icrg.external),
+                         ggplotGrob(plot.protests),
                          ggplotGrob(plot.shaming),
                          ggplotGrob(plot.misc))
   
   # Adjust panel sizes
   # via http://stackoverflow.com/a/24333504/120898
   panels <- plot.timeline$layout$t[grep("panel", plot.timeline$layout$name)]
-  plot.timeline$heights[panels] <- unit(c(0.9, 1, 1, 1, 1, 0.15), "null")
+  plot.timeline$heights[panels] <- unit(c(0.9, 1, 1, 1, 1, 1, 1, 0.15), "null")
   
   # All done!
   return(plot.timeline)
 }
 
-plot.country <- function(country) {
-  p.timeline <- plot.timeline(country)
-  
-  # grid::grid.draw(p.timeline)
-  fig.save.cairo(p.timeline, filename=sprintf("timeline-%s", tolower(country)),
-                 width=6, height=7.5)
-  
-  return(TRUE)
-}
+# plot.country <- function(country) {
+#   p.timeline <- plot.timeline(country)
+#   
+#   fig.save.cairo(p.timeline, filename=sprintf("timeline-%s", tolower(country)),
+#                  width=6, height=7.5)
+#   
+#   return(TRUE)
+# }
+# 
+# suppressWarnings(sapply(cases, FUN=plot.country))
 
-suppressWarnings(sapply(cases, FUN=plot.country))
+#' ## Egypt
+#+ warning=FALSE, fig.width=6, fig.height=7.5
+grid::grid.draw(plot.timeline("EGY"))
+
+#' ## Jordan
+#+ warning=FALSE, fig.width=6, fig.height=7.5
+grid::grid.draw(plot.timeline("JOR"))
+
+#' ## China
+#+ warning=FALSE, fig.width=6, fig.height=7.5
+grid::grid.draw(plot.timeline("CHN"))
+
+#' ## Myanmar
+#+ warning=FALSE, fig.width=6, fig.height=7.5
+grid::grid.draw(plot.timeline("MMR"))
+
+#' ## Russia
+#+ warning=FALSE, fig.width=6, fig.height=7.5
+grid::grid.draw(plot.timeline("RUS"))
+
+#' ## Kazakhstan
+#+ warning=FALSE, fig.width=6, fig.height=7.5
+grid::grid.draw(plot.timeline("KAZ"))

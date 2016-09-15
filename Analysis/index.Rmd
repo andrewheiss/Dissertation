@@ -17,6 +17,7 @@ output:
 ## Case studies of international aspect of CSRE
 
 - [LNA-based case selection](country_case_studies/case_selection.html)
+- [Case study timelines](country_case_studies/timelines.html)
 
 ## INGO survey
 

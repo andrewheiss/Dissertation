@@ -4,6 +4,7 @@ filename: cases_wars.csv
 source:
   - "https://en.wikipedia.org/wiki/List_of_wars_involving_Russia#Russian_Federation_.281991.E2.80.93present.29"
   - "https://en.wikipedia.org/wiki/List_of_wars_involving_Egypt#Post-independence"
+  - "https://en.wikipedia.org/wiki/List_of_wars_involving_Jordan#Hashemite_Kingdom_of_Jordan_.281946.E2.80.93present.29"
   - Personal research
 fields:
   - name: ISO3
