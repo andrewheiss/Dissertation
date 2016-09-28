@@ -1,9 +1,9 @@
 term,category,term.clean,source.clean,term.clean.breaks
 cs_env_sum.lead,,Civil society regulatory environment,based on V-Dem,Civil society regulatory environmentXXX
 (Intercept),,Intercept,,Intercept
-icrg.stability,Internal,Government stability,ICRG,Government stability
 icrg.pol.risk.internal.scaled,Internal,"Internal political stability, rescaled",ICRG,"Internal political stability, rescaledXXX"
 icrg.pol.risk.internal.nostab.scaled,Internal,"Internal political stability, government stability omitted, rescaled",ICRG,"Internal political stability, governmentXXXstability omitted, rescaled"
+icrg.stability,Internal,Government stability,ICRG,Government stability
 yrsoffc,Internal,Years executive in office,DPI,Years executive in office
 years.since.comp,Internal,Years since competitive election,NELDA,Years since competitiveXXXelection
 opp1vote,Internal,Opposition vote share,DPI,Opposition vote share
