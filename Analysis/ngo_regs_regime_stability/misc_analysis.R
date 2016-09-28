@@ -240,7 +240,7 @@ fig.save.cairo(plot.regime.csre, filename="1-regime-csre",
 #' The V-Dem Bayesian measurement model is cool and all, but it's really hard
 #' to interpret by itself. Showing a few example countries can help. 
 #' 
-cs.plot.all <- full.data %>%
+cs.plot.all <- autocracies %>%
   filter(year.num > 2000) %>%
   group_by(country) %>%
   summarise(env.mean = mean(cs_env_sum, na.rm=TRUE)) %>%
