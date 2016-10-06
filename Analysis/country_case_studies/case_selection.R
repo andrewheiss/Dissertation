@@ -27,6 +27,7 @@ library(tidyverse)
 library(DT)
 library(countrycode)
 library(rstanarm)
+library(ggrepel)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
@@ -164,6 +165,34 @@ final.case.studies.temp <- final.case.studies %>%
   rename_(.dots = setNames(colnames(.), 
                            str_replace(colnames(.), "_mean_percentile", "")))
 
+#' ### Average values in whole distribution
+df.distributions.plot <- autocracies %>%
+  select(one_of(all.column.names)) %>%
+  gather(variable, value) %>%
+  filter(!is.na(value)) %>%
+  left_join(coef.names, by=c("variable" = "term"))
+
+df.case.means <- case.studies %>%
+  select(country, dplyr::ends_with("mean")) %>%
+  gather(variable, value, -country) %>%
+  mutate(variable = str_replace(variable, "_mean", "")) %>%
+  filter(!is.na(value)) %>%
+  left_join(coef.names, by=c("variable" = "term"))
+
+plot.cases.in.distributions <- ggplot(df.distributions.plot, aes(x=value)) +
+  geom_density(aes(fill=category), colour=NA) + 
+  geom_vline(data=df.case.means, aes(xintercept=value), size=0.25) +
+  geom_text_repel(data=df.case.means, aes(label=country, y=0),
+                  size=2.5) +
+  guides(fill="none") +
+  labs(x=NULL, y=NULL) +
+  facet_wrap(~ term.short, scales="free", ncol=2) + 
+  theme_ath()
+
+#+ fig.width=6, fig.height=10
+plot.cases.in.distributions
+
+
 #' ### Actual and predicted CSRE
 #' 
 # TODO: Get predicted CSRE too
@@ -172,8 +201,8 @@ csre.pred.table <- plot.data.sna.selection %>%
   filter(country %in% cases$country.name) %>%
   group_by(country) %>%
   summarise_at(funs(mean = mean(., na.rm=TRUE)), .cols=vars(-country)) %>%
-  left_join(select(final.case.studies.temp, country,
-                   cs_env_sum.lead.full.data = cs_env_sum.lead),
+  left_join(select(final.case.studies, country,
+                   cs_env_sum.lead.full.data_mean_pct = cs_env_sum.lead_mean_percentile),
             by="country") 
 
 csre.pred.table %>%
@@ -182,10 +211,10 @@ csre.pred.table %>%
               background=styleColorBarCentered(csre.pred.table$cs_env_sum.lead_mean, 
                                                "#FF4136", "#2ECC40")) %>%
   formatStyle("post.pred.fit_mean", 
-              background=styleColorBar(csre.pred.table$post.pred.fit_mean,
-                                       "#0074D9", angle=-90)) %>%
-  formatStyle("cs_env_sum.lead.full.data", 
-              background=styleColorBar(csre.pred.table$cs_env_sum.lead.full.data,
+              background=styleColorBarCentered(csre.pred.table$post.pred.fit_mean, 
+                                               "#FF4136", "#2ECC40")) %>%
+  formatStyle("cs_env_sum.lead.full.data_mean_pct", 
+              background=styleColorBar(csre.pred.table$cs_env_sum.lead.full.data_mean_pct,
                                        "#0074D9", angle=-90))
 
 #' ### Internal risk
@@ -218,7 +247,90 @@ percentile.table.shaming %>%
   formatStyle(2, background=styleColorBar(0:1, "#0074D9", angle=-90))
 
 
+#' ### By country
+percentile.table.by.country <- final.case.studies.temp %>%
+  gather(variable, value, -country) %>%
+  spread(country, value) %>%
+  left_join(coef.names, by=c("variable" = "term")) %>%
+  select(term.clean, category, 2:7) %>%
+  arrange(category, term.clean)
+
+percentile.table.by.country %>%
+  datatable() %>% formatRound(3:8) %>%
+  formatStyle(3:8, background=styleColorBar(0:1, "#0074D9", angle=-90))
+
+
+
+
 #' ## Expected and actual outcomes
+#' 
+#' ### General mechanisms
+#' 
+#' Internal politics:
+#' 
+#' - Government stability better → 😡
+#' - Political stability better → 😃
+#' - More years in office → 😡
+#' - More years since election → 😡
+#' - Opposition vote share → 😃
+#' 
+#' External risk:
+#' 
+#' - Neighbors more stable → 😡
+#' - Coups in neighbors → 😃
+#' - Violent protests in neighbors → 😡
+#' - Nonviolent protests in neighbors → 😃
+#' 
+#' Reputation:
+#' 
+#' - State-based shaming → 😡 | 😃
+#'
+#'  
+#' ### Things that make CSRE better (😃)
+#' 
+#' Internal politics:
+#' 
+#' - Government stability low
+#' - Political stability high
+#' - Fewer years in office
+#' - Fewer years since election
+#' - Opposition vote share high
+#' 
+#' External risk:
+#' 
+#' - Neighbors more unstable
+#' - Coups in neighbors
+#' - No violent protests in neighbors
+#' - Nonviolent protests in neighbors
+#' 
+#' Reputation:
+#' 
+#' - State-based shaming?
+#' 
+#' 
+#' ### Things that make CSRE worse (😡)
+#' 
+#' Internal politics:
+#' 
+#' - Government stability high
+#' - Political stability low
+#' - More years in office
+#' - More years since election
+#' - Opposition vote share low
+#' 
+#' External risk:
+#' 
+#' - Neighbors more stable
+#' - No coups in neighbors
+#' - Violent protests in neighbors
+#' - No nonviolent protests in neighbors
+#' 
+#' Reputation:
+#' 
+#' - State-based shaming?
+#'
+#' 
+#' ### Table
 #' 
 #' Based on this table and the timelines, here's the typological table of
 #' expected outcomes for each case study country:
@@ -230,7 +342,8 @@ expected.outcomes <- read_csv(file.path(PROJHOME, "Analysis",
 
 caption <- "Expected and actual outcomes {#tbl:expected-outcomes}"
 outcomes <- pandoc.table.return(expected.outcomes, keep.line.breaks=TRUE,
-                                justify="llllll", caption=caption, style="multiline")
+                                justify="llllll", caption=caption, style="grid",
+                                emphasize.strong.cols=1)
 
 #+ results="asis"
 cat(outcomes)
