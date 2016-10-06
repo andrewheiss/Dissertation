@@ -1,15 +1,15 @@
-term,category,term.clean,source.clean,term.clean.breaks
-cs_env_sum.lead,,Civil society regulatory environment,based on V-Dem,Civil society regulatory environmentXXX
-(Intercept),,Intercept,,Intercept
-icrg.pol.risk.internal.scaled,Internal,"Internal political stability, rescaled",ICRG,"Internal political stability, rescaledXXX"
-icrg.pol.risk.internal.nostab.scaled,Internal,"Internal political stability, government stability omitted, rescaled",ICRG,"Internal political stability, governmentXXXstability omitted, rescaled"
-icrg.stability,Internal,Government stability,ICRG,Government stability
-yrsoffc,Internal,Years executive in office,DPI,Years executive in office
-years.since.comp,Internal,Years since competitive election,NELDA,Years since competitiveXXXelection
-opp1vote,Internal,Opposition vote share,DPI,Opposition vote share
-icrg.pol.risk_wt,External,"Political stability of neighbors, weighted by distance",ICRG,"Political stability of neighbors,XXXweighted by distance"
-coups.activity.bin_sum_nb,External,Count of coup activity of neighbors within 900 km,Powell and Thyne 2011,Count of coup activity of neighborsXXXwithin 900 km
-protests.violent.std_wt,External,"Relative violent protest activity, weighted by distance",ICEWS,"Relative violent protest activity,XXXweighted by distance"
-protests.nonviolent.std_wt,External,"Relative nonviolent protest activity, weighted by distance",ICEWS,"Relative nonviolent protest activity,XXXweighted by distance"
-shaming.states.std,Shaming,Relative state-based shaming,ICEWS,Relative state-based shaming
-shaming.ingos.std,Shaming,Relative INGO-based shaming,ICEWS,Relative INGO-based shaming
+term,category,term.short,term.clean,source.clean,term.clean.breaks
+cs_env_sum.lead,,CSRE,Civil society regulatory environment,based on V-Dem,Civil society regulatory environmentXXX
+(Intercept),,Intercept,Intercept,,Intercept
+icrg.pol.risk.internal.scaled,Internal,Internal political stability,"Internal political stability, rescaled",ICRG,"Internal political stability, rescaledXXX"
+icrg.pol.risk.internal.nostab.scaled,Internal,Internal political stability,"Internal political stability, government stability omitted, rescaled",ICRG,"Internal political stability, governmentXXXstability omitted, rescaled"
+icrg.stability,Internal,Government stability,Government stability,ICRG,Government stability
+yrsoffc,Internal,Years in office,Years executive in office,DPI,Years executive in office
+years.since.comp,Internal,Years since election,Years since competitive election,NELDA,Years since competitiveXXXelection
+opp1vote,Internal,Opposition vote share,Opposition vote share,DPI,Opposition vote share
+icrg.pol.risk_wt,External,Neighbor political stability,"Political stability of neighbors, weighted by distance",ICRG,"Political stability of neighbors,XXXweighted by distance"
+coups.activity.bin_sum_nb,External,Neighbor coup activity,Count of coup activity of neighbors within 900 km,Powell and Thyne 2011,Count of coup activity of neighborsXXXwithin 900 km
+protests.violent.std_wt,External,Neighbor violent protests,"Relative violent protest activity, weighted by distance",ICEWS,"Relative violent protest activity,XXXweighted by distance"
+protests.nonviolent.std_wt,External,Neighbor nonviolent protests,"Relative nonviolent protest activity, weighted by distance",ICEWS,"Relative nonviolent protest activity,XXXweighted by distance"
+shaming.states.std,Shaming,State-based shaming,Relative state-based shaming,ICEWS,Relative state-based shaming
+shaming.ingos.std,Shaming,INGO-based shaming,Relative INGO-based shaming,ICEWS,Relative INGO-based shaming
