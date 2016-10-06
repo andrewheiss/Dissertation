@@ -17,7 +17,8 @@ coef.names <- read_csv(file.path(PROJHOME, "Analysis",
   mutate(term.clean = factor(term.clean, levels=unique(term.clean), ordered=TRUE),
          category = factor(category, levels=unique(category), ordered=TRUE),
          term.clean.rev = factor(term.clean, levels=rev(levels(term.clean))),
-         category.rev = factor(category, levels=rev(levels(category))))
+         category.rev = factor(category, levels=rev(levels(category))),
+         term.short = factor(term.short, levels=unique(term.short), ordered=TRUE))
 
 col.auth <- "#441152"
 col.dem <- "#BEDB3A"
@@ -71,6 +72,11 @@ grob.blank <- grid::rectGrob(gp=grid::gpar(col="white"))
 theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
   update_geom_defaults("bar", list(fill = "grey30"))
   update_geom_defaults("line", list(colour = "grey30"))
+  update_geom_defaults("label", list(family="Source Sans Pro Light"))
+  update_geom_defaults("label_repel", list(family="Source Sans Pro Light"))
+  update_geom_defaults("text", list(family="Source Sans Pro Light"))
+  update_geom_defaults("text_repel", list(family="Source Sans Pro Light"))
+
   ret <- theme_bw(base_size, base_family) +
     theme(panel.background = element_rect(fill="#ffffff", colour=NA),
           title=element_text(size=rel(1.1), vjust=1.2, family="Source Sans Pro Semibold"),
@@ -78,7 +84,7 @@ theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
           plot.caption=element_text(margin=margin(t=10), size=rel(0.6),
                                     family="Source Sans Pro Light"),
           panel.border = element_blank(), 
-          panel.margin = unit(1, "lines"),
+          panel.spacing = unit(1, "lines"),
           panel.grid.minor = element_blank(),
           panel.grid.major = element_line(size=0.25, colour="grey90"),
           axis.line = element_blank(),
@@ -90,7 +96,7 @@ theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
           legend.title = element_text(size=rel(0.8)),
           legend.key.size=unit(.7, "line"),
           legend.key = element_blank(),
-          legend.margin = unit(0.1, "lines"),
+          legend.spacing = unit(0.1, "lines"),
           strip.text = element_text(size=rel(1), family="Source Sans Pro Semibold"),
           strip.background = element_rect(fill="#ffffff", colour=NA))
   ret
