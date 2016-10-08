@@ -264,7 +264,7 @@ percentile.table.by.country %>%
 #' 
 #' ### CSRE-enabling factors (😃)
 #' 
-#' Internal politics:
+#' Internal environment:
 #' 
 #' - Government stability low
 #' - Political stability high
@@ -272,21 +272,21 @@ percentile.table.by.country %>%
 #' - Fewer years since election
 #' - Opposition vote share high
 #' 
-#' External risk:
+#' External environment:
 #' 
 #' - Neighbors more unstable
 #' - Coups in neighbors
 #' - No violent protests in neighbors
 #' - Nonviolent protests in neighbors
 #' 
-#' Reputation:
+#' Reputational environment:
 #' 
 #' - State-based shaming?
 #' 
 #' 
 #' ### CSRE-restricting factors (😡)
 #' 
-#' Internal politics:
+#' Internal environment:
 #' 
 #' - Government stability high
 #' - Political stability low
@@ -294,14 +294,14 @@ percentile.table.by.country %>%
 #' - More years since election
 #' - Opposition vote share low
 #' 
-#' External risk:
+#' External environment:
 #' 
 #' - Neighbors more stable
 #' - No coups in neighbors
 #' - Violent protests in neighbors
 #' - No nonviolent protests in neighbors
 #' 
-#' Reputation:
+#' Reputational environment:
 #' 
 #' - State-based shaming?
 #'
