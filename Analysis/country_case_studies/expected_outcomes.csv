@@ -1,7 +1,25 @@
-Country,Internal stability,External risk,International reputation,Expected outcome,Actual outcome
-Egypt,q,,,,
-Jordan,w,,,,
-China,e,,,,w
-Myanmar,r,,,d,
-Russia,,t,,,
-Kazakhstan,,,e,,
+Country,Internal environment,External environment,Reputational environment,Expected CSRE (mean predicted value),Actual CSRE (mean)
+Egypt,Low,"Moderate, then low",High,Moderate–high,Low
+,"- *Restricting factors* (−): Moderate–low political stability, high government stability (before 2011), many years in office (before 2011), unsuccessful opposition
+- *Enabling factors* (+): Low government stability (after 2011), short time in office (after 2011), frequent elections","- (−) High–moderate regional stability (before 2011), few coups in region (before 2011), many violent protests in region (after 2011), few nonviolent protests in region (before 2011)
+- (+) Low regional stability (after 2011), coups in region (after 2011), few violent protests in region (before 2011), many nonviolent protests in region (after 2011)","- High levels of state-based shaming, especially after 2005",≈ 1,≈ −1
+Jordan,Moderate,"High, then moderate",Moderate,Moderate–high,Moderate
+,"- (−) High–moderate government stability (before 2011), many years in office, infrequent elections
+- (+) High political stability, moderate–low government stability (after 2011), moderately successful opposition","- (−) High–moderate regional stability (before 2011), few coups in region (before 2011), many violent protests in region (after 2011), few nonviolent protests in region (before 2011)
+- (+) Low regional stability (after 2011), many coups in region (after 2011), many nonviolent protests in region (after 2011)",- Low–moderate levels of state-based shaming,≈ 1,≈ 0.5
+China,Moderate,High,High,Low,Low
+,"- (−) High–moderate government stability, no elections, unsuccessful/nonexistent opposition
+- (+) High political stability, few years in office","- (−) High–moderate regional stability, few violent protests in region
+- (+) Coups in region, few nonviolent protests in region","- High levels of state-based shaming, especially after 2005",≈ 0.5,≈ −2
+Myanmar,Low,Low,Moderate,Low,Very low
+,"- (−) Low political stability, high–moderate government stability, many years in office, infrequent elections, unsuccessful opposition
+- (+) None","- (−) High–moderate regional stability, moderate violent protests in region
+- (+) Coups in region, moderate nonviolent protests in region ",- Low levels of state-based shaming (with sharp peak in 2006–09),≈ 0,≈ −3
+Russia,Moderate,High,Low,Moderate,Moderate
+,"- (−) Moderate–low political stability (very low in 2000), high government stability, many de facto years in office (because of Putin's shadow presidency during Medvedev's term)
+- (+) Frequent elections, successful opposition","- (−) High regional stability, few nonviolent protests in region
+- (+) Coups in region (especially in 1990s), few violent protests in region",- Low levels of state-based shaming (with peaks in 2008 and 2014),≈ 0.75,≈ 0.5
+Kazakhstan,Moderate,Low,Low,Moderate–high,Moderate–high
+,"- (−) High government stability, many years in office, unsuccessful opposition
+- (+) High political stability, frequent elections","- (−) High regional stability, few nonviolent protests in region
+- (+) Coups in region, few violent protests in region",- Low levels of state-based shaming (with peak in 2001),≈ 1,≈ 1

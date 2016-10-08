@@ -260,33 +260,9 @@ percentile.table.by.country %>%
   formatStyle(3:8, background=styleColorBar(0:1, "#0074D9", angle=-90))
 
 
-
-
 #' ## Expected and actual outcomes
 #' 
-#' ### General mechanisms
-#' 
-#' Internal politics:
-#' 
-#' - Government stability better → 😡
-#' - Political stability better → 😃
-#' - More years in office → 😡
-#' - More years since election → 😡
-#' - Opposition vote share → 😃
-#' 
-#' External risk:
-#' 
-#' - Neighbors more stable → 😡
-#' - Coups in neighbors → 😃
-#' - Violent protests in neighbors → 😡
-#' - Nonviolent protests in neighbors → 😃
-#' 
-#' Reputation:
-#' 
-#' - State-based shaming → 😡 | 😃
-#'
-#'  
-#' ### Things that make CSRE better (😃)
+#' ### CSRE-enabling factors (😃)
 #' 
 #' Internal politics:
 #' 
@@ -308,7 +284,7 @@ percentile.table.by.country %>%
 #' - State-based shaming?
 #' 
 #' 
-#' ### Things that make CSRE worse (😡)
+#' ### CSRE-restricting factors (😡)
 #' 
 #' Internal politics:
 #' 
@@ -329,6 +305,110 @@ percentile.table.by.country %>%
 #' 
 #' - State-based shaming?
 #'
+#'
+#' ### Basic trends
+#' 
+#' #### Egypt
+#' 
+#' - 😡 Political stability - medium
+#' - 😡 Government stability - medium
+#' - 😡 Years in office - high (low after 2011)
+#' - 😃 Years since election - low
+#' - 😡 Opposition vote share - low
+#' - 😃 Neighbor political stability - medium (low after 2011)
+#' - 😃 Neighbor coup activity - medium
+#' - 😡 Neighbor violent protests - medium (high after 2011)
+#' - 😃 Neighbor nonviolent protests - medium (high after 2011)
+#' - State-based shaming - medium (high after 2005)
+#' 
+#' - Internal stability - low (−3)
+#' - External stability - moderate, then low
+#' - International reputation/shaming - high
+#' 
+#' #### Jordan
+#' 
+#' - 😃 Political stability - high
+#' - 😡 Government stability - medium high
+#' - 😡 Years in office - super high
+#' - 😡 Years since election - high
+#' - 😃 Opposition vote share - medium
+#' - 😃 Neighbor political stability - medium
+#' - 😃 Neighbor coup activity - medium
+#' - 😃 Neighbor violent protests - low (high during 2011–13)
+#' - 😃 Neighbor nonviolent protests - low (high during 2011–13)
+#' - State-based shaming - medium
+#' 
+#' - Internal stability - moderate (−1)
+#' - External stability - high, then moderate
+#' - International reputation/shaming - medium
+#' 
+#' #### China
+#' 
+#' - 😃 Political stability - high
+#' - 😡 Government stability - medium high
+#' - 😃 Years in office - low
+#' - 🚫 Years since election - none
+#' - 😡 Opposition vote share - low
+#' - 😡 Neighbor political stability - medium
+#' - 😃 Neighbor coup activity - medium
+#' - 😃 Neighbor violent protests - low
+#' - 😃 Neighbor nonviolent protests - medium
+#' - State-based shaming - high
+#' 
+#' - Internal stability - moderate (0)
+#' - External stability - high
+#' - International reputation/shaming - high
+#' 
+#' #### Myanmar
+#' 
+#' - 😡 Political stability - low
+#' - 😡 Government stability - medium
+#' - 😡 Years in office - medium
+#' - 😡 Years since election - high
+#' - 😡 Opposition vote share - low
+#' - 😃 Neighbor political stability - medium
+#' - 😡 Neighbor coup activity - low
+#' - 😡 Neighbor violent protests - high
+#' - 😃 Neighbor nonviolent protests - medium
+#' - State-based shaming - medium
+#' 
+#' - Internal stability - low (−5)
+#' - External stability - low
+#' - International reputation/shaming - medium
+#' 
+#' #### Russia
+#' 
+#' - 😡 Political stability - medium
+#' - 😡 Government stability - medium
+#' - 😃 Years in office - high (technically low, but they're a weird case because Putin has been president twice and he was shadow president with Medvedev)
+#' - 😃 Years since election - low
+#' - 😃 Opposition vote share - high
+#' - 😡 Neighbor political stability - high
+#' - 😃 Neighbor coup activity - medium
+#' - 😃 Neighbor violent protests - low
+#' - 😃 Neighbor nonviolent protests - medium
+#' - State-based shaming - low
+#' 
+#' - Internal stability - moderate (−1)
+#' - External stability - high
+#' - International reputation/shaming - low
+#' 
+#' #### Kazakhstan
+#' 
+#' - 😃 Political stability - high
+#' - 😡 Government stability - high
+#' - 😡 Years in office - medium
+#' - 😃 Years since election - low
+#' - 😡 Opposition vote share - low
+#' - 😃 Neighbor political stability - medium
+#' - 😃 Neighbor coup activity - medium
+#' - 😡 Neighbor violent protests - high
+#' - 😃 Neighbor nonviolent protests - high
+#' - State-based shaming - low
+#' 
+#' - Internal stability - moderate (−1)
+#' - External stability - low
+#' - International reputation/shaming - low
 #' 
 #' ### Table
 #' 
@@ -340,7 +420,7 @@ expected.outcomes <- read_csv(file.path(PROJHOME, "Analysis",
                                         "country_case_studies", 
                                         "expected_outcomes.csv"))
 
-caption <- "Expected and actual outcomes {#tbl:expected-outcomes}"
+caption <- "Expected and actual outcomes with all restricting and enabling factors {#tbl:expected-outcomes-full}"
 outcomes <- pandoc.table.return(expected.outcomes, keep.line.breaks=TRUE,
                                 justify="llllll", caption=caption, style="grid",
                                 emphasize.strong.cols=1)
@@ -348,4 +428,19 @@ outcomes <- pandoc.table.return(expected.outcomes, keep.line.breaks=TRUE,
 #+ results="asis"
 cat(outcomes)
 cat(outcomes, file=file.path(PROJHOME, "Output", "tables", 
-                             "2-expected-outcomes.md"))
+                             "2-expected-outcomes-full.md"))
+
+
+#' Simpler table
+expected.outcomes.simple <- expected.outcomes %>%
+  filter(Country != "")
+
+caption <- "Expected and actual outcomes, simple {#tbl:expected-outcomes-simple}"
+outcomes <- pandoc.table.return(expected.outcomes.simple, keep.line.breaks=TRUE,
+                                justify="llllll", caption=caption, style="grid",
+                                emphasize.strong.cols=1)
+
+#+ results="asis"
+cat(outcomes)
+cat(outcomes, file=file.path(PROJHOME, "Output", "tables", 
+                             "2-expected-outcomes-simple.md"))
