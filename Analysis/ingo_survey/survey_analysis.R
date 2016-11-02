@@ -421,7 +421,7 @@ ggplot(df.employees.relationship, aes(y=Q4.11, x=Q3.4.num)) +
 #+ fig.width=6, fig.height=3
 ggplot(df.employees.relationship.plot.means, 
        aes(x=med, y=Q4.11, fill=potential.contentiousness)) +
-  geom_barh(stat="identity", position="dodge") + 
+  geom_barh(stat="identity", position=position_dodgev()) + 
   scale_x_continuous(expand=c(0, 0)) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   labs(x="Median number of employees", y=NULL, 
@@ -462,7 +462,7 @@ ggplot(df.employees.reg.types, aes(y=response, x=Q3.4.num,
 #+ fig.width=6, fig.height=3
 ggplot(df.employees.reg.types.plot.means, 
        aes(x=med, y=response, fill=potential.contentiousness)) +
-  geom_barh(stat="identity", position="dodge") + 
+  geom_barh(stat="identity", position=position_dodgev()) + 
   scale_x_continuous(expand=c(0, 0)) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   labs(x="Median number of employees", y=NULL, 
@@ -497,7 +497,7 @@ ggplot(df.employees.restriction, aes(y=Q4.17, x=Q3.4.num)) +
 #+ fig.width=6, fig.height=3
 ggplot(df.employees.restrictions.plot.means, 
        aes(x=med, y=Q4.17, fill=potential.contentiousness)) +
-  geom_barh(stat="identity", position="dodge") + 
+  geom_barh(stat="identity", position=position_dodgev()) + 
   scale_x_continuous(expand=c(0, 0)) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   labs(x="Median number of employees", y=NULL, 
@@ -532,7 +532,7 @@ ggplot(df.employees.changes, aes(y=Q4.19, x=Q3.4.num)) +
 #+ fig.width=6, fig.height=3
 ggplot(df.employees.changes.plot.means, 
        aes(x=med, y=Q4.19, fill=potential.contentiousness)) +
-  geom_barh(stat="identity", position="dodge") + 
+  geom_barh(stat="identity", position=position_dodgev()) + 
   scale_x_continuous(expand=c(0, 0)) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   labs(x="Median number of employees", y=NULL, 
@@ -567,7 +567,7 @@ ggplot(df.employees.change.attempt, aes(y=Q4.23, x=Q3.4.num)) +
 #+ fig.width=6, fig.height=3
 ggplot(df.employees.change.attempt.plot.means, 
        aes(x=med, y=Q4.23, fill=potential.contentiousness)) +
-  geom_barh(stat="identity", position="dodge") + 
+  geom_barh(stat="identity", position=position_dodgev()) + 
   scale_x_continuous(expand=c(0, 0)) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   labs(x="Median number of employees", y=NULL, 
@@ -604,7 +604,7 @@ ggplot(df.volunteers.restriction, aes(y=Q4.17, x=Q3.5.num)) +
 #+ fig.width=6, fig.height=3
 ggplot(df.volunteers.restrictions.plot.means, 
        aes(x=med, y=Q4.17, fill=potential.contentiousness)) +
-  geom_barh(stat="identity", position="dodge") + 
+  geom_barh(stat="identity", position=position_dodgev()) + 
   scale_x_continuous(expand=c(0, 0)) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   labs(x="Median number of volunteers", y=NULL, 
