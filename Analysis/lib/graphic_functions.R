@@ -2,6 +2,8 @@ library(broom)
 library(stringr)
 library(ggstance)
 library(ggrepel)
+library(gridExtra)
+library(viridis)
 library(pander)
 
 panderOptions('table.split.table', Inf)
@@ -100,6 +102,14 @@ theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
           legend.spacing = unit(0.1, "lines"),
           strip.text = element_text(size=rel(1), family="Source Sans Pro Semibold"),
           strip.background = element_rect(fill="#ffffff", colour=NA))
+  ret
+}
+
+theme_ath_density <- function(...) {
+  ret <- theme_ath(...) +
+    theme(panel.grid.major=element_blank(),
+          axis.title.y=element_blank(),
+          axis.text.y=element_blank())
   ret
 }
 
