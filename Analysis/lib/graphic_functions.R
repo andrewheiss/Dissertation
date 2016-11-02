@@ -1,6 +1,7 @@
 library(broom)
 library(stringr)
 library(ggstance)
+library(ggrepel)
 library(pander)
 
 panderOptions('table.split.table', Inf)
