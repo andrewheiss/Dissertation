@@ -24,7 +24,7 @@ knitr::opts_chunk$set(cache=TRUE, fig.retina=2,
                       tidy.opts=list(width.cutoff=120),  # For code
                       options(width=120))  # For output
 
-# library(plyr)  # Because of productplots
+library(plyr)  # Because of productplots
 library(tidyverse)
 library(forcats)
 library(stringr)
