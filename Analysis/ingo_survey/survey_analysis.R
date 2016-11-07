@@ -30,11 +30,7 @@ library(forcats)
 library(stringr)
 library(productplots)
 library(pander)
-library(magrittr)
 library(DT)
-library(scales)
-library(countrycode)
-library(tm)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -219,7 +215,7 @@ ggplot(df.employees.relationship, aes(y=Q4.11, x=Q3.4.num)) +
   geom_point(alpha=0.2, size=0.5) +
   geom_point(data=df.employees.relationship.plot.means,
              aes(x=med, y=Q4.11)) +
-  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=scales::comma) + 
   labs(x="Number of employees", y=NULL,
        title="Relationship with government and # of employees") +
   theme_ath() + facet_wrap(~ potential.contentiousness)
@@ -258,7 +254,7 @@ ggplot(df.employees.reg.types, aes(y=response, x=Q3.4.num,
   geom_point(alpha=0.2, size=0.5) +
   geom_point(data=df.employees.reg.types.plot.means,
              aes(x=med, y=response)) +
-  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=scales::comma) + 
   scale_fill_manual(values=ath.palette("contention"), name=NULL) +
   labs(x="Number of employees", y=NULL,
        title="Types of regulation, perceptions of restriction, and # of employees (logged)") +
@@ -295,7 +291,7 @@ ggplot(df.employees.restriction, aes(y=Q4.17, x=Q3.4.num)) +
   geom_point(alpha=0.2, size=0.5) +
   geom_point(data=df.employees.restrictions.plot.means,
              aes(x=med, y=Q4.17)) +
-  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=scales::comma) + 
   labs(x="Number of employees", y=NULL,
        title="Perceptions of restriction and # of employees") +
   theme_ath() + facet_wrap(~ potential.contentiousness)
@@ -330,7 +326,7 @@ ggplot(df.employees.changes, aes(y=Q4.19, x=Q3.4.num)) +
   geom_point(alpha=0.2, size=0.5) +
   geom_point(data=df.employees.changes.plot.means,
              aes(x=med, y=Q4.19)) +
-  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=scales::comma) + 
   labs(x="Number of employees", y=NULL,
        title="Changes in programming and # of employees") +
   theme_ath() + facet_wrap(~ potential.contentiousness)
@@ -365,7 +361,7 @@ ggplot(df.employees.change.attempt, aes(y=Q4.23, x=Q3.4.num)) +
   geom_point(alpha=0.2, size=0.5) +
   geom_point(data=df.employees.change.attempt.plot.means,
              aes(x=med, y=Q4.23)) +
-  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=scales::comma) + 
   labs(x="Number of employees", y=NULL,
        title="Changes in programming and # of employees") +
   theme_ath() + facet_wrap(~ potential.contentiousness)
@@ -402,7 +398,7 @@ ggplot(df.volunteers.restriction, aes(y=Q4.17, x=Q3.5.num)) +
   geom_point(alpha=0.2, size=0.5) +
   geom_point(data=df.volunteers.restrictions.plot.means,
              aes(x=med, y=Q4.17)) +
-  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=comma) + 
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:5)), labels=scales::comma) + 
   labs(x="Number of volunteers", y=NULL,
        title="Perceptions of restriction and # of volunteers") +
   theme_ath() + facet_wrap(~ potential.contentiousness)
@@ -999,7 +995,7 @@ plot.change.how.regime.bar <- ggplot(plot.df.change.how.regime,
                                          fill=target.regime.type)) +
   geom_barh(stat="identity") + 
   scale_fill_manual(values=ath.palette("regime"), name=NULL) +
-  scale_x_continuous(labels=percent) +
+  scale_x_continuous(labels=scales::percent) +
   labs(x=NULL, y=NULL, title="Percentages by regime type") + 
   guides(fill=FALSE) +
   theme_ath() +
