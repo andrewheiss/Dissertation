@@ -1,5 +1,5 @@
 #' ---
-#' title: "Survey analysis"
+#' title: "General survey analysis"
 #' author: "Andrew Heiss"
 #' date: "`r format(Sys.time(), '%B %e, %Y')`"
 #' output: 
