@@ -61,29 +61,52 @@ analyze.cat.var <- function(cat.table) {
 # - https://github.com/rasmusab/bayesian_first_aid (because "inside every classical test there is a Bayesian model trying to get out")
 # - https://cran.r-project.org/web/packages/rstanarm/vignettes/binomial.html
 #
-prop.test.bayes <- function(df, group.formula) {
-  # --------------------
-  # Run binomial model
-  # --------------------
-  capture.output({
-    model <- stan_glm(group.formula, data=df, family=binomial("logit"),
-                      # Weakly informative prior on log-odds
-                      prior_intercept=normal(-1, 1),
-                      chains=CHAINS, iter=ITER, warmup=WARMUP,
-                      algorithm="sampling", seed=my.seed)
-  }, file="/dev/null")
+diff.groups.bayes <- function(formula, data, prop=FALSE, cores=1) {
+  form <- as.formula(formula)
+  df <- data
+
+  # ----------------------
+  # Run regression model
+  # ----------------------
+  if (prop) {
+    # Binomial model if using proportions
+    capture.output({
+      model <- stan_glm(form, data=df, family=binomial("logit"),
+                        # Weakly informative prior on log-odds
+                        prior_intercept=normal(-1, 1),
+                        chains=CHAINS, iter=ITER, warmup=WARMUP, cores=cores,
+                        algorithm="sampling", seed=my.seed)
+    }, file="/dev/null")
+  } else {
+    # Difference in means otherwise
+    capture.output({
+      model <- stan_glm(form, data=df, family=gaussian(),
+                        # Weakly informative prior
+                        prior_intercept=student_t(df=1, location=0),
+                        chains=CHAINS, iter=ITER, warmup=WARMUP, cores=cores,
+                        algorithm="sampling", seed=my.seed)
+    }, file="/dev/null")
+  }
   
   # ---------------------------
   # MCMC draws for each group
   # ---------------------------
-  group.names <- levels(df[[attr(terms(group.formula), "term.labels")]])
+  group.names <- levels(df[[attr(terms(form), "term.labels")]])
   
-  samples.clean <- as.data.frame(model) %>%
-    # The first column is the intercept/base case. Add it to all the other columns
-    mutate_at(vars(-1), funs(. + `(Intercept)`)) %>%
-    # Exponentiate
-    mutate_all(exp) %>%
-    magrittr::set_colnames(group.names)
+  if (prop) {
+    samples.clean <- as.data.frame(model) %>%
+      # The first column is the intercept/base case. Add it to all the other columns
+      mutate_at(vars(-1), funs(. + `(Intercept)`)) %>%
+      # Exponentiate
+      mutate_all(exp) %>%
+      magrittr::set_colnames(group.names)
+  } else {
+    samples.clean <- as.data.frame(model) %>%
+      select(-sigma) %>%
+      # The first column is the intercept/base case. Add it to all the other columns
+      mutate_at(vars(-1), funs(. + `(Intercept)`)) %>%
+      magrittr::set_colnames(group.names)
+  }
   
   # Summarize draws
   samples.summary <- samples.clean %>%
@@ -142,15 +165,24 @@ prop.test.bayes <- function(df, group.formula) {
                  size=3, alpha=0.8) +
     geom_vline(data=samples.summary, aes(xintercept=median, colour=group.name),
                size=0.5) +
-    scale_x_continuous(labels=scales::percent) +
     scale_fill_viridis(discrete=TRUE, option="plasma") +
     scale_color_viridis(discrete=TRUE, option="plasma") +
-    labs(x="Proportion", y="Density",
-         title="Group distributions") +
     guides(fill=guide_legend(title=NULL), colour="none") +
     theme_ath_density() + 
     # Legend in the plot for cbind.gtable
     theme(legend.position=c(1, 1), legend.justification=c(1,1))
+  
+  if (prop) {
+    plot.groups <- plot.groups +
+      scale_x_continuous(labels=scales::percent) +
+      labs(x="Proportion", y="Density",
+           title="Group distributions")
+  } else {
+    plot.groups <- plot.groups +
+      scale_x_continuous() +
+      labs(x="Value", y="Density",
+           title="Group distributions")
+  }
   
   # Plot differences
   diffs.summary.plot <- diffs.summary %>%
@@ -174,16 +206,24 @@ prop.test.bayes <- function(df, group.formula) {
                  size=3) +
     geom_vline(data=diffs.summary.plot, aes(xintercept=median), size=0.25) +
     geom_vline(xintercept=0, linetype="dotted") +
-    scale_x_continuous(labels=scales::percent) +
     scale_fill_brewer(palette="Set1") +
     scale_color_brewer(palette="Set1") +
     guides(fill="none", colour="none") +
-    labs(x="Difference in proportion",
-         title="Differences between group distributions") +
     theme_ath_density() +
     facet_wrap(~ diff.group, scales="free_x")
-  plot.diffs
   
+  if (prop) {
+    plot.diffs <- plot.diffs +
+      scale_x_continuous(labels=scales::percent) +
+      labs(x="Difference in proportion",
+           title="Differences between group distributions") 
+  } else {
+    plot.diffs <- plot.diffs +
+      scale_x_continuous() +
+      labs(x="Difference in value",
+           title="Differences between group distributions") 
+  }
+
   # -----------------------------
   # Return everything as a list
   # -----------------------------
