@@ -877,6 +877,10 @@ collaboration.clean <- survey.orgs.clean.final %>%
   filter(Q3.6_value != "Other") %>%
   # Merge in hand-coded others
   left_join(collaborations.clean.raw, by="ResponseID") %>%
+  mutate(Q3.6_other.manual = stri_split(Q3.6_other.manual, regex=",")) %>%
+  unnest(Q3.6_other.manual) %>%
+  mutate(Q3.6_other.manual = str_trim(Q3.6_other.manual),
+         Q3.6_value = str_trim(Q3.6_value)) %>%
   group_by(ResponseID) %>%
   # Combine existing values with hand-coded values
   summarise(Q3.6_clean = list(na.omit(unique(c(Q3.6_value, Q3.6_other.manual))))) %>%
