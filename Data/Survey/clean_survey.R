@@ -960,7 +960,7 @@ full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
 # Get most recent CSRE, average CSRE over past 10 years, gwf.ever.autocracy,
 # most recent Polity, average Polity over past 10 years
 external.data <- full.data %>%
-  select(cowcode, country_name, year.num, autocracy = gwf.binary, 
+  select(cowcode, country, year.num, autocracy = gwf.binary, 
          csre = cs_env_sum, polity = e_polity2) %>%
   filter(year.num >= 2005)
 
