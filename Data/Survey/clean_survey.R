@@ -992,6 +992,22 @@ govt.freq.report.fixed <- survey.countries.clean %>%
   select(ResponseID, loop.number, Q4.8.clean)
 
 
+# --------------------------
+# Reactions to regulations
+# --------------------------
+reactions <- survey.countries.clean %>%
+  select(ResponseID, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT")) %>%
+  gather(reaction, value, -c(ResponseID, loop.number)) %>%
+  group_by(ResponseID, loop.number) %>%
+  summarise(Q4.21_yes.total = sum(value == "Yes"),
+            Q4.21_no.total = sum(value == "No"),
+            Q4.21_na.total = sum(value == "Not applicable"),
+            Q4.21_total.possible = 8 - Q4.21_na.total) %>%
+  mutate(Q4.21_percent.changed = ifelse(Q4.21_total.possible != 0, 
+                                        Q4.21_yes.total / Q4.21_total.possible,
+                                        0))
+
+
 # --------------------------------------------------
 # -------------------------
 # Deal with external data
@@ -1104,6 +1120,7 @@ survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
 survey.countries.clean.for.realz <- survey.countries.clean %>%
   left_join(govt.freq.fixed, by=c("ResponseID", "loop.number")) %>%
   left_join(govt.freq.report.fixed, by=c("ResponseID", "loop.number")) %>%
+  left_join(reactions, by=c("ResponseID", "loop.number")) %>%
   left_join(external.data.target, by=c("Q4.1_cow"="target.cowcode")) %>%
   # Add issue area data
   left_join(left_join(select(survey.orgs.clean.final.for.realz, 
