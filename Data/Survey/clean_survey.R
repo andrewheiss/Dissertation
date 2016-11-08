@@ -852,6 +852,46 @@ volunteers.num <- survey.orgs.clean.final %>%
   select(ResponseID, Q3.5.num)
 
 
+# -----------------------------
+# Collaborative relationships
+# -----------------------------
+# CSV to work with by hand
+survey.orgs.clean.final %>%
+  filter(!is.na(Q3.6_other_TEXT)) %>%
+  select(ResponseID, Q3.6_other_TEXT) %>%
+  mutate(Q3.6_other.manual = "") %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "collaborations_WILL_BE_OVERWRITTEN.csv"))
+
+# Read in clean CSV
+collaborations.clean.raw <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                               "handcoded_survey_stuff",
+                                               "collaborations.csv")) %>%
+  select(ResponseID, Q3.6_other.manual)
+
+collaboration.clean <- survey.orgs.clean.final %>%
+  select(ResponseID, Q3.6_value) %>%
+  unnest(Q3.6_value) %>%
+  # Get rid of original "Other values"
+  filter(Q3.6_value != "Other") %>%
+  # Merge in hand-coded others
+  left_join(collaborations.clean.raw, by="ResponseID") %>%
+  group_by(ResponseID) %>%
+  # Combine existing values with hand-coded values
+  summarise(Q3.6_clean = list(na.omit(unique(c(Q3.6_value, Q3.6_other.manual))))) %>%
+  rowwise() %>%
+  # Count how many types of collaboration each organization has
+  mutate(Q3.6_num = length(Q3.6_clean)) %>%
+  ungroup() %>%
+  # Clean up these counts. If they explicitly do not collaborate, set count to 
+  # 0. If they don't now and it's their only response, set count to 0
+  mutate(Q3.6_num = ifelse(str_detect(as.character(Q3.6_clean), "We do not"), 
+                           0, Q3.6_num),
+         Q3.6_num = ifelse(str_detect(as.character(Q3.6_clean), "Don't know") & 
+                             Q3.6_num == 1, 0, Q3.6_num))
+
+
 # --------------------------------------
 # Frequency of contact with government
 # --------------------------------------
@@ -1054,6 +1094,7 @@ survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
   left_join(contentiousness, by="Q3.2.clean") %>%
   left_join(employees.num, by="ResponseID") %>%
   left_join(volunteers.num, by="ResponseID") %>%
+  left_join(collaboration.clean, by="ResponseID") %>%
   left_join(external.data.home, by=c("Q2.2_cow"="home.cowcode"))
 
 survey.countries.clean.for.realz <- survey.countries.clean %>%
