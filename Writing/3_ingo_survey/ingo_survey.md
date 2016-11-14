@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss&#x40;duke.edu
-date: November 12, 2016
+date: November 13, 2016
 published: Early draft for ARNOVA 2016. Please do not cite without permission.
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -28,7 +28,7 @@ In contrast, the Carnegie Center was motivated by a different set of core princi
 
 This sharp divergence between OSF and the Carnegie Center illustrates a broader trend occurring on a global scale. Since the 1990s, INGOs have emerged as a cornerstone of global governance [@Lipschutz:1992; @AhmedPotter:2006] and have become increasingly active in authoritarian regimes [@Heiss:2016a]. Autocrats, in turn, work to regulate and restrict the activities and programming of international and foreign-funded NGOs working their countries, and often force INGOs to make difficult organizational decisions. What determines when INGOs adhere to authoritarian legal restrictions (like the Carnegie Center), resist government intrusions into organizational practices, or pull out of the country entirely (like OSF)? Why do INGOs work in these regimes if their services and advocacy can potentially help the regime? More generally, how do INGOs adapt to their institutional context and what tactics do they use to stay in engaged in the countries they target?
 
-In this paper, I argue that the political, legal, and regulatory institutions of the countries that INGOs target and work in have a substantial influence on these organizations' strategies and programming. I present an original theoretical model to explain and predict how INGOs respond to authoritarian regulations and restrictions, given an organization's core principles, its instrumental concerns, and its power relative to the regime. I test this theory by conducting a global survey of 40,000 NGOs. Unfortunately, due to technical delays, the survey is not yet completed at this stage of the project.
+In this paper, I argue that the political, legal, and regulatory institutions of the countries that INGOs target and work in have a substantial influence on these organizations' strategies and programming. I present an original theoretical model to explain and predict how INGOs respond to authoritarian regulations and restrictions, given an organization's core principles, its instrumental concerns, and its power relative to the regime, and I test this theory using the results from a global survey of more than 600 INGOs.
 
 
 # What influences INGO behavior?
