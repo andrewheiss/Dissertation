@@ -131,7 +131,11 @@ I faced an empirical tradeoff with the survey's sampling strategy. I could attem
 
 Combining all five of these lists yielded 53,369 potential INGOs (see @tbl:summary-list). A large proportion of these organizations, however, had invalid, outdated, or incomplete information. Prior to conducting the survey, I used an e-mail verification service to verify that the organization's internet domain name existed and that the e-mail address listed existed at the domain. Roughly half of the final list contained apparently valid organizations (26,772), with wide variation across directories—less than a third of the UN's iCSO list was valid, while nearly all of the organizations in the DDO were valid. Even with this cleaner list, 9,182 e-mail invitations were rejected (or bounced) by their receiving servers, including more than half of the apparently valid DDO organizations. Ultimately, only 17,590 (or 33%) of the complete list of organizations received an e-mail invitation, which indicates significant problems with maintaining up-to-date information in online directories of NGOs. 
 
+\begingroup
+\footnotesize
+\renewcommand\arraystretch{1.6}
 !INCLUDE "../../Output/tables/3-summary-list.md"
+\endgroup
 
 Traditional survey-based research will often report a survey's response rate. Response rates are associated with probability samples and rely on knowing the exact size of the survey sample. With non-probability list-based internet surveys, however, it is impossible to know how many potential respondents were exposed to the invitation or how often they were exposed—the only response data known about possible respondents is the number of members invited to the survey and the number of members who respond to and complete the survey. Because of this, response rates are impossible to calculate for this kind of survey [@AAPOR:2016]. Instead, a somewhat comparable participation (or completion) rate can be calculated, dividing the number of usable responses by the total number of initial survey invitations [@CallegaroDiSogra:2008, 1021–22]. The participation rate cannot be used as a measure of possible nonresponse error, but it can indicate the overall efficiency of the panel [@AAPOR:2016, 49]. 
 
