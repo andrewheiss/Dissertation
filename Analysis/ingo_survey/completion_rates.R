@@ -130,6 +130,24 @@ response.summary.display <- response.summary.with.total %>%
   mutate_each(funs(comma), starts_with("num")) %>%
   mutate_each(funs(percent), starts_with("perc"))
 
+response.summary.in.paper <- response.summary.display %>%
+  select(Directory = title, `Organizations listed` = num_rows_raw, 
+         `Apparently valid addresses` = num.apparently.valid,
+         `Bounced` = num.dead.bounced, `Invited` = num.invited,
+         `Percent invited (of all addresses)` = perc.invited.from.raw,
+         `Percent invited (of valid addresses)` = perc.invited.from.valid)
+
+caption <- "Number of valid and invited NGOs {#tbl:summary-list}"
+clean.table <- pandoc.table.return(response.summary.in.paper,
+                                   keep.line.breaks=TRUE,
+                                   justify="lllllll", caption=caption)
+
+#+ results="asis"
+cat(clean.table)
+cat(clean.table, file=file.path(PROJHOME, "Output", "tables", 
+                                "3-summary-list.md"))
+
+
 #' Full technical details of how I ran the survey are available at my [research
 #' notebook](https://notebook.andrewheiss.com/project/diss-ingos-in-autocracies/survey-technical-details/).
 #' 
