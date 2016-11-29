@@ -65,10 +65,12 @@ lists:
     filename: Raw/un-icso-clean.json
     type: json
     date_updated: 2016-02-09
-    num_rows_raw: 27028
+    num_rows_raw: 7632
     description: >-
         Huge list of all NGOs that have registered with the UN's Department of
-        Economic and Social Affairs (DESA)
+        Economic and Social Affairs (DESA). There were originally 27,028
+        organizations categorized as local, national, regional, and
+        international; I only look at regional and international organizations.
     changes:
         Run `Data/Python/fix_un-icso.py` to fix a few errant Unicode characters
 
