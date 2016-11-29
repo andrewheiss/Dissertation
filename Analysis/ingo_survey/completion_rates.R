@@ -24,6 +24,7 @@
 library(dplyr)
 library(tidyr)
 library(stringr)
+library(readr)
 library(yaml)
 library(purrr)
 library(pander)
@@ -190,6 +191,35 @@ response.summary.actual <- survey.dbs %>%
 
 #+ results="asis"
 pandoc.table(response.summary.actual)
+
+
+#' ## ECOSOC-affiliated organizations
+ecosoc.general <- read_csv(file.path(PROJHOME, "Data", "data_raw", 
+                                     "NGO lists", "ECOSOC", "general.csv"))
+ecosoc.roster <- read_csv(file.path(PROJHOME, "Data", "data_raw", 
+                                    "NGO lists", "ECOSOC", "roster.csv"))
+ecosoc.special <- read_csv(file.path(PROJHOME, "Data", "data_raw", 
+                                     "NGO lists", "ECOSOC", "special.csv"))
+
+ecosoc.all <- bind_rows(ecosoc.general, ecosoc.roster, ecosoc.special) %>%
+  rename(org_name = organization)
+
+icso <- email.full %>% filter(db == "icso")
+
+icso.ecosoc <- icso %>% left_join(ecosoc.all, by="org_name") %>%
+  filter(!is.na(affiliation))
+
+# Not all of the ECOSOC-affiliated ones are in here, since I only collected
+# regional and international organizations
+nrow(icso.ecosoc)
+
+# How many of these are dead or bounced?
+dead.ecosoc <- icso.ecosoc %>%
+  filter(index_org %in% dead.and.bounced$fk_org)
+
+# 8% of ECOSOC-affiliated NGOs are dead
+nrow(dead.ecosoc)
+nrow(dead.ecosoc) / nrow(icso.ecosoc)
 
 #' ## Figure out partials, incompletes, completes
 #' 
@@ -433,6 +463,7 @@ make_range <- function(x) {
 }
 
 sending.groups.plot <- sending.groups.summary %>%
+  filter(!is.na(email_date)) %>%
   mutate(email_day = ceiling_date(email_date, unit="day")) %>%
   filter(!is.na(email_day)) %>%
   group_by(email_day, email_type) %>%
