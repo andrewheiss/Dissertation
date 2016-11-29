@@ -22,10 +22,8 @@
 #+ message=FALSE
 knitr::opts_chunk$set(fig.retina=2)
 
-library(dplyr)
-library(tidyr)
-library(purrr)
-library(ggplot2)
+library(tidyverse)
+library(forcats)
 library(ggstance)
 library(stringr)
 library(magrittr)
@@ -223,6 +221,16 @@ sum(df.work.countries.all$presence, na.rm=TRUE)
 #' map file, so mapping them out is kind of pointless.
 #' 
 
+#' #### Countries per response
+survey.orgs.clean %>%
+  unnest(Q2.5_iso3) %>%
+  group_by(ResponseID) %>%
+  summarise(num = n()) %>%
+  ungroup() %T>% 
+  {print(summary(.$num))} %>%
+  ggplot(data=., aes(x=num)) +
+  geom_histogram(binwidth=2) + theme_ath()
+
 
 #' #### Responses per country
 plot.work.all.map.scale <- ggplot(df.work.countries.all,
@@ -235,11 +243,14 @@ plot.work.all.map.scale <- ggplot(df.work.countries.all,
                       na.value="#FFFFFF", name="NGOs reporting work in country",
                       guide=guide_colourbar(ticks=FALSE, barwidth=6)) + 
   labs(title="Countries where NGOs work",
-       subtitle="Q2.5: Besides 'home_country', where does your organization work?") +
-  theme_ath_map() +
+       subtitle="Q2.5: Besides your home country, where does your organization work?") +
+  theme_ath_map(12) +
   theme(legend.position="bottom", legend.key.size=unit(0.65, "lines"),
         strip.background=element_rect(colour="#FFFFFF", fill="#FFFFFF"))
 plot.work.all.map.scale
+
+fig.save.cairo(plot.work.all.map.scale, filename="3-map-work",
+               width=7, height=6)
 
 
 #' ### Which countries did NGOs answer about?
@@ -307,10 +318,13 @@ plot.work.map.scale <- ggplot(df.work.countries.answered,
                       guide=guide_colourbar(ticks=FALSE, barwidth=6)) + 
   labs(title="Countries about which NGOs answered questions",
        subtitle="Q4.1: Please select a country you would like to discuss\n(One of countries selected in Q2.5)") +
-  theme_ath_map() +
+  theme_ath_map(12) +
   theme(legend.position="bottom", legend.key.size=unit(0.65, "lines"),
         strip.background=element_rect(colour="#FFFFFF", fill="#FFFFFF"))
 plot.work.map.scale
+
+fig.save.cairo(plot.work.map.scale, filename="3-map-work-answered",
+               width=7, height=6)
 
 
 #' ## What do these NGOs do?
@@ -449,6 +463,25 @@ plot.issues.most.clean <- ggplot(df.issues.most.clean,
 
 plot.issues.most.clean
 
+df.issues.most.clean.small <- df.issues.most.clean %>%
+  filter(num >= 7) %>%
+  mutate(issue = fct_drop(issue))
+
+plot.issues.most.clean.small <- ggplot(df.issues.most.clean.small,
+                                 aes(x=num, y=issue,
+                                     fill=potential.contentiousness)) + 
+  geom_barh(stat="identity") + 
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
+  labs(x="Times selected", y=NULL,
+       title="Which issues do NGOs work on?",
+       subtitle="Q3.2: Which issues does your organization focus on the most?") +
+  theme_ath(14)
+plot.issues.most.clean.small
+
+fig.save.cairo(plot.issues.most.clean.small, filename="3-issues-most",
+               width=7, height=4)
+
 
 #' ### What kinds of activities do these NGOs engage in?
 labels.activities <- data_frame(levels=c("aid", "education", "mobilize", 
@@ -517,12 +550,12 @@ plot.volunteers
 
 #' ### Collaboration
 df.collaboration <- survey.orgs.clean %>%
-  unnest(Q3.6_value) %>%
-  group_by(Q3.6_value) %>%
+  unnest(Q3.6_clean) %>%
+  group_by(Q3.6_clean) %>%
   summarise(num = n()) %>%
   arrange(desc(num)) %>%
-  filter(!is.na(Q3.6_value)) %>%
-  mutate(partner = factor(Q3.6_value, levels=rev(Q3.6_value), ordered=TRUE))
+  filter(!is.na(Q3.6_clean)) %>%
+  mutate(partner = factor(Q3.6_clean, levels=rev(Q3.6_clean), ordered=TRUE))
 
 # Add line break to label
 levels(df.collaboration$partner)[levels(df.collaboration$partner) == "We do not collaborate with other organizations or institutions"] <-
