@@ -40,10 +40,17 @@ ath.palettes <- list(
                "#B10DC9",  # purple
                "#FF851B",  # orange
                "#FFDC00"),  # yellow
-  contention = c("#3D9970",  # olive
+  contention1 = c("#3D9970",  # olive
                  "#FF851B"),  # orange
-  regime = c("#FFDC00",  # yellow
-             "#85144b")  # maroon
+  contention = c("#53787B",  # turquoise
+                 "#DC5B44"),  # orange
+  regime1 = c("#FFDC00",  # yellow
+             "#85144b"),  # magenta
+  regime2 = c("#0074D9",  # blue
+             "#FFDC00"),  # red
+  regime = c("#203864",  # gold
+             "#7F6000"),  # word blue 
+  single.color = c("#53787B")  # turquoise
 )
 
 ath.palette <- function(name, n, type = c("discrete", "continuous")) {
