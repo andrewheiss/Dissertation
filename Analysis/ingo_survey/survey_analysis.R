@@ -49,14 +49,19 @@ set.seed(my.seed)
 CHAINS <- 4
 ITER <-2000
 WARMUP <- 1000
-options(mc.cores = 1)  # No need to parallelize with simple models
+CORES <- parallel::detectCores()
+
+options(mc.cores = CORES)
 
 # Treat ordered factors as treatments in models
 options(contrasts=rep("contr.treatment", 2))
 
 # Load cleaned, country-based survey data (*with* the Q4\* loop)
 survey.clean.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
-                                      "survey_clean_all.rds"))
+                                      "survey_clean_all.rds")) %>%
+  mutate(Q4.11_collapsed = ordered(fct_recode(Q4.11, NULL = "Don't know", 
+                                              NULL = "Prefer not to answer"))) %>%
+  mutate(Q2.5_count = as.numeric(Q2.5_count))
 
 # Load cleaned, organization-based data (without the Q4 loop)
 survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
@@ -78,6 +83,89 @@ great.none.dk <- c("A great deal", "A lot", "A moderate amount",
                    "A little", "None at all", "Don't know", "Not applicable")
 great.none <- great.none.dk[1:5]
 
+
+#' Organizations were asked to choose 
+survey.countries.clean %>%
+  group_by(target.regime.type) %>%
+  summarise(qwer = mean(Q4.21_percent.changed))
+
+pct.changed.regime <- diff.groups.bayes(Q4.21_percent.changed * 8 ~ target.regime.type, 
+                                        data=survey.countries.clean, prop=FALSE)
+#+ fig.width=6, fig.height=3
+grid.arrange(pct.changed.regime$plot.groups,
+             pct.changed.regime$plot.diffs)
+pct.changed.regime$diffs.summary
+
+pct.changed.contention <- diff.groups.bayes(Q4.21_percent.changed * 8 ~ potential.contentiousness, 
+                                            data=survey.countries.clean, prop=FALSE)
+#+ fig.width=6, fig.height=3
+grid.arrange(pct.changed.contention$plot.groups,
+             pct.changed.contention$plot.diffs)
+
+# asdf <- survey.clean.all %>%
+#   xtabs(~ target.regime.type + Q4.11_collapsed, .)
+# 
+# 
+# qwer <- survey.clean.all %>%
+#   count(Q4.11_collapsed, target.regime.type) %>%
+#   group_by(Q4.11_collapsed) %>%
+#   mutate(total = sum(n)) %>%
+#   filter(!is.na(Q4.11_collapsed)) %>%
+#   filter(target.regime.type == "Autocracy") %>%
+#   diff.groups.bayes(cbind(n, total) ~ Q4.11_collapsed, data=., prop=TRUE)
+# 
+# #+ fig.width=6, fig.height=3
+# grid.arrange(qwer$plot.groups,
+#              qwer$plot.diffs)
+# 
+# qwer1 <- survey.clean.all %>%
+#   count(Q4.11_collapsed, target.regime.type) %>%
+#   group_by(Q4.11_collapsed) %>%
+#   mutate(total = sum(n)) %>%
+#   filter(!is.na(Q4.11_collapsed)) %>%
+#   filter(target.regime.type != "Autocracy") %>%
+#   diff.groups.bayes(cbind(n, total) ~ Q4.11_collapsed, data=., prop=TRUE)
+# 
+# #+ fig.width=6, fig.height=3
+# grid.arrange(qwer1$plot.groups,
+#              qwer1$plot.diffs)
+# 
+# grid.arrange(qwer1$plot.groups,
+#              qwer$plot.groups)
+
+# percent changed ~ contentiousness + regime type + positivity of relationship + instrumental + principles
+zxcv <- lm(Q4.21_percent.changed ~ potential.contentiousness + 
+             target.regime.type + Q4.11_collapsed +
+             Q2.5_count +
+             Q3.6_num + log1p(Q3.4.num), 
+           data=survey.clean.all)
+
+zxcv.bayes <- stan_glm(Q4.21_percent.changed ~ potential.contentiousness + 
+                         target.regime.type + Q4.11_collapsed +
+                         Q2.5_count +
+                         Q3.6_num + log1p(Q3.4.num),
+                       data=survey.clean.all, family=gaussian(),
+                       prior=cauchy(), prior_intercept=cauchy(),
+                       chains=4, iter=ITER, warmup=WARMUP,
+                       algorithm="sampling", seed=my.seed)
+
+plot.data <- tidy(zxcv.bayes, intervals=TRUE, prob=0.95) %>%
+  filter(term != "(Intercept)") %>%
+  left_join(coef.names, by="term")
+
+plot.coefs <- ggplot(plot.data,
+                     aes(x=estimate, y=term.clean.rev,
+                         xmin=lower, xmax=upper)) +
+  geom_vline(xintercept=0) +
+  geom_pointrangeh(position=position_dodgev(height=0.5), size=0.5) +
+  scale_colour_manual(values=ath.palette("contention"), name=NULL) +
+  coord_cartesian(xlim=c(-0.5, 1)) +
+  labs(x="Posterior median change in proportion of reactions", y=NULL) +
+  theme_ath()
+plot.coefs
+
+fig.save.cairo(plot.coefs, filename="3-coefs-bayes",
+               width=6, height=3)
 
 #' ## Organizational characteristics
 #' 
@@ -143,11 +231,16 @@ plot.issue.regime <- prodplot(df.issue.regime,
   guides(fill=FALSE, linetype=FALSE) +
   labs(title="Potential issue contentiousness across regime types",
        subtitle="Issue area of INGO + regime type of target country") +
-  theme_ath() + theme(axis.title=element_blank(),
+  theme_ath(18) + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
 #+ fig.width=6, fig.height=3
 plot.issue.regime
+
+fig.save.cairo(plot.issue.regime + labs(title=NULL, subtitle=NULL), 
+               filename="3-issue-regime",
+               width=8, height=5)
+
 
 issue.regime.table <- survey.countries.clean %>%
   xtabs(~ target.regime.type + potential.contentiousness, .)
@@ -157,7 +250,7 @@ issue.regime.table.bayes <- survey.countries.clean %>%
   group_by(target.regime.type) %>%
   mutate(total = sum(n)) %>%
   filter(potential.contentiousness == "High contention") %>%
-  prop.test.bayes(., as.formula(cbind(n, total) ~ target.regime.type))
+  diff.groups.bayes(cbind(n, total) ~ target.regime.type, data=., prop=TRUE)
 
 #+ fig.width=6, fig.height=3
 grid.arrange(issue.regime.table.bayes$plot.groups,
@@ -475,7 +568,7 @@ time.country.table.bayes <- survey.countries.clean %>%
   group_by(Q4.2) %>%
   mutate(total = sum(n)) %>%
   filter(target.regime.type == "Autocracy") %>%
-  prop.test.bayes(., as.formula(cbind(n, total) ~ Q4.2))
+  diff.groups.bayes(cbind(n, total) ~ Q4.2, data=., prop=TRUE)
 
 #+ fig.width=6, fig.height=5
 grid.arrange(time.country.table.bayes$plot.groups,
@@ -831,11 +924,15 @@ plot.govt.positivity.regime <- prodplot(df.govt.positivity.regime,
   guides(fill=FALSE) +
   labs(title="Relationship with the government, by regime type",
        subtitle="Q4.11: How would you characterize your organization’s relationship with the government of `target_country`?") +
-  theme_ath() + theme(axis.title=element_blank(),
+  theme_ath(18) + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
 #+ fig.width=6, fig.height=5
 plot.govt.positivity.regime
+
+fig.save.cairo(plot.govt.positivity.regime + labs(title=NULL, subtitle=NULL), 
+               filename="3-positivity-regime",
+               width=8, height=5)
 
 govt.positivity.regime.table <- survey.countries.clean %>%
   filter(Q4.11 != "Don't know", Q4.11 != "Prefer not to answer") %>%
@@ -843,6 +940,38 @@ govt.positivity.regime.table <- survey.countries.clean %>%
   xtabs(~ Q4.11 + target.regime.type, .)
 
 analyze.cat.var(govt.positivity.regime.table)
+
+
+df.govt.positivity.issue <- survey.countries.clean %>%
+  select(Q4.11, potential.contentiousness) %>%
+  filter(Q4.11 != "Don't know", Q4.11 != "Prefer not to answer") %>%
+  mutate(Q4.11 = droplevels(Q4.11),
+         Q4.11 = factor(Q4.11, levels=rev(levels(Q4.11))))
+
+plot.govt.positivity.issue <- prodplot(df.govt.positivity.issue,
+                                        ~ potential.contentiousness + Q4.11, mosaic("h"),
+                                        colour=NA) +
+  aes(fill=potential.contentiousness, colour="white") +
+  scale_fill_manual(values=ath.palette("contention"), name=NULL) +
+  guides(fill=FALSE) +
+  labs(title="Relationship with the government, by contentiousness",
+       subtitle="Q4.11: How would you characterize your organization’s relationship with the government of `target_country`?") +
+  theme_ath(18) + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+
+fig.save.cairo(plot.govt.positivity.issue + labs(title=NULL, subtitle=NULL), 
+               filename="3-positivity-issue",
+               width=8, height=5)
+
+#+ fig.width=6, fig.height=5
+plot.govt.positivity.issue
+
+govt.positivity.issue.table <- survey.countries.clean %>%
+  filter(Q4.11 != "Don't know", Q4.11 != "Prefer not to answer") %>%
+  mutate(Q4.11 = droplevels(Q4.11)) %>%
+  xtabs(~ Q4.11 + potential.contentiousness, .)
+
+analyze.cat.var(govt.positivity.issue.table)
 
 
 #' ## NGO regulations and restrictions
@@ -1039,13 +1168,13 @@ plot.reg.effect.general.regime <- prodplot(df.reg.effect.general.regime,
   guides(fill=FALSE) +
   labs(title="General restrictions, by regime type",
        subtitle="Q4.17: Overall, how is your organization's work affected by government regulations\nin `target_country`?") +
-  theme_ath() + theme(axis.title=element_blank(),
+  theme_ath(18) + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
 #+ fig.width=6, fig.height=4
 plot.reg.effect.general.regime
 
-fig.save.cairo(plot.reg.effect.general.regime + theme_ath(10), 
+fig.save.cairo(plot.reg.effect.general.regime + labs(title=NULL, subtitle=NULL), 
                filename="3-restrictions-regime-type", 
                width=6, height=4)
 
@@ -1077,13 +1206,13 @@ plot.reg.effect.general.issue <- prodplot(df.reg.effect.general.issue,
   guides(fill=FALSE) +
   labs(title="General restrictions, by issue",
        subtitle="Q4.17: Overall, how is your organization's work affected by government regulations\nin `target_country`?") +
-  theme_ath() + theme(axis.title=element_blank(),
+  theme_ath(18) + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
 #+ fig.width=6, fig.height=4
 plot.reg.effect.general.issue
 
-fig.save.cairo(plot.reg.effect.general.issue + theme_ath(10), 
+fig.save.cairo(plot.reg.effect.general.issue + labs(title=NULL, subtitle=NULL), 
                filename="3-restrictions-issue", 
                width=6, height=4)
 
@@ -1268,8 +1397,8 @@ show.plots <- function(chunk) {
     aes(fill=target.regime.type, colour="white") + 
     scale_fill_manual(values=ath.palette("regime"), name=NULL) +
     guides(fill=FALSE) +
-    labs(title=current.question) +
-    theme_ath() + theme(axis.title=element_blank(),
+    # labs(title=current.question) +
+    theme_ath(14) + theme(axis.title=element_blank(),
                         panel.grid=element_blank())
   
   plot.issue <- prodplot(chunk,
@@ -1278,14 +1407,21 @@ show.plots <- function(chunk) {
     aes(fill=potential.contentiousness, colour="white") + 
     scale_fill_manual(values=ath.palette("contention"), name=NULL) +
     guides(fill=FALSE) +
-    labs(title=" ") +
-    theme_ath() + theme(axis.title=element_blank(),
+    # labs(title=" ") +
+    theme_ath(14) + theme(axis.title=element_blank(),
                         panel.grid=element_blank())
 
   # Can't do this because knitr chokes...
-  # plot.both <- arrangeGrob(plot.regime, plot.issue, nrow=1)
+  plot.both <- arrangeGrob(plot.regime, plot.issue, nrow=1)
   # grid::grid.draw(plot.both)
+
+  filename <- paste0("3-reaction-",
+                     str_replace_all(str_to_lower(current.question), 
+                                     " |/", "-"))
   
+  fig.save.cairo(plot.both, filename=filename,
+                 width=7, height=2)
+
   grid.arrange(plot.regime, plot.issue, nrow=1)
 }
 
@@ -1305,7 +1441,7 @@ show.plots <- function(chunk) {
 #   map(~ show.plots(.))
 
 #+ fig.width=7, fig.height=2
-for (Q in unique(df.changes.response$question)) {
+for (Q in na.omit(unique(df.changes.response$question))) {
   chunk <- filter(df.changes.response, question == Q)
   
   show.plots(chunk)
