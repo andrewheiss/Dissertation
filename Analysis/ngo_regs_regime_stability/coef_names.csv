@@ -13,3 +13,12 @@ protests.violent.std_wt,External,Neighbor violent protests,"Relative violent pro
 protests.nonviolent.std_wt,External,Neighbor nonviolent protests,"Relative nonviolent protest activity, weighted by distance",ICEWS,"Relative nonviolent protest activity,XXXweighted by distance"
 shaming.states.std,Shaming,State-based shaming,Relative state-based shaming,ICEWS,Relative state-based shaming
 shaming.ingos.std,Shaming,INGO-based shaming,Relative INGO-based shaming,ICEWS,Relative INGO-based shaming
+potential.contentiousnessHigh contention,,High contention,High contention,,High contention
+target.regime.typeAutocracy,,Autocracy,Autocracy,,Autocracy
+Q4.11_collapsedSomewhat negative,,Somewhat negative,Somewhat negative,,Somewhat negative
+Q4.11_collapsedNeither positive nor negative,,Neither positive nor negative,Neither positive nor negative,,Neither positive nor negative
+Q4.11_collapsedSomewhat positive,,Somewhat positive,Somewhat positive,,Somewhat positive
+Q4.11_collapsedExtremely positive,,Extremely positive,Extremely positive,,Extremely positive
+Q3.6_num,,Number of collaborations,Number of collaborations,,Number of collaborations
+log1p(Q3.4.num),,Number of employees (logged),Number of employees (logged),,Number of employees (logged)
+Q2.5_count,,Number of countries,Number of countries,,
