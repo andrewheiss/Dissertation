@@ -24,3 +24,4 @@ output:
 - [Completion rates](ingo_survey/completion_rates.html)
 - [Summary](ingo_survey/survey_summary.html)
 - [Analysis](ingo_survey/survey_analysis.html)
+- [Actual analysis](ingo_survey/actual_analysis.html)
