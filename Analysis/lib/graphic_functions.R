@@ -5,6 +5,7 @@ library(ggrepel)
 library(gridExtra)
 library(viridis)
 library(pander)
+library(Cairo)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -25,6 +26,17 @@ coef.names <- read_csv(file.path(PROJHOME, "Analysis",
 
 col.auth <- "#441152"
 col.dem <- "#BEDB3A"
+
+# Colors for continents Sankey plot
+cont.colors <- tribble(
+  ~N1, ~col,
+  "Africa", "#FF4036",  # Red
+  "Americas", "#2ECC40",  # Green
+  "Asia &\nOceania", "#0073D9",  # Blue
+  "Europe", "#FFDB00"  # Yellow
+) %>%
+  mutate(N2 = paste0(N1, " ")) %>%
+  gather(key, ID, -col) %>% select(-key)
 
 # Borrowed from wesanderson
 # https://github.com/karthik/wesanderson/blob/master/R/colors.R

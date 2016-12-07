@@ -20,7 +20,7 @@
 
 #+ message=FALSE
 # Load clean data
-knitr::opts_chunk$set(cache=TRUE, fig.retina=2,
+knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
                       tidy.opts=list(width.cutoff=120),  # For code
                       options(width=120))  # For output
 
@@ -34,6 +34,7 @@ library(pander)
 library(DT)  # yay fancy HTML tables
 library(tm)  # yay text analysis
 library(countrycode)
+library(riverplot)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -213,6 +214,184 @@ plot.hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_i
 plot.hq.map.scale + 
   labs(title="Number of responding NGOs around the world",
        subtitle="Q2.2: Where is your organization's headquarters? (50 NGO ceiling)")
+
+
+#' ## Where do NGOs work?
+#' 
+#' ### Countries marked in the survey
+continents.marked <- survey.orgs.clean %>%
+  select(home = Q2.2_iso3, target = Q2.5_iso3) %>%
+  unnest(target) %>%
+  mutate_at(vars(home, target), funs(continent = countrycode(., "iso3c", "continent"))) %>%
+  mutate_at(vars(home_continent, target_continent),
+            funs(recode(., Oceania = "Asia &\nOceania", Asia = "Asia &\nOceania"))) %>%
+  group_by(home_continent, target_continent) %>%
+  summarize(times.marked = n()) %>%
+  filter(!is.na(home_continent), !is.na(target_continent)) %>%
+  group_by(home_continent) %>%
+  mutate(perc.home = times.marked / sum(times.marked)) %>%
+  group_by(target_continent) %>%
+  mutate(perc.target = times.marked / sum(times.marked)) %>%
+  ungroup()
+
+#' #### Flows
+datatable(continents.marked) %>%
+  formatPercentage(c("perc.home", "perc.target"), 2)
+
+edges.fancy <- continents.marked %>%
+  select(N1 = home_continent, N2 = target_continent, Value = times.marked) %>%
+  mutate(N2 = paste0(N2, " ")) %>%
+  arrange(Value) %>%
+  as.data.frame()
+
+nodes.fancy <- edges.fancy %>%
+  select(-Value) %>%
+  gather(X, ID) %>%
+  mutate(x = ifelse(X == "N1", 1, 2)) %>%
+  distinct(ID, X, .keep_all=TRUE) %>%
+  left_join(cont.colors, by="ID") %>%
+  select(ID, x, col) %>%
+  as.data.frame()
+
+continents.river <- makeRiver(nodes.fancy, edges.fancy)
+
+# Save plot to an object using a null PDF device
+# http://stackoverflow.com/a/14742001/120898
+pdf(NULL)
+dev.control(displaylist="enable")
+plot(continents.river, srt=0, lty=0)
+text(1, 0, "HQ region\n", adj=c(0.5, -0.5), font=2)
+text(2, 0, "Host region\n", adj=c(0.5, -0.5), font=2)
+countries.marked.plot <- recordPlot()
+invisible(dev.off())
+
+grid::grid.newpage()
+countries.marked.plot
+
+# Save to file
+filename <- "3-countries-marked"
+
+cairo_pdf(file.path(PROJHOME, "Output", "figures", paste0(filename, ".pdf")),
+          width=6, height=4, family="Source Sans Pro")
+countries.marked.plot
+invisible(dev.off())
+
+png(file.path(PROJHOME, "Output", "figures", paste0(filename, ".png")), 
+    width=6, height=4, family="Source Sans Pro", 
+    bg="white", units="in", res=300, type="cairo")
+countries.marked.plot
+invisible(dev.off())
+
+#' #### Overall summary
+df.target.regions <- continents.marked %>%
+  group_by(target_continent) %>%
+  summarise(times.marked = sum(times.marked)) %>%
+  mutate(perc.target = times.marked / sum(times.marked)) %>%
+  arrange(times.marked) %>%
+  mutate(target_continent = fct_inorder(target_continent))
+
+df.target.regions %>% datatable() %>% 
+  formatPercentage("perc.target", 2)
+
+plot.target.regions <- ggplot(df.target.regions, aes(x=times.marked, y=target_continent)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0),
+                     sec.axis = sec_axis(~ . / sum(df.target.regions$times.marked),
+                                         labels=scales::percent)) +
+  labs(x="Times marked", y=NULL) +
+  theme_ath()
+
+plot.target.regions +
+  labs(title="Region of work country",
+       subtitle="Q2.5: Where does your organization work? (summarized by region)")
+
+
+#' ### Countries answered
+continents.answered <- survey.clean.all %>%
+  select(home = Q2.2_iso3, target = Q4.1_iso3) %>%
+  mutate_at(vars(home, target), funs(continent = countrycode(., "iso3c", "continent"))) %>%
+  mutate_at(vars(home_continent, target_continent),
+            funs(recode(., Oceania = "Asia &\nOceania", Asia = "Asia &\nOceania"))) %>%
+  group_by(home_continent, target_continent) %>%
+  summarize(times.marked = n()) %>%
+  filter(!is.na(home_continent), !is.na(target_continent)) %>%
+  group_by(home_continent) %>%
+  mutate(perc.home = times.marked / sum(times.marked)) %>%
+  group_by(target_continent) %>%
+  mutate(perc.target = times.marked / sum(times.marked)) %>%
+  ungroup()
+
+#' #### Flows
+datatable(continents.answered) %>%
+  formatPercentage(c("perc.home", "perc.target"), 2)
+
+edges.fancy.answered <- continents.answered %>%
+  select(N1 = home_continent, N2 = target_continent, Value = times.marked) %>%
+  mutate(N2 = paste0(N2, " ")) %>%
+  arrange(Value) %>%
+  as.data.frame()
+
+nodes.fancy.answered <- edges.fancy %>%
+  select(-Value) %>%
+  gather(X, ID) %>%
+  mutate(x = ifelse(X == "N1", 1, 2)) %>%
+  distinct(ID, X, .keep_all=TRUE) %>%
+  left_join(cont.colors, by="ID") %>%
+  select(ID, x, col) %>%
+  as.data.frame()
+
+continents.river.answered <- makeRiver(nodes.fancy.answered,
+                                       edges.fancy.answered)
+
+# Save to file
+pdf(NULL)
+dev.control(displaylist="enable")
+plot(continents.river.answered, srt=0, lty=0)
+text(1, 0, "HQ region\n", adj=c(0.5, -0.5), font=2)
+text(2, 0, "Host region\n", adj=c(0.5, -0.5), font=2)
+countries.answered.plot <- recordPlot()
+invisible(dev.off())
+
+grid::grid.newpage()
+countries.answered.plot
+
+# Save to file
+filename <- "3-countries-answered"
+
+cairo_pdf(file.path(PROJHOME, "Output", "figures", paste0(filename, ".pdf")),
+          width=6, height=4, family="Source Sans Pro")
+countries.answered.plot
+invisible(dev.off())
+
+png(file.path(PROJHOME, "Output", "figures", paste0(filename, ".png")), 
+    width=6, height=4, family="Source Sans Pro", 
+    bg="white", units="in", res=300, type="cairo")
+countries.answered.plot
+invisible(dev.off())
+
+#' #### Overall summary
+df.target.regions.answered <- continents.answered %>%
+  group_by(target_continent) %>%
+  summarise(times.marked = sum(times.marked)) %>%
+  mutate(perc.target = times.marked / sum(times.marked)) %>%
+  arrange(times.marked) %>%
+  mutate(target_continent = fct_inorder(target_continent))
+
+df.target.regions.answered %>% datatable() %>% 
+  formatPercentage("perc.target", 2)
+
+plot.target.regions.answered <- ggplot(df.target.regions.answered, 
+                                       aes(x=times.marked, y=target_continent)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0),
+                     sec.axis = sec_axis(~ . / sum(df.target.regions.answered$times.marked),
+                                         labels=scales::percent)) +
+  labs(x="Times marked", y=NULL) +
+  theme_ath()
+
+plot.target.regions.answered +
+  labs(title="Region of work country",
+       subtitle="Q4.1: Which country would you like to discuss? (summarized by region)")
 
 
 #' ## What do these NGOs do?
