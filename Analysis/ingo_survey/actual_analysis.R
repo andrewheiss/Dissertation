@@ -515,7 +515,8 @@ datatable(df.funding.other)
 #' 
 
 
-
+#' ## Responses to reactions
+#' 
 #######
 
 reactions <- tribble(
@@ -539,14 +540,15 @@ reaction.counts <- survey.clean.all %>%
   left_join(reactions, by="reaction") %>%
   mutate(reaction.clean = ordered(fct_inorder(reaction.clean)))
 
+# TODO: Percent labels along top
 plot.reaction.counts <- ggplot(reaction.counts, aes(y=reaction.clean, x=n)) +
-  geom_barh(stat="identity", fill=ath.palette("single.color")) +
-  # scale_fill_manual(values=, name=NULL) +
+  geom_barh(stat="identity") +
   labs(x=NULL, y=NULL) + 
-  theme_ath(20)
+  theme_ath() + theme(panel.grid.major.y=element_blank())
+plot.reaction.counts
 
 fig.save.cairo(plot.reaction.counts, filename="3-reaction-counts",
-               width=9, height=4)
+               width=4.5, height=2.5)
 
 
 #' How do different types of INGOs react differently in different political contexts?
@@ -563,39 +565,24 @@ reaction.counts <- survey.clean.all %>%
   arrange(potential.contentiousness, target.regime.type, prop) %>%
   mutate(reaction.clean = ordered(fct_inorder(reaction.clean)))
 
-ggplot(reaction.counts, aes(y=reaction.clean, x=prop)) +
+plot.reactions.regime.issue <- ggplot(reaction.counts,
+                                      aes(y=reaction.clean, x=prop)) +
   geom_barh(stat="identity") +
   labs(x=NULL, y=NULL) + 
   scale_x_continuous(labels=scales::percent) +
-  theme_ath() +
+  theme_ath() + theme(panel.grid.major.y=element_blank()) +
   facet_wrap(~ target.regime.type + potential.contentiousness)
+plot.reactions.regime.issue
 
 #' The most common reaction to restrictions is to turn to more local staff and volunteers, likely because it provides insulation against accuations of being tools of foreign governments (and it gives organizations a better connection to trends on the ground).
+#' 
 #' However, though this is the most frequent reaction for highly contentious NGOs working in autocracies, it is less common compared to their low contention counterparts. FREE RESPONSE ABOUT THAT HERE. Or in-person interview with human rights organization and how they purposely don't use local staff
+#' 
 #' INGOs that work in autocracies change the sources of their funding more often, which makes sense given the increase in restrictions on foreign funding—that's one of the more popular types of NGO restriction. In general, contentiousness of the issue doesn't do much for INGOs working in autocracies, since the distribution of reactions is pretty much the same, with two exceptions: more high contention INGOs in autocracies change the locations they work in and change the locations of their country offices. 
+#' 
 #' Interestingly, INGOS that work in democracies do differ slighly by contentiousness. High contention INGOs change the issues they work on more frequently compared to their less contentious counterparts, change the locations they work in less often, and change their sources of funding more often
-
+#' 
 #' Number of changes made. Organizations were offered 8 types of reactions - on average, how many did they choose? More in autcracies (21% ; 1.7 reactions) than in democracies (13.8%; 1.1 reactions), with a 9x% chance that the difference is greater than zero. Issue contentiousness does not matter, though. Both high and low contention NGOs selected 1.3 reactions
-
-# (21 * 8) / 100
-# (13.8 * 8) / 100
-# (16*8) / 100
-
-.21 * 8
-
-
-class(survey.clean.all$Q2.5_count)
-
-as.numeric(survey.clean.all$Q2.5_count)
-
-model <- lm(Q4.21_percent.changed ~ as.numeric(Q2.5_count), data=survey.clean.all)
-summary(model)
-
-ggplot(bloop, aes(x=Q2.5_count, y=Q4.21_percent.changed)) + 
-  geom_point() + geom_smooth()
-
-survey.clean.all %>%
-  mutate(num.countries = length(Q))
 
 num.changes <- survey.clean.all %>%
   select(ResponseID, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT")) %>%
@@ -606,6 +593,92 @@ num.changes <- survey.clean.all %>%
 
 survey.clean.num.changes <- survey.clean.all %>%
   left_join(num.changes, by=c("ResponseID", "loop.number"))
+
+survey.clean.num.changes %>%
+  group_by(target.regime.type) %>%
+  summarise(avg.pct.changed = mean(Q4.21_percent.changed, na.rm=TRUE)) %>%
+  mutate(avg.converted = avg.pct.changed * 8)
+
+survey.clean.num.changes %>%
+  group_by(potential.contentiousness) %>%
+  summarise(avg.pct.changed = mean(Q4.21_percent.changed, na.rm=TRUE)) %>%
+  mutate(avg.converted = avg.pct.changed * 8)
+
+ggplot(survey.clean.num.changes, aes(x=num.changes)) + 
+  geom_density() + 
+  facet_wrap(~ target.regime.type)
+
+
+#' INGOs make more changes in response to feeling restricted, which makes
+#' sense, since they have to respond more to harsher restrictions
+#' 
+asdf <- survey.clean.num.changes %>%
+  filter(!is.na(Q4.17), Q4.17 != "Don’t know") %>%
+  group_by(Q4.17) %>%
+  summarise(
+    num = n(),
+    avg.num.changed = mean(num.changes, na.rm=TRUE),
+    avg.pct.changed = mean(Q4.21_percent.changed, na.rm=TRUE)
+    ) %>%
+  mutate(avg.converted = avg.pct.changed * 8)
+ggplot(asdf, aes(x=avg.converted, y=Q4.17)) + geom_barh(stat="identity")
+
+#' Relationship with the government matters. INGOs that have a poor
+#' relationship with the government tend to make more changes. This possibly
+#' reflects differences in application of the law? Like, governments force more
+#' reactions and changes from organizations they don't like?
+#' 
+asdf <- survey.clean.num.changes %>%
+  filter(!is.na(Q4.11), Q4.11 != "Don't know", Q4.11 != "Prefer not to answer") %>%
+  group_by(Q4.11, target.regime.type) %>%
+  summarise(
+    num = n(),
+    avg.num.changed = mean(num.changes, na.rm=TRUE),
+    avg.pct.changed = mean(Q4.21_percent.changed, na.rm=TRUE)
+  ) %>%
+  mutate(avg.converted = avg.pct.changed * 8)
+ggplot(asdf, aes(x=avg.converted, y=Q4.11)) + geom_barh(stat="identity") + facet_wrap(~ target.regime.type)
+
+
+
+asdf <- survey.clean.num.changes %>%
+  filter(!is.na(Q4.17), !is.na(Q4.11)) %>%
+  filter(Q4.17 != "Don’t know", Q4.11 != "Don't know", Q4.11 != "Prefer not to answer") %>%
+  group_by(Q4.17, Q4.11) %>%
+  summarise(
+    num = n(),
+    avg.num.changed = mean(num.changes, na.rm=TRUE),
+    avg.pct.changed = mean(Q4.21_percent.changed, na.rm=TRUE)
+  ) %>%
+  mutate(avg.converted = avg.pct.changed * 8)
+
+ggplot(asdf, aes(x=avg.converted, y=Q4.11)) + geom_barh(stat="identity") + facet_wrap(~ Q4.17)
+
+# Changes ~ relationship with government
+survey.clean.num.changes %>%
+  group_by(Q4.11) %>%
+  summarise(avg.pct.changed = mean(Q4.21_percent.changed, na.rm=TRUE))
+  
+asdf <- survey.clean.all %>%
+  filter(Q2.5_count < 100)
+
+ggplot(asdf, aes(x=as.numeric(Q2.5_count), y=Q4.21_percent.changed)) + 
+  geom_point() + geom_smooth()
+
+num.changes <- survey.clean.all %>%
+  select(ResponseID, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT")) %>%
+  gather(reaction, value, -c(ResponseID, loop.number)) %>%
+  filter(value == "Yes") %>%
+  group_by(ResponseID, loop.number) %>%
+  summarize(num.changes = length(value))
+
+survey.clean.num.changes <- survey.clean.all %>%
+  left_join(num.changes, by=c("ResponseID", "loop.number"))
+
+
+survey.clean.num.changes %>%
+  group_by(target.regime.type) %>%
+  summarise(asdf = mean(num.changes, na.rm=TRUE))
 
 survey.clean.num.changes %>%
   group_by(potential.contentiousness) %>%
