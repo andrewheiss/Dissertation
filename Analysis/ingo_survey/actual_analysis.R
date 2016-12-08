@@ -277,9 +277,9 @@ continents.river <- makeRiver(nodes.fancy, edges.fancy)
 # code to an object that can then get re-run later, like a macro.
 countries.marked.plot %<a-% {
   plot(continents.river, srt=0, lty=0)
-  text(1, 0, "HQ\n", adj=c(0.5, -0.5), font=2)
-  text(2, 0, "Host\n", adj=c(0.5, -0.5), font=2)
-  text(1.5, 0, "Countries marked\n\n", adj=c(0.5, -0.5), font=2)
+  text(1, 0, "HQ", adj=c(0.5, -0.5), font=2)
+  text(2, 0, "Host", adj=c(0.5, -0.5), font=2)
+  text(1.5, 0, "Countries selected\n", adj=c(0.5, -0.5), font=2)
 }
 
 countries.marked.plot
@@ -348,9 +348,9 @@ continents.river.answered <- makeRiver(nodes.fancy.answered,
 
 countries.answered.plot %<a-% {
   plot(continents.river.answered, srt=0, lty=0)
-  text(1, 0, "HQ\n", adj=c(0.5, -0.5), font=2)
-  text(2, 0, "Target\n", adj=c(0.5, -0.5), font=2)
-  text(1.5, 0, "Countries answered\n\n", adj=c(0.5, -0.5), font=2)
+  text(1, 0, "HQ", adj=c(0.5, -0.5), font=2)
+  text(2, 0, "Target", adj=c(0.5, -0.5), font=2)
+  text(1.5, 0, "Countries answered\n", adj=c(0.5, -0.5), font=2)
 }
 
 countries.answered.plot
