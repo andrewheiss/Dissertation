@@ -12,6 +12,8 @@
 #'     highlight: pygments
 #'     theme: cosmo
 #'     self_contained: no
+#'     fig.height: 4
+#'     fig.width: 5
 #'     includes:
 #'       after_body: ../html/add_home_link.html
 #' bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
@@ -35,6 +37,7 @@ library(DT)  # yay fancy HTML tables
 library(tm)  # yay text analysis
 library(countrycode)
 library(riverplot)
+library(feather)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -69,6 +72,10 @@ survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 # Load cleaned, country-based data (only the Q4 loop)
 survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
                                             "survey_countries_clean.rds"))
+
+# External data
+full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
+                                    "full_data.feather"))
 
 # Load Robinson map projection
 countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
@@ -392,6 +399,57 @@ plot.target.regions.answered <- ggplot(df.target.regions.answered,
 plot.target.regions.answered +
   labs(title="Region of work country",
        subtitle="Q4.1: Which country would you like to discuss? (summarized by region)")
+
+
+#' ### Did NGOs choose easier countries to answer about?
+#' 
+#' NGOs chose one of the selected countries for the second half of the survey. Did they choose countries that were easier or harder to work in? Did the restrictivness of the country's civil society regulatory environment influence their answer?
+#' 
+csre.only <- full.data %>%
+  select(iso3, cs_env_sum) %>%
+  group_by(iso3) %>%
+  mutate(csre.fixed = zoo::na.locf(cs_env_sum, na.rm=FALSE)) %>%  # Forward-fill CSRE
+  summarise(csre.mean = mean(csre.fixed, na.rm=TRUE),
+            csre.last = last(csre.fixed),
+            csre.min = min(csre.fixed, na.rm=TRUE),
+            csre.max = max(csre.fixed, na.rm=TRUE))
+
+csre.selected <- survey.clean.all %>%
+  select(ResponseID, home_iso3 = Q2.2_iso3, target_iso3 = Q2.5_iso3, answered_iso3 = Q4.1_iso3) %>%
+  unnest(target_iso3) %>%
+  left_join(csre.only, by=c("target_iso3" = "iso3")) %>%
+  left_join(csre.only, by=c("answered_iso3" = "iso3"), suffix=c("_target", "_answered"))
+  
+csre.selected.answered <- csre.selected %>%
+  group_by(ResponseID, answered_iso3) %>%
+  summarise(avg.csre.all.targets = mean(csre.mean_target, na.rm=TRUE),
+            avg.csre.answered = mean(csre.mean_answered, na.rm=TRUE)) %>%
+  filter(!is.na(avg.csre.answered)) %>%
+  mutate(restriction = case_when(
+    avg.csre.answered < avg.csre.all.targets ~ "More restrictive than average",
+    avg.csre.answered > avg.csre.all.targets ~ "Less restrictive than average",
+    avg.csre.answered == avg.csre.all.targets ~ "Average restrictiveness"
+  ))
+
+ggplot(csre.selected.answered, 
+       aes(y=avg.csre.all.targets, x=avg.csre.answered)) + 
+  geom_abline(slope=1, size=0.25) +
+  geom_vline(xintercept=0, size=0.25) +
+  geom_point(aes(color=restriction), size=0.75) + 
+  labs(x="Average CSRE in country answered",
+       y="Average CSRE in all countries selected") +
+  scale_color_manual(values=ath.palette("palette1"), name=NULL) +
+  coord_cartesian(xlim=c(-6, 6.5), ylim=c(-6, 6.6)) +
+  theme_ath()
+
+#' To some extent, yes. 45% of respondents answered questions about countries that were less restrictive than the average restrictiveness of their total portfolio of countries.
+#' 
+csre.selected.answered %>%
+  group_by(restriction) %>%
+  summarize(total = n()) %>%
+  mutate(prop = total / sum(total)) %>%
+  datatable() %>%
+  formatPercentage("prop")
 
 
 #' ## What do these NGOs do?
