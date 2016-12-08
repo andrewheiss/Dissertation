@@ -401,7 +401,7 @@ plot.target.regions.answered +
        subtitle="Q4.1: Which country would you like to discuss? (summarized by region)")
 
 
-#' ### Did NGOs choose easier countries to answer about?
+#' ## Did NGOs choose easier countries to answer about?
 #' 
 #' NGOs chose one of the selected countries for the second half of the survey. Did they choose countries that were easier or harder to work in? Did the restrictivness of the country's civil society regulatory environment influence their answer?
 #' 
@@ -444,12 +444,31 @@ ggplot(csre.selected.answered,
 
 #' To some extent, yes. 45% of respondents answered questions about countries that were less restrictive than the average restrictiveness of their total portfolio of countries.
 #' 
+#+ results="asis"
 csre.selected.answered %>%
   group_by(restriction) %>%
   summarize(total = n()) %>%
   mutate(prop = total / sum(total)) %>%
-  datatable() %>%
-  formatPercentage("prop")
+  pandoc.table()
+
+#' The scatterplot shows a kind of equal distribution of easier vs. harder (45%
+#' vs. 35%). The distribution shows this a little differently, with the country
+#' answered skewed left.
+#' 
+csre.selected.answered.dist <- csre.selected.answered %>%
+  gather(key, value, avg.csre.all.targets, avg.csre.answered) %>%
+  mutate(key = fct_recode(key, 
+                          `All countries selected   ` = "avg.csre.all.targets",
+                          `Country answered` = "avg.csre.answered"))
+
+ggplot(csre.selected.answered.dist, aes(x=value, fill=key)) + 
+  geom_density(alpha=0.5, color=NA) + 
+  scale_fill_manual(values=ath.palette("palette1")[4:5], name=NULL) +
+  labs(x=NULL, y=NULL) +
+  theme_ath() + 
+  theme(panel.grid.major.y=element_blank(),
+        axis.text.y=element_blank())
+
 
 
 #' ## What do these NGOs do?
