@@ -12,8 +12,6 @@
 #'     highlight: pygments
 #'     theme: cosmo
 #'     self_contained: no
-#'     fig.height: 4
-#'     fig.width: 5
 #'     includes:
 #'       after_body: ../html/add_home_link.html
 #' bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
@@ -37,6 +35,7 @@ library(DT)  # yay fancy HTML tables
 library(tm)  # yay text analysis
 library(countrycode)
 library(riverplot)
+library(pryr)
 library(feather)
 
 panderOptions('table.split.table', Inf)
@@ -242,7 +241,8 @@ continents.marked <- survey.orgs.clean %>%
   ungroup()
 
 #' #### Flows
-datatable(continents.marked) %>%
+continents.marked %>%
+  datatable(options=list(pageLength=nrow(.))) %>%
   formatPercentage(c("perc.home", "perc.target"), 2)
 
 edges.fancy <- continents.marked %>%
@@ -264,30 +264,25 @@ continents.river <- makeRiver(nodes.fancy, edges.fancy)
 
 # Save plot to an object using a null PDF device
 # http://stackoverflow.com/a/14742001/120898
-pdf(NULL)
-dev.control(displaylist="enable")
-plot(continents.river, srt=0, lty=0)
-text(1, 0, "HQ region\n", adj=c(0.5, -0.5), font=2)
-text(2, 0, "Host region\n", adj=c(0.5, -0.5), font=2)
-countries.marked.plot <- recordPlot()
-invisible(dev.off())
+# pdf(NULL)
+# dev.control(displaylist="enable")
+# plot(continents.river, srt=0, lty=0)
+# text(1, 0, "HQ region\n", adj=c(0.5, -0.5), font=2)
+# text(2, 0, "Host region\n", adj=c(0.5, -0.5), font=2)
+# countries.marked.plot <- recordPlot()
+# invisible(dev.off())
+#
+# THIS IS AMAZING. This total beats recordPlot().
+# Use pryr's active binding function (%<a-%) to essentially save a chunk of R
+# code to an object that can then get re-run later, like a macro.
+countries.marked.plot %<a-% {
+  plot(continents.river, srt=0, lty=0)
+  text(1, 0, "HQ\n", adj=c(0.5, -0.5), font=2)
+  text(2, 0, "Host\n", adj=c(0.5, -0.5), font=2)
+  text(1.5, 0, "Countries marked\n\n", adj=c(0.5, -0.5), font=2)
+}
 
-grid::grid.newpage()
 countries.marked.plot
-
-# Save to file
-filename <- "3-countries-marked"
-
-cairo_pdf(file.path(PROJHOME, "Output", "figures", paste0(filename, ".pdf")),
-          width=6, height=4, family="Source Sans Pro")
-countries.marked.plot
-invisible(dev.off())
-
-png(file.path(PROJHOME, "Output", "figures", paste0(filename, ".png")), 
-    width=6, height=4, family="Source Sans Pro", 
-    bg="white", units="in", res=300, type="cairo")
-countries.marked.plot
-invisible(dev.off())
 
 #' #### Overall summary
 df.target.regions <- continents.marked %>%
@@ -329,7 +324,8 @@ continents.answered <- survey.clean.all %>%
   ungroup()
 
 #' #### Flows
-datatable(continents.answered) %>%
+continents.answered %>%
+  datatable(options=list(pageLength=nrow(.))) %>%
   formatPercentage(c("perc.home", "perc.target"), 2)
 
 edges.fancy.answered <- continents.answered %>%
@@ -350,31 +346,14 @@ nodes.fancy.answered <- edges.fancy %>%
 continents.river.answered <- makeRiver(nodes.fancy.answered,
                                        edges.fancy.answered)
 
-# Save to file
-pdf(NULL)
-dev.control(displaylist="enable")
-plot(continents.river.answered, srt=0, lty=0)
-text(1, 0, "HQ region\n", adj=c(0.5, -0.5), font=2)
-text(2, 0, "Host region\n", adj=c(0.5, -0.5), font=2)
-countries.answered.plot <- recordPlot()
-invisible(dev.off())
+countries.answered.plot %<a-% {
+  plot(continents.river.answered, srt=0, lty=0)
+  text(1, 0, "HQ\n", adj=c(0.5, -0.5), font=2)
+  text(2, 0, "Target\n", adj=c(0.5, -0.5), font=2)
+  text(1.5, 0, "Countries answered\n\n", adj=c(0.5, -0.5), font=2)
+}
 
-grid::grid.newpage()
 countries.answered.plot
-
-# Save to file
-filename <- "3-countries-answered"
-
-cairo_pdf(file.path(PROJHOME, "Output", "figures", paste0(filename, ".pdf")),
-          width=6, height=4, family="Source Sans Pro")
-countries.answered.plot
-invisible(dev.off())
-
-png(file.path(PROJHOME, "Output", "figures", paste0(filename, ".png")), 
-    width=6, height=4, family="Source Sans Pro", 
-    bg="white", units="in", res=300, type="cairo")
-countries.answered.plot
-invisible(dev.off())
 
 #' #### Overall summary
 df.target.regions.answered <- continents.answered %>%
@@ -399,6 +378,33 @@ plot.target.regions.answered <- ggplot(df.target.regions.answered,
 plot.target.regions.answered +
   labs(title="Region of work country",
        subtitle="Q4.1: Which country would you like to discuss? (summarized by region)")
+
+#' ### Both at once
+#+ fig.width=8, fig.height=3.5
+countries.marked.answered.both %<a-% {
+  split.screen(c(1, 2))
+  screen(1)
+  countries.marked.plot
+  screen(2)
+  countries.answered.plot
+  close.screen(all=TRUE) 
+}
+
+countries.marked.answered.both
+
+# Save to file
+filename <- "3-countries-marked-answered"
+
+cairo_pdf(file.path(PROJHOME, "Output", "figures", paste0(filename, ".pdf")),
+          width=8, height=3.5, family="Source Sans Pro")
+countries.marked.answered.both
+invisible(dev.off())
+
+png(file.path(PROJHOME, "Output", "figures", paste0(filename, ".png")), 
+    width=8, height=3.5, family="Source Sans Pro", 
+    bg="white", units="in", res=300, type="cairo")
+countries.marked.answered.both
+invisible(dev.off())
 
 
 #' ## Did NGOs choose easier countries to answer about?
