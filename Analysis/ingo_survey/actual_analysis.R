@@ -44,6 +44,8 @@ panderOptions('keep.line.breaks', TRUE)
 panderOptions('table.style', 'multiline')
 panderOptions('table.alignment.default', 'left')
 
+options("readr.num_columns" = 0)
+
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 source(file.path(PROJHOME, "Analysis", "lib", "cat_analysis.R"))
 
