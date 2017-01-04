@@ -35,7 +35,7 @@ In this paper, I argue that the political, legal, and regulatory institutions of
 
 INGOs have long been treated as a "black box" in much of the existing academic work on international institutions, and have often been assumed to act as altruistic bulwarks against the state, filling policy and issue gaps in the international system, and run by managers with only the best intentions [@Corry:2010; @Skjelsbaek:1971; @NyeKeohane:1971; @Bartelson:2006]. In the past decade, however, scholars have worked to move beyond this simplistic view and uncover the determinants of INGO behavior. @PrakashGugerty:2010a helped spearhead a new theoretical trend, arguing that advocacy INGOs should be seen as firms working in policy markets, driven by normative and instrumental concerns, and motivated organizational survival and growth. Seen in this more nuanced light, it became clear that, like firms, INGOs are subject to interagency conflicts, face issues with accountability, compete for scarce resources, and struggle to get their issues on the global agenda. @HeissJohnson:2016 provide a useful typology for this newer body of work (summarized in [@fig:ISR-pyramid]), which organizes these emerging structural determinants of INGO behavior into three related and interlocking categories: (1) the internal structure of the INGO, (2) the external dynamics and relationships faced by the INGO, and (3) the institutional context that defines the boundaries of INGO action. 
 
-![A unified framework for analyzing INGO behavior [@HeissJohnson:2016]](../../Graphics/ISR-pyramid.pdf){#fig:ISR-pyramid}
+![A unified framework for analyzing INGO behavior [@HeissJohnson:2016]](../../Graphics/ISR-pyramid){#fig:ISR-pyramid}
 
 ## Internal traits
 
