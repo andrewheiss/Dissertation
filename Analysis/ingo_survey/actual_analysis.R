@@ -284,8 +284,6 @@ countries.marked.plot %<a-% {
   text(1.5, 0, "Countries selected\n", adj=c(0.5, -0.5), font=2)
 }
 
-countries.marked.plot
-
 #' #### Overall summary
 df.target.regions <- continents.marked %>%
   group_by(target_continent) %>%
@@ -354,8 +352,6 @@ countries.answered.plot %<a-% {
   text(2, 0, "Target", adj=c(0.5, -0.5), font=2)
   text(1.5, 0, "Countries answered\n", adj=c(0.5, -0.5), font=2)
 }
-
-countries.answered.plot
 
 #' #### Overall summary
 df.target.regions.answered <- continents.answered %>%
@@ -439,7 +435,7 @@ csre.selected.answered <- csre.selected %>%
     avg.csre.answered == avg.csre.all.targets ~ "Average restrictiveness"
   ))
 
-ggplot(csre.selected.answered, 
+plot.csre.selected.answered <- ggplot(csre.selected.answered, 
        aes(y=avg.csre.all.targets, x=avg.csre.answered)) + 
   geom_abline(slope=1, size=0.25) +
   geom_vline(xintercept=0, size=0.25) +
@@ -448,7 +444,7 @@ ggplot(csre.selected.answered,
        y="Average CSRE in all countries selected") +
   scale_color_manual(values=ath.palette("palette1"), name=NULL) +
   coord_cartesian(xlim=c(-6, 6.5), ylim=c(-6, 6.6)) +
-  theme_ath()
+  theme_ath(8)
 
 #' To some extent, yes. 45% of respondents answered questions about countries that were less restrictive than the average restrictiveness of their total portfolio of countries.
 #' 
@@ -469,14 +465,24 @@ csre.selected.answered.dist <- csre.selected.answered %>%
                           `All countries selected   ` = "avg.csre.all.targets",
                           `Country answered` = "avg.csre.answered"))
 
-ggplot(csre.selected.answered.dist, aes(x=value, fill=key)) + 
+plot.csre.selected.answered.dist <- ggplot(csre.selected.answered.dist,
+                                           aes(x=value, fill=key)) + 
   geom_density(alpha=0.5, color=NA) + 
   scale_fill_manual(values=ath.palette("palette1")[4:5], name=NULL) +
-  labs(x=NULL, y=NULL) +
-  theme_ath() + 
+  labs(x="CSRE", y=NULL) +
+  theme_ath(8) + 
   theme(panel.grid.major.y=element_blank(),
         axis.text.y=element_blank())
 
+#+ fig.width=6, fig.height=2.5
+plot.csre.selected.answered.both <- cbind(ggplotGrob(plot.csre.selected.answered),
+                                          ggplotGrob(plot.csre.selected.answered.dist))
+
+grid::grid.draw(plot.csre.selected.answered.both)
+
+fig.save.cairo(plot.csre.selected.answered.both,
+               filename="3-easier-harder", 
+               width=6, height=2.5)
 
 
 #' ## What do these NGOs do?
