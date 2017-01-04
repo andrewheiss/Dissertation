@@ -277,6 +277,17 @@ Case studies: AMERA vs. IRI
 
 **Finish this tomorrow**
 
+\newpage
+
+# Appendix
+
+![Average CSRE in country about which organization answered vs. all countries organization selected](../../Output/figures/3-easier-harder.pdf){#fig:selected-easier}
+
+
+![Patterns of headquarters and host country regions for countries about which organizations selected and answered](../../Output/figures/3-countries-marked-answered.pdf){#fig:regions-sankey}
+
+
+\newpage
 
 [^1]:	[http://www.theguardian.com/global-development-professionals-network/2014/aug/12/china-ngo-government-civil-society](http://www.theguardian.com/global-development-professionals-network/2014/aug/12/china-ngo-government-civil-society)
 
