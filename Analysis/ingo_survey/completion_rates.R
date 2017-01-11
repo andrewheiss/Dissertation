@@ -62,6 +62,9 @@ options(mc.cores = CORES)
 
 
 #' ## Dead addresses, domains, and bounces
+# Clean IDs
+clean.ids <- read_csv(file.path(PROJHOME, "Data", "Survey", "raw_data",
+                                "clean_ids-2017-01-11.csv"))
 # Load data from tracking database
 db.email <- src_sqlite(path=file.path(PROJHOME, "Data", "Survey", "list", 
                                       "final_list.db"))
@@ -69,7 +72,8 @@ email.full <- tbl(db.email, "full_list") %>% collect() %>%
   separate(id_org, c("db", "id.in.db"))
 removed <- tbl(db.email, "remove") %>% collect()
 bounced.raw <- tbl(db.email, "bounces") %>% collect()
-completed <- tbl(db.email, "survey_completed") %>% collect()
+completed <- tbl(db.email, "survey_completed") %>% collect() %>%
+  left_join(clean.ids, by=c("qualtrics_id" = "ResponseID"))
 sending.groups <- tbl(db.email, "groups") %>% collect()
 
 email.by.db <- email.full %>%
@@ -328,15 +332,16 @@ absorption.rate <- (EI - BB.NET) / EI
 
 # Only consider the organizations that were not screened out
 survey.orgs.ingos <- survey.orgs.all %>%
-  filter(Q2.4 == "Yes")
+  filter(Q2.4 == "Yes") %>%
+  left_join(clean.ids, by="ResponseID")
 
 BO <- survey.orgs.ingos %>%
-  filter(!(ResponseID %in% unique(c(survey.partials$ResponseID,
-                                    survey.clean.all$ResponseID)))) %>%
+  filter(!(ResponseID %in% unique(survey.partials$ResponseID))) %>%
+  filter(!(clean.id %in% unique(survey.clean.all$clean.id))) %>%
   select(ResponseID) %>% unique() %>% nrow() %>% unlist()
 
 I.survey <- survey.clean.all %>%
-  filter(Finished == 1) %>% select(ResponseID) %>% 
+  filter(Finished == 1) %>% select(clean.id) %>% 
   unique() %>% nrow() %>% unlist()
 
 P.survey <- length(unique(survey.partials$ResponseID))
@@ -584,9 +589,9 @@ ggplotly(plot.responses.timeline.interactive)
 
 # Get a list of ids of completed surveys
 completed.and.partial <- completed %>%
-  filter(qualtrics_id %in% survey.orgs.clean$ResponseID) %>%
-  left_join(select(survey.orgs.clean, qualtrics_id=ResponseID, Q2.2_country),
-            by="qualtrics_id")
+  filter(clean.id %in% survey.orgs.clean$clean.id) %>%
+  left_join(select(survey.orgs.clean, clean.id, Q2.2_country),
+            by="clean.id")
 
 # Get full list of invited organizations with a column indicating the ones that
 # completed the survey. This is not completely accurate since not every

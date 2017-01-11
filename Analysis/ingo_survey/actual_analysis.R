@@ -419,13 +419,13 @@ csre.only <- full.data %>%
             csre.max = max(csre.fixed, na.rm=TRUE))
 
 csre.selected <- survey.clean.all %>%
-  select(ResponseID, home_iso3 = Q2.2_iso3, target_iso3 = Q2.5_iso3, answered_iso3 = Q4.1_iso3) %>%
+  select(clean.id, home_iso3 = Q2.2_iso3, target_iso3 = Q2.5_iso3, answered_iso3 = Q4.1_iso3) %>%
   unnest(target_iso3) %>%
   left_join(csre.only, by=c("target_iso3" = "iso3")) %>%
   left_join(csre.only, by=c("answered_iso3" = "iso3"), suffix=c("_target", "_answered"))
   
 csre.selected.answered <- csre.selected %>%
-  group_by(ResponseID, answered_iso3) %>%
+  group_by(clean.id, answered_iso3) %>%
   summarise(avg.csre.all.targets = mean(csre.mean_target, na.rm=TRUE),
             avg.csre.answered = mean(csre.mean_answered, na.rm=TRUE)) %>%
   filter(!is.na(avg.csre.answered)) %>%
@@ -802,8 +802,8 @@ reactions <- tribble(
 )
 
 reaction.counts <- survey.clean.all %>%
-  select(ResponseID, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT")) %>%
-  gather(reaction, value, -c(ResponseID, loop.number)) %>%
+  select(clean.id, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT")) %>%
+  gather(reaction, value, -c(clean.id, loop.number)) %>%
   filter(value == "Yes") %>%
   count(reaction) %>%
   arrange(n) %>%
@@ -823,9 +823,9 @@ fig.save.cairo(plot.reaction.counts, filename="3-reaction-counts",
 
 #' How do different types of INGOs react differently in different political contexts?
 reaction.counts <- survey.clean.all %>%
-  select(ResponseID, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT"),
+  select(clean.id, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT"),
          potential.contentiousness, target.regime.type) %>%
-  gather(reaction, value, -c(ResponseID, loop.number,
+  gather(reaction, value, -c(clean.id, loop.number,
                              potential.contentiousness, target.regime.type)) %>%
   filter(value == "Yes") %>%
   count(reaction, potential.contentiousness, target.regime.type) %>%
@@ -855,14 +855,14 @@ plot.reactions.regime.issue
 #' Number of changes made. Organizations were offered 8 types of reactions - on average, how many did they choose? More in autcracies (21% ; 1.7 reactions) than in democracies (13.8%; 1.1 reactions), with a 9x% chance that the difference is greater than zero. Issue contentiousness does not matter, though. Both high and low contention NGOs selected 1.3 reactions
 
 num.changes <- survey.clean.all %>%
-  select(ResponseID, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT")) %>%
-  gather(reaction, value, -c(ResponseID, loop.number)) %>%
+  select(clean.id, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT")) %>%
+  gather(reaction, value, -c(clean.id, loop.number)) %>%
   filter(value == "Yes") %>%
-  group_by(ResponseID, loop.number) %>%
+  group_by(clean.id, loop.number) %>%
   summarize(num.changes = length(value))
 
 survey.clean.num.changes <- survey.clean.all %>%
-  left_join(num.changes, by=c("ResponseID", "loop.number"))
+  left_join(num.changes, by=c("clean.id", "loop.number"))
 
 survey.clean.num.changes %>%
   group_by(target.regime.type) %>%
@@ -936,14 +936,14 @@ ggplot(asdf, aes(x=as.numeric(Q2.5_count), y=Q4.21_percent.changed)) +
   geom_point() + geom_smooth()
 
 num.changes <- survey.clean.all %>%
-  select(ResponseID, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT")) %>%
-  gather(reaction, value, -c(ResponseID, loop.number)) %>%
+  select(clean.id, loop.number, starts_with("Q4.21"), -dplyr::contains("_TEXT")) %>%
+  gather(reaction, value, -c(clean.id, loop.number)) %>%
   filter(value == "Yes") %>%
-  group_by(ResponseID, loop.number) %>%
+  group_by(clean.id, loop.number) %>%
   summarize(num.changes = length(value))
 
 survey.clean.num.changes <- survey.clean.all %>%
-  left_join(num.changes, by=c("ResponseID", "loop.number"))
+  left_join(num.changes, by=c("clean.id", "loop.number"))
 
 
 survey.clean.num.changes %>%
@@ -961,7 +961,7 @@ survey.clean.num.changes %>%
 # What explains those reactions
 
 open.ended <- survey.clean.all %>%
-  select(ResponseID, loop.number, contains("TEXT"), 
+  select(clean.id, loop.number, contains("TEXT"), 
          Q3.9, Q3.10, Q3.11, Q3.12, Q3.13, 
          Q4.10, Q4.12, Q4.18, Q4.20, Q5.1, 
          -Q2.3_TEXT, -Q3.1_other_TEXT)
@@ -971,9 +971,9 @@ open.ended %>% ncol() - 2
 
 # How many open-ended questions did respondents answer?
 open.ended.respondnents <- open.ended %>%
-  gather(key, value, -ResponseID, -loop.number) %>%
+  gather(key, value, -clean.id, -loop.number) %>%
   filter(!is.na(value)) %>%
-  group_by(ResponseID, loop.number) %>%
+  group_by(clean.id, loop.number) %>%
   summarise(n = n())
 
 ggplot(open.ended.respondnents, aes(x=n)) +
@@ -984,6 +984,6 @@ ggplot(open.ended.respondnents, aes(x=n)) +
 summary(open.ended.respondnents$n)
 
 # How many people skipped all open-ended questions?
-skipped <- sum(!(survey.orgs.clean$ResponseID %in% open.ended.respondnents$ResponseID))
+skipped <- sum(!(survey.orgs.clean$clean.id %in% open.ended.respondnents$clean.id))
 skipped
 skipped / nrow(survey.countries.clean)

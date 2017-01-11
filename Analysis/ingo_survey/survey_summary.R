@@ -224,7 +224,7 @@ sum(df.work.countries.all$presence, na.rm=TRUE)
 #' #### Countries per response
 survey.orgs.clean %>%
   unnest(Q2.5_iso3) %>%
-  group_by(ResponseID) %>%
+  group_by(clean.id) %>%
   summarise(num = n()) %>%
   ungroup() %T>% 
   {print(summary(.$num))} %>%
