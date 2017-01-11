@@ -1,9 +1,7 @@
-library(dplyr)
-library(tidyr)
-library(readr)
+library(tidyverse)
+library(magrittr)
 library(stringi)
 library(stringr)
-library(purrr)
 library(feather)
 library(zoo)
 library(countrycode)
@@ -1107,6 +1105,21 @@ external.data.target <- external.data.summary %>%
 # --------------------------
 # Create final survey data
 # --------------------------
+# Add clean anonymized IDs
+randomly <- function(x) {
+  sample(xtfrm(x))
+}
+
+clean.ids <- survey.orgs.clean.final %T>%
+  {set.seed(1234)} %>%
+  distinct(ResponseID) %>%
+  arrange(randomly(ResponseID)) %>%
+  mutate(clean.id = as.integer(seq(from=sample(1000:2000, 1),
+                                   length.out=n()))) %T>%
+  write_csv(., file.path(PROJHOME, "Data", "Survey", 
+                         "raw_data", "clean_ids.csv"))
+
+
 # Merge in hand-coded and external data
 survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
   left_join(all.issues.clean, by="ResponseID") %>%
@@ -1115,25 +1128,28 @@ survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
   left_join(employees.num, by="ResponseID") %>%
   left_join(volunteers.num, by="ResponseID") %>%
   left_join(collaboration.clean, by="ResponseID") %>%
-  left_join(external.data.home, by=c("Q2.2_cow"="home.cowcode"))
+  left_join(external.data.home, by=c("Q2.2_cow"="home.cowcode")) %>%
+  left_join(clean.ids, by="ResponseID") %>%
+  select(clean.id, everything(), -ResponseID)
 
 survey.countries.clean.for.realz <- survey.countries.clean %>%
   left_join(govt.freq.fixed, by=c("ResponseID", "loop.number")) %>%
   left_join(govt.freq.report.fixed, by=c("ResponseID", "loop.number")) %>%
   left_join(reactions, by=c("ResponseID", "loop.number")) %>%
   left_join(external.data.target, by=c("Q4.1_cow"="target.cowcode")) %>%
+  left_join(clean.ids, by="ResponseID") %>%
+  select(clean.id, everything(), -ResponseID) %>%
   # Add issue area data
   left_join(left_join(select(survey.orgs.clean.final.for.realz, 
-                             ResponseID, main.issue = Q3.2.clean), 
+                             clean.id, main.issue = Q3.2.clean), 
                       contentiousness, 
                       by=c("main.issue" = "Q3.2.clean")),
-            by="ResponseID")
-
-
+            by="clean.id")
+  
 # Combine with country-level data
 survey.clean.all <- survey.orgs.clean.final.for.realz %>%
   left_join(survey.countries.clean.for.realz,
-            by=c("ResponseID", "survey", "potential.contentiousness"))
+            by=c("clean.id", "survey", "potential.contentiousness"))
 
 
 # ------------------------
