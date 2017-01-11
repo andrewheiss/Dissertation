@@ -4,8 +4,8 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss&#x40;duke.edu
-date: November 13, 2016
-published: Early draft for ARNOVA 2016. Please do not cite without permission.
+date: January 11, 2017
+published: Please do not cite without permission.
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
 ...
@@ -28,7 +28,7 @@ In contrast, the Carnegie Center was motivated by a different set of core princi
 
 This sharp divergence between OSF and the Carnegie Center illustrates a broader trend occurring on a global scale. Since the 1990s, INGOs have emerged as a cornerstone of global governance [@Lipschutz:1992; @AhmedPotter:2006] and have become increasingly active in authoritarian regimes [@Heiss:2016a]. Autocrats, in turn, work to regulate and restrict the activities and programming of international and foreign-funded NGOs working their countries, and often force INGOs to make difficult organizational decisions. What determines when INGOs adhere to authoritarian legal restrictions (like the Carnegie Center), resist government intrusions into organizational practices, or pull out of the country entirely (like OSF)? Why do INGOs work in these regimes if their services and advocacy can potentially help the regime? More generally, how do INGOs adapt to their institutional context and what tactics do they use to stay in engaged in the countries they target?
 
-In this paper, I argue that the political, legal, and regulatory institutions of the countries that INGOs target and work in have a substantial influence on these organizations' strategies and programming. I present an original theoretical model to explain and predict how INGOs respond to authoritarian regulations and restrictions, given an organization's core principles, its instrumental concerns, and its power relative to the regime, and I test this theory using the results from a global survey of more than 600 INGOs.
+In this chapter, I argue that the political, legal, and regulatory institutions of the countries that INGOs target and work in have a substantial influence on these organizations' strategies and programming. I present an original theoretical model to explain and predict how INGOs respond to authoritarian regulations and restrictions, given an organization's core principles, its instrumental concerns, and its power relative to the regime, and I test this theory using the results from a global survey of more than 600 INGOs.
 
 
 # What influences INGO behavior?
@@ -125,7 +125,7 @@ As noted previously, the Yearbook uses a more restrictive definition of internat
 
 With the exception of the ECOSOC list, none of these directories indicate where the organizations work—only their organizational headquarters. As such, there is no systematic way to disambiguate international NGOs, as I define them, from domestic NGOs. To account for this, I use an early question in the survey to filter out domestic NGOs.[^17] Organizations that indicate they only work in one country leave the survey early and are not included in this analysis. 
 
-I faced an empirical tradeoff with the survey's sampling strategy. I could attempt to calculate accurate population estimates and boost the survey's inferential power by creating probability-based panels of potential participants, butting so would reduce the possible number of responses significant, especially given the impossibility of distinguishing between domestic and international organizations. Additionally, given the composition of the lists, the universe of possible NGO sectors is inherently not representative of the entire INGO sector—the UN's list of ECOSOC-affiliated NGOs is self-selected, and the other lists are domain-based, selecting only organizations focused on education, development, freedom of expression, human rights, and human trafficking. Finally, it was impossible to know how many of the organizations listed in these directories were defunct and unreachable. Sampling from such an unstable population would result in a small number of usable responses. To maximize the chances of identifying the greatest number of *international* organizations in the list, I instead conduct a non-probability list-based internet survey [@AAPOR:2016, 43]. While this decision increases the number of responses, it limits the inferential and statistical power of the sample and tempers the conclusions and findings. Regardless, though results from the survey are not perfectly reflective of the entire global INGO sector, they do reveal important insights and trends about a self-selecting subset of organizations working on education and human rights issues. 
+I faced an empirical tradeoff with the survey's sampling strategy. I could attempt to calculate accurate population estimates and boost the survey's inferential power by creating probability-based panels of potential participants, but doing so would reduce the possible number of responses significant, especially given the impossibility of distinguishing between domestic and international organizations. Additionally, given the composition of the lists, the universe of possible NGO sectors is inherently not representative of the entire INGO sector—the UN's list of ECOSOC-affiliated NGOs is self-selected, and the other lists are domain-based, selecting only organizations focused on education, development, freedom of expression, human rights, and human trafficking. Finally, it was impossible to know how many of the organizations listed in these directories were defunct and unreachable. Sampling from such an unstable population would result in a small number of usable responses. To maximize the chances of identifying the greatest number of *international* organizations in the list, I instead conduct a non-probability list-based internet survey [@AAPOR:2016, 43]. While this decision increases the number of responses, it limits the inferential and statistical power of the sample and tempers the conclusions and findings. Regardless, though results from the survey are not perfectly reflective of the entire global INGO sector, they do reveal important insights and trends about a self-selecting subset of organizations working on education and human rights issues. 
 
 ## Survey details
 
@@ -143,26 +143,29 @@ Of the 17,590 organizations that potentially received the initial survey invitat
 
 ## Analytic strategy and possible biases
 
-Online surveys pose other methodological challenges beyond issues of sampling. My list inherently omits any international NGOs without an active English-based online presence, ignoring organizations that do not engage with the UN or other English-centered umbrella organization, organizations that lack technical capacity to maintain a current website or access the internet to respond to the survey, or organizations that purposely do not publish their information online. `TODO: Look at geographic distribution, issue distribution of respondents and nonrespondents (where known, since not all NGOs in list list their home/target countries or issues) - like, based on the lists overall vs. respondents`
+Online surveys pose other methodological challenges beyond issues of sampling. My list inherently omits any international NGOs without an active English-based online presence, ignoring organizations that do not engage with the UN or other English-centered umbrella organization, organizations that lack technical capacity to maintain a current website or access the internet to respond to the survey, or organizations that purposely do not publish their information online. Accordingly, this survey does not represent all INGOs. Though it is impossible to tell exactly how respondents and nonrespondents differed in their choice to complete the survey, as I do not have complete information about the pool of potential respondents, more European and American NGOs responded than those based in Asia and Africa, likely because of these technological and linguistic barriers.[^19]
 
-I took several steps to address these biases and threats to validity, based on the methods and recommendations of others [@Buthe:2011; @EdwardsRobertsClarke:2009; @HeissKelley:2016]. After cleaning the initial list of e-mails, I sent each potential respondent an initial invitation, followed up with a reminder two weeks later, and a final reminder after another two weeks.[^19]To reduce language barriers, respondents were encouraged to answer all free questions in their native language. Because the survey deals with sensitive questions about organizational strategy in potentially precarious political contexts, respondents were informed that their responses would be kept anonymous. To maintain anonymity when discussing the results of the survey, each respondent was assigned a randomly assigned four-digit ID number, and any quotes from the free response questions were stripped of potentially identifying information.
+I took several steps to address these biases and threats to validity, based on the methods and recommendations of others [@Buthe:2011; @EdwardsRobertsClarke:2009; @HeissKelley:2016]. After cleaning the initial list of e-mails, I sent each potential respondent an initial invitation, followed up with a reminder two weeks later, and a final reminder after another two weeks.[^20]To reduce language barriers, respondents were encouraged to answer all free questions in their native language. Because the survey deals with sensitive questions about organizational strategy in potentially precarious political contexts, respondents were informed that their responses would be kept anonymous. To maintain anonymity when discussing the results of the survey, each respondent was assigned a randomly assigned four-digit ID number, and any quotes from the free response questions were stripped of potentially identifying information.
 
 The nature of the population of INGOs poses an additional challenge for analyzing organizational strategy. To isolate the effect of country-level policies on INGOs, the survey asks organizations about their experiences working in *one* country, yet many INGOs work in multiple countries. An early question in the survey asked respondents to identify all the countries their has organization worked in, and later in the survey, respondents were asked to choose one of those pre-selected countries to answer a set of country-specific questions. This introduces additional bias into the survey responses—especially for organizations working in dozens of different countries—since respondents were given some choice about their responses. However, allowing for self-selection of target country was, to some extent, unavoidable given how little was known about the sample population *a priori*. Randomly offering one country from the subset of countries organizations identified previously could present a respondent with a country in which an organization engages in only minor work (e.g. an organization that attends an annual conference in one country may indicate that they have worked there), yielding less-than-useful country-level responses. 
 
 Furthermore, to avoid priming respondents' opinions of their experiences with host governments, I did not ask organizations to choose the country they felt most restricted working in (though that was the main purpose of the survey)—the survey simply asked respondents to choose one of the previously selected countries. This introduces a concern that organizations may have chosen to answer questions about easier, less restrictive countries. Nearly half of respondents answered questions about a country that had a less restrictive civil society regulatory environment (as measured by the CSRE index from chapter 2) than the average CSRE across their total portfolio of host countries, 35% answered about countries that were more restrictive than the average CSRE, and 21% answered about countries with the same level of restrictiveness as the average (see @fig:selected-easier in the appendix). To some extent, respondents did tend to provide answers about their work in less restrictive countries compared to their total portfolio, possibly to avoid answering more difficult questions.
 
-That said, there is some evidence that respondents answered questions about the countries with which they were most familiar, regardless of the restrictiveness of the regulatory environment. Respondents headquartered in specific regions tended to answer questions about their work in countries in a way that reflected general patterns for that region. For instance, that fit a general pattern for INGOs based in their same region. For instance, 44% of all Europe-based respondents indicated that they conduct work in other European countries, with 23% working in Asia, 18% in Africa, and 14% in the Americas (see @fig:regions-sankey). Correspondingly, 46% of Europe-based respondents answered questions about their work in Europe, 20% about Asia, 20% in Africa, and 14% in the Americas. This distribution closely mirrors that of the countries these INGOs had selected and shows that, at least at a regional level, organizations did not answer questions about their work in a less restrictive region (such as Europe). This pattern of similarity holds for INGOs working in all other regions, with the exception of Africa-based INGOs—while 66% of African INGOs indicated working in other African countries, 83% answered questions about their work in other African countries, indicating that respondents likely chose to answer questions about countries that were most familiar and similar to their home countries and not necessarily because of the CSRE.
+That said, there is some evidence that respondents answered questions about the countries with which they were most familiar, regardless of the restrictiveness of the regulatory environment. Respondents headquartered in specific regions tended to answer questions about their work in countries in a way that reflected general patterns for that region. For instance, that fit a general pattern for INGOs based in their same region. For instance, 44% of all Europe-based respondents indicated that they conduct work in other European countries, with 23% working in Asia, 18% in Africa, and 14% in the Americas (see @fig:regions-sankey). Correspondingly, 46% of Europe-based respondents answered questions about their work in Europe, 20% about Asia, 20% in Africa, and 14% in the Americas. This distribution closely mirrors that of the countries these INGOs had selected and shows that, at least at a regional level, organizations did not answer questions about their work in a less restrictive region (such as Europe). This pattern of similarity holds for INGOs working in all other regions, with the exception of Africa-based INGOs—while 66% of African INGOs indicated working in other African countries, 83% answered questions about their work in other African countries, indicating that respondents likely chose to answer questions about countries that were most familiar and similar to their home countries and not necessarily because of the CSRE. 
 
+Since the survey was designed to not have strong statistical or inferential power (opting to maximize possible international NGO response instead), the findings reported below are primarily descriptive and highlight general trends in how human rights-focused and service provision-focused INGOs relate to the regulatory environments of their host countries. I report basic summary statistics and cross-tabulations of survey responses and I use Bayesian inferential statistics to check for differences in means and associations within responses. Bayesian methods are especially appropriate for making tentative exploratory inferences from this kind of data, particularly when combined with data visualizations and graphs [@Gelman:2003], and accordingly, I rely heavily on statistical graphics when making inferences. As with previous statistical chapters, I use weakly informative prior distributions for sample parameters and I obtain the posterior distribution of the CSRE with Markov Chain Monte Carlo (MCMC) sampling and simulate values from the joint posterior distribution of sample parameters.[^21]
 
-respondents tended to select countries that fit within the general pattern for NGOs based in their same region. Africa-based NGOs are the one exception, with 83% of respondents based in Africa answering questions about their work in another African country, rather than in Europe, the Americas, or Asia. This switch may indicate that smaller NGOs selected countries they work in the most or have the most knowledge of. Indeed, ASDF
-
-However, I am less concerned with this bias, since most respondents work in X–Y countries and …. Additionally, the countries for which respondents answered generally reflect the countries they had marked
-
-Since the survey was designed to not have strong statistical or inferential power (opting to maximize possible international NGO response instead), the findings reported below are primarily descriptive and highlight general trends in how human rights-focused and service provision-focused INGOs relate to the regulatory environments of their host countries. I report basic summary statistics and cross-tabulations of survey responses and I use Bayesian inferential statistics to check for differences in means and associations within responses. Bayesian methods are especially appropriate for making tentative exploratory inferences from this kind of data, particularly when combined with data visualizations and graphs [@Gelman:2003], and accordingly, I rely heavily on statistical graphics when making inferences. As with previous statistical chapters, I use weakly informative prior distributions for sample parameters and I obtain the posterior distribution of the CSRE with Markov Chain Monte Carlo (MCMC) sampling and simulate values from the joint posterior distribution of sample parameters.[^20]
-
-In the absence of strong statistical power, I supplement inferences with interpretive analysis of the survey's free response answers. Only 19 respondents (2.8%) failed to answer any of the survey's 36 open-ended questions, and most answered between 8–16 questions, resulting in a sizable corpus of qualitative insights into INGO experiences with their host governments. `TODO: More about how specifically I use the free response answers`
+In the absence of strong statistical power, I supplement inferences with interpretive analysis of the survey's free response answers. Only 19 respondents (2.8%) declined to answer any of the survey's 36 open-ended questions, and most answered between 8–16 questions, resulting in a sizable corpus of qualitative insights into INGO experiences with their host governments. Where possible, I quote extensively from these responses to provide deeper anecdotal support of organizations's experiences and decisions working with the governments of their target countries.
 
 I use the results of this global survey of international NGOs to measure each element of my theory: INGO ideal points, operational flexibility, and relationship with the target regime. I also measure how restricted INGOs feel in their host countries and which kinds of adjustments they have undertaken in response to changing regulations. In the remainder of this chapter, I provide a general overview of the subset of the INGO sector I surveyed. I then describe how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. Next, I investigate how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. I conclude by discussing how these results support the implications of my hypotheses and theory.
+
+## general overview of the subset of the INGO sector I surveyed. 
+
+## I then describe how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. 
+
+## I then describe how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. 
+
+## I conclude by discussing how these results support the hypotheses implied by my theory.
 
 ## Reactions to restrictions
 
@@ -178,29 +181,6 @@ We changed which locations we work in
 We changed the location of our country office
 We used more local staff and/or volunteers
 We used more foreign staff and/or volunteers
-
-## general overview of the subset of the INGO sector I surveyed. 
-
-## I then describe how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. 
-
-## I then describe how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. 
-
-## I conclude by discussing how these results support the hypotheses implied by my theory.
-
-## Survey structure
-
-The survey includes a series of questions designed to identify the aspects of an INGO's organizational culture that correspond to my theory. In general, I ask respondents to (1) define their organization's core mission, vision, and values, and discuss how their programming reflects those principles, (2) explain the organization's flexibility (i.e. how it raises funds, how it collaborates with other organizations, etc.), and (3) describe and discuss the government restrictions they have faced while working abroad. Ultimately, I will be able to use these results to test each of the three mechanisms and determine how, why, and when INGOs shift their core values, become more flexible and instrumental, or attempt to induce the government to change its preferences. 
-
-
-Structure analysis around each element of theory. 
-
-- summary of responses
-- summary of relationship with government + restrictions + reactions to restrictions + regime type
-- instrumental size funding volunteers reactions to restrictions, overall restrictions
-- principles based on free responses and reactions
-- issue alignment 
-
-Reaction ~ instrumental issues + issue alignment + principles
 
 Where are respondents based?
 Where do respondents work?
@@ -253,10 +233,6 @@ USE IRI VS. CARNEGIE
 
 One changed instrumental, one changed principles
 
-- Lists, how created, cleaned, number of respondents
-
-
-
 Instrumental concerns - size of organization; sources of funding
 
 Perceptions of restriction
@@ -272,6 +248,21 @@ Case studies: AMERA vs. IRI
 
 ---- 
 
+
+## Survey structure
+
+The survey includes a series of questions designed to identify the aspects of an INGO's organizational culture that correspond to my theory. In general, I ask respondents to (1) define their organization's core mission, vision, and values, and discuss how their programming reflects those principles, (2) explain the organization's flexibility (i.e. how it raises funds, how it collaborates with other organizations, etc.), and (3) describe and discuss the government restrictions they have faced while working abroad. Ultimately, I will be able to use these results to test each of the three mechanisms and determine how, why, and when INGOs shift their core values, become more flexible and instrumental, or attempt to induce the government to change its preferences. 
+
+
+Structure analysis around each element of theory. 
+
+- summary of responses
+- summary of relationship with government + restrictions + reactions to restrictions + regime type
+- instrumental size funding volunteers reactions to restrictions, overall restrictions
+- principles based on free responses and reactions
+- issue alignment 
+
+Reaction ~ instrumental issues + issue alignment + principles
 
 # Conclusion
 
@@ -329,8 +320,10 @@ Case studies: AMERA vs. IRI
 
 [^18]:	To count as a valid partial response, a responded had to answer at least 20 questions in the survey, and at least 6 had to come from the section asking about the organization's work in a specific country.
 
-[^19]:	For technical details on how the invitation was sent and designed, see [notebook.andrewheiss.com/project/diss-ingos-in-autocracies/survey-technical-details/](https://notebook.andrewheiss.com/project/diss-ingos-in-autocracies/survey-technical-details/).
+[^19]:	Of the organizations in the master database with a known headquarters location, roughly 2.5% of Asian NGOs and 3% of African NGOs responded, in contrast to nearly 6% of both European and American NGOs. The difference between these proportions is highly significant (P(∆ \> 0 ≈ 1)).
 
-[^20]:	I use Stan [@stan] through R [@rstan; @r-project] to generate 4 MCMC chains with 2,000 iterations in each chain, 1,000 of which are used for warmup. All chains converge; I assess convergence with visual inspection, and diagnostic plots are included the dissertation appendix.
+[^20]:	For technical details on how the invitation was sent and designed, see [notebook.andrewheiss.com/project/diss-ingos-in-autocracies/survey-technical-details/](https://notebook.andrewheiss.com/project/diss-ingos-in-autocracies/survey-technical-details/).
+
+[^21]:	I use Stan [@stan] through R [@rstan; @r-project] to generate 4 MCMC chains with 2,000 iterations in each chain, 1,000 of which are used for warmup. All chains converge; I assess convergence with visual inspection, and diagnostic plots are included the dissertation appendix.
 
 	I use the medians of the simulated values from the MCMC samples as coefficient estimates, and use the 2.5% and 97.5% quantiles as lower and upper limits for 95% credible intervals. Finally, I declare an effect statistically significant if the posterior probability of being different from zero is larger than 0.99.
