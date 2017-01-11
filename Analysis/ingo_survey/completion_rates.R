@@ -33,12 +33,32 @@ library(ggrepel)
 library(scales)
 library(lubridate)
 library(plotly)
+library(DT)
+library(countrycode)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
 panderOptions('keep.line.breaks', TRUE)
 panderOptions('table.style', 'multiline')
 panderOptions('table.alignment.default', 'left')
+
+options("readr.num_columns" = 0)
+
+#+ message=FALSE
+source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
+source(file.path(PROJHOME, "Analysis", "lib", "cat_analysis.R"))
+
+# Reproducibility
+my.seed <- 1234
+set.seed(my.seed)
+
+# Bayesian stuff
+CHAINS <- 4
+ITER <-2000
+WARMUP <- 1000
+CORES <- parallel::detectCores()
+
+options(mc.cores = CORES)
 
 
 #' ## Dead addresses, domains, and bounces
@@ -209,15 +229,18 @@ icso <- email.full %>% filter(db == "icso")
 icso.ecosoc <- icso %>% left_join(ecosoc.all, by="org_name") %>%
   filter(!is.na(affiliation))
 
-# Not all of the ECOSOC-affiliated ones are in here, since I only collected
-# regional and international organizations
+#' Not all of the ECOSOC-affiliated ones are in here, since I only collected
+#' regional and international organizations
+#' 
 nrow(icso.ecosoc)
 
-# How many of these are dead or bounced?
+#' How many of these are dead or bounced?
+#' 
 dead.ecosoc <- icso.ecosoc %>%
   filter(index_org %in% dead.and.bounced$fk_org)
 
-# 8% of ECOSOC-affiliated NGOs are dead
+#' 8% of ECOSOC-affiliated NGOs are dead
+#' 
 nrow(dead.ecosoc)
 nrow(dead.ecosoc) / nrow(icso.ecosoc)
 
@@ -539,6 +562,76 @@ plot.responses.timeline.interactive <- plot.responses.timeline +
 
 ggplotly(plot.responses.timeline.interactive)
 
+
+#' # Differences between responders and nonresponders
+#' 
+#' Checking for differences between responders and nonresponders is really
+#' tricky since (1) the final database didn't always have information about
+#' survey HQ countries or target countries, (2) not all respondents could be
+#' matched with their entires in the master list of all invited organizations,
+#' and (3) respondent answers don't always match up with what's in the list—for
+#' instance, an organization listed by the YIO as based in one country might
+#' answer as being based in another.
+#' 
+#' So, this analysis here is very, very rough and shows how representative home
+#' countries might be in general. It can't check how representative issues are,
+#' since issues aren't really well known, and it can't check how representative
+#' target countries are for the same reason.
+#' 
+#' With all those caveats, it seems that in general, more American and European
+#' NGOs responded than those from Asia and Africa.
+#' 
+
+# Get a list of ids of completed surveys
+completed.and.partial <- completed %>%
+  filter(qualtrics_id %in% survey.orgs.clean$ResponseID) %>%
+  left_join(select(survey.orgs.clean, qualtrics_id=ResponseID, Q2.2_country),
+            by="qualtrics_id")
+
+# Get full list of invited organizations with a column indicating the ones that
+# completed the survey. This is not completely accurate since not every
+# response was matchable with its database entry—it actually undercounts by a
+# lot. But it should give a rough approximation.
+all.invited <- email.full %>%
+  filter(!(index_org %in% dead.and.bounced$fk_org)) %>%
+  mutate(completed = index_org %in% completed.and.partial$fk_org) %>%
+  left_join(select(completed.and.partial, index_org=fk_org, Q2.2_country), by="index_org") %>%
+  mutate(country_hq_real = ifelse(completed, Q2.2_country, country_hq)) %>%
+  mutate(region_hq = countrycode(country_hq_real, "country.name", "continent"))
+
+#' How many completed responses are missing from this analysis?
+#' 
+nrow(survey.orgs.clean) - sum(all.invited$completed)
+# ¯\_(ツ)_/¯
+
+#' Associational statistics for respondents and nonrespondents:
+#' 
+responses.hq.region <- all.invited %>%
+  xtabs(~ region_hq + completed, .)
+
+#+ results="markup"
+analyze.cat.var(responses.hq.region)
+
+# Bayesian stuff just for fun
+responses.hq.region.bayes <- all.invited %>%
+  count(region_hq, completed) %>%
+  filter(!is.na(region_hq)) %>%
+  group_by(region_hq) %>%
+  mutate(total = sum(n)) %>%
+  ungroup() %>%
+  filter(completed) %>%
+  mutate(region_hq = factor(region_hq)) %>%
+  diff.groups.bayes(cbind(n, total) ~ region_hq, data=., prop=TRUE)
+
+#+ fig.width=6, fig.height=2
+responses.hq.region.bayes$plot.groups
+
+#+ fig.width=6, fig.height=4
+responses.hq.region.bayes$plot.diffs
+
+responses.hq.region.bayes$diffs.summary %>% 
+  datatable(extensions="Responsive") %>%
+  formatSignif(2:8)
 
 #' # References
 #' 
