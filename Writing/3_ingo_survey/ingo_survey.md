@@ -151,7 +151,7 @@ The nature of the population of INGOs poses an additional challenge for analyzin
 
 Furthermore, to avoid priming respondents' opinions of their experiences with host governments, I did not ask organizations to choose the country they felt most restricted working in (though that was the main purpose of the survey)—the survey simply asked respondents to choose one of the previously selected countries. This introduces a concern that organizations may have chosen to answer questions about easier, less restrictive countries. Nearly half of respondents answered questions about a country that had a less restrictive civil society regulatory environment (as measured by the CSRE index from chapter 2) than the average CSRE across their total portfolio of host countries, 35% answered about countries that were more restrictive than the average CSRE, and 21% answered about countries with the same level of restrictiveness as the average (see @fig:selected-easier in the appendix). To some extent, respondents did tend to provide answers about their work in less restrictive countries compared to their total portfolio, possibly to avoid answering more difficult questions.
 
-That said, there is some evidence that respondents answered questions about the countries with which they were most familiar, regardless of the restrictiveness of the regulatory environment. Respondents headquartered in specific regions tended to answer questions about their work in countries in a way that reflected general patterns for that region. For instance, that fit a general pattern for INGOs based in their same region. For instance, 44% of all Europe-based respondents indicated that they conduct work in other European countries, with 23% working in Asia, 18% in Africa, and 14% in the Americas (see @fig:regions-sankey). Correspondingly, 46% of Europe-based respondents answered questions about their work in Europe, 20% about Asia, 20% in Africa, and 14% in the Americas. This distribution closely mirrors that of the countries these INGOs had selected and shows that, at least at a regional level, organizations did not answer questions about their work in a less restrictive region (such as Europe). This pattern of similarity holds for INGOs working in all other regions, with the exception of Africa-based INGOs—while 66% of African INGOs indicated working in other African countries, 83% answered questions about their work in other African countries, indicating that respondents likely chose to answer questions about countries that were most familiar and similar to their home countries and not necessarily because of the CSRE. 
+That said, there is some evidence that respondents answered questions about the countries with which they were most familiar, regardless of the restrictiveness of the regulatory environment. Respondents headquartered in specific regions tended to answer questions about their work in countries in a way that reflected general patterns for that region. For instance, that fit a general pattern for INGOs based in their same region. For instance, 44% of all Europe-based respondents indicated that they conduct work in other European countries, with 23% working in Asia, 18% in Africa, and 14% in the Americas (see @fig:regions-sankey in the appendix). Correspondingly, 46% of Europe-based respondents answered questions about their work in Europe, 20% about Asia, 20% in Africa, and 14% in the Americas. This distribution closely mirrors that of the countries these INGOs had selected and shows that, at least at a regional level, organizations did not answer questions about their work in a less restrictive region (such as Europe). This pattern of similarity holds for INGOs working in all other regions, with the exception of Africa-based INGOs—while 66% of African INGOs indicated working in other African countries, 83% answered questions about their work in other African countries, indicating that respondents likely chose to answer questions about countries that were most familiar and similar to their home countries and not necessarily because of the CSRE. 
 
 Since the survey was designed to not have strong statistical or inferential power (opting to maximize possible international NGO response instead), the findings reported below are primarily descriptive and highlight general trends in how human rights-focused and service provision-focused INGOs relate to the regulatory environments of their host countries. I report basic summary statistics and cross-tabulations of survey responses and I use Bayesian inferential statistics to check for differences in means and associations within responses. Bayesian methods are especially appropriate for making tentative exploratory inferences from this kind of data, particularly when combined with data visualizations and graphs [@Gelman:2003], and accordingly, I rely heavily on statistical graphics when making inferences. As with previous statistical chapters, I use weakly informative prior distributions for sample parameters and I obtain the posterior distribution of the CSRE with Markov Chain Monte Carlo (MCMC) sampling and simulate values from the joint posterior distribution of sample parameters.[^21]
 
@@ -159,19 +159,45 @@ In the absence of strong statistical power, I supplement inferences with interpr
 
 I use the results of this global survey of international NGOs to measure each element of my theory: INGO ideal points, operational flexibility, and relationship with the target regime. I also measure how restricted INGOs feel in their host countries and which kinds of adjustments they have undertaken in response to changing regulations. In the remainder of this chapter, I provide a general overview of the subset of the INGO sector I surveyed. I then describe how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. Next, I investigate how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. I conclude by discussing how these results support the implications of my hypotheses and theory.
 
-## general overview of the subset of the INGO sector I surveyed. 
+## Respondent overview
 
-## I then describe how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. 
+Before analyzing INGO perceptions of and responses to government restrictions, it is helpful to first look at the survey's respondents. INGOs that responded to the survey span the globe and work on a wide variety of issues and policies, and the majority of the people who filled out the survey have deep experience working with their organizations. The sample of INGOs have their headquarters spread across 93 different countries (see @fig:hq-countries), with roughly two thirds based in either Europe or the Americas, primarily in the US, UK, and Switzerland (see left panel of @fig:work-hq-regions). 
 
-## I then describe how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. 
+![Countries where INGOs are headquartered](../../Output/figures/3-hq-countries){#fig:hq-countries}
 
-## I conclude by discussing how these results support the hypotheses implied by my theory.
+![Regions where INGOs are headquartered vs. regions about which INGOs answered questions](../../Output/figures/3-work-hq-regions){#fig:work-hq-regions}
 
-## Reactions to restrictions
+While comparatively few INGOs are headquartered outside the Global North, these organizations have a global reach.  As described previously, the survey asked respondents to select all the countries they work in and then allowed respondents to answer questions about their work in at least one. Though 20% of responding organizations indicated working only in one other country, the median number of countries was 6, with a mean of 16 (see @fig:countries-per-response in the appendix). In total, INGOs selected 169 different countries and answered questions about their work in 148. The regional distribution of INGO target countries reflects their broader scope and is nearly a mirror image of these organizations' home regions—nearly two-thirds of respondents answered questions about their work in Africa and Asia (see right panel of @fig:work-hq-regions), the most underrepresented regions for NGO headquarters. This disparity could reflect the fact that INGOs from the Global South without a clear English-language internet presence were excluded from the sample, but the pattern also corresponds to similar findings in other surveys of global NGOs [@Limoncelli:2016; @HeissKelley:2016; @FootToftCesare:2015], reinforcing the idea that Northern-based NGOs tend to focus their work in the South.
 
-Transition sentence
+Who responded? What perspective am I getting?
 
+What do they do / issues?
 
+### Mission
+
+Deeper principles (from free response questions)
+
+### Flexibility
+
+Differences in instrumental approaches, operational flexibility
+
+Size, volunteers, money, etc. = show how NGOs differ across groups or types of issues
+
+### Relationship with the government
+
+Relationships with governments - how essential or in line are these organizations with government needs?
+
+## INGO restrictions
+
+I then describe how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. 
+
+How restricted do they feel? How is that related to mission, flexibility, relationship with government?
+
+## Responses to restrictions
+
+I then describe how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. 
+
+Responses to reactions - how have they responded + are these responses associated with contentiousness, instrumental stuff, core principles, or alignment with government?
 
 We changed the sources of our funding
 We changed which issues we work on
@@ -182,21 +208,16 @@ We changed the location of our country office
 We used more local staff and/or volunteers
 We used more foreign staff and/or volunteers
 
-Where are respondents based?
-Where do respondents work?
-What do they do / issues?
-Geographic difference in where they work?
 
+Do types of restriction (Q4.16) or general level of restriction (Q4.17) correlate with responses to regulations (Q4.21)?
 
-If an INGO does not make one of these three adjustments—shifting its ideal point, increasing its operational flexibility, or becoming essential for the regime—it runs a high risk of expulsion.
+\\# of changes ~ feeling of restriction + instrumental stuff + relationship with government
 
+---- 
 
-1. Summary of respondents - how restricted they feel
-2. Differences in instrumental approaches, operational flexibility
-3. Deeper principles (from free response questions)
-4. Relationships with governments - how essential or in line are these organizations with government needs?
-5. Responses to reactions - how have they responded + are these responses associated with contentiousness, instrumental stuff, core principles, or alignment with government?
+Reaction ~ instrumental issues + issue alignment + principles
 
+## Sandbox
 
 More restrictions ~ collaborations?
 Reactions to restrictions ~ collaborations
@@ -218,14 +239,6 @@ Also, feeling of restriction ~ alignment
 
 Which variables adjust more or first? Core or flexibility? Are NGOs protecting their core with flexibility?
 
-Size, volunteers, money, etc. = show how NGOs differ across groups or types of issues
-
----- 
-
-Do types of restriction (Q4.16) or general level of restriction (Q4.17) correlate with responses to regulations (Q4.21)?
-
-\\# of changes ~ feeling of restriction + instrumental stuff + relationship with government
-
 
 ## ARNOVA outline
 
@@ -246,8 +259,6 @@ Overall percent reaction - no relationship between issue contentiousness and cha
 
 Case studies: AMERA vs. IRI
 
----- 
-
 
 ## Survey structure
 
@@ -262,8 +273,6 @@ Structure analysis around each element of theory.
 - principles based on free responses and reactions
 - issue alignment 
 
-Reaction ~ instrumental issues + issue alignment + principles
-
 # Conclusion
 
 **Finish this tomorrow**
@@ -274,9 +283,9 @@ Reaction ~ instrumental issues + issue alignment + principles
 
 ![Average CSRE in country about which organization answered vs. all countries organization selected](../../Output/figures/3-easier-harder.pdf){#fig:selected-easier}
 
-
 ![Patterns of headquarters and host country regions for countries about which organizations selected and answered](../../Output/figures/3-countries-marked-answered.pdf){#fig:regions-sankey}
 
+![Frequency of selected number of countries](../../Output/figures/3-countries-per-response){#fig:countries-per-response}
 
 \newpage
 
