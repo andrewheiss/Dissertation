@@ -297,7 +297,7 @@ df.hq.countries <- survey.orgs.clean %>%
   ungroup() %>%
   # Combine with list of all possible mappable countries
   right_join(possible.countries, by=c("Q2.2_iso3"="id")) %>%
-  mutate(num.ceiling = ifelse(num.ngos >= 50, 50, num.ngos),
+  mutate(num.ceiling = ifelse(num.ngos >= 30, 30, num.ngos),
          prop = num.ngos / sum(num.ngos, na.rm=TRUE),
          country.name = countrycode(Q2.2_iso3, "iso3c", "country.name"),
          presence = num.ngos >= 1) %>%
@@ -319,6 +319,7 @@ df.hq.regions <- df.hq.countries %>%
   filter(!is.na(num.ngos)) %>%
   mutate(region = countrycode(Q2.2_iso3, "iso3c", "continent"),
          region = ifelse(Q2.2_iso3 == "TWN", "Asia", region)) %>%
+  mutate(region = recode(region, Oceania = "Asia &\nOceania", Asia = "Asia &\nOceania")) %>%
   group_by(region) %>%
   summarise(num = sum(num.ngos, na.rm=TRUE)) %>% ungroup() %>%
   mutate(prop = num / sum(num)) %>%
@@ -334,7 +335,7 @@ plot.hq.regions <- ggplot(df.hq.regions, aes(x=num, y=region)) +
   scale_x_continuous(expand=c(0, 0),
                      sec.axis = sec_axis(~ . / sum(df.hq.regions$num),
                                          labels=scales::percent)) +
-  labs(x="Respondents", y=NULL) +
+  labs(x="Respondents based in region", y=NULL) +
   theme_ath()
 
 plot.hq.regions +
@@ -357,15 +358,15 @@ plot.hq.map.presence +
        subtitle="Q2.2: Where is your organization's headquarters?")
 ```
 
-### Responses per country (50 NGO ceiling)
+### Responses per country (30 NGO ceiling)
 
 ```{r plot-hq-presence-ceiling}
 plot.hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_iso3)) +
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
   expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
   coord_equal() +
-  scale_fill_gradient(low="grey95", high="grey20", breaks=seq(0, 50, 10), 
-                      labels=c(paste(seq(0, 40, 10), "  "), "50+"),
+  scale_fill_gradient(low="grey85", high="grey20", breaks=seq(0, 30, 10), 
+                      labels=c(paste(seq(0, 20, 10), "  "), "20+"),
                       na.value="#FFFFFF", name="NGOs based in country",
                       guide=guide_colourbar(ticks=FALSE, barwidth=6)) +
   theme_ath_map() +
@@ -374,7 +375,10 @@ plot.hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_i
 
 plot.hq.map.scale + 
   labs(title="Number of responding NGOs around the world",
-       subtitle="Q2.2: Where is your organization's headquarters? (50 NGO ceiling)")
+       subtitle="Q2.2: Where is your organization's headquarters? (30 NGO ceiling)")
+
+fig.save.cairo(plot.hq.map.scale, filename="3-hq-countries",
+               width=5, height=3)
 ```
 
 
@@ -395,6 +399,10 @@ df.work.countries.all <- survey.orgs.clean %>%
          presence = num >= 1) %>%
   arrange(desc(num))
 
+df.work.countries.answered <- survey.clean.all %>%
+  group_by(Q4.1_iso3) %>%
+  summarise(num = n())
+
 df.work.countries.all %>% 
   select(country.name, num, prop) %>%
   datatable() %>% formatPercentage("prop", 2)
@@ -402,27 +410,39 @@ df.work.countries.all %>%
 
 ### Number of unique target countries
 
-Respondents gave information about their work in `r sum(df.work.countries.all$presence, na.rm=TRUE)` unique countries. 
+Respondents indicated working in `r sum(df.work.countries.all$presence, na.rm=TRUE)` unique countries and answered questions about their work in `r nrow(df.work.countries.answered)` unique countries. 
 
 
 ### Countries per response
 
 ```{r plot-countries-per-response, fig.width=6, fig.height=3, results="asis"}
-survey.orgs.clean %>%
+countries.per.response <- survey.orgs.clean %>%
   unnest(Q2.5_iso3) %>%
   group_by(clean.id) %>%
   summarise(num = n()) %>%
-  ungroup() %T>% 
-  {pandoc.table(summary(.$num))} %>%
-  ggplot(data=., aes(x=num)) +
+  ungroup()
+
+pandoc.table(summary(countries.per.response$num))
+
+countries.per.response %>%
+  count(num) %>% mutate(prop = n / sum(n)) %>%
+  slice(1:5) %>% pandoc.table()
+
+plot.countries.per.response <- ggplot(data=countries.per.response,
+                                      aes(x=num)) +
   labs(x="Number of countries selected", y="Frequency") +
   geom_histogram(binwidth=2) + theme_ath()
+plot.countries.per.response
+
+fig.save.cairo(plot.countries.per.response,
+               filename="3-countries-per-response",
+               width=5, height=2)
 ```
 
 
-### Countries marked in the survey
+### Countries selected
 
-#### Flows
+#### Flows between regions
 
 ```{r tbl-continents-marked, results="asis"}
 continents.marked <- survey.orgs.clean %>%
@@ -477,7 +497,7 @@ continents.river <- makeRiver(nodes.fancy, edges.fancy)
 countries.marked.plot %<a-% {
   plot(continents.river, srt=0, lty=0)
   text(1, 0, "HQ", adj=c(0.5, -0.5), font=2)
-  text(2, 0, "Host", adj=c(0.5, -0.5), font=2)
+  text(2, 0, "Target", adj=c(0.5, -0.5), font=2)
   text(1.5, 0, "Countries selected\n", adj=c(0.5, -0.5), font=2)
 }
 ```
@@ -511,7 +531,7 @@ plot.target.regions +
 
 ### Countries answered
 
-#### Flows
+#### Flows between regions
 
 ```{r tbl-continents-answered, results="asis"}
 continents.answered <- survey.clean.all %>%
@@ -576,13 +596,27 @@ plot.target.regions.answered <- ggplot(df.target.regions.answered,
   scale_x_continuous(expand=c(0, 0),
                      sec.axis = sec_axis(~ . / sum(df.target.regions.answered$times.marked),
                                          labels=scales::percent)) +
-  labs(x="Times marked", y=NULL) +
+  labs(x="Respondents answered about", y=NULL) +
   theme_ath()
 
 plot.target.regions.answered +
   labs(title="Region of work country",
        subtitle="Q4.1: Which country would you like to discuss? (summarized by region)")
 ```
+
+```{r plot-hq-work-regions}
+plot.regions <- cbind(ggplotGrob(plot.hq.regions + 
+                                   labs(title="INGO headquarters") +
+                                   theme(plot.title=element_text(size=rel(1)))),
+                      ggplotGrob(plot.target.regions.answered +
+                                   labs(title="Target countries") +
+                                   theme(plot.title=element_text(size=rel(1)))))
+
+fig.save.cairo(plot.regions,
+               filename="3-work-hq-regions",
+               width=6, height=2)
+```
+
 
 ### Both at once
 
