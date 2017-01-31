@@ -1,0 +1,23 @@
+% Start each sub(sub)section on its own page
+\let\oldsubsection\subsection
+\renewcommand\subsection{\clearpage\oldsubsection}
+
+\let\oldsubsubsection\subsubsection
+\renewcommand\subsubsection{\clearpage\oldsubsubsection}
+
+% Switch fonts according to language!
+% Adapted from http://tex.stackexchange.com/a/129032/11851
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\usepackage{bidi}
+% \usepackage[Latin, Khmer, Thai, Arabic]{ucharclasses}
+\usepackage[Latin, Arabic]{ucharclasses}
+
+% \newfontfamily{\Khmer}{Khmer}  % From http://www.google.com/fonts/specimen/Khmer
+% \newfontfamily{\Thai}{Thonburi}
+\newfontfamily{\Arabic}{Al Tarikh}
+
+\setDefaultTransitions{\normalfont}{}
+% \setTransitionsFor{Khmer}{\Khmer}{}  
+% \setTransitionsFor{Thai}{\Thai}{}
+\setTransitionsFor{Arabic}{\Arabic}{}

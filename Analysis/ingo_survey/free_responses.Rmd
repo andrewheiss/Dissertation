@@ -1,0 +1,224 @@
+---
+title: "Free responses"
+author: "Andrew Heiss"
+date: '`r format(Sys.time(), "%F")`'
+output:
+  html_document:
+    code_folding: hide
+    css: ../html/fixes.css
+    highlight: pygments
+    includes:
+      after_body: ../html/add_home_link.html
+    self_contained: no
+    theme: cosmo
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    highlight: pygments
+    includes:
+      in_header: ../TeX/top_stuff.tex
+    latex_engine: xelatex
+    toc: yes
+    toc_depth: 3
+mainfont: Source Sans Pro
+fontsize: 10pt
+...
+
+```{r load-data, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(stringr)
+library(pander)
+
+# Load cleaned, country-based survey data (*with* the Q4\* loop)
+survey.clean.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                      "survey_clean_all.rds"))
+
+# Load cleaned, organization-based data (without the Q4 loop)
+survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                       "survey_orgs_clean.rds"))
+
+org.free.responses <- survey.orgs.clean %>%
+  arrange(clean.id) %>%
+  rowwise() %>%
+  mutate(preface = str_interp("${clean.id}; HQ: ${Q2.2_country}"))
+  # mutate(preface = str_interp("${Q2.1} (${clean.id}); HQ: ${Q2.2_country}"))
+
+country.free.responses <- survey.clean.all %>%
+  arrange(clean.id) %>%
+  rowwise() %>%
+  mutate(preface = str_interp("${clean.id}; HQ: ${Q2.2_country}; target: ${Q4.1_name}"))
+  # mutate(preface = str_interp("${Q2.1} (${clean.id}); HQ: ${Q2.2_country}; target: ${Q4.1_name}"))
+
+pandoc.definition <- function(term, definition) {
+  template <- "${term}
+  
+:   ${definition}"
+  
+  str_interp(template, list(term=term, definition=definition))
+}
+
+print.answer.list <- function(df, question) {
+  output <- df %>%
+    rename_(.dots=setNames(list(question), "question")) %>%
+    filter(!is.na(question)) %>%
+    rowwise() %>%
+    mutate(output = pandoc.definition(preface, question),
+           output = str_replace_all(output, "\\\\(\\w)", "\\\\ \\1"))
+  cat(output$output, sep="\n\n")
+  
+  # str_replace_all(bloop$Q3.9, "\\\\(\\w)", "\\\\ \\1")
+  # 
+  bloop <- country.free.responses %>%
+    filter(clean.id == 1437)
+  bloop$Q4.10
+}
+```
+
+## Organizational questions
+
+### *Q3.9*: In general, what would you say your organization is trying to accomplish?
+
+```{r q3-9, results="asis"}
+print.answer.list(org.free.responses, "Q3.9")
+```
+
+### *Q3.10*: How is your organization's mission, vision, and values reflected in these objectives?
+
+```{r q3-10, results="asis"}
+print.answer.list(org.free.responses, "Q3.10")
+```
+
+### *Q3.11*: Have these objectives changed at all in the last 10 years? If so, how?
+
+```{r q3-11, results="asis"}
+print.answer.list(org.free.responses, "Q3.11")
+```
+
+### *Q3.12*: What are the major obstacles, if any, to reaching your organization's objectives?
+
+```{r q3-12, results="asis"}
+print.answer.list(org.free.responses, "Q3.12")
+```
+
+### *Q3.13*: Are there any changes that you would like to see in your organization's goals and strategies, now or in the future?
+
+```{r q3-13, results="asis"}
+print.answer.list(org.free.responses, "Q3.13")
+```
+
+## Contact with government
+
+### *Q4.10*: How is the government of `target_country` involved in your work?
+
+```{r q4-10, results="asis"}
+print.answer.list(country.free.responses, "Q4.10")
+```
+
+## NGO regulations and restrictions
+
+### *Q4.16a*: Regulations regarding registration
+
+```{r q4-16a, results="asis"}
+print.answer.list(country.free.responses, "Q4.16_registration_TEXT")
+```
+
+### *Q4.16b*: Regulations regarding operations
+
+```{r q4-16b, results="asis"}
+print.answer.list(country.free.responses, "Q4.16_operations_TEXT")
+```
+
+### *Q4.16c*: Regulations regarding speech and advocacy
+
+```{r q4-16c, results="asis"}
+print.answer.list(country.free.responses, "Q4.16_speech_TEXT")
+```
+
+### *Q4.16d*: Regulations regarding communication and cooperation
+
+```{r q4-16d, results="asis"}
+print.answer.list(country.free.responses, "Q4.16_communications_TEXT")
+```
+
+### *Q4.16e*: Regulations regarding assembly
+
+```{r q4-16e, results="asis"}
+print.answer.list(country.free.responses, "Q4.16_assembly_TEXT")
+```
+
+### *Q4.16f*: Regulations regarding resources
+
+```{r q4-16f, results="asis"}
+print.answer.list(country.free.responses, "Q4.16_resources_TEXT")
+```
+
+### *Q4.18*: How do the local laws and regulations in `target_country` affect your organization's ability to pursue its mission?
+
+```{r q4-18, results="asis"}
+print.answer.list(country.free.responses, "Q4.18")
+```
+
+## Responses to regulations
+
+### *Q4.20*: How has your organization's mix of programming changed in `target_country`?
+
+```{r q4-20, results="asis"}
+print.answer.list(country.free.responses, "Q4.20")
+```
+
+### *Q4.21a*: How org changed its funding sources
+
+```{r q4-21a, results="asis"}
+print.answer.list(country.free.responses, "Q4.21_funding_TEXT")
+```
+
+### *Q4.21b*: How org changed which issues it works on
+
+```{r q4-21b, results="asis"}
+print.answer.list(country.free.responses, "Q4.21_issues_TEXT")
+```
+
+### *Q4.21c*: How org changed how it communicates with the government
+
+```{r q4-21c, results="asis"}
+print.answer.list(country.free.responses, "Q4.21_comm_govt_TEXT")
+```
+
+### *Q4.21d*: How org changed how it communicates with donors
+
+```{r q4-21d, results="asis"}
+print.answer.list(country.free.responses, "Q4.21_comm_donors_TEXT")
+```
+
+### *Q4.21e*: How org changed the locations it works in
+
+```{r q4-21e, results="asis"}
+print.answer.list(country.free.responses, "Q4.21_locations_TEXT")
+```
+
+### *Q4.21f*: How org changed the location of its country office
+
+```{r q4-21f, results="asis"}
+print.answer.list(country.free.responses, "Q4.21_country_office_TEXT")
+```
+
+### *Q4.21g*: How org used more local staff or volunteers
+
+```{r q4-21g, results="asis"}
+print.answer.list(country.free.responses, "Q4.21_local_staff_TEXT")
+```
+
+### *Q4.21h*: How org used more foreign staff or volunteers
+
+```{r q4-21h, results="asis"}
+print.answer.list(country.free.responses, "Q4.21_foreign_staff_TEXT")
+```
+
+## Final questions
+
+### *Q5.1*: Do you have any additional comments?
+
+```{r q5-1, results="asis"}
+print.answer.list(org.free.responses, "Q5.1")
+```
