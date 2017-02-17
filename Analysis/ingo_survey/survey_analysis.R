@@ -231,12 +231,10 @@ plot.issue.regime <- prodplot(df.issue.regime,
   guides(fill=FALSE, linetype=FALSE) +
   labs(title="Potential issue contentiousness across regime types",
        subtitle="Issue area of INGO + regime type of target country") +
-  theme_ath(18) + theme(axis.title=element_blank(),
+  theme_ath(30) + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
 #+ fig.width=6, fig.height=3
-plot.issue.regime
-
 fig.save.cairo(plot.issue.regime + labs(title=NULL, subtitle=NULL), 
                filename="3-issue-regime",
                width=8, height=5)
@@ -924,7 +922,7 @@ plot.govt.positivity.regime <- prodplot(df.govt.positivity.regime,
   guides(fill=FALSE) +
   labs(title="Relationship with the government, by regime type",
        subtitle="Q4.11: How would you characterize your organization’s relationship with the government of `target_country`?") +
-  theme_ath(18) + theme(axis.title=element_blank(),
+  theme_ath(30) + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 
 #+ fig.width=6, fig.height=5
