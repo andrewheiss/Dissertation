@@ -41,14 +41,12 @@ survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 org.free.responses <- survey.orgs.clean %>%
   arrange(clean.id) %>%
   rowwise() %>%
-  mutate(preface = str_interp("${clean.id}; HQ: ${Q2.2_country}"))
-  # mutate(preface = str_interp("${Q2.1} (${clean.id}); HQ: ${Q2.2_country}"))
+  mutate(preface = str_interp("${clean.id}; HQ: ${Q2.2_country}; ${potential.contentiousness}"))
 
 country.free.responses <- survey.clean.all %>%
   arrange(clean.id) %>%
   rowwise() %>%
-  mutate(preface = str_interp("${clean.id}; HQ: ${Q2.2_country}; target: ${Q4.1_name}"))
-  # mutate(preface = str_interp("${Q2.1} (${clean.id}); HQ: ${Q2.2_country}; target: ${Q4.1_name}"))
+  mutate(preface = str_interp("${clean.id}; HQ: ${Q2.2_country}; target: ${Q4.1_name}; ${potential.contentiousness}"))
 
 pandoc.definition <- function(term, definition) {
   template <- "${term}
@@ -66,12 +64,6 @@ print.answer.list <- function(df, question) {
     mutate(output = pandoc.definition(preface, question),
            output = str_replace_all(output, "\\\\(\\w)", "\\\\ \\1"))
   cat(output$output, sep="\n\n")
-  
-  # str_replace_all(bloop$Q3.9, "\\\\(\\w)", "\\\\ \\1")
-  # 
-  bloop <- country.free.responses %>%
-    filter(clean.id == 1437)
-  bloop$Q4.10
 }
 ```
 
