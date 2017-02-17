@@ -115,6 +115,14 @@ print.answer.list(org.free.responses, "Q3.13")
 print.answer.list(country.free.responses, "Q4.10")
 ```
 
+## Relationship with government
+
+### *Q4.12*: Briefly describe your organization's relationship with the government of `target_country`:
+
+```{r q4-12, results="asis"}
+print.answer.list(country.free.responses, "Q4.12")
+```
+
 ## NGO regulations and restrictions
 
 ### *Q4.16a*: Regulations regarding registration
