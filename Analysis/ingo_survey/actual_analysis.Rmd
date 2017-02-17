@@ -73,7 +73,13 @@ survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 
 # Load cleaned, country-based data (only the Q4 loop)
 survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
-                                            "survey_countries_clean.rds"))
+                                            "survey_countries_clean.rds")) %>%
+  mutate(Q4.11_collapsed = fct_collapse(Q4.11,
+                                        Negative = c("Extremely negative", "Somewhat negative"),
+                                        Neither = c("Neither positive nor negative"),
+                                        Positive = c("Somewhat positive", "Extremely positive"),
+                                        NULL = c("Don't know", "Prefer not to answer")),
+         Q4.11_collapsed = ordered(Q4.11_collapsed))
 
 # External data
 full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
@@ -350,7 +356,7 @@ plot.hq.map.presence <- ggplot(df.hq.countries, aes(fill=presence, map_id=Q2.2_i
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
   expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
   coord_equal() +
-  scale_fill_manual(values=c("grey50", "#FFFFFF"), na.value="#FFFFFF", guide=FALSE) +
+  scale_fill_manual(values=c("#0074D9", "#FFFFFF"), na.value="#FFFFFF", guide=FALSE) +
   theme_ath_map()
 
 plot.hq.map.presence + 
@@ -365,7 +371,7 @@ plot.hq.map.scale <- ggplot(df.hq.countries, aes(fill=num.ceiling, map_id=Q2.2_i
   geom_map(map=countries.ggmap, size=0.15, colour="black") + 
   expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
   coord_equal() +
-  scale_fill_gradient(low="grey85", high="grey20", breaks=seq(0, 30, 10), 
+  scale_fill_gradient(low="#4397DF", high="#003059", breaks=seq(0, 30, 10), 
                       labels=c(paste(seq(0, 20, 10), "  "), "20+"),
                       na.value="#FFFFFF", name="NGOs based in country",
                       guide=guide_colourbar(ticks=FALSE, barwidth=6)) +
@@ -669,7 +675,7 @@ plot.issues.most.clean <- ggplot(df.issues.most.clean,
   geom_pointrangeh(aes(xmin=0, xmax=num)) +
   scale_x_continuous(sec.axis = sec_axis(~ . / df.issues.most.denom,
                                          labels=scales::percent)) +
-  scale_colour_manual(values=c("grey80", "grey40"), name=NULL) +
+  scale_colour_manual(values=ath.palette("contention1"), name=NULL) +
   labs(x="Organizations", y=NULL) +
   theme_ath() + theme(legend.position=c(1, 0), legend.justification = c(1, 0),
                       legend.direction="horizontal", panel.grid.major.y=element_blank())
@@ -724,7 +730,7 @@ plot.activities <- ggplot(df.activities.plot, aes(x=prop, y=fct_rev(response),
   geom_pointrangeh(aes(xmin=0, xmax=prop), position=position_dodgev(height=0.75),
                    size=0.5) +
   labs(x="Proportion selected", y="How often INGO does work") +
-  scale_colour_manual(values=c("grey80", "grey40"), name=NULL) +
+  scale_colour_manual(values=ath.palette("contention1"), name=NULL) +
   scale_x_continuous(labels=scales::percent) +
   guides(colour=guide_legend(reverse=TRUE)) +
   facet_wrap(~ question) +
@@ -746,6 +752,79 @@ low.contention.work <- survey.orgs.clean %>%
 high.contention.work <- survey.orgs.clean %>%
   filter(potential.contentiousness == "High contention") %>%
   select(clean.id, matches("Q3\\.3_.*_TEXT"))
+```
+
+
+## Relationship with host governments
+
+### Positivity
+
+```{r plot-govt-positivity-regime, fig.width=2, fig.height=2}
+df.govt.positivity.regime <- survey.countries.clean %>%
+  select(Q4.11_collapsed, target.regime.type) %>%
+  filter(!is.na(Q4.11_collapsed))
+
+plot.govt.positivity.regime <- prodplot(df.govt.positivity.regime,
+                                        ~ target.regime.type + Q4.11_collapsed, mosaic("h"),
+                                        colour=NA) +
+  aes(fill=target.regime.type, colour="white") +
+  scale_fill_manual(values=ath.palette("regime2"), name=NULL) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.govt.positivity.regime
+
+govt.positivity.regime.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.11_collapsed)) %>%
+  xtabs(~ Q4.11_collapsed + target.regime.type, .)
+
+analyze.cat.var(govt.positivity.regime.table)
+```
+
+```{r plot-govt-positivity-issue, fig.width=2, fig.height=2}
+df.govt.positivity.issue <- survey.countries.clean %>%
+  select(Q4.11_collapsed, potential.contentiousness) %>%
+  filter(!is.na(Q4.11_collapsed))
+
+plot.govt.positivity.issue <- prodplot(df.govt.positivity.issue,
+                                        ~ potential.contentiousness + Q4.11_collapsed,
+                                       mosaic("h"), colour=NA) +
+  aes(fill=potential.contentiousness, colour="white") +
+  scale_fill_manual(values=ath.palette("contention1"), name=NULL) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.govt.positivity.issue
+
+govt.positivity.issue.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.11_collapsed)) %>%
+  xtabs(~ Q4.11_collapsed + potential.contentiousness, .)
+
+analyze.cat.var(govt.positivity.issue.table)
+```
+
+```{r plot-govt-positivity-regime-bayes}
+govt.positivity.issue.table.bayes <- survey.countries.clean %>%
+  filter(!is.na(Q4.11_collapsed)) %>%
+  count(Q4.11_collapsed, potential.contentiousness) %>%
+  group_by(Q4.11_collapsed) %>%
+  mutate(total = sum(n)) %>%
+  filter(potential.contentiousness == "High contention") %>%
+  diff.groups.bayes(cbind(n, total) ~ Q4.11_collapsed, data=., prop=TRUE)
+
+grid.arrange(govt.positivity.issue.table.bayes$plot.groups,
+             govt.positivity.issue.table.bayes$plot.diffs)
+```
+
+```{r plot-govt-positivity-both}
+plot.govt.positivity.both <- cbind(ggplotGrob(plot.govt.positivity.regime),
+                                   ggplotGrob(plot.govt.positivity.issue))
+grid::grid.newpage()
+grid::grid.draw(plot.govt.positivity.both)
+
+fig.save.cairo(plot.govt.positivity.both,
+               filename="3-govt-positivity-both",
+               width=6, height=1.5)
 ```
 
 

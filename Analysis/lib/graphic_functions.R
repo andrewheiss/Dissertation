@@ -59,7 +59,7 @@ ath.palettes <- list(
   regime1 = c("#FFDC00",  # yellow
              "#85144b"),  # magenta
   regime2 = c("#0074D9",  # blue
-             "#FFDC00"),  # red
+             "#FF4136"),  # red
   regime = c("#203864",  # gold
              "#7F6000"),  # word blue 
   single.color = c("#53787B")  # turquoise
