@@ -724,15 +724,17 @@ df.activities.plot <- df.activities %>%
   mutate(question = ordered(fct_inorder(question)))
 
 plot.activities <- ggplot(df.activities.plot, aes(x=prop, y=fct_rev(response),
-                                                  fill=potential.contentiousness)) +
-  geom_barh(stat="identity", position=position_dodgev()) +
+                                                  colour=potential.contentiousness)) +
+  geom_pointrangeh(aes(xmin=0, xmax=prop), position=position_dodgev(height=0.75),
+                   size=0.5) +
   labs(x="Proportion selected", y="How often INGO does work") +
-  scale_fill_manual(values=c("grey80", "grey40"), name=NULL) +
+  scale_colour_manual(values=c("grey80", "grey40"), name=NULL) +
   scale_x_continuous(labels=scales::percent) +
-  guides(fill=guide_legend(reverse=TRUE)) +
+  guides(colour=guide_legend(reverse=TRUE)) +
   facet_wrap(~ question) +
   theme_ath() + theme(legend.position=c(1, 0), legend.justification = c(1, 0),
-                      legend.direction="vertical", strip.text=element_text(size=rel(0.75)))
+                      legend.direction="vertical", strip.text=element_text(size=rel(0.75)),
+                      panel.grid.major.y=element_blank())
 plot.activities
 
 fig.save.cairo(plot.activities,
