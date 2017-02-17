@@ -708,48 +708,36 @@ df.activities <- survey.orgs.clean %>%
   ungroup() %>%
   mutate(response = factor(response, levels=levels(survey.orgs.clean$Q3.3_aid), ordered=TRUE))
 
-activities.order.low <- df.activities %>%
-  filter(potential.contentiousness == "Low contention", response == "Always") %>%
-  arrange(response, desc(num)) %>% 
-  mutate(question = ordered(fct_inorder(question))) %>% select(question)
+df.activities.plot <- df.activities %>%
+  mutate(response = fct_collapse(response,
+    "Almost always" = c("Always", "Most of the time"),
+    "Sometimes" = c("About half the time", "Sometimes"),
+    "Never" = "Never"
+  )) %>%
+  group_by(question, response, potential.contentiousness) %>%
+  summarise(num = sum(num)) %>%
+  group_by(potential.contentiousness, question) %>%
+  mutate(total = sum(num)) %>%
+  ungroup() %>%
+  mutate(prop = num / total) %>%
+  arrange(response, desc(potential.contentiousness), desc(prop)) %>%
+  mutate(question = ordered(fct_inorder(question)))
 
-activities.order.high <- df.activities %>%
-  filter(potential.contentiousness == "High contention", response == "Always") %>%
-  arrange(response, desc(num)) %>% 
-  mutate(question = ordered(fct_inorder(question))) %>% select(question)
+plot.activities <- ggplot(df.activities.plot, aes(x=prop, y=fct_rev(response),
+                                                  fill=potential.contentiousness)) +
+  geom_barh(stat="identity", position=position_dodgev()) +
+  labs(x="Proportion selected", y="How often INGO does work") +
+  scale_fill_manual(values=c("grey80", "grey40"), name=NULL) +
+  scale_x_continuous(labels=scales::percent) +
+  guides(fill=guide_legend(reverse=TRUE)) +
+  facet_wrap(~ question) +
+  theme_ath() + theme(legend.position=c(1, 0), legend.justification = c(1, 0),
+                      legend.direction="vertical", strip.text=element_text(size=rel(0.75)))
+plot.activities
 
-df.activities.low <- df.activities %>%
-  filter(potential.contentiousness == "Low contention") %>%
-  mutate(question = factor(question, levels=levels(activities.order.low$question),
-                           ordered=TRUE))
-
-df.activities.high <- df.activities %>%
-  filter(potential.contentiousness == "High contention") %>%
-  mutate(question = factor(question, levels=levels(activities.order.high$question),
-                           ordered=TRUE))
-
-plot.activities.low <- ggplot(df.activities.low, aes(y=num, x=response)) +
-  geom_bar(stat="identity", fill="grey40") +
-  labs(y="Times selected", x="How often INGO does work",
-       title="Low contention INGOs") +
-  facet_wrap(~ question, ncol=1) +
-  theme_ath() + theme(plot.title=element_text(hjust=0.5))
-
-plot.activities.high <- ggplot(df.activities.high, aes(y=num, x=response)) +
-  geom_bar(stat="identity", fill="grey80") +
-  labs(y=NULL, x="How often INGO does work",
-       title="High contention INGOs") +
-  facet_wrap(~ question, ncol=1) +
-  theme_ath() + theme(plot.title=element_text(hjust=0.5))
-
-plot.activities.both <- cbind(ggplotGrob(plot.activities.low),
-                              ggplotGrob(plot.activities.high))
-grid::grid.newpage()
-grid::grid.draw(plot.activities.both)
-
-fig.save.cairo(plot.activities.both,
+fig.save.cairo(plot.activities,
                filename="3-main-activities",
-               width=8.5, height=4.5)
+               width=7, height=3)
 ```
 
 ```{r manual-reading-filtering}
