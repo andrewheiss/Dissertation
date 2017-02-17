@@ -161,15 +161,31 @@ I use the results of this global survey of international NGOs to measure each el
 
 ## Respondent overview
 
-Before analyzing INGO perceptions of and responses to government restrictions, it is helpful to first look at the survey's respondents. INGOs that responded to the survey span the globe and work on a wide variety of issues and policies, and the majority of the people who filled out the survey have deep experience working with their organizations. The sample of INGOs have their headquarters spread across 93 different countries (see @fig:hq-countries), with roughly two thirds based in either Europe or the Americas, primarily in the US, UK, and Switzerland (see left panel of @fig:work-hq-regions). 
+Before analyzing INGO perceptions of and responses to government restrictions, it is helpful to first look at the survey's respondents. The people who filled out the survey were quite familiar with their organizations' work and had an intimate perspective of their organizations' experiences and strategies. More than half of the respondents indicated that they were the executive director, president, secretary general, CEO, or other high-level officer for their organization, and roughly a third were staff members or program officers, with the remainder either public relations officers or receptionists. 
+
+The INGOs that responded to the survey span the globe and work on a wide variety of issues and policies. The sample of INGOs have their headquarters spread across 93 different countries (see @fig:hq-countries), with roughly two thirds based in either Europe or the Americas, primarily in the US, UK, and Switzerland (see left panel of @fig:work-hq-regions). 
 
 ![Countries where INGOs are headquartered](../../Output/figures/3-hq-countries){#fig:hq-countries}
 
 ![Regions where INGOs are headquartered vs. regions about which INGOs answered questions](../../Output/figures/3-work-hq-regions){#fig:work-hq-regions}
 
-While comparatively few INGOs are headquartered outside the Global North, these organizations have a global reach.  As described previously, the survey asked respondents to select all the countries they work in and then allowed respondents to answer questions about their work in at least one. Though 20% of responding organizations indicated working only in one other country, the median number of countries was 6, with a mean of 16 (see @fig:countries-per-response in the appendix). In total, INGOs selected 169 different countries and answered questions about their work in 148. The regional distribution of INGO target countries reflects their broader scope and is nearly a mirror image of these organizations' home regions—nearly two-thirds of respondents answered questions about their work in Africa and Asia (see right panel of @fig:work-hq-regions), the most underrepresented regions for NGO headquarters. This disparity could reflect the fact that INGOs from the Global South without a clear English-language internet presence were excluded from the sample, but the pattern also corresponds to similar findings in other surveys of global NGOs [@Limoncelli:2016; @HeissKelley:2016; @FootToftCesare:2015], reinforcing the idea that Northern-based NGOs tend to focus their work in the South.
+While comparatively few INGOs are headquartered outside the Global North, these organizations have a worldwide reach.  As described previously, the survey asked respondents to select all the countries they work in and then allowed respondents to answer questions about their work in at least one. Though 20% of responding organizations indicated working only in one other country, the median number of countries was 6, with a mean of 16 (see @fig:countries-per-response in the appendix). In total, INGOs selected 169 different countries and answered questions about their work in 148. The regional distribution of INGO target countries reflects their broader scope and is almost a mirror image of these organizations' home regions—nearly two-thirds of respondents answered questions about their work in Africa and Asia (see right panel of @fig:work-hq-regions), the most underrepresented regions for NGO headquarters. This disparity could reflect the fact that INGOs from the Global South without a clear English-language internet presence were excluded from the sample, but the pattern also corresponds to similar findings in other surveys of global NGOs [@Limoncelli:2016; @HeissKelley:2016; @FootToftCesare:2015], reinforcing the idea that Northern-based NGOs tend to focus their work in the South.
 
-Who responded? What perspective am I getting?
+Organizations also operate in a variety of political contexts. Unsurprisingly, given the concentration of INGOs in the Global North, the vast majority of respondents (90%) are headquartered in democracies. The countries these organizations work in, though, show more diversity in regime type—a third of respondents (219) answered questions about their work in autocratic regimes.
+
+![Issues INGOs work on the most, divided by potential contentiousness](../../Output/figures/3-issues-worked-on){#fig:issues-worked-on}
+
+Finally, responding organizations tackle a variety of issues (see @fig:issues-worked-on). The top three issues—education, development, and human rights—account for more than 60% of the respondents and reflect the the makeup of the sample of organizations collected in my database. The remaining 40% of organizations focus on topics that reflect other common issues addressed by global civil society, such as public health, environmental advocacy, disaster relief, human trafficking, post-conflict resolution, and cultural promotion. 
+
+A key element of my theory of amicable contempt is alignment with the regime—INGOs working on issues that a regime finds favorable and inline with its own preferences will be treated differently than INGOs working on more threatening, less aligned topics. I divide the self-reported respondent issues into two levels of potential high or low regime contentiousness. As seen in @fig:issues-worked-on, highly contentious issues include human rights, advocacy, human trafficking, freedom of expression, conflict, and democracy assistance—all issues that pose a direct threat to regime policies and stability. Less contentious issues like education, development, health, and the environment reflect policy areas where governments are more willing to accept intervention and assistance. 
+
+![Frequency of INGO engagement in different types of activities; organizations answered about one or more activities](../../Output/figures/3-main-activities){#fig:main-activities}
+
+This division of INGOs into contentious and non contentious programming aligns well with the activities INGOs report engaging in. @fig:main-activities shows how frequently responding organizations work on a variety of types of programming, with each column sorted by the frequency of the "Always" option. If the division of contentiousness is correct, low contention INGOs should provide direct aid and services and engage in research and public education most frequently, since these types of programming pose little threat to the target country regime. High contention INGOs, on the other hand, should deal most often with more threatening activities like advocacy, political mobilization, and government monitoring. As seen in the figure, low contention organizations indicated always providing aid and services and engaging in research while only occasionally monitoring the government or mobilizing people. Interestingly, around 100 low contention organizations reported always engaging in advocacy. However, this form of advocacy appears to still be noncontentious: respondents describe advocating for "expanded public health programs,"[^22] "agr[i]culture,"[^23] "volunteerism,"[^24] "girls completing secondary education,"[^25] or expanding "access [to] health and justice."[^26] 
+
+As expected, high contention organizations are most likely to report always engaging in advocacy and monitoring government policies, including advocating for the recognition and safety of human rights defenders,[^27]assisting with the "rehabilitation of repentant terrorists,"[^28] promoting religious freedom and human rights, [^29] and "holding … leaders accountable" for their policies and actions.[^30] These more contentious organizations engage in research and public education as the third most common primary activity. These educational activities clearly post more of a threat to the government and are more focused on human rights, such as maintaining a death penalty policy database,[^31] organizing activist training sessions and hackathons,[^32] or developing country-specific media literacy training programs.[^33] These organizations only sometimes provide direct aid and services, in contrast to their low contention counterparts. Finally, both kinds of INGOS are least likely to report always engaging in political mobilization, which is understandable for low contention organizations but surprising for those working on more contentious issues. INGOs may have conflated this kind of work with engaging in research—organizations mentioned political mobilization and campaigns in many of their explanations of their research and public education work.
+
+This division of contentiousness is by no means perfect. As seen in the case of China in the previous chapter, education INGOs can pose a threat to regime stability as governments fear the spread of foreign influence among their youth, and development INGOs can rival weak central governments and create territorial "fiefdoms" to supersede the regime [@Schuller:2012]. However, while the division between low and high contention issues is fairly simplistic, it does appear to accurately capture (1) the broad types of programs that INGOs engage in, and (2) the range of possible objections governments are likely to raise (or not raise).
 
 
 ### Mission
@@ -446,3 +462,27 @@ Structure analysis around each element of theory.
 [^21]:	I use Stan [@stan] through R [@rstan; @r-project] to generate 4 MCMC chains with 2,000 iterations in each chain, 1,000 of which are used for warmup. All chains converge; I assess convergence with visual inspection, and diagnostic plots are included the dissertation appendix.
 
 	I use the medians of the simulated values from the MCMC samples as coefficient estimates, and use the 2.5% and 97.5% quantiles as lower and upper limits for 95% credible intervals. Finally, I declare an effect statistically significant if the posterior probability of being different from zero is larger than 0.99.
+
+[^22]:	Response 1385.
+
+[^23]:	Response 1605.
+
+[^24]:	Response 1472.
+
+[^25]:	Response 1419.
+
+[^26]:	Response 1448.
+
+[^27]:	Response 1339.
+
+[^28]:	Response 1233.
+
+[^29]:	Responses 1304 and 1703.
+
+[^30]:	Response 1193.
+
+[^31]:	Response 1558.
+
+[^32]:	Responses 1487 and 1660.
+
+[^33]:	Response 1643.
