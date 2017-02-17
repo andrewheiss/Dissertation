@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss&#x40;duke.edu
-date: January 11, 2017
+date: February 16, 2017
 published: Please do not cite without permission.
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -171,7 +171,6 @@ While comparatively few INGOs are headquartered outside the Global North, these 
 
 Who responded? What perspective am I getting?
 
-What do they do / issues?
 
 ### Mission
 
@@ -181,7 +180,14 @@ Deeper principles (from free response questions)
 
 Differences in instrumental approaches, operational flexibility
 
+How operate
+
 Size, volunteers, money, etc. = show how NGOs differ across groups or types of issues
+
+What they do in country - Q4.3
+
+Time in country
+
 
 ### Relationship with the government
 
@@ -191,11 +197,96 @@ Relationships with governments - how essential or in line are these organization
 
 I then describe how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. 
 
+Restriction ~ instrumental issues + issue alignment + principles
+
+
 How restricted do they feel? How is that related to mission, flexibility, relationship with government?
+
+---- 
+
+### Relationship with host governments
+
+In general, how positive are NGO relationships with their hosts? (Q4.11) - depends on regime type? issue? principles? flexibility?
+Stories from free responses
+
+Government views of NGOs -
+Threat to government - fear of gatherings - bigger NGOs a threat?
+Government wants to use NGOs
+Bribery
+Domestic politics
+
+Are organizations registered? More/less likely to be registered in democracies
+Stories from free responses
+
+Contact with government - based on feeling of restriction and positivity of relationship with government - organizations that are more restricted/more positive are more/less in contact with government - who do INGOs contact? presidents, MPs, etc (Q4.7) - are they required to have someone on their board(Q4.9) - how often do they report?
+Stories from free responses
+
+### Government involvement in and regulation of NGO programming
+
+How is the government involved? Q4.10
+
+The most common way for the government affect NGO work is through regulation How do government restrict and regulate NGOs? How are NGOs affected by those regulations?
+
+NGOs are fairly familiar with the regulations they face (Q4.13–15)
+
+How restrictive are these regulations (Q4.17)? What does the lived experience look like? (Q4.16)? Different depending on regime type? Issue? Principles?
+
+Key themes emerge from the rich free response questions:
+
+Importance of enabling environment
+rules have to be followed - but if there's no enabling environment, it's really hard to do anything - 1412\_4.10 - provide security in Somalia - 1683\_4.10 - collaborate
+
+Registration
+Arbitrary - confusing
+lengthy - 4 years in Haiti - multiple years in Congo
+caused delays - slowdowns
+hurts organizations
+Can't build offices
+Easier in EU, west
+
+Operations
+Locked into programs
+Regulations give government control sometimes
+
+Advocacy
+Self-censorship, fear of crossing the line
+
+Assembly
+Organizations are kind of resigned to this
+Unfounded fears of foreign influence
+Arbitrary denial
+Arrests
+Apply for permission
+
+Funding
+Lots in 16f
+Disclose sources of funding
+
+Unrelated
+Taxes, fees, bureaucratic regulations, irrational visa restrictions
+
+
+How do all these regulations affect the ability to pursue mission? Q4.18
+
+
+## What about those that don't feel regulated?
+
+The experiences of these NGOs paints a dire picture of BLAH BLAH. However, X% of respondents indicated feeling little to no restrictions in their host countries? Why is that?
+
+Regime type - responses saying all is well work in the EU and US
+Contentiousness - those more in line with government preferences aren't restricted as much
 
 ## Responses to restrictions
 
+organization size:
+
+> Sarah Bush says larger more professional organizations have tamer programs
+> I find that larger organizations can be more resilient in authoritarian contexts. But at what cost? They can shift resources around, but they have to shift closer to the regime?
+
 I then describe how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. 
+
+
+Reaction ~ instrumental issues + issue alignment + principles
 
 Responses to reactions - how have they responded + are these responses associated with contentiousness, instrumental stuff, core principles, or alignment with government?
 
@@ -213,9 +304,28 @@ Do types of restriction (Q4.16) or general level of restriction (Q4.17) correlat
 
 \\# of changes ~ feeling of restriction + instrumental stuff + relationship with government
 
+> ¿Total change count in reactions to government restrictions?
+
 ---- 
 
-Reaction ~ instrumental issues + issue alignment + principles
+## Reactions
+
+- Ways around registration - 16a: 1693, 1699
+- Smaller programs
+- Fund irregularly
+- Fund through government
+- Shape programming to fit regulations
+- Just follow rules
+- Align with government
+- Partner with government (but that's hard)
+- Work with consultants
+- Work in exile
+- Collaborate with domestic NGOs
+- Protect against changes
+- Work regardless of registration status
+- Avoid fees
+- Bribery
+- Leave the country
 
 ## Sandbox
 
