@@ -332,12 +332,11 @@ df.hq.regions %>% pandoc.table()
 
 ```{r plot-hq-regions, fig.width=6, fig.height=3}
 plot.hq.regions <- ggplot(df.hq.regions, aes(x=num, y=region)) +
-  geom_barh(stat="identity") +
-  scale_x_continuous(expand=c(0, 0),
-                     sec.axis = sec_axis(~ . / sum(df.hq.regions$num),
+  geom_pointrangeh(aes(xmin=0, xmax=num)) +
+  scale_x_continuous(sec.axis = sec_axis(~ . / sum(df.hq.regions$num),
                                          labels=scales::percent)) +
   labs(x="Respondents based in region", y=NULL) +
-  theme_ath()
+  theme_ath() + theme(panel.grid.major.y=element_blank())
 
 plot.hq.regions +
   labs(title="Region of headquarters",
@@ -593,12 +592,11 @@ df.target.regions.answered %>% pandoc.table()
 
 plot.target.regions.answered <- ggplot(df.target.regions.answered, 
                                        aes(x=times.marked, y=target_continent)) +
-  geom_barh(stat="identity") +
-  scale_x_continuous(expand=c(0, 0),
-                     sec.axis = sec_axis(~ . / sum(df.target.regions.answered$times.marked),
+  geom_pointrangeh(aes(xmin=0, xmax=times.marked)) +
+  scale_x_continuous(sec.axis = sec_axis(~ . / sum(df.target.regions.answered$times.marked),
                                          labels=scales::percent)) +
   labs(x="Respondents answered about", y=NULL) +
-  theme_ath()
+  theme_ath() + theme(panel.grid.major.y=element_blank())
 
 plot.target.regions.answered +
   labs(title="Region of work country",
@@ -667,16 +665,14 @@ df.issues.most.denom <- sum(df.issues.most.clean$num)
 
 plot.issues.most.clean <- ggplot(df.issues.most.clean,
                                  aes(x=num, y=issue,
-                                     fill=potential.contentiousness)) +
-  geom_barh(stat="identity") +
-  scale_x_continuous(expand=c(0, 0),
-                     sec.axis = sec_axis(~ . / df.issues.most.denom,
+                                     colour=potential.contentiousness)) +
+  geom_pointrangeh(aes(xmin=0, xmax=num)) +
+  scale_x_continuous(sec.axis = sec_axis(~ . / df.issues.most.denom,
                                          labels=scales::percent)) +
-  scale_fill_manual(values=c("grey80", "grey40"), name=NULL) +
+  scale_colour_manual(values=c("grey80", "grey40"), name=NULL) +
   labs(x="Organizations", y=NULL) +
   theme_ath() + theme(legend.position=c(1, 0), legend.justification = c(1, 0),
-                      legend.direction="horizontal")
-
+                      legend.direction="horizontal", panel.grid.major.y=element_blank())
 plot.issues.most.clean
 
 fig.save.cairo(plot.issues.most.clean,
