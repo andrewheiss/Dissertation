@@ -36,6 +36,7 @@ library(tm)  # yay text analysis
 library(countrycode)
 library(riverplot)
 library(pryr)
+library(gridExtra)
 library(feather)
 
 panderOptions('table.split.table', Inf)
@@ -648,181 +649,121 @@ invisible(dev.off())
 ```
 
 
+## What do these NGOs do?
+
+### Which issues do these NGOs work on?
+
+```{r plot-issues-worked-on, fig.width=6, fig.height=3}
+df.issues.most.clean <- survey.orgs.clean %>%
+  group_by(Q3.2.clean, potential.contentiousness) %>%
+  summarise(num = n()) %>%
+  filter(!is.na(Q3.2.clean)) %>%
+  ungroup() %>%
+  arrange(desc(num)) %>%
+  mutate(issue = factor(Q3.2.clean, levels=rev(unique(Q3.2.clean)), ordered=TRUE)) %>%
+  mutate(prop = num / sum(num), cum.prop = cumsum(prop))
+
+df.issues.most.denom <- sum(df.issues.most.clean$num)
+
+plot.issues.most.clean <- ggplot(df.issues.most.clean,
+                                 aes(x=num, y=issue,
+                                     fill=potential.contentiousness)) +
+  geom_barh(stat="identity") +
+  scale_x_continuous(expand=c(0, 0),
+                     sec.axis = sec_axis(~ . / df.issues.most.denom,
+                                         labels=scales::percent)) +
+  scale_fill_manual(values=c("grey80", "grey40"), name=NULL) +
+  labs(x="Organizations", y=NULL) +
+  theme_ath() + theme(legend.position=c(1, 0), legend.justification = c(1, 0),
+                      legend.direction="horizontal")
+
+plot.issues.most.clean
+
+fig.save.cairo(plot.issues.most.clean,
+               filename="3-issues-worked-on",
+               width=6, height=3)
+```
+
+
+### What kinds of activities do these NGOs engage in?
+
+```{r plot-activities}
+labels.activities <- data_frame(levels=c("aid", "education", "mobilize",
+                                         "advocacy", "monitor"),
+                                labels=c("Providing direct aid and services",
+                                         "Engaging in research and public education",
+                                         "Mobilizing people",
+                                         "Engaging in advocacy",
+                                         "Monitoring and assessing the effects of policies"))
+
+df.activities <- survey.orgs.clean %>%
+  select(potential.contentiousness, dplyr::contains("Q3.3"), -dplyr::contains("TEXT")) %>%
+  gather(question, response, -potential.contentiousness) %>%
+  mutate(question = str_replace(question, "Q3\\.3_", ""),
+         question = factor(question, levels=labels.activities$levels,
+                           labels=labels.activities$labels, ordered=TRUE)) %>%
+  filter(!(response %in% c("Don't know", "Not applicable"))) %>%
+  group_by(question, response, potential.contentiousness) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(response = factor(response, levels=levels(survey.orgs.clean$Q3.3_aid), ordered=TRUE))
+
+activities.order.low <- df.activities %>%
+  filter(potential.contentiousness == "Low contention", response == "Always") %>%
+  arrange(response, desc(num)) %>% 
+  mutate(question = ordered(fct_inorder(question))) %>% select(question)
+
+activities.order.high <- df.activities %>%
+  filter(potential.contentiousness == "High contention", response == "Always") %>%
+  arrange(response, desc(num)) %>% 
+  mutate(question = ordered(fct_inorder(question))) %>% select(question)
+
+df.activities.low <- df.activities %>%
+  filter(potential.contentiousness == "Low contention") %>%
+  mutate(question = factor(question, levels=levels(activities.order.low$question),
+                           ordered=TRUE))
+
+df.activities.high <- df.activities %>%
+  filter(potential.contentiousness == "High contention") %>%
+  mutate(question = factor(question, levels=levels(activities.order.high$question),
+                           ordered=TRUE))
+
+plot.activities.low <- ggplot(df.activities.low, aes(y=num, x=response)) +
+  geom_bar(stat="identity", fill="grey40") +
+  labs(y="Times selected", x="How often INGO does work",
+       title="Low contention INGOs") +
+  facet_wrap(~ question, ncol=1) +
+  theme_ath() + theme(plot.title=element_text(hjust=0.5))
+
+plot.activities.high <- ggplot(df.activities.high, aes(y=num, x=response)) +
+  geom_bar(stat="identity", fill="grey80") +
+  labs(y=NULL, x="How often INGO does work",
+       title="High contention INGOs") +
+  facet_wrap(~ question, ncol=1) +
+  theme_ath() + theme(plot.title=element_text(hjust=0.5))
+
+plot.activities.both <- cbind(ggplotGrob(plot.activities.low),
+                              ggplotGrob(plot.activities.high))
+grid::grid.newpage()
+grid::grid.draw(plot.activities.both)
+
+fig.save.cairo(plot.activities.both,
+               filename="3-main-activities",
+               width=8.5, height=4.5)
+```
+
+```{r manual-reading-filtering}
+low.contention.work <- survey.orgs.clean %>%
+  filter(potential.contentiousness == "Low contention") %>%
+  select(clean.id, matches("Q3\\.3_.*_TEXT"))
+
+high.contention.work <- survey.orgs.clean %>%
+  filter(potential.contentiousness == "High contention") %>%
+  select(clean.id, matches("Q3\\.3_.*_TEXT"))
+```
+
+
 ```{r}
-# ## What do these NGOs do?
-# 
-# ### Which issues do these NGOs work on?
-# df.issues <- survey.orgs.clean %>%
-#   unnest(Q3.1_value) %>%
-#   group_by(Q3.1_value) %>%
-#   summarise(num = n()) %>%
-#   arrange(desc(num)) %>%
-#   filter(!is.na(Q3.1_value)) %>%
-#   mutate(issue = factor(Q3.1_value, levels=rev(Q3.1_value), ordered=TRUE))
-# 
-# df.issues.denom <- sum(!is.na(survey.orgs.clean$Q3.1_value))
-# 
-# plot.issues <- ggplot(df.issues, aes(x=num, y=issue)) + 
-#   geom_barh(stat="identity") + 
-#   scale_x_continuous(expand=c(0, 0),
-#                      sec.axis = sec_axis(~ . / df.issues.denom,
-#                                          labels=scales::percent)) +
-#   labs(x="Times selected", y=NULL) +
-#   theme_ath()
-# 
-# plot.issues + 
-#   labs(title="Which issues do NGOs work on?",
-#        subtitle="Q3.1: Which issues does your organization focus on? (multiple answers allowed)")
-# 
-# 
-# ### Which issues do NGOs work on the most?
-# df.issues.most <- survey.orgs.clean %>%
-#   group_by(Q3.2) %>%
-#   summarise(num = n()) %>%
-#   arrange(desc(num)) %>%
-#   filter(!is.na(Q3.2)) %>%
-#   mutate(issue = factor(Q3.2, levels=rev(Q3.2), ordered=TRUE))
-# 
-# plot.issues.most <- ggplot(df.issues.most, aes(x=num, y=issue)) + 
-#   geom_barh(stat="identity") + 
-#   scale_x_continuous(expand=c(0, 0),
-#                      sec.axis = sec_axis(~ . / sum(df.issues.most$num),
-#                                          labels=scales::percent)) +
-#   labs(x="Respondents", y=NULL) +
-#   theme_ath()
-# 
-# plot.issues.most +
-#   labs(title="Which issues do NGOs work on?",
-#        subtitle="Q3.2: Which issues does your organization focus on the most?")
-# 
-# There are lots of others, both for all issues and most important issue. What are they?
-# df.other.issues <- survey.orgs.clean %>%
-#   filter(!is.na(Q3.1_other_TEXT)) %>%
-#   mutate(other.issue = str_to_title(Q3.1_other_TEXT)) %>% 
-#   group_by(other.issue) %>%
-#   summarise(num = n()) %>%
-#   arrange(desc(num))
-# 
-# datatable(df.other.issues)
-# 
-# There are 300+ other issues here. That's a lot. Natural language processing
-# can help make sense of the mess.
-# # Build clean corpus for NLP
-# issue.corpus.df <- survey.orgs.clean %>%
-#   filter(!is.na(Q3.1_other_TEXT)) %>%
-#   mutate(other.issue = str_to_lower(Q3.1_other_TEXT)) %>%
-#   select(other.issue)
-# 
-# issue.corpus <- issue.corpus.df %>%
-#   DataframeSource() %>% Corpus() %>%
-#   tm_map(removePunctuation) %>%
-#   tm_map(removeNumbers) %>%
-#   tm_map(removeWords, stopwords("english")) %>%
-#   tm_map(stemDocument, language="english") %>%
-#   tm_map(stripWhitespace)
-# 
-# tdm.issues <- TermDocumentMatrix(issue.corpus)
-# 
-# # This works, but doesn't provide frequencies, so dplyr it is
-# #   findFreqTerms(tdm.issues, 5)
-# term.frequency <- as.data.frame(as.matrix(tdm.issues)) %>%
-#   mutate(term = rownames(.)) %>%
-#   gather(document, freq, -term) %>%
-#   filter(freq > 0) %>%
-#   group_by(term) %>%
-#   summarise(num = n()) %>%
-#   ungroup()
-# 
-# frequent.issues <- term.frequency %>%
-#   filter(num >= 5) %>%
-#   arrange(desc(num))
-# frequent.issues
-# 
-# Lots of NGOs deal with rights, health, and developent. Do they qualify those
-# broader issues?
-# findAssocs(tdm.issues, "right", 0.1)
-# findAssocs(tdm.issues, "health", 0.1)
-# findAssocs(tdm.issues, "develop", 0.1)
-# 
-# Imputing latent themes from these other topics algorithmically is tricky though. K-means, PAM, latent semantic analysis (LSA), and latent dirichlet allocation (LDA) all choke, since the corpus isn't that big and the "documents" are super short (often just one word long). I attempt each of these in `/Analysis/ingo_survey/sandbox.R`, but none of them work well, even for coarse sorting. 
-# 
-# So, hand-coding it is.
-# 
-# Here are the results post-hand-coding:
-# 
-# df.issues.clean <- survey.orgs.clean %>%
-#   unnest(Q3.1.clean_value) %>%
-#   group_by(Q3.1.clean_value) %>%
-#   summarise(num = n()) %>%
-#   arrange(desc(num)) %>%
-#   filter(!is.na(Q3.1.clean_value)) %>%
-#   mutate(issue = factor(Q3.1.clean_value, levels=rev(Q3.1.clean_value), ordered=TRUE))
-# 
-# plot.issues.clean <- ggplot(df.issues.clean, aes(x=num, y=issue)) + 
-#   geom_barh(stat="identity") + 
-#   scale_x_continuous(expand=c(0, 0)) +
-#   labs(x="Times selected", y=NULL,
-#        title="Which issues do NGOs work on?",
-#        subtitle="Q3.1: Which issues does your organization focus on? (multiple answers allowed)") +
-#   theme_ath()
-# 
-# plot.issues.clean
-# 
-# 
-# df.issues.most.clean <- survey.orgs.clean %>%
-#   group_by(Q3.2.clean, potential.contentiousness) %>%
-#   summarise(num = n()) %>%
-#   filter(!is.na(Q3.2.clean)) %>%
-#   ungroup() %>%
-#   arrange(desc(num)) %>%
-#   mutate(issue = factor(Q3.2.clean, levels=rev(unique(Q3.2.clean)), ordered=TRUE))
-# 
-# plot.issues.most.clean <- ggplot(df.issues.most.clean,
-#                                  aes(x=num, y=issue,
-#                                      fill=potential.contentiousness)) + 
-#   geom_barh(stat="identity") + 
-#   scale_x_continuous(expand=c(0, 0)) +
-#   scale_fill_manual(values=c("grey80", "grey40"),
-#                     name="Potential contentiousness") +
-#   labs(x="Times selected", y=NULL,
-#        title="Which issues do NGOs work on?",
-#        subtitle="Q3.2: Which issues does your organization focus on the most?") +
-#   theme_ath()
-# 
-# plot.issues.most.clean
-# 
-# 
-# ### What kinds of activities do these NGOs engage in?
-# labels.activities <- data_frame(levels=c("aid", "education", "mobilize", 
-#                                          "advocacy", "monitor"),
-#                                 labels=c("Providing direct aid and services",
-#                                          "Engaging in research and public education",
-#                                          "Mobilizing people",
-#                                          "Engaging in advocacy",
-#                                          "Monitoring and assessing the effects of policies"))
-# 
-# df.activities <- survey.orgs.clean %>%
-#   select(dplyr::contains("Q3.3"), -dplyr::contains("TEXT")) %>%
-#   gather(question, response) %>%
-#   mutate(question = str_replace(question, "Q3\\.3_", ""),
-#          question = factor(question, levels=labels.activities$levels,
-#                            labels=labels.activities$labels, ordered=TRUE)) %>%
-#   filter(!(response %in% c("Don't know", "Not applicable"))) %>%
-#   group_by(question, response) %>%
-#   summarise(num = n()) %>%
-#   ungroup() %>%
-#   mutate(response = factor(response, levels=levels(survey.orgs.clean$Q3.3_aid), ordered=TRUE))
-# 
-# plot.activities <- ggplot(df.activities, aes(y=num, x=response)) +
-#   geom_bar(stat="identity") +
-#   labs(y="Number of responses", x=NULL,
-#        title="What kinds of activities are NGOs engaged in?",
-#        subtitle="Q3.3: Please indicate how often your organization engages in each of these types of activities") +
-#   facet_wrap(~ question, ncol=1) + 
-#   theme_ath()
-# 
-# plot.activities
-# 
 # ### Staffing details
 # 
 # #### Full time employees
