@@ -181,9 +181,9 @@ A key element of my theory of amicable contempt is alignment with the regime—I
 
 ![Frequency of INGO engagement in different types of activities; organizations answered about one or more activities](../../Output/figures/3-main-activities){#fig:main-activities}
 
-This division of INGOs into contentious and non contentious programming aligns well with the activities INGOs report engaging in. @fig:main-activities shows how frequently responding organizations work on a variety of types of programming, with each column sorted by the frequency of the "Always" option. If the division of contentiousness is correct, low contention INGOs should provide direct aid and services and engage in research and public education most frequently, since these types of programming pose little threat to the target country regime. High contention INGOs, on the other hand, should deal most often with more threatening activities like advocacy, political mobilization, and government monitoring. As seen in the figure, low contention organizations indicated always providing aid and services and engaging in research while only occasionally monitoring the government or mobilizing people. Interestingly, around 100 low contention organizations reported always engaging in advocacy. However, this form of advocacy appears to still be noncontentious: respondents describe advocating for "expanded public health programs,"[^22] "agr[i]culture,"[^23] "volunteerism,"[^24] "girls completing secondary education,"[^25] or expanding "access [to] health and justice."[^26] 
+This division of INGOs into contentious and non contentious programming aligns well with the activities INGOs report engaging in. @fig:main-activities shows how frequently responding organizations work on a variety of types of programming.[^22] If the division of contentiousness is correct, low contention INGOs should provide direct aid and services and engage in research and public education most frequently, since these types of programming pose little threat to the target country regime. High contention INGOs, on the other hand, should deal most often with more threatening activities like advocacy, political mobilization, and government monitoring. As seen in the figure, 60% of low contention organizations indicated they almost always provide aid, half almost always engage in research, and less than 40% monitor the government or mobilize people. Interestingly, about half of low contention organizations reported regularly engaging in advocacy. However, this form of advocacy appears to still be noncontentious: respondents describe advocating for "expanded public health programs,"[^23] "agr[i]culture,"[^24] "volunteerism,"[^25] "girls completing secondary education,"[^26] or expanding "access [to] health and justice."[^27] 
 
-As expected, high contention organizations are most likely to report always engaging in advocacy and monitoring government policies, including advocating for the recognition and safety of human rights defenders,[^27]assisting with the "rehabilitation of repentant terrorists,"[^28] promoting religious freedom and human rights, [^29] and "holding … leaders accountable" for their policies and actions.[^30] These more contentious organizations engage in research and public education as the third most common primary activity. These educational activities clearly post more of a threat to the government and are more focused on human rights, such as maintaining a death penalty policy database,[^31] organizing activist training sessions and hackathons,[^32] or developing country-specific media literacy training programs.[^33] These organizations only sometimes provide direct aid and services, in contrast to their low contention counterparts. Finally, both kinds of INGOS are least likely to report always engaging in political mobilization, which is understandable for low contention organizations but surprising for those working on more contentious issues. INGOs may have conflated this kind of work with engaging in research—organizations mentioned political mobilization and campaigns in many of their explanations of their research and public education work.
+As expected, high contention organizations are most likely to report always engaging in advocacy (63%) and monitoring government policies (53%), including advocating for the recognition and safety of human rights defenders,[^28]assisting with the "rehabilitation of repentant terrorists,"[^29] promoting religious freedom and human rights, [^30] and "holding … leaders accountable" for their policies and actions.[^31] These more contentious organizations engage in research and public education as the third most common primary activity (53%). These educational activities clearly post more of a threat to the government and are more focused on human rights, such as maintaining a death penalty policy database,[^32] organizing activist training sessions and hackathons,[^33] or developing country-specific media literacy training programs.[^34] These organizations only sometimes provide direct aid and services, in contrast to their low contention counterparts. Finally, both kinds of INGOS are least likely to report always engaging in political mobilization, which is understandable for low contention organizations but surprising for those working on more contentious issues. INGOs may have conflated this kind of work with engaging in research—organizations mentioned political mobilization and campaigns in many of their explanations of their research and public education work.
 
 This division of contentiousness is by no means perfect. As seen in the case of China in the previous chapter, education INGOs can pose a threat to regime stability as governments fear the spread of foreign influence among their youth, and development INGOs can rival weak central governments and create territorial "fiefdoms" to supersede the regime [@Schuller:2012]. However, while the division between low and high contention issues is fairly simplistic, it does appear to accurately capture (1) the broad types of programs that INGOs engage in, and (2) the range of possible objections governments are likely to raise (or not raise).
 
@@ -215,33 +215,66 @@ I then describe how restricted these organizations feel in their target countrie
 
 Restriction ~ instrumental issues + issue alignment + principles
 
-
 How restricted do they feel? How is that related to mission, flexibility, relationship with government?
 
 ---- 
 
 ### Relationship with host governments
 
-In general, how positive are NGO relationships with their hosts? (Q4.11) - depends on regime type? issue? principles? flexibility?
-Stories from free responses
+In general, INGOs have a fairly positive relationship with their host governments (@fig:govt-positivity-both)—only 10% of respondents report having a somewhat or extremely negative relationship, while the remainder either have a positive relationship or are ambivalent. Opinions of the positivity of this relationship depend on the type of government and the contentiousness of the INGO's issue. 60% of INGOs that reported a negative relationship work in autocracies, while only 20–30% of organizations with a positive or ambivalent relationship work in similar regimes.[^35] Similarly, 50% of organizations with a negative relationship work on contentious issues. In fact, 17% of high contention organizations have a negative relationship with their hosts, in contrast to only 8% of low contention organizations.[^36] 
 
-Government views of NGOs -
-Threat to government - fear of gatherings - bigger NGOs a threat?
-Government wants to use NGOs
-Bribery
-Domestic politics
+![Opinions of relationship with host government, separated by regime type and issue contentiousness (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-govt-positivity-both){#fig: govt-positivity-both}
 
-Are organizations registered? More/less likely to be registered in democracies
-Stories from free responses
+This trend towards highly contentious INGOs working in authoritarian regimes having a more negative relationship with the regime reflects respondent experiences. Organizations working on low contention issues that align with government needs report having a close and cordial working relationship with their hosts. A health organization working in West Africa explains that "[w]e work very closely with government hospitals and universities, [and we meet with] various health ministers [regularly],"[^37]and a development organization working in Central America reports that "[w]e work very closely with the trade unions, many of whom have representatives in the National Assembly," and that they have a good relationship with the host government's foreign ministry and with their ambassador in the organization's home country.[^38] Government officials are often enthusiastic about NGO work and sometimes "verbally express their gratitude to work with" foreign NGOs.[^39] One education INGO working in a South Asian dictatorship summarizes the experiences of many low-contention organizations optimistically: "We really do not have any problem with them, mater [sic] of fact they work with us so well that when we need any kind of help they are there for us to assist. We have a great relationship."[^40]
 
-Contact with government - based on feeling of restriction and positivity of relationship with government - organizations that are more restricted/more positive are more/less in contact with government - who do INGOs contact? presidents, MPs, etc (Q4.7) - are they required to have someone on their board(Q4.9) - how often do they report?
-Stories from free responses
+Not all organizations enjoy such a warm relationship with the government. Some low contention organizations have poor relationships with their host governments because of poor governance, with one disaster relief INGO working in Southeast Asia reporting that "There is a lot of bureaucracy and corruption. We spend so much time to get approval in the projects. We don't agree to pay bribe, which makes or work even more difficult."[^41] 
+
+More commonly, though, INGOs working on more contentious issues face more negative relationships. An organization working in Central Africa identifies their programming as the source of this poor relationship:
+
+> we document and report human rights violation, we organise presse conference to denounce and alert the peoples on pertinent cases, the government is against this and task us to be instrumantalised by europeans and americans, we undergo threats of all forms and some times watch our meetings monitored. [sic][^42]
+
+This organization's mission to report on human rights violations makes its relationship with the government naturally combative, and the government responds by conflating INGO programming with former imperial influence and by closely following the organization's activities. This link between contentious programming and poor relationships is reiterated by other human rights INGOs working in Oceania and the Middle East:
+
+> We are highly critical of them and their policies and laws. We are human rights defenders at risk of prosecution for our work in sharing information with the UN human rights mechanisms. We are monitored by the security agency.[^43]
+
+> The government does not want us to document violations of human rights and fundamental freedoms, including systematic torture and abuse of civilians, civil society activists and women rights defenders.[^44]
+
+In chapter two, I argued that authoritarian regimes use international NGOs to promote regime stability. Here, respondent experiences reinforce this finding, showing that many authoritarian host governments clearly see foreign NGOs as threats to stability. Respondents note that their relationship with the government is often affected by the political atmosphere[^45] and that international NGOs in particular are seen as risky political actors.[^46] Some NGOs feel that accusations of acting as foreign political operatives are baseless and note that there is "much hue and cry about foreign money and agenda with out any evidence."[^47]
+
+The foreign aspect of international NGOs appears to be the overriding trigger of fears for stability, most likely because it is more difficult to directly regulate or control non-domestic organizations. A conflict resolution INGO working in East Africa argues that it is difficult to work with the host government because "any organization or investor from a another country is viewed as a threat to the government of [the country], especially on issues resolving conflicts and human right[s]."[^48] Governments are especially wary of foreign organizations that work directly with citizens—for instance, one human rights INGO in East Africa feels like the government considers it a threat to national security when staff conduct trainings in the community.[^49] Fears of foreign influence are not limited solely to contentious organizations. An education INGO working in Southern Africa reports government suspicion of their pro-education advocacy and training, noting that "[t]he government is security and politically conscious, and have a negative view to gatherings of people. They take gatherings as opportunities for political influence."[^50]
+
+Though fears of regime stability appear paramount in determining the relationship between INGOs and governments, the relationship between INGOs and their host governments is not always so antagonistic. Governments often take advantage of the foreign organizations working in their countries. While a few organizations note that governments take literal monetary advantage of foreign organizations—one INGO working in the Caribbean reports that "every regulation or law gives a potential pretext for an official or policeman to attempt to solicit a bribe"[^51]—many more discuss how their host governments use their presence and their services to boost their own public image at home and abroad  The presence of foreign organizations in failed states can signal growing stability and instill confidence in potential investors. For example, an education INGO working in East Africa reports:
+
+> The [g]overnment is desperately seeking any form of cooperation with foreign countries to re-establish a resemblance of normality in a war-ravaged country that is slowly trying to lift off. Therefore any international action is warmly welcomed by top brass executives of any political side.[^52]
+
+The presence of foreign NGOs can also act as a signal to domestic audiences. INGOs provide specialized services and expertise that are often not offered by domestic firms or local governments. Government ministries tend to partner with INGOs "whenever they need… services"[^53] to take advantage of improved services and to access better resources. One disaster relief INGO working in South Asia reports having a close and productive relationship with the government, since it "has recognized how quickly and efficiently our nonprofit was able to provide relief services and has supported partnerships with us in many areas related to our programs of health, education and [disaster] recovery."[^54] Government officials will also use foreign NGO services and expertise for personal political gain—a public health INGO working in West Africa notes that "some state officials want your services to be in their home villages and community"[^55] as a form of pork barrel politics, securing aid and services for their constituents.
+
+Thus, the nature of the relationship between international NGOs and their host governments is the product of multiple factors. INGOs working on more contentious issues and implementing programs that pose more of a risk to the stability of their host regimes are most likely to have a negative relationship with the governments of their target countries. INGO alignment with regime preferences is essential for a good relationship. When a host government sees INGOs as risks to internal political stability the relationship will sour, but when it sees these foreign organizations as potential political assets, INGOs are likely to be embraced.
+
 
 ### Government involvement in and regulation of NGO programming
 
+How do governments safely embrace international NGOs, though?
+
+Given the centrality of concerns over regime stability, ASDFA ASDF about INGO work in their country, governments oversee this work and occasionally insert themselves in it. 
+
+
+**Direct involvement**
+Governments get involved directly in NGOs
+
+- Contact with the government
+Contact with government - based on feeling of restriction and positivity of relationship with government - organizations that are more restricted/more positive are more/less in contact with government - who do INGOs contact? presidents, MPs, etc (Q4.7) - are they required to have someone on their board(Q4.9) - how often do they report?
+Stories from free responses
+
 How is the government involved? Q4.10
 
-The most common way for the government affect NGO work is through regulation How do government restrict and regulate NGOs? How are NGOs affected by those regulations?
+**Regulation**
+The most common way for the government affect NGO work is through formal regulations How do government restrict and regulate NGOs? How are NGOs affected by those regulations?
+
+- Registration
+Are organizations registered? More/less likely to be registered in democracies
+Stories from free responses
+
 
 NGOs are fairly familiar with the regulations they face (Q4.13–15)
 
@@ -280,6 +313,13 @@ Disclose sources of funding
 
 Unrelated
 Taxes, fees, bureaucratic regulations, irrational visa restrictions
+1574; HQ: United States; target: Haiti; Low contention
+
+
+
+1328; HQ: Uzbekistan; target: Uzbekistan; High contention
+prosecution for receiving foreign aid and cooperation with international NGOs
+
 
 
 How do all these regulations affect the ability to pursue mission? Q4.18
@@ -318,7 +358,7 @@ We used more foreign staff and/or volunteers
 
 Do types of restriction (Q4.16) or general level of restriction (Q4.17) correlate with responses to regulations (Q4.21)?
 
-\\# of changes ~ feeling of restriction + instrumental stuff + relationship with government
+\\# of changes ~ feeling of restriction (Q4.17) + instrumental stuff + relationship with government (Q4.11)
 
 > ¿Total change count in reactions to government restrictions?
 
@@ -463,26 +503,70 @@ Structure analysis around each element of theory.
 
 	I use the medians of the simulated values from the MCMC samples as coefficient estimates, and use the 2.5% and 97.5% quantiles as lower and upper limits for 95% credible intervals. Finally, I declare an effect statistically significant if the posterior probability of being different from zero is larger than 0.99.
 
-[^22]:	Response 1385.
+[^22]:	"Always" and "Most of the time" responses are collapsed to "Almost always; "About half the time" and "Sometimes" responses are collapsed to "Sometimes."
 
-[^23]:	Response 1605.
+[^23]:	Response 1385.
 
-[^24]:	Response 1472.
+[^24]:	Response 1605.
 
-[^25]:	Response 1419.
+[^25]:	Response 1472.
 
-[^26]:	Response 1448.
+[^26]:	Response 1419.
 
-[^27]:	Response 1339.
+[^27]:	Response 1448.
 
-[^28]:	Response 1233.
+[^28]:	Response 1339.
 
-[^29]:	Responses 1304 and 1703.
+[^29]:	Response 1233.
 
-[^30]:	Response 1193.
+[^30]:	Responses 1304 and 1703.
 
-[^31]:	Response 1558.
+[^31]:	Response 1193.
 
-[^32]:	Responses 1487 and 1660.
+[^32]:	Response 1558.
 
-[^33]:	Response 1643.
+[^33]:	Responses 1487 and 1660.
+
+[^34]:	Response 1643.
+
+[^35]:	This difference is significant: p(Negative − Positive \> 0) = 0.97.
+
+[^36]:	This difference is also significant: p(Negative − Positive \> 0) = 0.97.
+
+[^37]:	Response 1189.
+
+[^38]:	Response 1192.
+
+[^39]:	Responses 1243, 1253, 1284 and 1323.
+
+[^40]:	Response 1507.
+
+[^41]:	Response 1224.
+
+[^42]:	Response 1339.
+
+[^43]:	Response 1408.
+
+[^44]:	Response 1458.
+
+[^45]:	Response 1678.
+
+[^46]:	Response 1541.
+
+[^47]:	Response 1683.
+
+[^48]:	Response 1751.
+
+[^49]:	Response 1751.
+
+[^50]:	Response 1541.
+
+[^51]:	Response 1574.
+
+[^52]:	Response 1412.
+
+[^53]:	Response 1464.
+
+[^54]:	Response 1608.
+
+[^55]:	Response 1307.
