@@ -757,7 +757,7 @@ high.contention.work <- survey.orgs.clean %>%
 
 ## Relationship with host governments
 
-### Positivity
+### Regime type
 
 ```{r plot-govt-positivity-regime, fig.width=2, fig.height=2}
 df.govt.positivity.regime <- survey.countries.clean %>%
@@ -781,6 +781,25 @@ govt.positivity.regime.table <- survey.countries.clean %>%
 analyze.cat.var(govt.positivity.regime.table)
 ```
 
+```{r plot-govt-positivity-regime-bayes}
+govt.positivity.regime.table.bayes <- survey.countries.clean %>%
+  filter(!is.na(Q4.11_collapsed)) %>%
+  count(Q4.11_collapsed, target.regime.type) %>%
+  group_by(Q4.11_collapsed) %>%
+  mutate(total = sum(n)) %>%
+  filter(target.regime.type == "Autocracy") %>%
+  diff.groups.bayes(cbind(n, total) ~ Q4.11_collapsed, data=., prop=TRUE)
+
+grid.arrange(govt.positivity.regime.table.bayes$plot.groups,
+             govt.positivity.regime.table.bayes$plot.diffs)
+```
+
+```{r results="asis"}
+govt.positivity.regime.table.bayes$diffs.summary %>% pandoc.table()
+```
+
+### Issue contentiousness
+
 ```{r plot-govt-positivity-issue, fig.width=2, fig.height=2}
 df.govt.positivity.issue <- survey.countries.clean %>%
   select(Q4.11_collapsed, potential.contentiousness) %>%
@@ -803,7 +822,7 @@ govt.positivity.issue.table <- survey.countries.clean %>%
 analyze.cat.var(govt.positivity.issue.table)
 ```
 
-```{r plot-govt-positivity-regime-bayes}
+```{r plot-govt-positivity-issue-bayes}
 govt.positivity.issue.table.bayes <- survey.countries.clean %>%
   filter(!is.na(Q4.11_collapsed)) %>%
   count(Q4.11_collapsed, potential.contentiousness) %>%
@@ -814,6 +833,10 @@ govt.positivity.issue.table.bayes <- survey.countries.clean %>%
 
 grid.arrange(govt.positivity.issue.table.bayes$plot.groups,
              govt.positivity.issue.table.bayes$plot.diffs)
+```
+
+```{r results="asis"}
+govt.positivity.issue.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
 ```{r plot-govt-positivity-both}
