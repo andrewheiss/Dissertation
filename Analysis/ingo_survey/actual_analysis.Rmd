@@ -79,7 +79,13 @@ survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                                         Neither = c("Neither positive nor negative"),
                                         Positive = c("Somewhat positive", "Extremely positive"),
                                         NULL = c("Don't know", "Prefer not to answer")),
-         Q4.11_collapsed = ordered(Q4.11_collapsed))
+         Q4.11_collapsed = ordered(Q4.11_collapsed)) %>%
+  mutate(Q4.13_collapsed = fct_collapse(Q4.13,
+                                        "Very familiar" = c("Extremely familiar", "Very familiar"),
+                                        "Somewhat familiar" = c("Moderately familiar", "Slightly familiar"),
+                                        "Not familiar at all" = c("Not familiar at all"),
+                                        NULL = c("Don't know")),
+         Q4.13_collapsed = ordered(Q4.13_collapsed))
 
 # External data
 full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
@@ -840,6 +846,100 @@ govt.positivity.issue.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
 ```{r plot-govt-positivity-both}
+plot.govt.positivity.both <- cbind(ggplotGrob(plot.govt.positivity.regime),
+                                   ggplotGrob(plot.govt.positivity.issue))
+grid::grid.newpage()
+grid::grid.draw(plot.govt.positivity.both)
+
+fig.save.cairo(plot.govt.positivity.both,
+               filename="3-govt-positivity-both",
+               width=6, height=1.5)
+```
+
+
+## Familiarity with regulations
+
+Most INGOs working in democracies are either moderately familiar with government regulations or not familiar at all. For INGOs working in autocracies, familiarity with regulations appears to be more essential—most are very or extremely familiar with regulations, and very few are unaware of any of the laws governing their activities. The difference in proportions across groups is significant. 
+
+```{r plot-familiarity-regime, fig.width=2, fig.height=2}
+df.reg.familiarity.regime <- survey.countries.clean %>%
+  select(Q4.13_collapsed, target.regime.type) %>%
+  filter(!is.na(Q4.13_collapsed))
+
+plot.reg.familiarity.regime <- prodplot(df.reg.familiarity.regime,
+                                        ~ target.regime.type + Q4.13_collapsed, mosaic("h"),
+                                        colour=NA) +
+  aes(fill=target.regime.type, colour="white") +
+  scale_fill_manual(values=ath.palette("regime2"), name=NULL) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.reg.familiarity.regime
+
+reg.familiarity.regime.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.13_collapsed)) %>%
+  xtabs(~ Q4.13_collapsed + target.regime.type, .)
+
+analyze.cat.var(reg.familiarity.regime.table)
+```
+
+```{r plot-familiarity-regime-bayes}
+reg.familiarity.regime.table.bayes <- survey.countries.clean %>%
+  filter(!is.na(Q4.13_collapsed)) %>%
+  count(Q4.13_collapsed, target.regime.type) %>%
+  group_by(Q4.13_collapsed) %>%
+  mutate(total = sum(n)) %>%
+  filter(target.regime.type == "Autocracy") %>%
+  diff.groups.bayes(cbind(n, total) ~ Q4.13_collapsed, data=., prop=TRUE)
+
+grid.arrange(reg.familiarity.regime.table.bayes$plot.groups,
+             reg.familiarity.regime.table.bayes$plot.diffs)
+```
+
+```{r results="asis"}
+reg.familiarity.regime.table.bayes$diffs.summary %>% pandoc.table()
+```
+
+```{r plot-familiarity-issue, fig.width=2, fig.height=2}
+df.reg.familiarity.issue <- survey.countries.clean %>%
+  select(Q4.13_collapsed, potential.contentiousness) %>%
+  filter(!is.na(Q4.13_collapsed))
+
+plot.reg.familiarity.issue <- prodplot(df.reg.familiarity.issue,
+                                        ~ potential.contentiousness + Q4.13_collapsed, mosaic("h"),
+                                        colour=NA) +
+  aes(fill=potential.contentiousness, colour="white") +
+  scale_fill_manual(values=ath.palette("contention1"), name=NULL) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.reg.familiarity.issue
+
+reg.familiarity.issue.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.13_collapsed)) %>%
+  xtabs(~ Q4.13_collapsed + potential.contentiousness, .)
+
+analyze.cat.var(reg.familiarity.issue.table)
+```
+
+```{r plot-familiarity-issue-bayes}
+reg.familiarity.issue.table.bayes <- survey.countries.clean %>%
+  filter(!is.na(Q4.13_collapsed)) %>%
+  count(Q4.13_collapsed, potential.contentiousness) %>%
+  group_by(Q4.13_collapsed) %>%
+  mutate(total = sum(n)) %>%
+  filter(potential.contentiousness == "High contention") %>%
+  diff.groups.bayes(cbind(n, total) ~ Q4.13_collapsed, data=., prop=TRUE)
+
+grid.arrange(reg.familiarity.issue.table.bayes$plot.groups,
+             reg.familiarity.issue.table.bayes$plot.diffs)
+```
+
+```{r results="asis"}
+reg.familiarity.issue.table.bayes$diffs.summary %>% pandoc.table()
+```
+
+```{r plot-familiarity-both}
 plot.govt.positivity.both <- cbind(ggplotGrob(plot.govt.positivity.regime),
                                    ggplotGrob(plot.govt.positivity.issue))
 grid::grid.newpage()
