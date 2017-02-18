@@ -44,6 +44,7 @@ PREFIX = /Users/andrew/.pandoc
 # references to PDFs with PNGs, but will not convert the PDFs
 PNG_CONVERT = --no-convert
 
+
 # Location of your working bibliography file
 BIB_FILE = /Users/andrew/Dropbox/Readings/Papers.bib
 
@@ -91,6 +92,12 @@ ERROR_COLOR = \x1b[31;01m
 # All markdown files in the working directory
 SRC = $(wildcard $(MS_DIR)/*.$(MEXT))
 BASE = $(basename $(SRC))
+
+ifeq ($(MS_DIR), .)
+	MS_DIR_FOR_TEX = 
+else
+	MS_DIR_FOR_TEX = "$(MS_DIR)/"
+endif
 
 # Targets
 PDF=$(SRC:.md=.pdf)
@@ -162,7 +169,7 @@ bib:	$(BIB)
 		--base-header-level=2 \
 	-o $@
 	@echo "$(WARN_COLOR)...converting TeX to PDF with latexmk (prepare for lots of output)...$(NO_COLOR)"
-	latexmk -outdir=$(MS_DIR)/$(TEX_DIR) -xelatex -quiet $@
+	latexmk -outdir=$(MS_DIR_FOR_TEX)$(TEX_DIR) -xelatex -quiet $@
 	@echo "$(OK_COLOR)All done!$(NO_COLOR)"
 
 %.odt:	%.md
@@ -188,7 +195,7 @@ bib:	$(BIB)
 
 %-manuscript.odt: %.md
 	@echo "$(WARN_COLOR)Converting Markdown to .odt using manuscript template...$(NO_COLOR)"
-	replace_includes $< | replace_pdfs $(PNG_CONVERT) | \
+	replace_includes $< | replace_pdfs $(PNG_CONVERT) | move_figs_tables_to_end | \
 	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S \
 		$(CROSSREF) \
 		--default-image-extension=png \

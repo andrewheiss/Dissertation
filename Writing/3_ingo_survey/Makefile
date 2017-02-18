@@ -35,6 +35,16 @@ MS_DIR = .
 # Location of Pandoc support files.
 PREFIX = /Users/andrew/.pandoc
 
+# Word and HTML can choke on PDF images, so those targets use a helper script
+# named replace_pdfs to replace all references to PDFs with PNGs and convert
+# existing PDFs to PNG using sips. However, there are times when it's better to
+# *not* convert to PNG on the fly, like when using high resolution PNGs exprted
+# from R with ggsave+Cairo. To disable on-the-fly conversion and supply your
+# own PNGs, uncomment PNG_CONVERT below. The script will still replace
+# references to PDFs with PNGs, but will not convert the PDFs
+PNG_CONVERT = --no-convert
+
+
 # Location of your working bibliography file
 BIB_FILE = /Users/andrew/Dropbox/Readings/Papers.bib
 
@@ -83,6 +93,12 @@ ERROR_COLOR = \x1b[31;01m
 SRC = $(wildcard $(MS_DIR)/*.$(MEXT))
 BASE = $(basename $(SRC))
 
+ifeq ($(MS_DIR), .)
+	MS_DIR_FOR_TEX = 
+else
+	MS_DIR_FOR_TEX = "$(MS_DIR)/"
+endif
+
 # Targets
 PDF=$(SRC:.md=.pdf)
 HTML=$(SRC:.md=.html)
@@ -106,7 +122,7 @@ bib:	$(BIB)
 
 %.html:	%.md
 	@echo "$(WARN_COLOR)Converting Markdown to HTML using standard template...$(NO_COLOR)"
-	replace_includes $< | replace_pdfs | \
+	replace_includes $< | replace_pdfs $(PNG_CONVERT) | \
 	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w html -S \
 		$(CROSSREF) \
 		--default-image-extension=png \
@@ -153,12 +169,12 @@ bib:	$(BIB)
 		--base-header-level=2 \
 	-o $@
 	@echo "$(WARN_COLOR)...converting TeX to PDF with latexmk (prepare for lots of output)...$(NO_COLOR)"
-	latexmk -outdir=$(MS_DIR)/$(TEX_DIR) -xelatex -quiet $@
+	latexmk -outdir=$(MS_DIR_FOR_TEX)$(TEX_DIR) -xelatex -quiet $@
 	@echo "$(OK_COLOR)All done!$(NO_COLOR)"
 
 %.odt:	%.md
 	@echo "$(WARN_COLOR)Converting Markdown to .odt using standard template...$(NO_COLOR)"
-	replace_includes $< | replace_pdfs | \
+	replace_includes $< | replace_pdfs $(PNG_CONVERT) | \
 	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S \
 		$(CROSSREF) \
 		--default-image-extension=png \
@@ -179,7 +195,7 @@ bib:	$(BIB)
 
 %-manuscript.odt: %.md
 	@echo "$(WARN_COLOR)Converting Markdown to .odt using manuscript template...$(NO_COLOR)"
-	replace_includes $< | replace_pdfs | \
+	replace_includes $< | replace_pdfs $(PNG_CONVERT) | move_figs_tables_to_end | \
 	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w odt -S \
 		$(CROSSREF) \
 		--default-image-extension=png \
