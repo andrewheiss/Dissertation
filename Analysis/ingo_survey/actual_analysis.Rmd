@@ -74,18 +74,27 @@ survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 # Load cleaned, country-based data (only the Q4 loop)
 survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
                                             "survey_countries_clean.rds")) %>%
-  mutate(Q4.11_collapsed = fct_collapse(Q4.11,
-                                        Negative = c("Extremely negative", "Somewhat negative"),
-                                        Neither = c("Neither positive nor negative"),
-                                        Positive = c("Somewhat positive", "Extremely positive"),
-                                        NULL = c("Don't know", "Prefer not to answer")),
+  mutate(Q4.11_collapsed = 
+           fct_collapse(Q4.11,
+                        Negative = c("Extremely negative", "Somewhat negative"),
+                        Neither = c("Neither positive nor negative"),
+                        Positive = c("Somewhat positive", "Extremely positive"),
+                        NULL = c("Don't know", "Prefer not to answer")),
          Q4.11_collapsed = ordered(Q4.11_collapsed)) %>%
-  mutate(Q4.13_collapsed = fct_collapse(Q4.13,
-                                        "Very familiar" = c("Extremely familiar", "Very familiar"),
-                                        "Somewhat familiar" = c("Moderately familiar", "Slightly familiar"),
-                                        "Not familiar at all" = c("Not familiar at all"),
-                                        NULL = c("Don't know")),
-         Q4.13_collapsed = ordered(Q4.13_collapsed))
+  mutate(Q4.13_collapsed = 
+           fct_collapse(Q4.13,
+                        "Very familiar" = c("Extremely familiar", "Very familiar"),
+                        "Somewhat familiar" = c("Moderately familiar", "Slightly familiar"),
+                        "Not familiar at all" = c("Not familiar at all"),
+                        NULL = c("Don't know")),
+         Q4.13_collapsed = ordered(Q4.13_collapsed)) %>%
+  mutate(Q4.14_collapsed = 
+           fct_collapse(Q4.14,
+                        "At least once a year" = c("Once a month", "Once a year"),
+                        "Once every few years" = c("Once every few years"),
+                        "Rarely or never" = c("Rarely", "Never"),
+                        NULL = c("Don't know")),
+         Q4.14_collapsed = ordered(Q4.14_collapsed))
 
 # External data
 full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
@@ -857,9 +866,9 @@ fig.save.cairo(plot.govt.positivity.both,
 ```
 
 
-## Familiarity with regulations
+## Experiences with regulations
 
-Most INGOs working in democracies are either moderately familiar with government regulations or not familiar at all. For INGOs working in autocracies, familiarity with regulations appears to be more essential—most are very or extremely familiar with regulations, and very few are unaware of any of the laws governing their activities. The difference in proportions across groups is significant. 
+### Familiarity with regulations
 
 ```{r plot-familiarity-regime, fig.width=2, fig.height=2}
 df.reg.familiarity.regime <- survey.countries.clean %>%
@@ -940,14 +949,59 @@ reg.familiarity.issue.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
 ```{r plot-familiarity-both}
-plot.govt.positivity.both <- cbind(ggplotGrob(plot.govt.positivity.regime),
-                                   ggplotGrob(plot.govt.positivity.issue))
+plot.familiarity.both <- cbind(ggplotGrob(plot.reg.familiarity.regime),
+                               ggplotGrob(plot.reg.familiarity.issue))
 grid::grid.newpage()
-grid::grid.draw(plot.govt.positivity.both)
+grid::grid.draw(plot.familiarity.both)
 
-fig.save.cairo(plot.govt.positivity.both,
-               filename="3-govt-positivity-both",
+fig.save.cairo(plot.familiarity.both,
+               filename="3-familiarity-both",
                width=6, height=1.5)
+```
+
+### Frequency of changes
+
+```{r plot-frequency-regime, fig.width=2, fig.height=2}
+df.frequency.regime <- survey.countries.clean %>%
+  select(Q4.14_collapsed, target.regime.type) %>%
+  filter(!is.na(Q4.14_collapsed))
+
+plot.frequency.regime <- prodplot(df.frequency.regime,
+                                  ~ target.regime.type + Q4.14_collapsed, mosaic("h"),
+                                  colour=NA) +
+  aes(fill=target.regime.type, colour="white") +
+  scale_fill_manual(values=ath.palette("regime2"), name=NULL) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.frequency.regime
+
+fig.save.cairo(plot.frequency.regime,
+               filename="3-frequency",
+               width=3, height=1.5)
+
+frequency.regime.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.14_collapsed)) %>%
+  xtabs(~ Q4.14_collapsed + target.regime.type, .)
+
+analyze.cat.var(frequency.regime.table)
+```
+
+```{r plot-frequency-regime-bayes}
+frequency.regime.table.bayes <- survey.countries.clean %>%
+  filter(!is.na(Q4.14_collapsed)) %>%
+  count(Q4.14_collapsed, target.regime.type) %>%
+  group_by(Q4.14_collapsed) %>%
+  mutate(total = sum(n)) %>%
+  filter(target.regime.type == "Autocracy") %>%
+  diff.groups.bayes(cbind(n, total) ~ Q4.14_collapsed, data=., prop=TRUE)
+
+grid.arrange(frequency.regime.table.bayes$plot.groups,
+             frequency.regime.table.bayes$plot.diffs)
+```
+
+```{r results="asis"}
+frequency.regime.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
 
