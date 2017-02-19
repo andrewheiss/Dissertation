@@ -1004,6 +1004,39 @@ grid.arrange(frequency.regime.table.bayes$plot.groups,
 frequency.regime.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
+### How NGOs find out about changes
+
+```{r plot-change-how}
+df.change.how <- survey.countries.clean %>%
+  unnest(Q4.15_value) %>%
+  group_by(Q4.15_value) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q4.15_value)) %>%
+  mutate(how = ordered(fct_inorder(Q4.15_value))) %>%
+  mutate(how = fct_recode(how, "Newspapers, television,\nand other media" = 
+                            "Newspapers, television, and other media", NULL = "Don't know")) %>%
+  filter(!is.na(how))
+
+plot.change.how <- ggplot(df.change.how, aes(x=num, y=fct_rev(how))) + 
+  geom_pointrangeh(aes(xmin=0, xmax=num)) +
+  scale_x_continuous(sec.axis = sec_axis(~ . / nrow(survey.countries.clean),
+                                         labels=scales::percent)) +
+  labs(x="Times selected", y=NULL) +
+  theme_ath() + theme(panel.grid.major.y=element_blank())
+plot.change.how
+
+fig.save.cairo(plot.change.how,
+               filename="3-change-how-find-out",
+               width=5, height=2)
+
+# What are the other ways?
+df.change.how.other <- survey.countries.clean %>%
+  filter(!is.na(Q4.15_other_TEXT)) %>%
+  select(clean.id, Q4.15_other_TEXT) %>%
+  arrange(Q4.15_other_TEXT)
+```
+
 
 ```{r}
 # ### Staffing details
