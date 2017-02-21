@@ -4,8 +4,8 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss&#x40;duke.edu
-date: February 16, 2017
-published: Please do not cite without permission.
+date: February 20, 2017
+published: Early draft for ISA 2017. Please do not cite without permission.
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
 ...
@@ -132,7 +132,7 @@ I faced an empirical tradeoff with the survey's sampling strategy. I could attem
 Combining all five of these lists yielded 33,973 potential INGOs (see @tbl:summary-list). A large proportion of these organizations, however, had invalid, outdated, or incomplete information. Prior to conducting the survey, I used an e-mail verification service to verify that the organization's internet domain name was valid and that the e-mail address listed existed at the domain. More than three-fourths of the final list contained apparently valid organizations (26,772), with wide variation across directories—nearly all the organizations listed in the DDO and in the UN's iCSO list were valid, while less than a third of the organizations in the Yearbook of International Organizations had usable e-mail addresses. Even with this cleaner list, 9,182 e-mail invitations were rejected (or bounced) by their receiving servers, including more than half of the apparently valid DDO organizations. Ultimately, only 17,590 (or 52%) of the complete list of organizations received an e-mail invitation, which indicates significant problems with maintaining up-to-date information in online directories of NGOs. 
 
 \begingroup
-\footnotesize
+\scriptsize
 \renewcommand\arraystretch{1.6}
 !INCLUDE "../../Output/tables/3-summary-list.md"
 \endgroup
@@ -157,13 +157,11 @@ Since the survey was designed to not have strong statistical or inferential powe
 
 In the absence of strong statistical power, I supplement inferences with interpretive analysis of the survey's free response answers. Only 19 respondents (2.8%) declined to answer any of the survey's 36 open-ended questions, and most answered between 8–16 questions, resulting in a sizable corpus of qualitative insights into INGO experiences with their host governments. Where possible, I quote extensively from these responses to provide deeper anecdotal support of organizations's experiences and decisions working with the governments of their target countries.
 
-I use the results of this global survey of international NGOs to measure each element of my theory: INGO ideal points, operational flexibility, and relationship with the target regime. I also measure how restricted INGOs feel in their host countries and which kinds of adjustments they have undertaken in response to changing regulations. In the remainder of this chapter, I provide a general overview of the subset of the INGO sector I surveyed. I then describe how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. Next, I investigate how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. I conclude by discussing how these results support the implications of my hypotheses and theory.
+I use the results of this global survey of international NGOs to measure each element of my theory: INGO ideal points, operational flexibility, and relationship with the target regime. I also measure how restricted INGOs feel in their host countries and which kinds of adjustments they have undertaken in response to changing regulations. In the remainder of this chapter, I provide a general overview of the subset of the INGO sector I surveyed. I then analyze how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. Next, I investigate how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. I conclude by discussing how these results support the implications of my hypotheses and theory.
 
-## Respondent overview
+# Respondent overview
 
-Before analyzing INGO perceptions of and responses to government restrictions, it is helpful to first look at the survey's respondents. The people who filled out the survey were quite familiar with their organizations' work and had an intimate perspective of their organizations' experiences and strategies. More than half of the respondents indicated that they were the executive director, president, secretary general, CEO, or other high-level officer for their organization, and roughly a third were staff members or program officers, with the remainder either public relations officers or receptionists. 
-
-The INGOs that responded to the survey span the globe and work on a wide variety of issues and policies. The sample of INGOs have their headquarters spread across 93 different countries (see @fig:hq-countries), with roughly two thirds based in either Europe or the Americas, primarily in the US, UK, and Switzerland (see left panel of @fig:work-hq-regions). 
+Before analyzing INGO perceptions of and responses to government restrictions, it is helpful to first look at the survey's respondents. The people who filled out the survey were quite familiar with their organizations' work and had an intimate perspective of their organizations' experiences and strategies. More than half of the respondents indicated that they were the executive director, president, secretary general, CEO, or other high-level officer for their organization, and roughly a third were staff members or program officers, with the remainder either public relations officers or receptionists. Responding organizations span the globe and work on a wide variety of issues and policies. The sample of INGOs have their headquarters spread across 93 different countries (see @fig:hq-countries), with roughly two thirds based in either Europe or the Americas, primarily in the US, UK, and Switzerland (see left panel of @fig:work-hq-regions). 
 
 ![Countries where INGOs are headquartered](../../Output/figures/3-hq-countries){#fig:hq-countries}
 
@@ -177,6 +175,14 @@ Organizations also operate in a variety of political contexts. Unsurprisingly, g
 
 Finally, responding organizations tackle a variety of issues (see @fig:issues-worked-on). The top three issues—education, development, and human rights—account for more than 60% of the respondents and reflect the the makeup of the sample of organizations collected in my database. The remaining 40% of organizations focus on topics that reflect other common issues addressed by global civil society, such as public health, environmental advocacy, disaster relief, human trafficking, post-conflict resolution, and cultural promotion. 
 
+# Characteristics that drive INGO behavior
+
+## Mission, vision, and values
+
+`TODO`: Adherence to mission, vision, and values (from free response questions)
+
+## Alignment of mission with the regime preferences
+
 A key element of my theory of amicable contempt is alignment with the regime—INGOs working on issues that a regime finds favorable and inline with its own preferences will be treated differently than INGOs working on more threatening, less aligned topics. I divide the self-reported respondent issues into two levels of potential high or low regime contentiousness. As seen in @fig:issues-worked-on, highly contentious issues include human rights, advocacy, human trafficking, freedom of expression, conflict, and democracy assistance—all issues that pose a direct threat to regime policies and stability. Less contentious issues like education, development, health, and the environment reflect policy areas where governments are more willing to accept intervention and assistance. 
 
 ![Frequency of INGO engagement in different types of activities; organizations answered about one or more activities](../../Output/figures/3-main-activities){#fig:main-activities}
@@ -187,39 +193,21 @@ As expected, high contention organizations are most likely to report always enga
 
 This division of contentiousness is by no means perfect. As seen in the case of China in the previous chapter, education INGOs can pose a threat to regime stability as governments fear the spread of foreign influence among their youth, and development INGOs can rival weak central governments and create territorial "fiefdoms" to supersede the regime [@Schuller:2012]. However, while the division between low and high contention issues is fairly simplistic, it does appear to accurately capture (1) the broad types of programs that INGOs engage in, and (2) the range of possible objections governments are likely to raise (or not raise).
 
+## Instrumental flexibility
 
-### Mission
+`TODO`: Differences in instrumental approaches, operational flexibility
 
-Deeper principles (from free response questions)
+- How NGOs operate in the country (local office, remote office, fund local NGOs, etc.: `Q4.3`)
+- Length of time in the country: `Q4.2`
+- Size of organization (number of employees, volunteers: `Q3.4–5`)
+- Sources of funding: `Q3.8`
+- Collaboration with other organizations: `Q3.6`
 
-### Flexibility
+# INGO restrictions and regulations in host governments
 
-Differences in instrumental approaches, operational flexibility
+These three characteristics—mission, flexibility, and alignment with the regime—help define the how positive the relationship is between INGOs and their host governments and how governments regulate organizations.
 
-How operate
-
-Size, volunteers, money, etc. = show how NGOs differ across groups or types of issues
-
-What they do in country - Q4.3
-
-Time in country
-
-
-### Relationship with the government
-
-Relationships with governments - how essential or in line are these organizations with government needs?
-
-## INGO restrictions
-
-I then describe how restricted these organizations feel in their target countries and explore factors that are associated with those feelings of restriction, based on an organization's mission, flexibility, and relationship with the government. 
-
-Restriction ~ instrumental issues + issue alignment + principles
-
-How restricted do they feel? How is that related to mission, flexibility, relationship with government?
-
----- 
-
-### Relationship with host governments
+## Relationship with host governments
 
 In general, INGOs have a fairly positive relationship with their host governments (@fig:govt-positivity-both)—only 10% of respondents report having a somewhat or extremely negative relationship, while the remainder either have a positive relationship or are ambivalent. Opinions of the positivity of this relationship depend on the type of government and the contentiousness of the INGO's issue. 60% of INGOs that reported a negative relationship work in autocracies, while only 20–30% of organizations with a positive or ambivalent relationship work in similar regimes.[^35] Similarly, 50% of organizations with a negative relationship work on contentious issues. In fact, 17% of high contention organizations have a negative relationship with their hosts, in contrast to only 8% of low contention organizations.[^36] 
 
@@ -249,199 +237,120 @@ Though fears of regime stability appear paramount in determining the relationshi
 
 The presence of foreign NGOs can also act as a signal to domestic audiences. INGOs provide specialized services and expertise that are often not offered by domestic firms or local governments. Government ministries tend to partner with INGOs "whenever they need… services"[^53] to take advantage of improved services and to access better resources. One disaster relief INGO working in South Asia reports having a close and productive relationship with the government, since it "has recognized how quickly and efficiently our nonprofit was able to provide relief services and has supported partnerships with us in many areas related to our programs of health, education and [disaster] recovery."[^54] Government officials will also use foreign NGO services and expertise for personal political gain—a public health INGO working in West Africa notes that "some state officials want your services to be in their home villages and community"[^55] as a form of pork barrel politics, securing aid and services for their constituents.
 
-Thus, the nature of the relationship between international NGOs and their host governments is the product of multiple factors. INGOs working on more contentious issues and implementing programs that pose more of a risk to the stability of their host regimes are most likely to have a negative relationship with the governments of their target countries. INGO alignment with regime preferences is essential for a good relationship. When a host government sees INGOs as risks to internal political stability the relationship will sour, but when it sees these foreign organizations as potential political assets, INGOs are likely to be embraced.
+Thus, the nature of the relationship between international NGOs and their host governments is the product of multiple factors. INGOs working on more contentious issues and implementing programs that pose more of a risk to the stability of their host regimes are most likely to have a negative relationship with the governments of their target countries. INGO alignment with regime preferences is essential for a good relationship. When a host government sees INGOs as risks to internal political stability their relationship will sour, but when it sees these foreign organizations as potential political assets, INGOs are likely to be embraced.
+
+## Government involvement in and regulation of NGO programming
+
+Governments can attempt to embrace international NGOs and offset the political risks they pose by overseeing INGO work, regulating their activities, and occasionally inserting themselves into their programming. Respondents offer rich descriptions of how closely they work with their host governments and how this regulation works in practice, crucially noting that there is often a disconnect between de jure regulations and their actual implementation.
+
+Government actions affect INGO programming in multiple ways: direct involvement vs. regulation
 
 
-### Government involvement in and regulation of NGO programming
+### Direct involvement
 
-How do governments safely embrace international NGOs, though?
+Governments are occasionally closely—and sometimes directly—involved in INGO programming. 
 
-Given the centrality of concerns over regime stability, ASDFA ASDF about INGO work in their country, governments oversee this work and occasionally insert themselves in it. 
+`TODO`: Contact with government - who do INGOs contact? presidents, MPs, etc (`Q4.7`) - are they required to have someone on their board (`Q4.9`) - how often do they report?
 
+`TODO`: How is the government involved? `Q4.10` free responses
 
-**Direct involvement**
-Governments get involved directly in NGOs
+### Regulation
 
-- Contact with the government
-Contact with government - based on feeling of restriction and positivity of relationship with government - organizations that are more restricted/more positive are more/less in contact with government - who do INGOs contact? presidents, MPs, etc (Q4.7) - are they required to have someone on their board(Q4.9) - how often do they report?
-Stories from free responses
+The most common way the government affects INGO work, though, is by passing and implementing formal regulations. INGOs tend to be quite aware of the regulations they face, with more than 80% of respondents somewhat or very familiar with the laws regulating their activities in their host countries (see @fig:familiarity-both). Familiarity is affected by the type of regime organizations work in. More than 75% of respondents who answered that they do not know anything about regulations work in democracies, while those most familiar with the regulatory environment are split roughly equally between democracies and autocracies.[^56] INGOs working in dictatorships are the most likely to be the most familiar with regulations, likely because deep knowledge of the legal environment is more essential to operate safely and effectively. The contentiousness of the issues INGOs work on does not help determine their familiarity—high contention INGOs are not more or less likely to be more aware of the legal environment.[^57]
 
-How is the government involved? Q4.10
+![Knowledge of regulatory environment in host government, separated by regime type and issue contentiousness (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-familiarity-both){#fig:familiarity-both}
 
-**Regulation**
-The most common way for the government affect NGO work is through formal regulations How do government restrict and regulate NGOs? How are NGOs affected by those regulations?
+Being aware of the regulatory environment is crucial for maintaining legal status in host countries. INGOs report that regulations can change frequently—half of respondents report that regulations and laws change every few years, and nearly 20% say regulations change at least once a year (see @fig:frequency). The regime type of the host country is closely related to how frequently INGOs see changes in regulations. Nearly two thirds of the INGOs that report changes at least once a year work in autocracies, which contrasts starkly with the two thirds of INGOs that experience a static legal environment in democratic host countries.[^58] 
 
-- Registration
-Are organizations registered? More/less likely to be registered in democracies
-Stories from free responses
+![Frequency of changes in regulatory environment for NGOs in host country, separated by regime type (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type)](../../Output/figures/3-frequency){#fig:frequency}
 
+The changes INGOs observe do not necessarily correlate with formal statutory developments. For instance, as seen in previous chapters, Egypt has only formally passed civil society laws in 2002 and 2012. These laws give bureaucrats and politicians significant interpretive leeway, however, and allow them to reshape the regulatory environment for international NGOs. Because of this dynamic discretionary de facto environment, INGOs actively seek out information about changes in laws, rules, and regulations (see @fig:change-how-find-out). International NGOs are most likely to hear about new legal changes from other NGOs in the country, both from their local partners and from other foreign organizations. They also receive news about changes directly from government officials, sometimes at inopportune moments. One INGO working in East Africa, unaware of any changes in regulations, discovered new funding requirements for foreign NGOs when requesting permits to expand their operations in the country—the organization ultimately decided to not expand as a result.[^59] INGOs also find out about changes in laws through the media and through internet research, including websites that aggregate information about civil society regulations like Civicus and the International Center for Not-for-Profit Law (ICNL). 
 
-NGOs are fairly familiar with the regulations they face (Q4.13–15)
+![Channels of discovering changes in the regulatory environment for NGOs in host country)](../../Output/figures/3-change-how-find-out){#fig:change-how-find-out}
 
-How restrictive are these regulations (Q4.17)? What does the lived experience look like? (Q4.16)? Different depending on regime type? Issue? Principles?
+`TODO`: How restrictive are these regulations (`Q4.17`)? How do all these regulations affect the ability to pursue mission? (`Q4.18`)
 
-Key themes emerge from the rich free response questions:
+In their free response questions, INGOs provide a rich picture of the effects of these regulations on their programs, activities, and behaviors.
 
-Importance of enabling environment
-rules have to be followed - but if there's no enabling environment, it's really hard to do anything - 1412\_4.10 - provide security in Somalia - 1683\_4.10 - collaborate
+#### Registration
 
-Registration
-Arbitrary - confusing
-lengthy - 4 years in Haiti - multiple years in Congo
-caused delays - slowdowns
-hurts organizations
-Can't build offices
-Easier in EU, west
+- Arbitrary - confusing
+- lengthy - 4 years in Haiti - multiple years in Congo
+- caused delays - slowdowns
+- hurts organizations
+- Can't build offices
+- Easier in EU, west
 
-Operations
-Locked into programs
-Regulations give government control sometimes
+#### Operations
 
-Advocacy
-Self-censorship, fear of crossing the line
+- Locked into programs
+- Regulations give government control sometimes
 
-Assembly
-Organizations are kind of resigned to this
-Unfounded fears of foreign influence
-Arbitrary denial
-Arrests
-Apply for permission
+#### Advocacy
 
-Funding
-Lots in 16f
-Disclose sources of funding
+- Self-censorship, fear of crossing the line
 
-Unrelated
-Taxes, fees, bureaucratic regulations, irrational visa restrictions
-1574; HQ: United States; target: Haiti; Low contention
+#### Assembly
 
+- Unfounded fears of foreign influence
+- Prohibition from contacting foreign organizations
+- Arbitrary denial
+- Arrests
+- Apply for permission
+
+#### Funding
+
+- Disclose sources of funding
+
+#### Indirect, unrelated regulations
+
+- Payroll taxes and health insurance
+- Fees
+- Irrational visa restrictions
 
 
-1328; HQ: Uzbekistan; target: Uzbekistan; High contention
-prosecution for receiving foreign aid and cooperation with international NGOs
+### What about the organizations that don't feel restricted?
 
+The experiences of these INGOs paints a dire picture of the regulatory environment for foreign organizations and helps confirm the notion of an ongoing crackdown on  global civil society. However, X% of respondents indicated feeling little to no restrictions in their host countries? Why is that?
 
+- Regime type: responses saying all is well work tend to work in the EU and US
+- Contentiousness: those more in line with government preferences aren't restricted as much
 
-How do all these regulations affect the ability to pursue mission? Q4.18
+# How do INGOs react to restrictions?
 
+`TODO`: See @fig:reaction-counts
 
-## What about those that don't feel regulated?
-
-The experiences of these NGOs paints a dire picture of BLAH BLAH. However, X% of respondents indicated feeling little to no restrictions in their host countries? Why is that?
-
-Regime type - responses saying all is well work in the EU and US
-Contentiousness - those more in line with government preferences aren't restricted as much
-
-## Responses to restrictions
-
-organization size:
-
-> Sarah Bush says larger more professional organizations have tamer programs
-> I find that larger organizations can be more resilient in authoritarian contexts. But at what cost? They can shift resources around, but they have to shift closer to the regime?
-
-I then describe how INGOs have reacted to changing restrictions and consider what factors are correlated with which types of reactions. 
-
-
-Reaction ~ instrumental issues + issue alignment + principles
-
-Responses to reactions - how have they responded + are these responses associated with contentiousness, instrumental stuff, core principles, or alignment with government?
-
-We changed the sources of our funding
-We changed which issues we work on
-We changed how we communicate with the government
-We changed how we communicate with our donors
-We changed which locations we work in
-We changed the location of our country office
-We used more local staff and/or volunteers
-We used more foreign staff and/or volunteers
-
-
-Do types of restriction (Q4.16) or general level of restriction (Q4.17) correlate with responses to regulations (Q4.21)?
-
-\\# of changes ~ feeling of restriction (Q4.17) + instrumental stuff + relationship with government (Q4.11)
-
-> ¿Total change count in reactions to government restrictions?
-
----- 
+![Most frequent reactions to government restrictions on INGO programming](../../Output/figures/3-reaction-counts){#fig:reaction-counts}
 
 ## Reactions
 
-- Ways around registration - 16a: 1693, 1699
-- Smaller programs
-- Fund irregularly
-- Fund through government
+`TODO`: Themes from free responses:
+
+### Compliance and tolerance
+
 - Shape programming to fit regulations
-- Just follow rules
 - Align with government
-- Partner with government (but that's hard)
-- Work with consultants
-- Work in exile
-- Collaborate with domestic NGOs
+- Just follow rules
+- Partner with government
+- Fund through government
+
+### Antagonism and expulsion
+
+- Find ways around registration
 - Protect against changes
-- Work regardless of registration status
 - Avoid fees
+- Create smaller programs
+- Collaborate with domestic NGOs
+- Fund irregularly
+- Work with consultants
+- Work regardless of registration status
 - Bribery
-- Leave the country
-
-## Sandbox
-
-More restrictions ~ collaborations?
-Reactions to restrictions ~ collaborations
-
-Differences in instrumental flexibility by level of contentiousness?
-
-
-Feeling of restriction ~ relationship with government
-
----- 
-
-Feelings of restriction
-
-Adjustments
-
-Adjustments in programming ~ alignment/relationship with government + instrumental flexibility + principled concerns
-
-Also, feeling of restriction ~ alignment
-
-Which variables adjust more or first? Core or flexibility? Are NGOs protecting their core with flexibility?
-
-
-## ARNOVA outline
-
-USE IRI VS. CARNEGIE
-
-One changed instrumental, one changed principles
-
-Instrumental concerns - size of organization; sources of funding
-
-Perceptions of restriction
-Relationship with government
-
-Reactions
-
-Types of reactions
-
-Overall percent reaction - no relationship between issue contentiousness and changes; clear relationship between regime type and changes
-
-Case studies: AMERA vs. IRI
-
-
-## Survey structure
-
-The survey includes a series of questions designed to identify the aspects of an INGO's organizational culture that correspond to my theory. In general, I ask respondents to (1) define their organization's core mission, vision, and values, and discuss how their programming reflects those principles, (2) explain the organization's flexibility (i.e. how it raises funds, how it collaborates with other organizations, etc.), and (3) describe and discuss the government restrictions they have faced while working abroad. Ultimately, I will be able to use these results to test each of the three mechanisms and determine how, why, and when INGOs shift their core values, become more flexible and instrumental, or attempt to induce the government to change its preferences. 
-
-
-Structure analysis around each element of theory. 
-
-- summary of responses
-- summary of relationship with government + restrictions + reactions to restrictions + regime type
-- instrumental size funding volunteers reactions to restrictions, overall restrictions
-- principles based on free responses and reactions
-- issue alignment 
+- Work in exile
+- Leave the country and stop programs
 
 # Conclusion
 
-**Finish this tomorrow**
+Thus…
 
 \newpage
 
@@ -570,3 +479,11 @@ Structure analysis around each element of theory.
 [^54]:	Response 1608.
 
 [^55]:	Response 1307.
+
+[^56]:	The difference between "Very familiar" and "Not familiar at all" is significant: p(∆ \> 0) = 0.99).
+
+[^57]:	P(Very familiar - not familiar) \> 0 = 0.45.
+
+[^58]:	p(At least once a year - Rarely or never) \> 0 = 0.97.
+
+[^59]:	Response 1211.
