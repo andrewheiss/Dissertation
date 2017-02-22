@@ -5,9 +5,12 @@ if (file.exists("/Users/andrew/.Rprofile")) {
 }
 
 .First <- function() {
+  days.left <- as.numeric(lubridate::ymd("2017-06-01") - lubridate::today())
+  
   cat("\n          ---------------------------------------------------------")
   cat("\n          😱 Write day and night like you're running out of time 😱 ")
-  cat("\n          ---------------------------------------------------------\n\n")
+  cat("\n          ---------------------------------------------------------\n")
+  cat("\n                       💀 Days until the reckoning:", days.left, "💀\n\n")
 }
 
 # Yay @jennybc!
@@ -15,8 +18,15 @@ if (file.exists("/Users/andrew/.Rprofile")) {
 RPROJ <- list(PROJHOME = normalizePath(getwd()))
 attach(RPROJ)
 
-cat("sourcing project-specific .Rprofile\n")
-cat('retrieve the top-level project directory at any time with PROJHOME or via get("PROJHOME", "RPROJ"):\n',
+# cat("sourcing project-specific .Rprofile\n")
+cat('Retrieve the top-level project directory with PROJHOME:',
     get("PROJHOME", "RPROJ"), "\n")
 
 rm(RPROJ)
+
+# Someday use rprojroot instead
+# library(rprojroot)
+# PROJHOME <- find_root(is_rstudio_project)
+# OR
+# R <- find_rstudio_root_file
+# R("Data", "data_raw")
