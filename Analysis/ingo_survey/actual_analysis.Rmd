@@ -141,17 +141,6 @@ side.by.side <- function(table1, table2) {
 }
 ```
 
-## General notes
- 
-Adjustments in programming ~ alignment/relationship with government + instrumental flexibility + principled concerns
-
-Also, feeling of restriction ~ alignment
-
-Which variables adjust more or first? Core or flexibility? Are NGOs protecting their core with flexibility?
-
-Size, volunteers, money, etc. = show how NGOs differ across groups or types of issues
-
-
 ## General respondent details
 
 ### How many NGOs responded?
