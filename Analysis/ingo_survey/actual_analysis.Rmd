@@ -1298,6 +1298,36 @@ side.by.side(restriction.regime.table, restriction.issue.table)
 ```
 
 
+### Registration and restrictions
+
+```{r}
+df.restriction.reg.issue <- survey.countries.clean %>%
+  select(Q4.17_collapsed, Q4.4_collapsed, target.regime.type) %>%
+  filter(!is.na(Q4.17_collapsed), !is.na(Q4.4_collapsed)) %>%
+  mutate(Q4.4_collapsed_clean = fct_recode(Q4.4_collapsed,
+                                           Registered = "Yes",
+                                           `Not registered` = "No"))
+
+plot.restriction.reg.issue <- prodplot(df.restriction.reg.issue,
+                                       ~ Q4.4_collapsed_clean + Q4.17_collapsed +
+                                         target.regime.type, 
+                                       mosaic("h")) +
+  aes(fill=Q4.4_collapsed_clean, linetype=target.regime.type, colour="white") +
+  scale_fill_manual(values=ath.palette("wars")) +
+  scale_linetype_manual(values=c("blank", "dashed")) +
+  guides(fill=FALSE, linetype=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.restriction.reg.issue
+
+restriction.reg.issue.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.17_collapsed), !is.na(Q4.4_collapsed)) %>%
+  xtabs(~ target.regime.type + Q4.17_collapsed + Q4.4_collapsed, .)
+
+analyze.cat.var(restriction.reg.issue.table)
+```
+
+
 ```{r}
 # ### Staffing details
 # 
