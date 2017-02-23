@@ -94,7 +94,14 @@ survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                         "Once every few years" = c("Once every few years"),
                         "Rarely or never" = c("Rarely", "Never"),
                         NULL = c("Don't know")),
-         Q4.14_collapsed = ordered(Q4.14_collapsed))
+         Q4.14_collapsed = ordered(Q4.14_collapsed)) %>%
+  mutate(Q4.17_collapsed = 
+           fct_collapse(Q4.17,
+                        "Not restricted" = c("Not restricted at all"),
+                        "Very restricted" = c("Very restricted",
+                                              "Extremely restricted"),
+                        NULL = c("Don’t know")),
+         Q4.17_collapsed = ordered(Q4.17_collapsed))
 
 # External data
 full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
@@ -1006,7 +1013,7 @@ frequency.regime.table.bayes$diffs.summary %>% pandoc.table()
 
 ### How NGOs find out about changes
 
-```{r plot-change-how}
+```{r plot-change-how, fig.width=5, fig.height=2}
 df.change.how <- survey.countries.clean %>%
   unnest(Q4.15_value) %>%
   group_by(Q4.15_value) %>%
@@ -1035,6 +1042,223 @@ df.change.how.other <- survey.countries.clean %>%
   filter(!is.na(Q4.15_other_TEXT)) %>%
   select(clean.id, Q4.15_other_TEXT) %>%
   arrange(Q4.15_other_TEXT)
+```
+
+### Are NGOs registered?
+
+There's a slight difference in how NGOs register across regimes, with more NGOs registering in autocracies than in democracies, perhaps because they are more likely to be *required* to register in autocracies. The difference is not significant, though. There is no significant difference in the registration status of low and high contentious INGOs.
+
+```{r plot-registration-regime, fig.width=2, fig.height=2}
+df.registered.regime <- survey.countries.clean %>%
+  select(Q4.4, target.regime.type) %>%
+  filter(Q4.4 != "Don't know") %>%
+  mutate(Q4.4 = droplevels(Q4.4),
+         Q4.4 = factor(Q4.4, levels=rev(levels(Q4.4))))
+
+plot.registered.regime <- prodplot(df.registered.regime,
+                                   ~ target.regime.type + Q4.4, mosaic("h"), 
+                                   colour=NA) + 
+  aes(fill=target.regime.type, colour="white") + 
+  scale_fill_manual(values=ath.palette("regime2"), name=NULL) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.registered.regime
+
+registered.table <- survey.countries.clean %>%
+  filter(Q4.4 != "Don't know") %>%
+  mutate(Q4.4 = droplevels(Q4.4)) %>%
+  xtabs(~ Q4.4 + target.regime.type, .)
+
+analyze.cat.var(registered.table)
+```
+
+```{r plot-registration-issue, fig.width=2, fig.height=2}
+df.registered.issue <- survey.countries.clean %>%
+  select(Q4.4, potential.contentiousness) %>%
+  filter(Q4.4 != "Don't know") %>%
+  mutate(Q4.4 = droplevels(Q4.4),
+         Q4.4 = factor(Q4.4, levels=rev(levels(Q4.4))))
+
+plot.registered.issue <- prodplot(df.registered.issue,
+                                  ~ potential.contentiousness + Q4.4, mosaic("h"), 
+                                  colour=NA) + 
+  aes(fill=potential.contentiousness, colour="white") + 
+  scale_fill_manual(values=ath.palette("contention1"), name=NULL) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.registered.issue
+
+registered.table.issue <- survey.countries.clean %>%
+  filter(Q4.4 != "Don't know") %>%
+  mutate(Q4.4 = droplevels(Q4.4)) %>%
+  xtabs(~ Q4.4 + potential.contentiousness, .)
+
+analyze.cat.var(registered.table.issue)
+```
+
+
+## Restrictions on INGOs
+
+### Routine regulation vs. burdensome regulation
+
+```{r plot-dcjw-registration, fig.width=6, fig.height=2}
+dcjw <- read_feather(file.path(PROJHOME, "Data", 
+                               "data_processed", "dcjw.feather"))
+
+dcjw.registration <- dcjw %>%
+  mutate(question = recode(question,
+                           q_2a = "registration",
+                           q_2b = "burdensome",
+                           q_2c  = "appeal",
+                           q_2d  = "diff.foreign")) %>%
+  filter(question %in% c("registration", "burdensome"))
+
+dcjw.registration.panel <- dcjw.registration %>%
+  tidyr::expand(Country, question, 
+                year = min(.$year, na.rm=TRUE):2013) %>%
+  left_join(dcjw.registration, by=c("Country", "question", "year")) %>%
+  # Bring most recent legislation forward
+  group_by(Country, question) %>%
+  mutate(value = zoo::na.locf(value, na.rm=FALSE)) %>%
+  ungroup() %>%
+  mutate(value = ifelse(is.na(value), 0, value)) %>%
+  mutate(cowcode = countrycode(Country, "country.name", "cown",
+                               custom_match=c(`Serbia` = 340L)))
+
+regime.types <- full.data %>%
+  select(cowcode, year.num, gwf.ever.autocracy) %>%
+  group_by(cowcode) %>%
+  summarise(ever.autocracy = any(gwf.ever.autocracy, na.rm=TRUE))
+
+dcjw.registration.summary <- dcjw.registration.panel %>%
+  left_join(regime.types, by="cowcode") %>%
+  # There are a few countries that didn't have regime type from full.data
+  mutate(ever.autocracy = case_when(
+    .$Country %in% c("Bahrain", "Equatorial Guinea", "Kuwait", "Oman",
+                     "Singapore", "United Arab Emirates") ~ TRUE,
+    .$Country == "Serbia" ~ FALSE,
+    TRUE ~ .$ever.autocracy
+  )) %>%
+  group_by(year, question, ever.autocracy) %>%
+  summarise(prop.with.reg = sum(value) / n()) %>%
+  ungroup() %>%
+  mutate(question = 
+           factor(question, levels=c("registration", "burdensome"),
+                  labels=c("Registration required", 
+                           "Registration burdensome"))) %>%
+  mutate(ever.autocracy = 
+           factor(ever.autocracy, levels=c(TRUE, FALSE),
+                  labels=c("Autocracies", "Democracies"))) %>%
+  filter(year > 1990)
+
+plot.dcjw.reg.regime <- ggplot(dcjw.registration.summary, 
+                               aes(x=year, y=prop.with.reg, colour=question)) + 
+  geom_line() + 
+  labs(x=NULL, y="Proportion of countries\nwith regulations") +
+  scale_y_continuous(labels=scales::percent) +
+  coord_cartesian(ylim=c(0, 0.65)) +
+  scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
+  theme_ath() +
+  facet_wrap(~ ever.autocracy)
+plot.dcjw.reg.regime
+
+fig.save.cairo(plot.dcjw.reg.regime,
+               filename="3-dcjw-reg-regime",
+               width=6, height=2)
+```
+
+
+### Overall restriction
+
+```{r plot-restrictions-regime, fig.width=2, fig.height=2}
+df.restriction.regime <- survey.countries.clean %>%
+  select(Q4.17_collapsed, target.regime.type) %>%
+  filter(!is.na(Q4.17_collapsed))
+
+plot.restriction.regime <- prodplot(df.restriction.regime,
+                                    ~ target.regime.type + Q4.17_collapsed, mosaic("h"),
+                                    colour=NA) +
+  aes(fill=target.regime.type, colour="white") +
+  scale_fill_manual(values=ath.palette("regime2"), name=NULL) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.restriction.regime
+
+restriction.regime.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.17_collapsed)) %>%
+  xtabs(~ Q4.17_collapsed + target.regime.type, .)
+
+analyze.cat.var(restriction.regime.table)
+```
+
+```{r plot-restrictions-regime-bayes}
+restrictions.regime.table.bayes <- survey.countries.clean %>%
+  filter(!is.na(Q4.17_collapsed)) %>%
+  count(Q4.17_collapsed, target.regime.type) %>%
+  group_by(Q4.17_collapsed) %>%
+  mutate(total = sum(n)) %>%
+  filter(target.regime.type == "Autocracy") %>%
+  diff.groups.bayes(cbind(n, total) ~ Q4.17_collapsed, data=., prop=TRUE)
+
+grid.arrange(restrictions.regime.table.bayes$plot.groups,
+             restrictions.regime.table.bayes$plot.diffs)
+```
+
+```{r results="asis"}
+restrictions.regime.table.bayes$diffs.summary %>% pandoc.table()
+```
+
+```{r plot-restrictions-issue, fig.width=2, fig.height=2}
+df.restriction.issue <- survey.countries.clean %>%
+  select(Q4.17_collapsed, potential.contentiousness) %>%
+  filter(!is.na(Q4.17_collapsed))
+
+plot.restriction.issue <- prodplot(df.restriction.issue,
+                                   ~ potential.contentiousness + Q4.17_collapsed, mosaic("h"),
+                                   colour=NA) +
+  aes(fill=potential.contentiousness, colour="white") +
+  scale_fill_manual(values=ath.palette("contention1"), name=NULL) +
+  guides(fill=FALSE) +
+  theme_ath() + theme(axis.title=element_blank(),
+                      panel.grid=element_blank())
+plot.restriction.issue
+
+restriction.issue.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.17_collapsed)) %>%
+  xtabs(~ Q4.17_collapsed + potential.contentiousness, .)
+
+analyze.cat.var(restriction.issue.table)
+```
+
+```{r plot-restrictions-issue-bayes}
+restrictions.issue.table.bayes <- survey.countries.clean %>%
+  filter(!is.na(Q4.17_collapsed)) %>%
+  count(Q4.17_collapsed, potential.contentiousness) %>%
+  group_by(Q4.17_collapsed) %>%
+  mutate(total = sum(n)) %>%
+  filter(potential.contentiousness == "High contention") %>%
+  diff.groups.bayes(cbind(n, total) ~ Q4.17_collapsed, data=., prop=TRUE)
+
+grid.arrange(restrictions.issue.table.bayes$plot.groups,
+             restrictions.issue.table.bayes$plot.diffs)
+```
+
+```{r results="asis"}
+restrictions.issue.table.bayes$diffs.summary %>% pandoc.table()
+```
+
+```{r plot-restriction-both}
+plot.restriction.both <- cbind(ggplotGrob(plot.restriction.regime),
+                               ggplotGrob(plot.restriction.issue))
+grid::grid.newpage()
+grid::grid.draw(plot.restriction.both)
+
+fig.save.cairo(plot.restriction.both,
+               filename="3-restriction-both",
+               width=6, height=1.5)
 ```
 
 
