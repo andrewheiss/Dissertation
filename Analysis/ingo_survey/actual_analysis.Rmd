@@ -1300,7 +1300,7 @@ side.by.side(restriction.regime.table, restriction.issue.table)
 
 ### Registration and restrictions
 
-```{r}
+```{r plot-registration-restrictions, fig.width=6.5, fig.height=1.5}
 df.restriction.reg.issue <- survey.countries.clean %>%
   select(Q4.17_collapsed, Q4.4_collapsed, target.regime.type) %>%
   filter(!is.na(Q4.17_collapsed), !is.na(Q4.4_collapsed)) %>%
@@ -1314,11 +1314,15 @@ plot.restriction.reg.issue <- prodplot(df.restriction.reg.issue,
                                        mosaic("h")) +
   aes(fill=Q4.4_collapsed_clean, linetype=target.regime.type, colour="white") +
   scale_fill_manual(values=ath.palette("wars")) +
-  scale_linetype_manual(values=c("blank", "dashed")) +
+  scale_linetype_manual(values=c("blank", "dotted")) +
   guides(fill=FALSE, linetype=FALSE) +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
 plot.restriction.reg.issue
+
+fig.save.cairo(plot.restriction.reg.issue,
+               filename="3-restrictions-registration",
+               width=6.5, height=1.5)
 
 restriction.reg.issue.table <- survey.countries.clean %>%
   filter(!is.na(Q4.17_collapsed), !is.na(Q4.4_collapsed)) %>%
