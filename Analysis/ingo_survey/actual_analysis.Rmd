@@ -21,8 +21,8 @@ csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
 
 ```{r load-libraries-data, message=FALSE}
 knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
-                      tidy.opts=list(width.cutoff=120),  # For code
-                      options(width=120))  # For output
+                      tidy.opts=list(width.cutoff=140),  # For code
+                      options(width=140))  # For output
 
 library(plyr)  # first because of productplots
 library(tidyverse)  # yay hadley
@@ -74,6 +74,9 @@ survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 # Load cleaned, country-based data (only the Q4 loop)
 survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
                                             "survey_countries_clean.rds")) %>%
+  mutate(Q4.4_collapsed =
+           fct_recode(Q4.4, NULL = c("Don't know")),
+         Q4.4_collapsed = ordered(Q4.4_collapsed)) %>%
   mutate(Q4.11_collapsed = 
            fct_collapse(Q4.11,
                         Negative = c("Extremely negative", "Somewhat negative"),
@@ -118,6 +121,24 @@ possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
 great.none.dk <- c("A great deal", "A lot", "A moderate amount",
                    "A little", "None at all", "Don't know", "Not applicable")
 great.none <- great.none.dk[1:5]
+
+# Show two analyze.cat.var tables side-by-side
+side.by.side <- function(table1, table2) {
+  # Use diff for the two column effect!
+  # http://stackoverflow.com/a/9214177/120898
+  tmp1 <- tempfile()
+  tmp2 <- tempfile()
+  
+  cat(capture.output( analyze.cat.var(table1) ), sep="\n", file=tmp1)
+  cat(capture.output( analyze.cat.var(table2) ), sep="\n", file=tmp2)
+ 
+  # system does weeeeird stuff with knitr (see https://github.com/yihui/knitr/issues/1203),
+  # so system(..., intern=TRUE) + cat(paste(..., collapse="\n)) does the trick
+  system.output <- suppressWarnings(
+    system2('diff', args=c('-y', '-W', '120', tmp1, tmp2), stdout=TRUE))
+  
+  cat(paste(system.output, collapse="\n"))
+}
 ```
 
 ## General notes
@@ -781,7 +802,7 @@ high.contention.work <- survey.orgs.clean %>%
 
 ### Regime type
 
-```{r plot-govt-positivity-regime, fig.width=2, fig.height=2}
+```{r plot-govt-positivity-regime}
 df.govt.positivity.regime <- survey.countries.clean %>%
   select(Q4.11_collapsed, target.regime.type) %>%
   filter(!is.na(Q4.11_collapsed))
@@ -794,13 +815,6 @@ plot.govt.positivity.regime <- prodplot(df.govt.positivity.regime,
   guides(fill=FALSE) +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
-plot.govt.positivity.regime
-
-govt.positivity.regime.table <- survey.countries.clean %>%
-  filter(!is.na(Q4.11_collapsed)) %>%
-  xtabs(~ Q4.11_collapsed + target.regime.type, .)
-
-analyze.cat.var(govt.positivity.regime.table)
 ```
 
 ```{r plot-govt-positivity-regime-bayes}
@@ -822,7 +836,7 @@ govt.positivity.regime.table.bayes$diffs.summary %>% pandoc.table()
 
 ### Issue contentiousness
 
-```{r plot-govt-positivity-issue, fig.width=2, fig.height=2}
+```{r plot-govt-positivity-issue}
 df.govt.positivity.issue <- survey.countries.clean %>%
   select(Q4.11_collapsed, potential.contentiousness) %>%
   filter(!is.na(Q4.11_collapsed))
@@ -835,13 +849,6 @@ plot.govt.positivity.issue <- prodplot(df.govt.positivity.issue,
   guides(fill=FALSE) +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
-plot.govt.positivity.issue
-
-govt.positivity.issue.table <- survey.countries.clean %>%
-  filter(!is.na(Q4.11_collapsed)) %>%
-  xtabs(~ Q4.11_collapsed + potential.contentiousness, .)
-
-analyze.cat.var(govt.positivity.issue.table)
 ```
 
 ```{r plot-govt-positivity-issue-bayes}
@@ -861,7 +868,7 @@ grid.arrange(govt.positivity.issue.table.bayes$plot.groups,
 govt.positivity.issue.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
-```{r plot-govt-positivity-both}
+```{r plot-govt-positivity-both, fig.width=6, fig.height=1.5}
 plot.govt.positivity.both <- cbind(ggplotGrob(plot.govt.positivity.regime),
                                    ggplotGrob(plot.govt.positivity.issue))
 grid::grid.newpage()
@@ -872,12 +879,27 @@ fig.save.cairo(plot.govt.positivity.both,
                width=6, height=1.5)
 ```
 
+```{r cat-var-positivity}
+govt.positivity.regime.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.11_collapsed)) %>%
+  xtabs(~ Q4.11_collapsed + target.regime.type, .)
+
+govt.positivity.issue.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.11_collapsed)) %>%
+  xtabs(~ Q4.11_collapsed + potential.contentiousness, .)
+
+side.by.side(govt.positivity.regime.table,
+             govt.positivity.issue.table)
+```
+
 
 ## Experiences with regulations
 
 ### Familiarity with regulations
 
-```{r plot-familiarity-regime, fig.width=2, fig.height=2}
+#### Regime type
+
+```{r plot-familiarity-regime}
 df.reg.familiarity.regime <- survey.countries.clean %>%
   select(Q4.13_collapsed, target.regime.type) %>%
   filter(!is.na(Q4.13_collapsed))
@@ -890,13 +912,6 @@ plot.reg.familiarity.regime <- prodplot(df.reg.familiarity.regime,
   guides(fill=FALSE) +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
-plot.reg.familiarity.regime
-
-reg.familiarity.regime.table <- survey.countries.clean %>%
-  filter(!is.na(Q4.13_collapsed)) %>%
-  xtabs(~ Q4.13_collapsed + target.regime.type, .)
-
-analyze.cat.var(reg.familiarity.regime.table)
 ```
 
 ```{r plot-familiarity-regime-bayes}
@@ -916,7 +931,9 @@ grid.arrange(reg.familiarity.regime.table.bayes$plot.groups,
 reg.familiarity.regime.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
-```{r plot-familiarity-issue, fig.width=2, fig.height=2}
+#### Issue contentiousness
+
+```{r plot-familiarity-issue}
 df.reg.familiarity.issue <- survey.countries.clean %>%
   select(Q4.13_collapsed, potential.contentiousness) %>%
   filter(!is.na(Q4.13_collapsed))
@@ -929,13 +946,6 @@ plot.reg.familiarity.issue <- prodplot(df.reg.familiarity.issue,
   guides(fill=FALSE) +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
-plot.reg.familiarity.issue
-
-reg.familiarity.issue.table <- survey.countries.clean %>%
-  filter(!is.na(Q4.13_collapsed)) %>%
-  xtabs(~ Q4.13_collapsed + potential.contentiousness, .)
-
-analyze.cat.var(reg.familiarity.issue.table)
 ```
 
 ```{r plot-familiarity-issue-bayes}
@@ -955,7 +965,9 @@ grid.arrange(reg.familiarity.issue.table.bayes$plot.groups,
 reg.familiarity.issue.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
-```{r plot-familiarity-both}
+#### Both
+
+```{r plot-familiarity-both, fig.width=6, fig.height=1.5}
 plot.familiarity.both <- cbind(ggplotGrob(plot.reg.familiarity.regime),
                                ggplotGrob(plot.reg.familiarity.issue))
 grid::grid.newpage()
@@ -966,9 +978,23 @@ fig.save.cairo(plot.familiarity.both,
                width=6, height=1.5)
 ```
 
+```{r cat-var-familiarity}
+reg.familiarity.regime.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.13_collapsed)) %>%
+  xtabs(~ Q4.13_collapsed + target.regime.type, .)
+
+reg.familiarity.issue.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.13_collapsed)) %>%
+  xtabs(~ Q4.13_collapsed + potential.contentiousness, .)
+
+side.by.side(reg.familiarity.regime.table,
+             reg.familiarity.issue.table)
+```
+
+
 ### Frequency of changes
 
-```{r plot-frequency-regime, fig.width=2, fig.height=2}
+```{r plot-frequency-regime, fig.width=3, fig.height=1.5}
 df.frequency.regime <- survey.countries.clean %>%
   select(Q4.14_collapsed, target.regime.type) %>%
   filter(!is.na(Q4.14_collapsed))
@@ -1048,7 +1074,7 @@ df.change.how.other <- survey.countries.clean %>%
 
 There's a slight difference in how NGOs register across regimes, with more NGOs registering in autocracies than in democracies, perhaps because they are more likely to be *required* to register in autocracies. The difference is not significant, though. There is no significant difference in the registration status of low and high contentious INGOs.
 
-```{r plot-registration-regime, fig.width=2, fig.height=2}
+```{r plot-registration-regime}
 df.registered.regime <- survey.countries.clean %>%
   select(Q4.4, target.regime.type) %>%
   filter(Q4.4 != "Don't know") %>%
@@ -1063,17 +1089,9 @@ plot.registered.regime <- prodplot(df.registered.regime,
   guides(fill=FALSE) +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
-plot.registered.regime
-
-registered.table <- survey.countries.clean %>%
-  filter(Q4.4 != "Don't know") %>%
-  mutate(Q4.4 = droplevels(Q4.4)) %>%
-  xtabs(~ Q4.4 + target.regime.type, .)
-
-analyze.cat.var(registered.table)
 ```
 
-```{r plot-registration-issue, fig.width=2, fig.height=2}
+```{r plot-registration-issue}
 df.registered.issue <- survey.countries.clean %>%
   select(Q4.4, potential.contentiousness) %>%
   filter(Q4.4 != "Don't know") %>%
@@ -1088,14 +1106,28 @@ plot.registered.issue <- prodplot(df.registered.issue,
   guides(fill=FALSE) +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
-plot.registered.issue
+```
+
+```{r plot-registration-both, fig.width=6, fig.height=1.5}
+plot.registration.both <- cbind(ggplotGrob(plot.registered.regime),
+                                ggplotGrob(plot.registered.issue))
+grid::grid.newpage()
+grid::grid.draw(plot.registration.both)
+```
+
+```{r cat-var-registered}
+registered.table <- survey.countries.clean %>%
+  filter(Q4.4 != "Don't know") %>%
+  mutate(Q4.4 = droplevels(Q4.4)) %>%
+  xtabs(~ Q4.4 + target.regime.type, .)
 
 registered.table.issue <- survey.countries.clean %>%
   filter(Q4.4 != "Don't know") %>%
   mutate(Q4.4 = droplevels(Q4.4)) %>%
   xtabs(~ Q4.4 + potential.contentiousness, .)
 
-analyze.cat.var(registered.table.issue)
+side.by.side(registered.table,
+             registered.table.issue)
 ```
 
 
@@ -1172,7 +1204,9 @@ fig.save.cairo(plot.dcjw.reg.regime,
 
 ### Overall restriction
 
-```{r plot-restrictions-regime, fig.width=2, fig.height=2}
+#### Regime type
+
+```{r plot-restrictions-regime}
 df.restriction.regime <- survey.countries.clean %>%
   select(Q4.17_collapsed, target.regime.type) %>%
   filter(!is.na(Q4.17_collapsed))
@@ -1185,13 +1219,6 @@ plot.restriction.regime <- prodplot(df.restriction.regime,
   guides(fill=FALSE) +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
-plot.restriction.regime
-
-restriction.regime.table <- survey.countries.clean %>%
-  filter(!is.na(Q4.17_collapsed)) %>%
-  xtabs(~ Q4.17_collapsed + target.regime.type, .)
-
-analyze.cat.var(restriction.regime.table)
 ```
 
 ```{r plot-restrictions-regime-bayes}
@@ -1211,7 +1238,9 @@ grid.arrange(restrictions.regime.table.bayes$plot.groups,
 restrictions.regime.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
-```{r plot-restrictions-issue, fig.width=2, fig.height=2}
+#### Issue contentiousness
+
+```{r plot-restrictions-issue}
 df.restriction.issue <- survey.countries.clean %>%
   select(Q4.17_collapsed, potential.contentiousness) %>%
   filter(!is.na(Q4.17_collapsed))
@@ -1224,13 +1253,6 @@ plot.restriction.issue <- prodplot(df.restriction.issue,
   guides(fill=FALSE) +
   theme_ath() + theme(axis.title=element_blank(),
                       panel.grid=element_blank())
-plot.restriction.issue
-
-restriction.issue.table <- survey.countries.clean %>%
-  filter(!is.na(Q4.17_collapsed)) %>%
-  xtabs(~ Q4.17_collapsed + potential.contentiousness, .)
-
-analyze.cat.var(restriction.issue.table)
 ```
 
 ```{r plot-restrictions-issue-bayes}
@@ -1250,7 +1272,9 @@ grid.arrange(restrictions.issue.table.bayes$plot.groups,
 restrictions.issue.table.bayes$diffs.summary %>% pandoc.table()
 ```
 
-```{r plot-restriction-both}
+#### Both
+
+```{r plot-restriction-both, fig.width=6, fig.height=1.5}
 plot.restriction.both <- cbind(ggplotGrob(plot.restriction.regime),
                                ggplotGrob(plot.restriction.issue))
 grid::grid.newpage()
@@ -1259,6 +1283,18 @@ grid::grid.draw(plot.restriction.both)
 fig.save.cairo(plot.restriction.both,
                filename="3-restriction-both",
                width=6, height=1.5)
+```
+
+```{r cat-var-restriction}
+restriction.regime.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.17_collapsed)) %>%
+  xtabs(~ Q4.17_collapsed + target.regime.type, .)
+
+restriction.issue.table <- survey.countries.clean %>%
+  filter(!is.na(Q4.17_collapsed)) %>%
+  xtabs(~ Q4.17_collapsed + potential.contentiousness, .)
+
+side.by.side(restriction.regime.table, restriction.issue.table)
 ```
 
 
