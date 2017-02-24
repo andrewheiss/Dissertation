@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss&#x40;duke.edu
-date: February 20, 2017
+date: February 23, 2017
 published: Early draft for ISA 2017. Please do not cite without permission.
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -256,7 +256,7 @@ Governments are occasionally closely—and sometimes directly—involved in INGO
 
 ### Regulation
 
-The most common way the government affects INGO work, though, is by passing and implementing formal regulations. INGOs tend to be quite aware of the regulations they face, with more than 80% of respondents somewhat or very familiar with the laws regulating their activities in their host countries (see @fig:familiarity-both). Familiarity is affected by the type of regime organizations work in. More than 75% of respondents who answered that they do not know anything about regulations work in democracies, while those most familiar with the regulatory environment are split roughly equally between democracies and autocracies.[^56] INGOs working in dictatorships are the most likely to be the most familiar with regulations, likely because deep knowledge of the legal environment is more essential to operate safely and effectively. The contentiousness of the issues INGOs work on does not help determine their familiarity—high contention INGOs are not more or less likely to be more aware of the legal environment.[^57]
+The most common way the government affects INGO work, though, is by passing and implementing formal regulations. INGOs tend to be quite aware of the regulatory environment of their host countries, with more than 80% of respondents somewhat or very familiar with the laws regulating their activities (see @fig:familiarity-both). Familiarity is affected by the type of regime organizations work in. More than 75% of respondents who answered that they do not know anything about regulations work in democracies, while those most familiar with the regulatory environment are split roughly equally between democracies and autocracies.[^56] INGOs working in dictatorships are the most likely to be the most familiar with regulations, likely because deep knowledge of the legal environment is more essential to operate safely and effectively. The contentiousness of the issues INGOs work on does not help determine their familiarity—high contention INGOs are not more or less likely to be more aware of the legal environment.[^57]
 
 ![Knowledge of regulatory environment in host government, separated by regime type and issue contentiousness (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-familiarity-both){#fig:familiarity-both}
 
@@ -266,14 +266,34 @@ Being aware of the regulatory environment is crucial for maintaining legal statu
 
 The changes INGOs observe do not necessarily correlate with formal statutory developments. For instance, as seen in previous chapters, Egypt has only formally passed civil society laws in 2002 and 2012. These laws give bureaucrats and politicians significant interpretive leeway, however, and allow them to reshape the regulatory environment for international NGOs. Because of this dynamic discretionary de facto environment, INGOs actively seek out information about changes in laws, rules, and regulations (see @fig:change-how-find-out). International NGOs are most likely to hear about new legal changes from other NGOs in the country, both from their local partners and from other foreign organizations. They also receive news about changes directly from government officials, sometimes at inopportune moments. One INGO working in East Africa, unaware of any changes in regulations, discovered new funding requirements for foreign NGOs when requesting permits to expand their operations in the country—the organization ultimately decided to not expand as a result.[^59] INGOs also find out about changes in laws through the media and through internet research, including websites that aggregate information about civil society regulations like Civicus and the International Center for Not-for-Profit Law (ICNL). 
 
-![Channels of discovering changes in the regulatory environment for NGOs in host country)](../../Output/figures/3-change-how-find-out){#fig:change-how-find-out}
+![Channels of discovering changes in the regulatory environment for NGOs in host country](../../Output/figures/3-change-how-find-out){#fig:change-how-find-out}
 
-`TODO`: How restrictive are these regulations (`Q4.17`)? How do all these regulations affect the ability to pursue mission? (`Q4.18`)
+Not all changes in NGO laws lead to restrictions on activities, however. Research by @ChaudhryHeiss:2017 and @BloodgoodTremblay-Boire:2016 suggests that the global increase in NGO laws is partly attributable to the routinization of NGO-government relations. For example, governments may require NGO registration in an attempt to formally define their relationship with civil society, and those registration laws will not necessarily be burdensome. Data from @ChristensenWeinstein:2013 helps demonstrate this difference in restrictiveness. @fig:djcw-reg-regime shows the prevalence of NGO registration laws in 98 countries from 1990–2013. Roughly the same proportion of autocracies and democracies have NGO registration laws, and the two types of countries have increased this type of legislation at similar rates over time. However, far more autocracies make these registration laws burdensome. This suggests that there is an urge to regularize state-NGO relations around the world, implying that the changes in laws that INGO respondents observe are not necessarily harmful. At the same time, there is a move to increase the burden of these more benign laws in autocracies.
+
+![Proportion of countries with laws that require NGO registration and that impose additional burdens on the registration process, by regime type [@ChristensenWeinstein:2013]](../../Output/figures/3-dcjw-reg-regime){#fig:djcw-reg-regime}
+
+Survey respondents confirm this. Nearly two-thirds of INGOs that feel the most restricted by government regulations work in autocracies, compared to 25% of organizations that report facing no restrictions in similar regimes (see @fig:restriction-both).[^60] The relationship between host country regime type and feelings of restriction is quite marked, with the proportion of respondents working in autocracies decreasing steadily as the feeling of restriction decreases. Interestingly, there is not as clear of a relationship between the contentiousness of INGO programming and feelings of restriction. Half of highly restricted organizations work on contentious issues, but there is no significant difference between the other levels of restriction—roughly 25% of organizations answering each other level of restriction work have contentious programming. It thus appears that the findings in @fig:djcw-reg-regime hold true—governments are increasingly passing routine NGO laws, but those laws are far more burdensome in autocracies, where they are designed to restrict NGO activities.
+
+![Feeling of restriction in host country, separated by regime type and issue contentiousness (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-restriction-both){#fig:restriction-both}
+
+### Effect of laws on INGO missions
+
+How do the regulations of host countries affect INGOs' ability to pursue their mission? Do more burdensome and restrictive regulations make it harder to be successful?
+
+How do all these regulations affect the ability to pursue mission? (`Q4.18`)
 
 In their free response questions, INGOs provide a rich picture of the effects of these regulations on their programs, activities, and behaviors.
 
 #### Registration
 
+Registration is one of the most common forms of government regulation of NGO activities—as seen in @fig:djcw-reg-regime, more than half of countries require that NGOs register with a government agency. NGO experiences with registration, however, are mixed. Roughly 50% of responding organizations are *not* formally registered in their host countries (see top panel of @fig:registration-all), and there is no significant difference between the registration status of INGOs working either in autocratic regimes or working on contentious issues. Registration status is correlated, however, with organizations' perceptions of restriction (see bottom panel of @fig:registration-all). In both types of regimes, organizations that report not feeling restricted are the most likely to not be registered, while those that feel moderately restricted are the least likely to register. Curiously, organizations that are the most restricted are just as likely to be registered as their unrestricted counterparts. This could indicate that avoidance of the state is one strategy for dealing with heavy restrictions—organizations facing no restrictions do not feel the need to register while organizations facing the strictest limitations work to avoid registration. 
+
+![**Top**: Registration status in host country, separated by regime type and issue contentiousness; **Bottom**: Registration status in host country, separated simultaneously by feeling of restriction and regime type (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-registration-all){#fig:registration-all}
+
+
+Stories from free responses
+
+- No negative experiences
 - Arbitrary - confusing
 - lengthy - 4 years in Haiti - multiple years in Congo
 - caused delays - slowdowns
@@ -309,12 +329,13 @@ In their free response questions, INGOs provide a rich picture of the effects of
 - Irrational visa restrictions
 
 
-### What about the organizations that don't feel restricted?
+### What about organizations that don't feel restricted?
 
 The experiences of these INGOs paints a dire picture of the regulatory environment for foreign organizations and helps confirm the notion of an ongoing crackdown on  global civil society. However, X% of respondents indicated feeling little to no restrictions in their host countries? Why is that?
 
 - Regime type: responses saying all is well work tend to work in the EU and US
 - Contentiousness: those more in line with government preferences aren't restricted as much
+
 
 # How do INGOs react to restrictions?
 
@@ -487,3 +508,5 @@ Thus…
 [^58]:	p(At least once a year - Rarely or never) \> 0 = 0.97.
 
 [^59]:	Response 1211.
+
+[^60]:	The difference between the proportion of INGOs responding "Very restricted" and "Not restricted" in autocracies is highly statistically significant: $P(Delta \> 0) = 1$.
