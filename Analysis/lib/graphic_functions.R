@@ -91,6 +91,10 @@ ath.palette <- function(name, n, type = c("discrete", "continuous")) {
 # Blank plot for spacing things in arrangeGrob()
 grob.blank <- grid::rectGrob(gp=grid::gpar(col="white"))
 
+# Blank plot for spacing things in *bind.gtable()
+plot.blank <- ggplot() + geom_blank(aes(1, 1)) + theme_void()
+
+
 theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
   update_geom_defaults("bar", list(fill = "grey30"))
   update_geom_defaults("line", list(colour = "grey30"))
