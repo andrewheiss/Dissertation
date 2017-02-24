@@ -75,7 +75,8 @@ survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
 survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
                                             "survey_countries_clean.rds")) %>%
   mutate(Q4.4_collapsed =
-           fct_recode(Q4.4, NULL = c("Don't know")),
+           fct_recode(Q4.4, Registered = "Yes", `Not registered` = "No", 
+                      NULL = "Don't know"),
          Q4.4_collapsed = ordered(Q4.4_collapsed)) %>%
   mutate(Q4.11_collapsed = 
            fct_collapse(Q4.11,
@@ -1065,13 +1066,12 @@ There's a slight difference in how NGOs register across regimes, with more NGOs 
 
 ```{r plot-registration-regime}
 df.registered.regime <- survey.countries.clean %>%
-  select(Q4.4, target.regime.type) %>%
-  filter(Q4.4 != "Don't know") %>%
-  mutate(Q4.4 = droplevels(Q4.4),
-         Q4.4 = factor(Q4.4, levels=rev(levels(Q4.4))))
+  filter(!is.na(Q4.4_collapsed)) %>%
+  select(Q4.4_collapsed, target.regime.type)
 
 plot.registered.regime <- prodplot(df.registered.regime,
-                                   ~ target.regime.type + Q4.4, mosaic("h"), 
+                                   ~ target.regime.type + Q4.4_collapsed,
+                                   mosaic("h"), 
                                    colour=NA) + 
   aes(fill=target.regime.type, colour="white") + 
   scale_fill_manual(values=ath.palette("regime2"), name=NULL) +
@@ -1082,13 +1082,12 @@ plot.registered.regime <- prodplot(df.registered.regime,
 
 ```{r plot-registration-issue}
 df.registered.issue <- survey.countries.clean %>%
-  select(Q4.4, potential.contentiousness) %>%
-  filter(Q4.4 != "Don't know") %>%
-  mutate(Q4.4 = droplevels(Q4.4),
-         Q4.4 = factor(Q4.4, levels=rev(levels(Q4.4))))
+  filter(!is.na(Q4.4_collapsed)) %>%
+  select(Q4.4_collapsed, potential.contentiousness)
 
 plot.registered.issue <- prodplot(df.registered.issue,
-                                  ~ potential.contentiousness + Q4.4, mosaic("h"), 
+                                  ~ potential.contentiousness + Q4.4_collapsed,
+                                  mosaic("h"), 
                                   colour=NA) + 
   aes(fill=potential.contentiousness, colour="white") + 
   scale_fill_manual(values=ath.palette("contention1"), name=NULL) +
@@ -1102,18 +1101,20 @@ plot.registration.both <- cbind(ggplotGrob(plot.registered.regime),
                                 ggplotGrob(plot.registered.issue))
 grid::grid.newpage()
 grid::grid.draw(plot.registration.both)
+
+fig.save.cairo(plot.registration.both,
+               filename="3-registration-both",
+               width=6, height=1.5)
 ```
 
 ```{r cat-var-registered}
 registered.table <- survey.countries.clean %>%
-  filter(Q4.4 != "Don't know") %>%
-  mutate(Q4.4 = droplevels(Q4.4)) %>%
-  xtabs(~ Q4.4 + target.regime.type, .)
+  filter(!is.na(Q4.4_collapsed)) %>%
+  xtabs(~ Q4.4_collapsed + target.regime.type, .)
 
 registered.table.issue <- survey.countries.clean %>%
-  filter(Q4.4 != "Don't know") %>%
-  mutate(Q4.4 = droplevels(Q4.4)) %>%
-  xtabs(~ Q4.4 + potential.contentiousness, .)
+  filter(!is.na(Q4.4_collapsed)) %>%
+  xtabs(~ Q4.4_collapsed + potential.contentiousness, .)
 
 side.by.side(registered.table,
              registered.table.issue)
@@ -1292,16 +1293,13 @@ side.by.side(restriction.regime.table, restriction.issue.table)
 ```{r plot-registration-restrictions, fig.width=6.5, fig.height=1.5}
 df.restriction.reg.issue <- survey.countries.clean %>%
   select(Q4.17_collapsed, Q4.4_collapsed, target.regime.type) %>%
-  filter(!is.na(Q4.17_collapsed), !is.na(Q4.4_collapsed)) %>%
-  mutate(Q4.4_collapsed_clean = fct_recode(Q4.4_collapsed,
-                                           Registered = "Yes",
-                                           `Not registered` = "No"))
+  filter(!is.na(Q4.17_collapsed), !is.na(Q4.4_collapsed))
 
 plot.restriction.reg.issue <- prodplot(df.restriction.reg.issue,
-                                       ~ Q4.4_collapsed_clean + Q4.17_collapsed +
+                                       ~ Q4.4_collapsed + Q4.17_collapsed +
                                          target.regime.type, 
                                        mosaic("h")) +
-  aes(fill=Q4.4_collapsed_clean, linetype=target.regime.type, colour="white") +
+  aes(fill=Q4.4_collapsed, linetype=target.regime.type, colour="white") +
   scale_fill_manual(values=ath.palette("wars")) +
   scale_linetype_manual(values=c("blank", "dotted")) +
   guides(fill=FALSE, linetype=FALSE) +
@@ -1320,6 +1318,31 @@ restriction.reg.issue.table <- survey.countries.clean %>%
 analyze.cat.var(restriction.reg.issue.table)
 ```
 
+#### Both registration and registration + restrictions
+
+```{r plot-registration-all, fig.width=6.5, fig.height=3}
+# TODO: The only way to get the axis labels to align correctly is to use
+# gtable, but it gets mad when combining unbalanced rbind(cbind())
+# combinations, so for now I have to live with the ugly arrangeGrob arrangement
+# plot.registration.all <- rbind(ggplotGrob(plot.registered.regime),
+#                                ggplotGrob(plot.blank),
+#                                ggplotGrob(plot.restriction.reg.issue))
+# 
+# panels <- plot.registration.all$layout$t[
+#   grep("panel", plot.registration.all$layout$name)]
+# plot.registration.all$heights[panels] <- unit(c(1, 0.1, 2), "null")
+
+plot.registration.all <- arrangeGrob(plot.registration.both,
+                                     plot.restriction.reg.issue,
+                                     heights=c(1.25, 2))
+
+grid::grid.newpage()
+grid::grid.draw(plot.registration.all)
+
+fig.save.cairo(plot.registration.all,
+               filename="3-registration-all",
+               width=6.5, height=3)
+```
 
 ```{r}
 # ### Staffing details
