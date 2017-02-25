@@ -575,7 +575,7 @@ plot.target.regions +
 ```{r tbl-continents-answered, results="asis"}
 continents.answered <- survey.clean.all %>%
   select(home = Q2.2_iso3, target = Q4.1_iso3) %>%
-  mutate_at(vars(home, target), funs(continent = countrycode(., "iso3c", "continent"))) %>%
+  mutate_at(vars(home, target), funs(continent = countrycode(., "iso3c", "continent", custom_match=c(XKX = "Europe")))) %>%
   mutate_at(vars(home_continent, target_continent),
             funs(recode(., Oceania = "Asia &\nOceania", Asia = "Asia &\nOceania"))) %>%
   group_by(home_continent, target_continent) %>%
@@ -625,6 +625,8 @@ df.target.regions.answered <- continents.answered %>%
   summarise(times.marked = sum(times.marked)) %>%
   mutate(perc.target = times.marked / sum(times.marked)) %>%
   arrange(times.marked) %>%
+  mutate(target_continent = factor(target_continent, 
+                                   levels=levels(df.hq.regions$region)))
   mutate(target_continent = fct_inorder(target_continent))
 
 df.target.regions.answered %>% pandoc.table()
