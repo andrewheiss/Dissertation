@@ -627,7 +627,7 @@ df.target.regions.answered <- continents.answered %>%
   arrange(times.marked) %>%
   mutate(target_continent = factor(target_continent, 
                                    levels=levels(df.hq.regions$region)))
-  mutate(target_continent = fct_inorder(target_continent))
+  # mutate(target_continent = fct_inorder(target_continent))
 
 df.target.regions.answered %>% pandoc.table()
 
