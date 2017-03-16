@@ -21,7 +21,6 @@ knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
                       tidy.opts=list(width.cutoff=120),  # For code
                       options(width=120))  # For output
 
-library(printr)
 library(tidyverse)
 library(magrittr)
 library(forcats)
@@ -202,7 +201,7 @@ autocracies <- full.data %>%
 #' 
 #' ## Summary of variables in models
 vars.to.summarize <- coef.names %>%
-  filter(term != "(Intercept)", term != "shaming.ingos.std")
+  filter(summarize == TRUE)
 
 vars.summarized <- autocracies %>%
   filter(year.num > 1994) %>%
@@ -378,7 +377,7 @@ plot.coefs <- ggplot(plot.data,
                      aes(x=estimate, y=term.clean.rev,
                          xmin=lower, xmax=upper, colour=model.name.clean)) +
   geom_vline(xintercept=0) +
-  geom_pointrangeh(position=position_dodge(width=0.5), size=0.5) +
+  geom_pointrangeh(position=position_dodgev(height=0.5), size=0.5) +
   scale_colour_manual(values=ath.palette("contention"), name=NULL) +
   coord_cartesian(xlim=c(-0.5, 1)) +
   labs(x="Posterior median change in CSRE", y=NULL) +
@@ -438,7 +437,7 @@ model.to.check <- filter(models.bayes,
 #' bimodalness of the distribution, with peaks at 0 and 3/4ish. The posterior
 #' distribution just averages out those peaks. I can live with it, though.
 #' 
-pp_check(model.to.check, check="dist", overlay=TRUE, nreps = 5) + 
+pp_check(model.to.check, plotfun="ppc_dens_overlay", overlay=TRUE, nreps=5) + 
   theme_ath()
 
 #' What about chain convergence? These should look like tops if everything 
