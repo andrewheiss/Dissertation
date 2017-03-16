@@ -228,11 +228,12 @@ csre.selected.answered <- csre.selected %>%
   group_by(clean.id, answered_iso3) %>%
   summarise(avg.csre.all.targets = mean(csre.mean_target, na.rm=TRUE),
             avg.csre.answered = mean(csre.mean_answered, na.rm=TRUE)) %>%
+  ungroup() %>%
   filter(!is.na(avg.csre.answered)) %>%
   mutate(restriction = case_when(
-    avg.csre.answered < avg.csre.all.targets ~ "More restrictive than average",
-    avg.csre.answered > avg.csre.all.targets ~ "Less restrictive than average",
-    avg.csre.answered == avg.csre.all.targets ~ "Average restrictiveness"
+    .$avg.csre.answered < .$avg.csre.all.targets ~ "More restrictive than average",
+    .$avg.csre.answered > .$avg.csre.all.targets ~ "Less restrictive than average",
+    .$avg.csre.answered == .$avg.csre.all.targets ~ "Average restrictiveness"
   ))
 
 plot.csre.selected.answered <- ggplot(csre.selected.answered, 
