@@ -322,8 +322,8 @@ saveRDS(full.icews.panel,
 
 # And EOI data
 saveRDS(eois.yearly,
-              file.path(PROJHOME, "Data", "data_processed",
-                        "icews_eois.rds"))
+        file.path(PROJHOME, "Data", "data_processed",
+                  "icews_eois.rds"))
 
 # ---------
 # Sandbox
