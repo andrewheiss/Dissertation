@@ -30,3 +30,6 @@ rm(RPROJ)
 # OR
 # R <- find_rstudio_root_file
 # R("Data", "data_raw")
+#### -- Packrat Autoloader (version 0.4.8-1) -- ####
+source("packrat/init.R")
+#### -- End Packrat Autoloader -- ####

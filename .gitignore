@@ -28,6 +28,10 @@ Icon?
 .Rapp.history
 .Rproj.user
 
+# Packrat
+packrat/lib*/
+packrat/src/
+
 # --------
 # Python
 # --------
