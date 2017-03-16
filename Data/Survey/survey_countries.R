@@ -3,7 +3,6 @@ library(tidyr)        # For more magic dataframe manipulation
 library(countrycode)  # Standardize countries
 library(rvest)        # Scrape stuff from the web
 library(pander)       # Markdown
-library(feather)      # For passing data between R scripts
 
 # World Bank countries
 wb.countries.raw <- read_html("https://web.archive.org/web/20160422022535/http://data.worldbank.org/country/") %>%
@@ -34,7 +33,7 @@ gsub("\\.", "\\\\.", paste(wb.countries.clean$`Country name`, collapse="|")) %>%
 cat(paste0(wb.countries.clean$`Country name`, collapse="\n"),
     file=file.path(PROJHOME, "Data", "Survey", "output", "survey_countries.txt"))
 
-# Save as feather
-write_feather(wb.countries.clean,
-              path=file.path(PROJHOME, "Data", "Survey", "output",
-                             "survey_countries.feather"))
+# Save as RDS
+saveRDS(wb.countries.clean,
+        file.path(PROJHOME, "Data", "Survey", "output",
+                  "survey_countries.rds"))

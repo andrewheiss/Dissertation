@@ -1,12 +1,11 @@
 library(dplyr)
-library(feather)
 library(ggplot2)
 library(gridExtra)
 library(Cairo)
 
 # Load data
-full.data <- read_feather(file.path(PROJHOME, "Data","data_processed",
-                                    "full_data.feather"))
+full.data <- readRDS(file.path(PROJHOME, "Data","data_processed",
+                               "full_data.rds"))
 
 # Plot specific cases
 plot.data <- full.data %>%

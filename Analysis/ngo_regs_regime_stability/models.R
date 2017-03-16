@@ -26,7 +26,6 @@ library(tidyverse)
 library(magrittr)
 library(forcats)
 library(broom)
-library(feather)
 library(rstanarm)
 library(scales)
 library(gridExtra)
@@ -37,8 +36,8 @@ library(DT)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
-full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                               "full_data.feather")) %>%
+full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                               "full_data.rds")) %>%
   mutate(case.study = cowcode %in% c(710, 775, 651, 663, 365, 705)) %>%
   # Make these variables more interpretable unit-wise
   mutate_each(funs(. * 100), dplyr::contains("pct")) %>%

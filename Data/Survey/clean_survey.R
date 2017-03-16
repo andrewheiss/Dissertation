@@ -2,7 +2,6 @@ library(tidyverse)
 library(magrittr)
 library(stringi)
 library(stringr)
-library(feather)
 library(zoo)
 library(countrycode)
 
@@ -61,8 +60,8 @@ completed <- tbl(db.email, "survey_completed") %>% collect() %>%
 
 # Look up a list of Qualtrics country IDs and return a list of clean country
 # names, ISO3 codes, or COW codes
-countries.raw <- read_feather(file.path(PROJHOME, "Data", "Survey", "output",
-                                        "survey_countries.feather"))
+countries.raw <- readRDS(file.path(PROJHOME, "Data", "Survey", "output",
+                                   "survey_countries.rds"))
 
 # Change Greenland > Anguilla; Aruba > Kosovo; Cayman Islands > Taiwan
 countries.manual.fixes <- data_frame(`Country name` = c("Anguilla", 
@@ -1012,8 +1011,8 @@ reactions <- survey.countries.clean %>%
 # -------------------------
 # --------------------------------------------------
 # CSRE-related data
-full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                    "full_data.feather"))
+full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                               "full_data.rds"))
 
 # Get most recent CSRE, average CSRE over past 10 years, gwf.ever.autocracy,
 # most recent Polity, average Polity over past 10 years
@@ -1155,7 +1154,6 @@ survey.clean.all <- survey.orgs.clean.final.for.realz %>%
 # ------------------------
 # Save all these things!
 # --------------------------
-# Not using feather because it can't handle list columns yet
 saveRDS(survey.orgs.all,
         file=file.path(PROJHOME, "Data", "data_processed",
                        "survey_orgs_all.rds"))

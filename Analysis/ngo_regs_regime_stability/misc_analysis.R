@@ -23,10 +23,9 @@ knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
                       tidy.opts=list(width.cutoff=120),  # For code
                       options(width=120))  # For output
 
-library(printr)
+# library(printr)
 library(tidyverse)
 library(magrittr)
-library(feather)
 library(broom)
 library(lubridate)
 library(stringr)
@@ -40,11 +39,11 @@ library(rstanarm)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
-full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                    "full_data.feather"))
+full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                               "full_data.rds"))
 
-dcjw <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                               "dcjw.feather"))
+dcjw <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                          "dcjw.rds"))
 
 # Load Robinson map projection
 countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",

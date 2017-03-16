@@ -1,7 +1,6 @@
 library(dplyr)
 library(tidyr)
 library(readr)
-library(feather)
 library(lubridate)
 library(ggplot2)
 library(gtable)
@@ -13,10 +12,10 @@ source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
 
 # Load data
-icrg.monthly <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                       "icrg_monthly.feather"))
-full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                    "full_data.feather"))
+icrg.monthly <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                                  "icrg_monthly.rds"))
+full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                               "full_data.rds"))
 
 icrg.russia <- icrg.monthly %>%
   filter(cowcode == 365, !is.na(icrg.pol.risk.internal.scaled))

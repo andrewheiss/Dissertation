@@ -37,7 +37,6 @@ library(countrycode)
 library(riverplot)
 library(pryr)
 library(gridExtra)
-library(feather)
 
 panderOptions('table.split.table', Inf)
 panderOptions('table.split.cells', Inf)
@@ -108,8 +107,8 @@ survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed",
          Q4.17_collapsed = ordered(Q4.17_collapsed))
 
 # External data
-full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                    "full_data.feather"))
+full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                               "full_data.rds"))
 
 # Load Robinson map projection
 countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
@@ -1128,8 +1127,8 @@ side.by.side(registered.table,
 ### Routine regulation vs. burdensome regulation
 
 ```{r plot-dcjw-registration, fig.width=6, fig.height=2}
-dcjw <- read_feather(file.path(PROJHOME, "Data", 
-                               "data_processed", "dcjw.feather"))
+dcjw <- readRDS(file.path(PROJHOME, "Data", 
+                          "data_processed", "dcjw.rds"))
 
 dcjw.registration <- dcjw %>%
   mutate(question = recode(question,

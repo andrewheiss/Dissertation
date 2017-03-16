@@ -8,7 +8,7 @@ Albania                         ALB      339           2
 
 Algeria                         DZA      615           3       
 
-American Samoa                  ASM       NA           4       
+American Samoa                  ASM                    4       
 
 Andorra                         AND      232           5       
 
@@ -20,7 +20,7 @@ Argentina                       ARG      160           8
 
 Armenia                         ARM      371           9       
 
-Aruba                           ABW       NA           10      
+Aruba                           ABW                    10      
 
 Australia                       AUS      900           11      
 
@@ -44,7 +44,7 @@ Belize                          BLZ       80           20
 
 Benin                           BEN      434           21      
 
-Bermuda                         BMU       NA           22      
+Bermuda                         BMU                    22      
 
 Bhutan                          BTN      760           23      
 
@@ -72,7 +72,7 @@ Cameroon                        CMR      471           34
 
 Canada                          CAN       20           35      
 
-Cayman Islands                  CYM       NA           36      
+Cayman Islands                  CYM                    36      
 
 Central African Republic        CAF      482           37      
 
@@ -98,7 +98,7 @@ Croatia                         HRV      344           47
 
 Cuba                            CUB       40           48      
 
-Curacao                         CUW       NA           49      
+Curacao                         CUW                    49      
 
 Cyprus                          CYP      352           50      
 
@@ -126,7 +126,7 @@ Estonia                         EST      366           61
 
 Ethiopia                        ETH      530           62      
 
-Faroe Islands                   FRO       NA           63      
+Faroe Islands                   FRO                    63      
 
 Fiji                            FJI      950           64      
 
@@ -134,7 +134,7 @@ Finland                         FIN      375           65
 
 France                          FRA      220           66      
 
-French Polynesia                PYF       NA           67      
+French Polynesia                PYF                    67      
 
 Gabon                           GAB      481           68      
 
@@ -148,11 +148,11 @@ Ghana                           GHA      452           72
 
 Greece                          GRC      350           73      
 
-Greenland                       GRL       NA           74      
+Greenland                       GRL                    74      
 
 Grenada                         GRD       55           75      
 
-Guam                            GUM       NA           76      
+Guam                            GUM                    76      
 
 Guatemala                       GTM       90           77      
 
@@ -166,7 +166,7 @@ Haiti                           HTI       41           81
 
 Honduras                        HND       91           82      
 
-Hong Kong SAR, China            HKG       NA           83      
+Hong Kong SAR, China            HKG                    83      
 
 Hungary                         HUN      310           84      
 
@@ -182,7 +182,7 @@ Iraq                            IRQ      645           89
 
 Ireland                         IRL      205           90      
 
-Isle of Man                     IMN       NA           91      
+Isle of Man                     IMN                    91      
 
 Israel                          ISR      666           92      
 
@@ -226,7 +226,7 @@ Lithuania                       LTU      368          111
 
 Luxembourg                      LUX      212          112      
 
-Macao SAR, China                MAC       NA          113      
+Macao SAR, China                MAC                   113      
 
 Macedonia, FYR                  MKD      343          114      
 
@@ -272,7 +272,7 @@ Nepal                           NPL      790          134
 
 Netherlands                     NLD      210          135      
 
-New Caledonia                   NCL       NA          136      
+New Caledonia                   NCL                   136      
 
 New Zealand                     NZL      920          137      
 
@@ -282,7 +282,7 @@ Niger                           NER      436          139
 
 Nigeria                         NGA      475          140      
 
-Northern Mariana Islands        MNP       NA          141      
+Northern Mariana Islands        MNP                   141      
 
 Norway                          NOR      385          142      
 
@@ -306,7 +306,7 @@ Poland                          POL      290          151
 
 Portugal                        PRT      235          152      
 
-Puerto Rico                     PRI       NA          153      
+Puerto Rico                     PRI                   153      
 
 Qatar                           QAT      694          154      
 
@@ -326,7 +326,7 @@ Saudi Arabia                    SAU      670          161
 
 Senegal                         SEN      433          162      
 
-Serbia                          SRB       NA          163      
+Serbia                          SRB                   163      
 
 Seychelles                      SYC      591          164      
 
@@ -334,7 +334,7 @@ Sierra Leone                    SLE      451          165
 
 Singapore                       SGP      830          166      
 
-Sint Maarten (Dutch part)       SXM       NA          167      
+Sint Maarten (Dutch part)       SXM                   167      
 
 Slovak Republic                 SVK      317          168      
 
@@ -356,7 +356,7 @@ St. Kitts and Nevis             KNA       60          176
 
 St. Lucia                       LCA       56          177      
 
-St. Martin (French part)        MAF       NA          178      
+St. Martin (French part)        MAF                   178      
 
 St. Vincent and the Grenadines  VCT       57          179      
 
@@ -392,7 +392,7 @@ Turkey                          TUR      640          194
 
 Turkmenistan                    TKM      701          195      
 
-Turks and Caicos Islands        TCA       NA          196      
+Turks and Caicos Islands        TCA                   196      
 
 Tuvalu                          TUV      947          197      
 
@@ -416,9 +416,9 @@ Venezuela, RB                   VEN      101          206
 
 Vietnam                         VNM      816          207      
 
-Virgin Islands (U.S.)           VIR       NA          208      
+Virgin Islands (U.S.)           VIR                   208      
 
-West Bank and Gaza              PSE       NA          209      
+West Bank and Gaza              PSE                   209      
 
 Yemen, Rep.                     YEM      679          210      
 

@@ -22,7 +22,7 @@ knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
                       options(width=120))  # For output
 
 # Load libraries
-library(printr)
+# library(printr)
 library(tidyverse)
 library(DT)
 library(countrycode)

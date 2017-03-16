@@ -26,7 +26,6 @@ library(dplyr)
 library(tidyr)
 library(readr)
 library(countrycode)
-library(feather)
 library(lubridate)
 library(ggplot2)
 library(gtable)
@@ -47,15 +46,15 @@ cases <- c("EGY", "JOR", "CHN", "MMR", "RUS", "KAZ")
 # -----------
 # Load data
 # -----------
-icrg.monthly <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                       "icrg_monthly.feather")) %>%
+icrg.monthly <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                                  "icrg_monthly.rds")) %>%
   filter(Country != "USSR")
 
-full.data <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                                    "full_data.feather"))
+full.data <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                               "full_data.rds"))
 
-dcjw <- read_feather(file.path(PROJHOME, "Data", "data_processed",
-                               "dcjw.feather"))
+dcjw <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                          "dcjw.rds"))
 
 # Archigos database of political leaders
 # http://privatewww.essex.ac.uk/~ksg/archigos.html

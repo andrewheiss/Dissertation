@@ -2,7 +2,6 @@ library(magrittr)
 library(dplyr)
 library(tidyr)
 library(readr)
-library(feather)
 library(lubridate)
 library(stringr)
 library(ggplot2)
@@ -317,14 +316,14 @@ full.icews.panel <- baseline.panel %>%
 
 
 # Save full panel data
-write_feather(full.icews.panel,
-              file.path(PROJHOME, "Data", "data_processed",
-                        "icews_panel.feather"))
+saveRDS(full.icews.panel,
+        file.path(PROJHOME, "Data", "data_processed",
+                  "icews_panel.rds"))
 
 # And EOI data
-write_feather(eois.yearly,
+saveRDS(eois.yearly,
               file.path(PROJHOME, "Data", "data_processed",
-                        "icews_eois.feather"))
+                        "icews_eois.rds"))
 
 # ---------
 # Sandbox

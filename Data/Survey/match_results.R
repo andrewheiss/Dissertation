@@ -1,10 +1,9 @@
 library(dplyr)
 library(readr)
-library(feather)
 library(readODS)
 
-countries <- read_feather(file.path(PROJHOME, "Data", "Survey", "output",
-                                    "survey_countries.feather"))
+countries <- readRDS(file.path(PROJHOME, "Data", "Survey", "output",
+                               "survey_countries.rds"))
 
 # Pilot-ish survey
 # Qualtrics isn't letting me download the full raw CSV file, so this is a
