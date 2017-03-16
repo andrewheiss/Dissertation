@@ -21,14 +21,10 @@
 
 #' # Load and process all data
 #+ message=FALSE
-library(dplyr)
-library(tidyr)
+library(tidyverse)
 library(stringr)
-library(readr)
 library(yaml)
-library(purrr)
 library(pander)
-library(ggplot2)
 library(ggrepel)
 library(scales)
 library(lubridate)
