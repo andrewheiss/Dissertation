@@ -180,9 +180,9 @@ correct_panel_size <- function(p) {
   # Figure out how many y breaks are in each panel
   # Use ggplot_build object for plot parameters
   p.object <- ggplot_build(p) 
-  nvars.in.tiles <- sapply(lapply(p.object$panel$ranges, "[[", "y.major"), length)
-  
-  # Manipulate underlying ggplot grob
+  nvars.in.tiles <- sapply(lapply(p.object$layout$panel_ranges, "[[", "y.major"), length)
+
+    # Manipulate underlying ggplot grob
   p.grob <- ggplotGrob(p)
   
   # Identify the panel elements in the grob
