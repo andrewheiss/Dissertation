@@ -96,10 +96,10 @@ Data/Survey/output/*
 # ----------
 # Analysis
 # ----------
-Analysis/**.html
-Analysis/**.md
-Analysis/**_files/*
-Analysis/**_cache/*
+Analysis/*/*.html
+Analysis/*/*.md
+Analysis/*/*_files/*
+Analysis/*/*_cache/*
 !Analysis/html/*.html
 
 # ---------
@@ -112,9 +112,9 @@ Analysis/**_cache/*
 #   **/Output/*
 # But adding this doesn't:
 #   !**/Output/.gitignore
-Writing/**.tex
-Writing/**/tex_out/*
-Writing/**/vc*
+Writing/*/*.tex
+Writing/*/tex_out/
+Writing/*/vc*
 
 # ----------
 # Graphics
