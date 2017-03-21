@@ -152,16 +152,16 @@ response.summary.display <- response.summary.with.total %>%
   mutate_each(funs(percent), starts_with("perc"))
 
 response.summary.in.paper <- response.summary.display %>%
-  select(Directory = title, `Organizations listed` = num_rows_raw, 
-         `Apparently valid addresses` = num.apparently.valid,
+  select(Directory = title, `Listed` = num_rows_raw, 
+         `Valid` = num.apparently.valid,
          `Bounced` = num.dead.bounced, `Invited` = num.invited,
-         `Percent invited (of all addresses)` = perc.invited.from.raw,
-         `Percent invited (of valid addresses)` = perc.invited.from.valid)
+         `% invited\n(listed)` = perc.invited.from.raw,
+         `% invited\n(valid)` = perc.invited.from.valid)
 
 caption <- "Number of valid and invited NGOs {#tbl:summary-list}"
 clean.table <- pandoc.table.return(response.summary.in.paper,
                                    keep.line.breaks=TRUE,
-                                   justify="lllllll", caption=caption)
+                                   justify="lrrrrcc", caption=caption)
 
 #+ results="asis"
 cat(clean.table)
