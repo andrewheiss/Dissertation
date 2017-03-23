@@ -118,6 +118,10 @@ plot.sna.selection <- ggplot(plot.data.sna.selection,
   theme_ath()
 plot.sna.selection
 
+fig.save.cairo(plot.sna.selection,
+               filename="2-sna-selection",
+               width=6, height=4.5)
+
 #' ## Data for case studies
 #' 
 #' Calculate the average level of each variable used in the two models and the
