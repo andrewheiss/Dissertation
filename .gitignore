@@ -115,6 +115,7 @@ Analysis/*/*_cache/*
 Writing/*/*.tex
 Writing/*/tex_out/
 Writing/*/vc*
+Writing/compiled/*
 
 # ----------
 # Graphics
