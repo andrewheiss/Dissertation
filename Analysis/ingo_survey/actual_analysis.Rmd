@@ -789,6 +789,36 @@ high.contention.work <- survey.orgs.clean %>%
   select(clean.id, matches("Q3\\.3_.*_TEXT"))
 ```
 
+## Instrumental factors
+
+### Staffing
+
+```{r analyze-staffing}
+df.staff <- survey.orgs.clean %>%
+  select(employees = Q3.4.num, volunteers = Q3.5.num) %>%
+  filter(employees < 10000, volunteers < 10000) %>%
+  mutate(no.emps = employees == 0,
+         no.vols = volunteers == 0)
+
+df.staff %>% count(no.vols) %>% mutate(prop = n / sum(n))
+
+df.staff %>% 
+  group_by(no.emps, no.vols) %>% 
+  summarise_at(vars(employees, volunteers),
+               funs(n(), median, mean)) %>%
+  ungroup() %>%
+  mutate(prop = employees_n / sum(employees_n))
+
+df.staff.long <- df.staff %>%
+  select(employees, volunteers) %>%
+  gather(key, value)
+
+ggplot(df.staff.long, aes(x=value, fill=key)) +
+  geom_histogram(binwidth = 0.5) + 
+  scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:6), 5000000), labels=scales::comma) +
+  theme_ath()
+```
+
 
 ## Relationship with host governments
 
