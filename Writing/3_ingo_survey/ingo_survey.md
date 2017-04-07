@@ -233,6 +233,8 @@ Not all changes in NGO laws lead to restrictions on activities, however. Researc
 Survey respondents confirm this. Nearly two-thirds of INGOs that feel the most restricted by government regulations work in autocracies, compared to 25% of organizations that report facing no restrictions in similar regimes (see @fig:restriction-both).[^59] The relationship between host country regime type and feelings of restriction is quite marked, with the proportion of respondents working in autocracies decreasing steadily as the feeling of restriction decreases. Interestingly, there is not as clear of a relationship between the contentiousness of INGO programming and feelings of restriction. Half of highly restricted organizations work on contentious issues, but there is no significant difference between the other levels of restriction—roughly 25% of organizations answering each other level of restriction work have contentious programming. It thus appears that the findings in @fig:djcw-reg-regime hold true—governments are increasingly passing routine NGO laws, but those laws are far more burdensome in autocracies, where they are designed to restrict NGO activities.
 
 ![Feeling of restriction in host country, separated by regime type and issue contentiousness (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-restriction-both){#fig:restriction-both}
+
+
 # Effect of laws on INGO missions
 
 How do the regulations of host countries affect INGOs' ability to pursue their mission? Do more burdensome and restrictive regulations make it harder to be successful?
