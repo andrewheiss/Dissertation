@@ -62,6 +62,10 @@ ath.palettes <- list(
              "#FF4136"),  # red
   regime = c("#203864",  # gold
              "#7F6000"),  # word blue 
+  org.size = c("#0074D9",  # blue
+               "#FF4136"),  # red
+  staffing = c("#B10DC9",  # purple
+               "#FFDC00"),  # yellow
   single.color = c("#53787B")  # turquoise
 )
 

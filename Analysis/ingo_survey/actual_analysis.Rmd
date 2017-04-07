@@ -828,6 +828,95 @@ ggplot(df.staff.long, aes(x=value, fill=key)) +
 ```
 
 
+### Funding
+
+```{r analyze-funding, results="asis"}
+df.funding <- survey.orgs.clean %>%
+  mutate(small.org = Q3.4.num <= 50,
+         small.org = factor(small.org, levels=c(TRUE, FALSE),
+                            labels=c("0–50 employees", "51+ employees"),
+                            ordered=TRUE)) %>%
+  filter(!is.na(small.org)) %>%
+  select(clean.id, small.org, Q3.8.num, Q3.8) %>%
+  filter(!is.na(Q3.8.num))
+
+df.funding %>%
+  group_by(small.org) %>%
+  summarise(sources.mean = mean(Q3.8.num),
+            sources.median = median(Q3.8.num)) %>%
+  pandoc.table()
+```
+
+```{r plot-analyze-funding-org-size}
+df.funding.unnested.org.size <- df.funding %>%
+  unnest(Q3.8) %>%
+  filter(key != "None") %>%
+  group_by(key, value, small.org) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(value = factor(value,
+                        levels=levels(survey.orgs.clean$Q3.8_individual),
+                        ordered=TRUE))
+
+df.funding.plot <- df.funding.unnested.org.size %>%
+  mutate(value = fct_collapse(value,
+    "A lot" = c("A great deal", "A lot"),
+    "Some" = c("A moderate amount", "A little"),
+    "None" = "None at all"
+  )) %>%
+  filter(key != "Other") %>%
+  mutate(key = fct_collapse(key,
+    "NGOs and foundations" = c("Donations from other NGOs", "Foundation donations"),
+    "Governments and IGOs" = c("Grants from home country", "Grants from host country", "Grants from other governments", "Grants from IGOs")
+  )) %>%
+  group_by(key, value, small.org) %>% summarise(num = sum(num)) %>%
+  group_by(small.org, key) %>% mutate(total = sum(num)) %>% ungroup() %>%
+  mutate(prop = num / total) %>%
+  arrange(value, desc(small.org), desc(prop)) %>%
+  mutate(key = ordered(fct_inorder(key)))
+
+df.funding.totals <- df.funding.plot %>%
+  group_by(key) %>%
+  summarise(total = sum(num)) %>%
+  ungroup() %>%
+  arrange(total) %>%
+  mutate(key = fct_inorder(key))
+
+plot.funding.totals <- ggplot(df.funding.totals, aes(x=total, y=key)) +
+  geom_pointrangeh(aes(xmin=0, xmax=total)) +
+  labs(x="Times answer selected", y=NULL) +
+  scale_x_continuous(breaks = c(0, 500, 1000)) +
+  theme_ath() +
+  theme(panel.grid.major.y=element_blank())
+
+plot.funding <- ggplot(df.funding.plot, 
+                       aes(x=prop, y=fct_rev(value),
+                           colour=fct_rev(small.org))) +
+  geom_pointrangeh(aes(xmin=0, xmax=prop), position=position_dodgev(height=0.75),
+                   size=0.5) +
+  labs(x="Proportion selected", y="How much funding INGO relies on") +
+  scale_colour_manual(values=ath.palette("org.size"), name=NULL) +
+  scale_x_continuous(labels=scales::percent) +
+  guides(colour=guide_legend(reverse=TRUE)) +
+  facet_wrap(~ key) +
+  theme_ath() + theme(strip.text=element_text(size=rel(0.75)),
+                      panel.grid.major.y=element_blank(),
+                      legend.position=c(1, 0), legend.justification = c(1, 0),
+                      legend.direction="vertical")
+
+plot.funding.both <- arrangeGrob(plot.funding.totals, 
+                                 grob.blank,
+                                 plot.funding, 
+                                 nrow=1, widths=c(0.325, 0.025, 0.65))
+grid::grid.newpage()
+grid::grid.draw(plot.funding.both)
+
+fig.save.cairo(plot.funding.both,
+               filename="3-funding-size",
+               width=7, height=3.5)
+```
+
+
 ## Relationship with host governments
 
 ### Regime type

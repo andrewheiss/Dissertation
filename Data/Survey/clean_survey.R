@@ -893,6 +893,76 @@ collaboration.clean <- survey.orgs.clean.final %>%
                              Q3.6_num == 1, 0, Q3.6_num))
 
 
+# ---------
+# Funding
+# ---------
+# CSV to work with by hand
+survey.orgs.clean.final %>%
+  filter(!is.na(Q3.8_other_TEXT)) %>%
+  select(ResponseID, Q3.8_other_TEXT) %>%
+  mutate(Q3.8_other.manual = "") %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "funding_WILL_BE_OVERWRITTEN.csv"))
+
+funding.not.others <- survey.orgs.clean.final %>%
+  select(ResponseID, starts_with("Q3.8"), -starts_with("Q3.8_other")) %>%
+  gather(key, value, -ResponseID) %>%
+  mutate(key = str_replace(key, "Q3.8_", ""),
+         key = recode(key,
+                      corporate = "Corporate donations", 
+                      foundation = "Foundation donations",
+                      home_govt = "Grants from home country", 
+                      host_govt = "Grants from host country",
+                      individual = "Individual donations")) %>%
+  filter(!(value %in% c("Not applicable", "Don't know")))
+
+# Read in clean CSV
+funding.clean.raw <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                        "handcoded_survey_stuff",
+                                        "funding.csv")) %>%
+  select(ResponseID, Q3.8_other.manual)
+
+funding.others <- survey.orgs.clean.final %>%
+  select(ResponseID, starts_with("Q3.8_other")) %>%
+  left_join(funding.clean.raw, by="ResponseID") %>%
+  select(-Q3.8_other_TEXT) %>%
+  # Not all respondents consistently indicated the amount of funding from other
+  # sources, so if they respond "None at all," "Don't know," or "Not
+  # applicable" and they included an "Other" source, I assume "A little"
+  mutate(Q3.8_other = ifelse(!is.na(Q3.8_other.manual) & 
+                               Q3.8_other %in% c("Not applicable", 
+                                                 "None at all", "Don't know") &
+                               Q3.8_other.manual != "None",
+                             "A little", as.character(Q3.8_other)),
+         Q3.8_other.manual = ifelse(is.na(Q3.8_other.manual), "Other", Q3.8_other.manual)) %>%
+  separate_rows(Q3.8_other.manual, sep="; ") %>%
+  select(ResponseID, key = Q3.8_other.manual, value = Q3.8_other) %>%
+  filter(!(value %in% c("Not applicable", "Don't know"))) %>%
+  mutate(flag = TRUE)
+
+funding.clean <- bind_rows(funding.not.others, funding.others) %>%
+  # Some of the handcoded others fit in the set categories and there can
+  # sometimes be mismatches as a result (e.g. an organization might say "None
+  # at all" to corporate donations but then say "A great deal" to "Other" and
+  # specify corporate donations). So, I group the merged data by ResponseID and
+  # key and take only the top value of whatever answers there are. The
+  # handcoded other data frame has a flag column to indicate that it was
+  # handcoded—before taking the top row, I sort by that column so that the
+  # response from the other data frame takes precedence.
+  group_by(ResponseID, key) %>% arrange(flag) %>% slice(1) %>% ungroup() %>%
+  select(-flag) 
+
+funding.clean.num <- funding.clean %>%
+  filter(value != "None at all") %>%
+  group_by(ResponseID) %>%
+  summarise(Q3.8.num = n())
+
+funding.clean <- funding.clean %>%
+  left_join(funding.clean.num, by="ResponseID") %>%
+  nest(key, value, .key = "Q3.8")
+
+
 # --------------------------------------
 # Frequency of contact with government
 # --------------------------------------
@@ -1126,6 +1196,7 @@ survey.orgs.clean.final.for.realz <- survey.orgs.clean.final %>%
   left_join(contentiousness, by="Q3.2.clean") %>%
   left_join(employees.num, by="ResponseID") %>%
   left_join(volunteers.num, by="ResponseID") %>%
+  left_join(funding.clean, by="ResponseID") %>%
   left_join(collaboration.clean, by="ResponseID") %>%
   left_join(external.data.home, by=c("Q2.2_cow"="home.cowcode")) %>%
   left_join(clean.ids, by="ResponseID") %>%
