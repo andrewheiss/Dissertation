@@ -945,6 +945,63 @@ fig.save.cairo(plot.time.country,
 ```
 
 
+### Collaboration
+
+```{r analyze-collaboration, results="asis"}
+df.collaboration.raw <- survey.orgs.clean %>%
+  mutate(small.org = Q3.4.num <= 50,
+         small.org = factor(small.org, levels=c(TRUE, FALSE),
+                            labels=c("0–50 employees", "51+ employees"),
+                            ordered=TRUE)) %>%
+  filter(!is.na(small.org)) %>%
+  select(clean.id, small.org, Q3.6_clean) %>%
+  unnest(Q3.6_clean) 
+
+df.collaboration.raw %>%
+  group_by(Q3.6_clean) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  pandoc.table()
+
+df.collaboration.plot <- df.collaboration.raw%>%
+  filter(!(Q3.6_clean %in% c("Other", "Individuals", "Don't know", 
+                             "We do not collaborate with other organizations or institutions"))) %>%
+  mutate(Q3.6_clean = fct_collapse(Q3.6_clean,
+    "NGOs" = 
+      c("Other nongovernmental organizations (NGOs)",
+        "Academic organizations",
+        "Faith-based organizations"),
+    "Corporations" = 
+      c("Corporations or businesses", "Media"),
+    "IGOs" = "International organizations (IGOs)"
+  )) %>%
+  group_by(small.org, Q3.6_clean) %>%
+  summarise(num = n()) %>%
+  group_by(small.org) %>%
+  mutate(total = sum(num)) %>%
+  ungroup() %>%
+  mutate(prop = num / total) %>%
+  arrange(small.org, prop) %>%
+  mutate(Q3.6_clean = ordered(fct_inorder(Q3.6_clean)))
+
+plot.collaboration <- ggplot(df.collaboration.plot, 
+                             aes(x=prop, y=Q3.6_clean, colour=fct_rev(small.org))) + 
+  geom_pointrangeh(aes(xmin=0, xmax=prop), position=position_dodgev(height=0.5),
+                   size=0.5) + 
+  labs(x="Proportion selected", y=NULL) +
+  scale_colour_manual(values=ath.palette("org.size"), name=NULL) +
+  scale_x_continuous(labels=scales::percent) +
+  guides(colour=guide_legend(reverse=TRUE)) +
+  theme_ath() + theme(panel.grid.major.y=element_blank())
+
+plot.collaboration
+
+fig.save.cairo(plot.collaboration,
+               filename="3-collaboration-size",
+               width=4.5, height=2.5)
+```
+
+
 ## Relationship with host governments
 
 ### Regime type
