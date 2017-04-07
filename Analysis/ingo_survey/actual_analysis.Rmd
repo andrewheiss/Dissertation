@@ -534,10 +534,12 @@ continents.river <- makeRiver(nodes.fancy, edges.fancy)
 # Use pryr's active binding function (%<a-%) to essentially save a chunk of R
 # code to an object that can then get re-run later, like a macro.
 countries.marked.plot %<a-% {
-  plot(continents.river, srt=0, lty=0)
-  text(1, 0, "HQ", adj=c(0.5, -0.5), font=2)
-  text(2, 0, "Target", adj=c(0.5, -0.5), font=2)
-  text(1.5, 0, "Countries selected\n", adj=c(0.5, -0.5), font=2)
+  capture.output({
+    plot(continents.river, srt=0, lty=0, fix.pdf=TRUE)
+  }, file="/dev/null")
+  text(0, 0, "HQ", adj=c(0.5, -0.5), font=2)
+  text(1, 0, "Target", adj=c(0.5, -0.5), font=2)
+  text(0.5, 0, "Countries selected\n", adj=c(0.5, -0.5), font=2)
 }
 ```
 
@@ -610,10 +612,12 @@ continents.river.answered <- makeRiver(nodes.fancy.answered,
                                        edges.fancy.answered)
 
 countries.answered.plot %<a-% {
-  plot(continents.river.answered, srt=0, lty=0)
-  text(1, 0, "HQ", adj=c(0.5, -0.5), font=2)
-  text(2, 0, "Target", adj=c(0.5, -0.5), font=2)
-  text(1.5, 0, "Countries answered\n", adj=c(0.5, -0.5), font=2)
+  capture.output({
+    plot(continents.river.answered, srt=0, lty=0, fix.pdf=TRUE)
+  }, file="/dev/null")
+  text(0, 0, "HQ", adj=c(0.5, -0.5), font=2)
+  text(1, 0, "Target", adj=c(0.5, -0.5), font=2)
+  text(0.5, 0, "Countries answered\n", adj=c(0.5, -0.5), font=2)
 }
 ```
 
@@ -660,7 +664,7 @@ fig.save.cairo(plot.regions,
 
 ### Both at once
 
-```{r plot-regions-river, fig.width=8, fig.height=3.5}
+```{r plot-regions-river, echo=FALSE, fig.height=3.5, fig.width=8}
 countries.marked.answered.both %<a-% {
   split.screen(c(1, 2))
   screen(1)
