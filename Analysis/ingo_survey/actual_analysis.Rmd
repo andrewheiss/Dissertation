@@ -797,29 +797,33 @@ high.contention.work <- survey.orgs.clean %>%
 
 ### Staffing
 
-```{r analyze-staffing}
+```{r analyze-staffing, results="asis"}
 df.staff <- survey.orgs.clean %>%
   select(employees = Q3.4.num, volunteers = Q3.5.num) %>%
   filter(employees < 10000, volunteers < 10000) %>%
   mutate(no.emps = employees == 0,
          no.vols = volunteers == 0)
 
-df.staff %>% count(no.vols) %>% mutate(prop = n / sum(n))
+df.staff %>% count(no.vols) %>% mutate(prop = n / sum(n)) %>% pandoc.table()
 
 df.staff %>% 
   group_by(no.emps, no.vols) %>% 
   summarise_at(vars(employees, volunteers),
                funs(n(), median, mean)) %>%
   ungroup() %>%
-  mutate(prop = employees_n / sum(employees_n))
+  mutate(prop = employees_n / sum(employees_n)) %>%
+  pandoc.table()
 
 df.staff.long <- df.staff %>%
   select(employees, volunteers) %>%
-  gather(key, value)
+  gather(key, value) %>%
+  mutate(key = str_to_title(key))
 
 ggplot(df.staff.long, aes(x=value, fill=key)) +
   geom_histogram(binwidth = 0.5) + 
   scale_x_continuous(trans="log1p", breaks=c(0, 10^(0:6), 5000000), labels=scales::comma) +
+  scale_fill_manual(values=ath.palette("staffing"), name=NULL) +
+  labs(x=NULL, y="Number of staff") +
   theme_ath()
 ```
 
