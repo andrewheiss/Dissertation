@@ -917,6 +917,34 @@ fig.save.cairo(plot.funding.both,
 ```
 
 
+### Time in country
+
+```{r analyze-time-in-country}
+df.time.country <- survey.clean.all %>%
+  filter(!is.na(Q4.2), Q4.2 != "Don't know") %>%
+  group_by(Q4.2, target.regime.type) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(Q4.2 = factor(Q4.2, levels=rev(levels(Q4.2)), ordered=TRUE))
+
+df.time.country.denom <- sum(df.time.country$num)
+
+plot.time.country <- ggplot(df.time.country, aes(x=num, y=Q4.2, colour=target.regime.type)) +
+  geom_pointrangeh(aes(xmin=0, xmax=num), position=position_dodgev(height=0.5),
+                   size=0.5) + 
+  scale_x_continuous(sec.axis = sec_axis(~ . / df.time.country.denom,
+                                         labels=scales::percent)) +
+  scale_colour_manual(values=ath.palette("regime2"), name=NULL) +
+  labs(x="Number of responses", y=NULL) +
+  theme_ath() + theme(panel.grid.major.y=element_blank())
+plot.time.country
+
+fig.save.cairo(plot.time.country,
+               filename="3-time-country",
+               width=4.5, height=2.5)
+```
+
+
 ## Relationship with host governments
 
 ### Regime type
