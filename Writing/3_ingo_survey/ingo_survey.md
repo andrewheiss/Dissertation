@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss&#x40;duke.edu
-date: March 22, 2017
+date: April 6, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -27,7 +27,7 @@ This sharp divergence between OSF and the Carnegie Center illustrates a broader 
 In this chapter, I argue that the political, legal, and regulatory institutions of the countries that INGOs target and work in have a substantial influence on these organizations' strategies and programming. I present an original theoretical model to explain and predict how INGOs respond to authoritarian regulations and restrictions, given an organization's core principles, its instrumental concerns, and its power relative to the regime, and I test this theory using the results from a global survey of more than 600 INGOs.
 
 
-## Framework mechanisms
+# Framework mechanisms
 
 As noted earlier, three mechanisms factor in to an INGO's decision-making calculus and programming choices, each corresponding to an element of the theoretical model. The first two mechanisms—the ideal point and the region extending from that point—represent a tension peculiar to third sector organizations. INGOs must balance their normative principles against the instrumental need of organizational survival. Unlike states or firms that generally face singular goals, like maximizing national security or maximizing profits, INGOs face a tradeoff between mission and money and must pursue both simultaneously—they must "instrumentally pursue their principled objectives within the economic constraints and political opportunity structures imposed by their external environments" [@MitchellSchmitz:2014, 489]. 
 
@@ -52,7 +52,7 @@ There is no central database of all international NGOs active in the world, and 
 
 For the purposes of this study, in an effort to capture the broadest range of potential organizations, I consider an international nongovernmental organization to be any organizations that is not privately or governmentally incorporated that conducts advocacy, provides services, or otherwise works in at least *one* country other than the one it is headquartered in. Using this minimalist definition provides several benefits. First, it allows me to bracket the longstanding definitional debate discussed above. While this debate raises important questions about the nature of international NGOs, the scope of their operations, and their role in global politics, it has less bearing on how these organizations are treated by their host countries. Legislation and regulation governing the behavior of international NGOs is not based on whether an organization has official ECOSOC status, works in a certain number of countries, or defines itself as international or transnational. Instead, the legal regime for regulating INGOs in most countries looks at more practical organizational characteristics, such as an organization's organizational structure (members of the board, staff ratios, etc.) or sources of funding, and laws tend to target both domestic and international NGOs simultaneously.
 
-Second, stricter definitions of internationality, such as the Yearbook's requirement that an organization works in at least three countries, omit smaller NGOs that are nonetheless international. Broadening the definition of international NGO allows me to better capture the experiences of these smaller organizations and permits me to explore the effect of organization size and geographic scope on its response to regulations. The he number of countries an organization works in likely affects its flexibility—if an INGO works only in one country, it cannot easily shift its resources to another country in response to harsher restrictions, while an INGO with programs in dozens of of countries can likely make more programmatic adjustments.
+Second, stricter definitions of internationality, such as the Yearbook's requirement that an organization works in at least three countries, omit smaller NGOs that are nonetheless international. Broadening the definition of international NGO allows me to better capture the experiences of these smaller organizations and permits me to explore the effect of organization size and geographic scope on its response to regulations. The number of countries an organization works in likely affects its flexibility—if an INGO works only in one country, it cannot easily shift its resources to another country in response to harsher restrictions, while an INGO with programs in dozens of of countries can likely make more programmatic adjustments.
 
 ## Creation of list of international NGOs
 
@@ -120,23 +120,37 @@ Finally, responding organizations tackle a variety of issues (see @fig:issues-wo
 
 # Characteristics that drive INGO behavior
 
+
+
 ## Mission, vision, and values
 
 `TODO`: Adherence to mission, vision, and values (from free response questions)
 
+Q3.3?
+
 ## Instrumental flexibility
 
-`TODO`: Differences in instrumental approaches, operational flexibility
+Though INGOs aspire to fulfill their core principles articulated in their mission, vision, and values, organizations are constrained by more practical, instrumental concerns. Responses to government restriction and regulation are determined in part by how much flexibility organizations can exercise in adapting to the changing environment, and this instrumental flexibility can take many forms, including organization size, funding sources, knowledge of the host country, and patterns of collaboration. 
 
-- How NGOs operate in the country (local office, remote office, fund local NGOs, etc.: `Q4.3`)
-- Length of time in the country: `Q4.2`
-- Size of organization (number of employees, volunteers: `Q3.4–5`)
-- Sources of funding: `Q3.8`
-- Collaboration with other organizations: `Q3.6`
+Most of the organizations that responded tend to be small, with half employing eight or fewer staff members. This does not mean, however, that the INGO sector as a whole employs few people—because of dozens of large organizations with hundreds (and even thousands) of employees, the average staff size is 50. These larger, better staffed organizations inherently need to have access to more financial resources to pay their employees, which can weigh NGOs down with fundraising concerns. At the same time, having more employees provides these larger organizations with more flexibility in the face of restrictions—if an organization is limited in one country, it can more easily shift programs and staff around to work in other countries or on other topics. In addition to full time staff, the majority of INGOs (93%) rely on volunteers to help implement their missions and programs. Half of responding INGOs use 25 or fewer employees, and the average (290) is again inflated by large, well funded INGOs that can afford to train, equip, and manage many more volunteers. Notably, 20% of responding organizations employ no formal staff and instead rely completely on volunteers. Having no employees does not necessarily entail an exact substitution of paid staff for unpaid volunteers—organizations with no staff tend to use fewer volunteers (median = 20, mean = 242) than their staffed counterparts, likely because managing volunteers imposes costs on organizations.
+
+![Level of reliance on sources of funding, divided by organization size](../../Output/figures/3-funding-size){#fig:funding-size}
+
+Variation in funding sources also helps determine an organization's flexibility. Government grants—from host countries, target countries, and other donors countries—are the most common stream of income reported by respondents, followed by individual donations, grants from NGOs and foundations, and corporate giving (see left panel of @fig:funding-size). Additionally, dozens of respondents report generating their own income through fundraising efforts, member fees, consulting services, and unrelated business income. The size of the organization is related to the funding sources it relies on. Organizations that employ more than 50 people selected an average of 4 streams of funding, while smaller organizations reported an average of 3. The mix and selection of funding sources can also depend on organization size (see right panel of @fig:funding-size). Smaller organizations are most likely to rely primarily on fundraising, member fees, and individual donations, and less heavily on grants from NGOs, foundations, and corporations. Additionally, nearly two thirds of smaller organizations explicitly eschew government funding, relying instead on other sources of revenue. Larger organizations also rely on fundraising, individual donations, and foundation grants, but are also far more likely than their smaller counterparts to draw money from governments, IGOs, and corporations. Larger INGOs tend to juggle more revenue streams to support their additional staff and programming, and these organizations are more likely to rely on government funding, which can come with more conditions and strings attached than private donations. With this diversification in income sources comes flexibility—if an organization fails to obtain a government grant, it can turn to foundations, fundraising, or other sources to compensate. Organizations with more sources of funding are thus likely more flexible when facing restrictions on their programs abroad.
+
+![Frequency of collaboration, divided by organization size](../../Output/figures/3-collaboration-size){#fig:collaboration-size}
+
+INGOs can also find flexibility in collaborative relationships. Organizations that work in isolation can find it difficult to make adjustments or offload programs and work when facing restrictions and limitations on their work, while those that work closely with other organizations can benefit from their expertise, support, and social networks. Most organizations indicate collaborating with at least one other actor; only nineteen respondents explicitly stated that they do not collaborate at all. INGOs tend to collaborate most frequently with other NGOs, followed by IGOs, governments, and corporations (@fig:collaboration-size). As with funding, organization size is associated with patterns of collaboration. Smaller organizations are more likely to collaborate with NGOs, while larger INGOs collaborate more frequently with governments and corporations, mirroring patterns in funding sources seen previously.
+
+![Length of time in host country, divided by regime type](../../Output/figures/3-time-country){#fig:time-country}
+
+A final source of operational flexibility is the familiarity an organization has with the country it targets. INGOs that have a longer presence in a country tend to have deeper institutional knowledge of that country and can better navigate the bureaucracy and work with local officials and NGOs. Responding organizations vary in how long they have been active in the countries they answered about (see @fig:time-country). Organizations working in democracies are most likely to have been in those countries for more than a decade, while those working in autocracies are equally likely to either be newer entrants (with a presence of 1–4 years) or have a more longstanding presence. 
+
+`TODO`: How these sources of flexibility influence practical strategies: `Q4.3` (local office, remote office, fund local NGOs, etc.)
 
 ## Alignment of mission with the regime preferences
 
-A key element of my theory of amicable contempt is alignment with the regime—INGOs working on issues that a regime finds favorable and inline with its own preferences will be treated differently than INGOs working on more threatening, less aligned topics. I divide the self-reported respondent issues into two levels of potential high or low regime contentiousness. As seen in @fig:issues-worked-on, highly contentious issues include human rights, advocacy, human trafficking, freedom of expression, conflict, and democracy assistance—all issues that pose a direct threat to regime policies and stability. Less contentious issues like education, development, health, and the environment reflect policy areas where governments are more willing to accept intervention and assistance. 
+The final factor that determines how an INGO relates to its host country is how well it aligns with regime preferences—INGOs working on issues that a regime finds favorable and inline with its own preferences will be treated differently than INGOs working on more threatening, less aligned topics. I divide the self-reported respondent issues into two levels of potential high or low regime contentiousness. As seen in @fig:issues-worked-on, highly contentious issues include human rights, advocacy, human trafficking, freedom of expression, conflict, and democracy assistance—all issues that pose a direct threat to autocratic policies and stability. Less contentious issues like education, development, health, and the environment reflect policy areas where governments are more willing to accept intervention and assistance. 
 
 ![Frequency of INGO engagement in different types of activities; organizations answered about one or more activities](../../Output/figures/3-main-activities){#fig:main-activities}
 
@@ -219,8 +233,7 @@ Not all changes in NGO laws lead to restrictions on activities, however. Researc
 Survey respondents confirm this. Nearly two-thirds of INGOs that feel the most restricted by government regulations work in autocracies, compared to 25% of organizations that report facing no restrictions in similar regimes (see @fig:restriction-both).[^59] The relationship between host country regime type and feelings of restriction is quite marked, with the proportion of respondents working in autocracies decreasing steadily as the feeling of restriction decreases. Interestingly, there is not as clear of a relationship between the contentiousness of INGO programming and feelings of restriction. Half of highly restricted organizations work on contentious issues, but there is no significant difference between the other levels of restriction—roughly 25% of organizations answering each other level of restriction work have contentious programming. It thus appears that the findings in @fig:djcw-reg-regime hold true—governments are increasingly passing routine NGO laws, but those laws are far more burdensome in autocracies, where they are designed to restrict NGO activities.
 
 ![Feeling of restriction in host country, separated by regime type and issue contentiousness (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-restriction-both){#fig:restriction-both}
-
-## Effect of laws on INGO missions
+# Effect of laws on INGO missions
 
 How do the regulations of host countries affect INGOs' ability to pursue their mission? Do more burdensome and restrictive regulations make it harder to be successful?
 
@@ -228,7 +241,7 @@ How do all these regulations affect the ability to pursue mission? (`Q4.18`)
 
 In their free response questions, INGOs provide a rich picture of the effects of these regulations on their programs, activities, and behaviors.
 
-### Registration
+## Registration
 
 Registration is one of the most common forms of government regulation of NGO activities—as seen in @fig:djcw-reg-regime, more than half of countries require that NGOs register with a government agency. NGO experiences with registration, however, are mixed. Roughly 50% of responding organizations are *not* formally registered in their host countries (see top panel of @fig:registration-all), and there is no significant difference between the registration status of INGOs working either in autocratic regimes or working on contentious issues. Registration status is correlated, however, with organizations' perceptions of restriction (see bottom panel of @fig:registration-all). In both types of regimes, organizations that report not feeling restricted are the most likely to not be registered, while those that feel moderately restricted are the least likely to register. Curiously, organizations that are the most restricted are just as likely to be registered as their unrestricted counterparts. This could indicate that avoidance of the state is one strategy for dealing with heavy restrictions—organizations facing no restrictions do not feel the need to register while organizations facing the strictest limitations actively work to avoid registration. 
 
@@ -245,16 +258,16 @@ Stories from free responses
 - Can't build offices
 - Easier in EU, west
 
-### Operations
+## Operations
 
 - Locked into programs
 - Regulations give government control sometimes
 
-### Advocacy
+## Advocacy
 
 - Self-censorship, fear of crossing the line
 
-### Assembly
+## Assembly
 
 - Unfounded fears of foreign influence
 - Prohibition from contacting foreign organizations
@@ -262,18 +275,18 @@ Stories from free responses
 - Arrests
 - Apply for permission
 
-### Funding
+## Funding
 
 - Disclose sources of funding
 
-### Indirect, unrelated regulations
+## Indirect, unrelated regulations
 
 - Payroll taxes and health insurance
 - Fees
 - Irrational visa restrictions
 
 
-### What about organizations that don't feel restricted?
+## What about organizations that don't feel restricted?
 
 The experiences of these INGOs paints a dire picture of the regulatory environment for foreign organizations and helps confirm the notion of an ongoing crackdown on  global civil society. However, X% of respondents indicated feeling little to no restrictions in their host countries? Why is that?
 
