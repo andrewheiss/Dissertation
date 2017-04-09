@@ -20,7 +20,7 @@ Integrative mixed methods research + large-N and small-N analysis (LNA/SNA) from
 
 ---- 
 
-Predicted vs. actual CSRE in @fig:2-sna-selection
+Predicted (based on the actual model, not based on theory) vs. actual CSRE in @fig:2-sna-selection
 
 ![Predicted vs. actual CSRE](../../Output/figures/2-sna-selection){#fig:2-sna-selection}
 

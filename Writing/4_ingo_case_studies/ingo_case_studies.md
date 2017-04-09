@@ -32,7 +32,7 @@ IRI marked as Undesirable Organization in Russia: http://www.iri.org/resource/ru
 
 ---- 
 
-Make some sort of typology
+Build typology of theory, fit case study organizations into it
 
  - Relative contentiousness of work, programming
 - Strength of mission
