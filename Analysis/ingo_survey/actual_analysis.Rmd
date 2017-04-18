@@ -64,11 +64,19 @@ options(contrasts=rep("contr.treatment", 2))
 
 # Load cleaned, country-based survey data (*with* the Q4\* loop)
 survey.clean.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
-                                      "survey_clean_all.rds"))
+                                      "survey_clean_all.rds")) %>%
+  mutate(small.org = Q3.4.num <= 50,
+         small.org = factor(small.org, levels=c(TRUE, FALSE),
+                            labels=c("0–50 employees", "51+ employees"),
+                            ordered=TRUE))
 
 # Load cleaned, organization-based data (without the Q4 loop)
 survey.orgs.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
-                                       "survey_orgs_clean.rds"))
+                                       "survey_orgs_clean.rds")) %>%
+  mutate(small.org = Q3.4.num <= 50,
+         small.org = factor(small.org, levels=c(TRUE, FALSE),
+                            labels=c("0–50 employees", "51+ employees"),
+                            ordered=TRUE)) 
 
 # Load cleaned, country-based data (only the Q4 loop)
 survey.countries.clean <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
@@ -832,10 +840,6 @@ ggplot(df.staff.long, aes(x=value, fill=key)) +
 
 ```{r analyze-funding, results="asis"}
 df.funding <- survey.orgs.clean %>%
-  mutate(small.org = Q3.4.num <= 50,
-         small.org = factor(small.org, levels=c(TRUE, FALSE),
-                            labels=c("0–50 employees", "51+ employees"),
-                            ordered=TRUE)) %>%
   filter(!is.na(small.org)) %>%
   select(clean.id, small.org, Q3.8.num, Q3.8) %>%
   filter(!is.na(Q3.8.num))
@@ -949,10 +953,6 @@ fig.save.cairo(plot.time.country,
 
 ```{r analyze-collaboration, results="asis"}
 df.collaboration.raw <- survey.orgs.clean %>%
-  mutate(small.org = Q3.4.num <= 50,
-         small.org = factor(small.org, levels=c(TRUE, FALSE),
-                            labels=c("0–50 employees", "51+ employees"),
-                            ordered=TRUE)) %>%
   filter(!is.na(small.org)) %>%
   select(clean.id, small.org, Q3.6_clean) %>%
   unnest(Q3.6_clean) 
@@ -999,6 +999,79 @@ plot.collaboration
 fig.save.cairo(plot.collaboration,
                filename="3-collaboration-size",
                width=4.5, height=2.5)
+```
+
+
+### Flexibility and practical strategies
+
+```{r analyze-strategies}
+df.operations <- survey.clean.all %>%
+  unnest(Q4.3_value) %>%
+  group_by(Q4.3_value) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q4.3_value), Q4.3_value != "Don't know") %>%
+  mutate(operation = factor(Q4.3_value, levels=rev(Q4.3_value), ordered=TRUE),
+         operation = fct_recode(operation,
+           `Maintain a physical office staffed\nprimarily by people from target_country` = 
+             "Maintain a physical office staffed primarily by people from target_country",
+           `Maintain a physical office staffed\nprimarily by foreigners` = 
+             "Maintain a physical office staffed primarily by foreigners"
+           ))
+
+plot.operations <- ggplot(df.operations, aes(x=num, y=operation)) + 
+  geom_pointrangeh(aes(xmin=0, xmax=num)) + 
+  labs(x="Times selected", y=NULL) +
+  theme_ath() + theme(panel.grid.major.y=element_blank())
+
+plot.operations
+
+fig.save.cairo(plot.operations,
+               filename="3-operations",
+               width=4.5, height=2)
+```
+
+```{r analyze-strategies-size, results="asis"}
+df.strategies.size <- survey.clean.all %>%
+  mutate(num.strategies = Q4.3_value %>% map_int(length)) %>%
+  filter(!is.na(Q4.3_value), !is.na(small.org))
+
+strategies.size.bayes <- diff.groups.bayes(num.strategies ~ small.org, 
+                                           data=df.strategies.size, prop=FALSE)
+
+grid.arrange(strategies.size.bayes$plot.groups,
+             strategies.size.bayes$plot.diffs)
+
+strategies.size.bayes$samples.summary %>% pandoc.table()
+strategies.size.bayes$diffs.summary %>% pandoc.table()
+```
+
+```{r analyze-strategies-funding}
+df.strategies.funding <- survey.clean.all %>%
+  mutate(num.strategies = Q4.3_value %>% map_int(length)) %>%
+  filter(!is.na(Q4.3_value), Q3.8.num < 7) %>%
+  select(num.strategies, Q3.8.num)
+  
+ggplot(df.strategies.funding, aes(x=Q3.8.num, y=num.strategies, group=Q3.8.num)) +
+  geom_point(position=position_jitter()) + 
+  geom_violin() +
+  labs(x="Number of funding sources", y="Number of operational strategies") +
+  theme_ath()
+```
+
+```{r analyze-strategies-collaboration}
+df.strategies.collaboration <- survey.clean.all %>%
+  mutate(num.strategies = Q4.3_value %>% map_int(length),
+         num.collaborations = Q3.6_num) %>%
+  filter(!is.na(Q4.3_value), !is.na(Q3.6_num)) %>%
+  select(num.strategies, num.collaborations)
+
+ggplot(df.strategies.collaboration, aes(x=num.collaborations, y=num.strategies, 
+                                        group=num.collaborations)) +
+  geom_point(position=position_jitter()) + 
+  geom_violin() +
+  labs(x="Number of collaborative partners", y="Number of operational strategies") +
+  theme_ath()
 ```
 
 
