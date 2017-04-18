@@ -1021,6 +1021,8 @@ df.operations <- survey.clean.all %>%
 
 plot.operations <- ggplot(df.operations, aes(x=num, y=operation)) + 
   geom_pointrangeh(aes(xmin=0, xmax=num)) + 
+  scale_x_continuous(sec.axis = sec_axis(~ . / nrow(survey.clean.all),
+                                         labels=scales::percent)) +
   labs(x="Times selected", y=NULL) +
   theme_ath() + theme(panel.grid.major.y=element_blank())
 
