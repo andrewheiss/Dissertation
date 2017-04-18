@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss&#x40;duke.edu
-date: April 6, 2017
+date: April 18, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -148,7 +148,9 @@ INGOs can also find flexibility in collaborative relationships. Organizations th
 
 A final source of operational flexibility is the familiarity an organization has with the country it targets. INGOs that have a longer presence in a country tend to have deeper institutional knowledge of that country and can better navigate the bureaucracy and work with local officials and NGOs. Responding organizations vary in how long they have been active in the countries they answered about (see @fig:time-country). Organizations working in democracies are most likely to have been in those countries for more than a decade, while those working in autocracies are equally likely to either be newer entrants (with a presence of 1–4 years) or have a more longstanding presence. 
 
-`TODO`: How these sources of flexibility influence practical strategies: `Q4.3` (local office, remote office, fund local NGOs, etc.)
+![In-country operational strategies; multiple answers allowed](../../Output/figures/3-operations){#fig:operations}
+
+The amount of flexibility an organization enjoys influences the variety of programs and strategies it is able to implement. For instance, @fig:operations shows the frequency responding organizations engage in four broad types of operations: funding local NGOs, partnering directly with local NGOs, maintaining an office staffed by locals, and maintaining an office staffed by foreigners. Most respondents partner with domestic NGOs and maintain locally-staffed countries when possible. Organizations with more flexibility, however, selected more strategies. On average, employing more employees, drawing from more funding sources, and collaborating with more partners are each associated with a greater number of operational strategies.[^18] Better funded, staffed, and cooperative INGOs can afford to staff offices in multiple countries and fund and partner with local organizations. 
 
 ## Alignment of mission with the regime preferences
 
@@ -156,9 +158,9 @@ The final factor that determines how an INGO relates to its host country is how 
 
 ![Frequency of INGO engagement in different types of activities; organizations answered about one or more activities](../../Output/figures/3-main-activities){#fig:main-activities}
 
-This division of INGOs into contentious and non contentious programming aligns well with the activities INGOs report engaging in. @fig:main-activities shows how frequently responding organizations work on a variety of types of programming.[^18] If the division of contentiousness is correct, low contention INGOs should provide direct aid and services and engage in research and public education most frequently, since these types of programming pose little threat to the target country regime. High contention INGOs, on the other hand, should deal most often with more threatening activities like advocacy, political mobilization, and government monitoring. As seen in the figure, 60% of low contention organizations indicated they almost always provide aid, half almost always engage in research, and less than 40% monitor the government or mobilize people. Interestingly, about half of low contention organizations reported regularly engaging in advocacy. However, this form of advocacy appears to still be noncontentious: respondents describe advocating for "expanded public health programs,"[^19] "agr[i]culture,"[^20] "volunteerism,"[^21] "girls completing secondary education,"[^22] or expanding "access [to] health and justice."[^23] 
+This division of INGOs into contentious and non contentious programming aligns well with the activities INGOs report engaging in. @fig:main-activities shows how frequently responding organizations work on a variety of types of programming.[^19] If the division of contentiousness is correct, low contention INGOs should provide direct aid and services and engage in research and public education most frequently, since these types of programming pose little threat to the target country regime. High contention INGOs, on the other hand, should deal most often with more threatening activities like advocacy, political mobilization, and government monitoring. As seen in the figure, 60% of low contention organizations indicated they almost always provide aid, half almost always engage in research, and less than 40% monitor the government or mobilize people. Interestingly, about half of low contention organizations reported regularly engaging in advocacy. However, this form of advocacy appears to still be noncontentious: respondents describe advocating for "expanded public health programs,"[^20] "agr[i]culture,"[^21] "volunteerism,"[^22] "girls completing secondary education,"[^23] or expanding "access [to] health and justice."[^24] 
 
-As expected, high contention organizations are most likely to report always engaging in advocacy (63%) and monitoring government policies (53%), including advocating for the recognition and safety of human rights defenders,[^24]assisting with the "rehabilitation of repentant terrorists,"[^25] promoting religious freedom and human rights, [^26] and "holding … leaders accountable" for their policies and actions.[^27] These more contentious organizations engage in research and public education as the third most common primary activity (53%). These educational activities clearly post more of a threat to the government and are more focused on human rights, such as maintaining a death penalty policy database,[^28] organizing activist training sessions and hackathons,[^29] or developing country-specific media literacy training programs.[^30] These organizations only sometimes provide direct aid and services, in contrast to their low contention counterparts. Finally, both kinds of INGOS are least likely to report always engaging in political mobilization, which is understandable for low contention organizations but surprising for those working on more contentious issues. INGOs may have conflated this kind of work with engaging in research—organizations mentioned political mobilization and campaigns in many of their explanations of their research and public education work.
+As expected, high contention organizations are most likely to report always engaging in advocacy (63%) and monitoring government policies (53%), including advocating for the recognition and safety of human rights defenders,[^25]assisting with the "rehabilitation of repentant terrorists,"[^26] promoting religious freedom and human rights, [^27] and "holding … leaders accountable" for their policies and actions.[^28] These more contentious organizations engage in research and public education as the third most common primary activity (53%). These educational activities clearly post more of a threat to the government and are more focused on human rights, such as maintaining a death penalty policy database,[^29] organizing activist training sessions and hackathons,[^30] or developing country-specific media literacy training programs.[^31] These organizations only sometimes provide direct aid and services, in contrast to their low contention counterparts. Finally, both kinds of INGOS are least likely to report always engaging in political mobilization, which is understandable for low contention organizations but surprising for those working on more contentious issues. INGOs may have conflated this kind of work with engaging in research—organizations mentioned political mobilization and campaigns in many of their explanations of their research and public education work.
 
 This division of contentiousness is by no means perfect. As seen in the case of China in the previous chapter, education INGOs can pose a threat to regime stability as governments fear the spread of foreign influence among their youth, and development INGOs can rival weak central governments and create territorial "fiefdoms" to supersede the regime [@Schuller:2012]. However, while the division between low and high contention issues is fairly simplistic, it does appear to accurately capture (1) the broad types of programs that INGOs engage in, and (2) the range of possible objections governments are likely to raise (or not raise).
 
@@ -169,33 +171,33 @@ These three characteristics—mission, flexibility, and alignment with the regim
 
 ## Relationship with host governments
 
-In general, INGOs have a fairly positive relationship with their host governments (@fig:govt-positivity-both)—only 10% of respondents report having a somewhat or extremely negative relationship, while the remainder either have a positive relationship or are ambivalent.[^31] Opinions of the positivity of this relationship depend on the type of government and the contentiousness of the INGO's issue. 60% of INGOs that reported a negative relationship work in autocracies, while only 20–30% of organizations with a positive or ambivalent relationship work in similar regimes.[^32] Similarly, 50% of organizations with a negative relationship work on contentious issues. In fact, 17% of high contention organizations have a negative relationship with their hosts, in contrast to only 8% of low contention organizations.[^33] 
+In general, INGOs have a fairly positive relationship with their host governments (@fig:govt-positivity-both)—only 10% of respondents report having a somewhat or extremely negative relationship, while the remainder either have a positive relationship or are ambivalent.[^32] Opinions of the positivity of this relationship depend on the type of government and the contentiousness of the INGO's issue. 60% of INGOs that reported a negative relationship work in autocracies, while only 20–30% of organizations with a positive or ambivalent relationship work in similar regimes.[^33] Similarly, 50% of organizations with a negative relationship work on contentious issues. In fact, 17% of high contention organizations have a negative relationship with their hosts, in contrast to only 8% of low contention organizations.[^34] 
 
 ![Opinions of relationship with host government, separated by regime type and issue contentiousness (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-govt-positivity-both){#fig:govt-positivity-both}
 
-This trend towards highly contentious INGOs working in authoritarian regimes having a more negative relationship with the regime reflects respondent experiences. Organizations working on low contention issues that align with government needs report having a close and cordial working relationship with their hosts. A health organization working in West Africa explains that "[w]e work very closely with government hospitals and universities, [and we meet with] various health ministers [regularly],"[^34]and a development organization working in Central America reports that "[w]e work very closely with the trade unions, many of whom have representatives in the National Assembly," and that they have a good relationship with the host government's foreign ministry and with their ambassador in the organization's home country.[^35] Government officials are often enthusiastic about NGO work and sometimes "verbally express their gratitude to work with" foreign NGOs.[^36] One education INGO working in a South Asian dictatorship summarizes the experiences of many low-contention organizations optimistically: "We really do not have any problem with them, mater [sic] of fact they work with us so well that when we need any kind of help they are there for us to assist. We have a great relationship."[^37]
+This trend towards highly contentious INGOs working in authoritarian regimes having a more negative relationship with the regime reflects respondent experiences. Organizations working on low contention issues that align with government needs report having a close and cordial working relationship with their hosts. A health organization working in West Africa explains that "[w]e work very closely with government hospitals and universities, [and we meet with] various health ministers [regularly],"[^35]and a development organization working in Central America reports that "[w]e work very closely with the trade unions, many of whom have representatives in the National Assembly," and that they have a good relationship with the host government's foreign ministry and with their ambassador in the organization's home country.[^36] Government officials are often enthusiastic about NGO work and sometimes "verbally express their gratitude to work with" foreign NGOs.[^37] One education INGO working in a South Asian dictatorship summarizes the experiences of many low-contention organizations optimistically: "We really do not have any problem with them, mater [sic] of fact they work with us so well that when we need any kind of help they are there for us to assist. We have a great relationship."[^38]
 
-Not all organizations enjoy such a warm relationship with the government. Some low contention organizations have poor relationships with their host governments because of poor governance, with one disaster relief INGO working in Southeast Asia reporting that "There is a lot of bureaucracy and corruption. We spend so much time to get approval in the projects. We don't agree to pay bribe, which makes or work even more difficult."[^38] 
+Not all organizations enjoy such a warm relationship with the government. Some low contention organizations have poor relationships with their host governments because of poor governance, with one disaster relief INGO working in Southeast Asia reporting that "There is a lot of bureaucracy and corruption. We spend so much time to get approval in the projects. We don't agree to pay bribe, which makes or work even more difficult."[^39] 
 
 More commonly, though, INGOs working on more contentious issues face more negative relationships. An organization working in Central Africa identifies their programming as the source of this poor relationship:
 
-> we document and report human rights violation, we organise presse conference to denounce and alert the peoples on pertinent cases, the government is against this and task us to be instrumantalised by europeans and americans, we undergo threats of all forms and some times watch our meetings monitored. [sic][^39]
+> we document and report human rights violation, we organise presse conference to denounce and alert the peoples on pertinent cases, the government is against this and task us to be instrumantalised by europeans and americans, we undergo threats of all forms and some times watch our meetings monitored. [sic][^40]
 
 This organization's mission to report on human rights violations makes its relationship with the government naturally combative, and the government responds by conflating INGO programming with former imperial influence and by closely following the organization's activities. This link between contentious programming and poor relationships is reiterated by other human rights INGOs working in Oceania and the Middle East:
 
-> We are highly critical of them and their policies and laws. We are human rights defenders at risk of prosecution for our work in sharing information with the UN human rights mechanisms. We are monitored by the security agency.[^40]
+> We are highly critical of them and their policies and laws. We are human rights defenders at risk of prosecution for our work in sharing information with the UN human rights mechanisms. We are monitored by the security agency.[^41]
 
-> The government does not want us to document violations of human rights and fundamental freedoms, including systematic torture and abuse of civilians, civil society activists and women rights defenders.[^41]
+> The government does not want us to document violations of human rights and fundamental freedoms, including systematic torture and abuse of civilians, civil society activists and women rights defenders.[^42]
 
-In chapter two, I argued that authoritarian regimes use international NGOs to promote regime stability. Here, respondent experiences reinforce this finding, showing that many authoritarian host governments clearly see foreign NGOs as threats to stability. Respondents note that their relationship with the government is often affected by the political atmosphere[^42] and that international NGOs in particular are seen as risky political actors.[^43] Some NGOs feel that accusations of acting as foreign political operatives are baseless and note that there is "much hue and cry about foreign money and agenda with out any evidence."[^44]
+In chapter two, I argued that authoritarian regimes use international NGOs to promote regime stability. Here, respondent experiences reinforce this finding, showing that many authoritarian host governments clearly see foreign NGOs as threats to stability. Respondents note that their relationship with the government is often affected by the political atmosphere[^43] and that international NGOs in particular are seen as risky political actors.[^44] Some NGOs feel that accusations of acting as foreign political operatives are baseless and note that there is "much hue and cry about foreign money and agenda with out any evidence."[^45]
 
-The foreign aspect of international NGOs appears to be the overriding trigger of fears for stability, most likely because it is more difficult to directly regulate or control non-domestic organizations. A conflict resolution INGO working in East Africa argues that it is difficult to work with the host government because "any organization or investor from a another country is viewed as a threat to the government of [the country], especially on issues resolving conflicts and human right[s]."[^45] Governments are especially wary of foreign organizations that work directly with citizens—for instance, one human rights INGO in East Africa feels like the government considers it a threat to national security when staff conduct trainings in the community.[^46] Fears of foreign influence are not limited solely to contentious organizations. An education INGO working in Southern Africa reports government suspicion of their pro-education advocacy and training, noting that "[t]he government is security and politically conscious, and have a negative view to gatherings of people. They take gatherings as opportunities for political influence."[^47]
+The foreign aspect of international NGOs appears to be the overriding trigger of fears for stability, most likely because it is more difficult to directly regulate or control non-domestic organizations. A conflict resolution INGO working in East Africa argues that it is difficult to work with the host government because "any organization or investor from a another country is viewed as a threat to the government of [the country], especially on issues resolving conflicts and human right[s]."[^46] Governments are especially wary of foreign organizations that work directly with citizens—for instance, one human rights INGO in East Africa feels like the government considers it a threat to national security when staff conduct trainings in the community.[^47] Fears of foreign influence are not limited solely to contentious organizations. An education INGO working in Southern Africa reports government suspicion of their pro-education advocacy and training, noting that "[t]he government is security and politically conscious, and have a negative view to gatherings of people. They take gatherings as opportunities for political influence."[^48]
 
-Though fears of regime stability appear paramount in determining the relationship between INGOs and governments, the relationship between INGOs and their host governments is not always so antagonistic. Governments often take advantage of the foreign organizations working in their countries. While a few organizations note that governments take literal monetary advantage of foreign organizations—one INGO working in the Caribbean reports that "every regulation or law gives a potential pretext for an official or policeman to attempt to solicit a bribe"[^48]—many more explain how their host governments use their presence and their services to boost their own public image at home and abroad  The presence of foreign organizations in failed states can signal growing stability and instill confidence in potential investors. For example, an education INGO working in East Africa reports:
+Though fears of regime stability appear paramount in determining the relationship between INGOs and governments, the relationship between INGOs and their host governments is not always so antagonistic. Governments often take advantage of the foreign organizations working in their countries. While a few organizations note that governments take literal monetary advantage of foreign organizations—one INGO working in the Caribbean reports that "every regulation or law gives a potential pretext for an official or policeman to attempt to solicit a bribe"[^49]—many more explain how their host governments use their presence and their services to boost their own public image at home and abroad  The presence of foreign organizations in failed states can signal growing stability and instill confidence in potential investors. For example, an education INGO working in East Africa reports:
 
-> The [g]overnment is desperately seeking any form of cooperation with foreign countries to re-establish a resemblance of normality in a war-ravaged country that is slowly trying to lift off. Therefore any international action is warmly welcomed by top brass executives of any political side.[^49]
+> The [g]overnment is desperately seeking any form of cooperation with foreign countries to re-establish a resemblance of normality in a war-ravaged country that is slowly trying to lift off. Therefore any international action is warmly welcomed by top brass executives of any political side.[^50]
 
-The presence of foreign NGOs can also act as a signal of compliance with international norms to domestic audiences. INGOs provide specialized services and expertise that are often not offered by domestic firms or local governments. Government ministries tend to partner with INGOs "whenever they need… services"[^50] to take advantage of improved services and to access better resources. One disaster relief INGO working in South Asia reports having a close and productive relationship with the government, since it "has recognized how quickly and efficiently our nonprofit was able to provide relief services and has supported partnerships with us in many areas related to our programs of health, education and [disaster] recovery."[^51] Government officials will also use foreign NGO services and expertise for personal political gain—a public health INGO working in West Africa notes that "some state officials want your services to be in their home villages and community"[^52] as a form of pork barrel politics, securing aid and services for their constituents.
+The presence of foreign NGOs can also act as a signal of compliance with international norms to domestic audiences. INGOs provide specialized services and expertise that are often not offered by domestic firms or local governments. Government ministries tend to partner with INGOs "whenever they need… services"[^51] to take advantage of improved services and to access better resources. One disaster relief INGO working in South Asia reports having a close and productive relationship with the government, since it "has recognized how quickly and efficiently our nonprofit was able to provide relief services and has supported partnerships with us in many areas related to our programs of health, education and [disaster] recovery."[^52] Government officials will also use foreign NGO services and expertise for personal political gain—a public health INGO working in West Africa notes that "some state officials want your services to be in their home villages and community"[^53] as a form of pork barrel politics, securing aid and services for their constituents.
 
 Thus, the nature of the relationship between international NGOs and their host governments is the product of multiple factors. INGOs working on more contentious issues and implementing programs that pose more of a risk to the stability of their host regimes are most likely to have a negative relationship with the governments of their target countries. INGO alignment with regime preferences is essential for a good relationship. When a host government sees INGOs as risks to internal political stability their relationship will sour, but when it sees these foreign organizations as potential political assets, INGOs are likely to be embraced.
 
@@ -216,15 +218,15 @@ Governments are occasionally closely—and sometimes directly—involved in INGO
 
 ### Regulation
 
-The most common way the government affects INGO work, though, is by passing and implementing formal regulations. INGOs tend to be quite aware of the regulatory environment of their host countries, with more than 80% of respondents somewhat or very familiar with the laws regulating their activities (see @fig:familiarity-both).[^53] Familiarity is affected by the type of regime organizations work in. More than 75% of respondents who answered that they do not know anything about regulations work in democracies, while those most familiar with the regulatory environment are split roughly equally between democracies and autocracies.[^54] INGOs working in dictatorships are the most likely to be the most familiar with regulations, likely because deep knowledge of the legal environment is more essential to operate safely and effectively. The contentiousness of the issues INGOs work on does not help determine their familiarity—high contention INGOs are not more or less likely to be more aware of the legal environment.[^55]
+The most common way the government affects INGO work, though, is by passing and implementing formal regulations. INGOs tend to be quite aware of the regulatory environment of their host countries, with more than 80% of respondents somewhat or very familiar with the laws regulating their activities (see @fig:familiarity-both).[^54] Familiarity is affected by the type of regime organizations work in. More than 75% of respondents who answered that they do not know anything about regulations work in democracies, while those most familiar with the regulatory environment are split roughly equally between democracies and autocracies.[^55] INGOs working in dictatorships are the most likely to be the most familiar with regulations, likely because deep knowledge of the legal environment is more essential to operate safely and effectively. The contentiousness of the issues INGOs work on does not help determine their familiarity—high contention INGOs are not more or less likely to be more aware of the legal environment.[^56]
 
 ![Knowledge of regulatory environment in host government, separated by regime type and issue contentiousness (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-familiarity-both){#fig:familiarity-both}
 
-Being aware of the regulatory environment is crucial for maintaining legal status in host countries. INGOs report that regulations can change frequently—half of respondents report that regulations and laws change every few years, and nearly 20% say regulations change at least once a year (see @fig:frequency).[^56] The regime type of the host country is closely related to how frequently INGOs see changes in regulations. Nearly two thirds of the INGOs that report changes at least once a year work in autocracies, which contrasts starkly with the two thirds of INGOs that experience a static legal environment in democratic host countries.[^57] 
+Being aware of the regulatory environment is crucial for maintaining legal status in host countries. INGOs report that regulations can change frequently—half of respondents report that regulations and laws change every few years, and nearly 20% say regulations change at least once a year (see @fig:frequency).[^57] The regime type of the host country is closely related to how frequently INGOs see changes in regulations. Nearly two thirds of the INGOs that report changes at least once a year work in autocracies, which contrasts starkly with the two thirds of INGOs that experience a static legal environment in democratic host countries.[^58] 
 
 ![Frequency of changes in regulatory environment for NGOs in host country, separated by regime type (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type)](../../Output/figures/3-frequency){#fig:frequency}
 
-The changes INGOs observe do not necessarily correlate with formal statutory developments. For instance, as seen in previous chapters, Egypt has only formally passed civil society laws in 2002 and 2012. These laws give bureaucrats and politicians significant interpretive leeway, however, and allow them to reshape the regulatory environment for international NGOs. Because of this dynamic discretionary de facto environment, INGOs actively seek out information about changes in laws, rules, and regulations (see @fig:change-how-find-out). International NGOs are most likely to hear about new legal changes from other NGOs in the country, both from their local partners and from other foreign organizations. They also receive news about changes directly from government officials, sometimes at inopportune moments. One INGO working in East Africa, unaware of any changes in regulations, discovered new funding requirements for foreign NGOs when requesting permits to expand their operations in the country—the organization ultimately decided to not expand as a result.[^58] INGOs also find out about changes in laws through the media and through internet research, including websites that aggregate information about civil society regulations like Civicus and the International Center for Not-for-Profit Law (ICNL). 
+The changes INGOs observe do not necessarily correlate with formal statutory developments. For instance, as seen in previous chapters, Egypt has only formally passed civil society laws in 2002 and 2012. These laws give bureaucrats and politicians significant interpretive leeway, however, and allow them to reshape the regulatory environment for international NGOs. Because of this dynamic discretionary de facto environment, INGOs actively seek out information about changes in laws, rules, and regulations (see @fig:change-how-find-out). International NGOs are most likely to hear about new legal changes from other NGOs in the country, both from their local partners and from other foreign organizations. They also receive news about changes directly from government officials, sometimes at inopportune moments. One INGO working in East Africa, unaware of any changes in regulations, discovered new funding requirements for foreign NGOs when requesting permits to expand their operations in the country—the organization ultimately decided to not expand as a result.[^59] INGOs also find out about changes in laws through the media and through internet research, including websites that aggregate information about civil society regulations like Civicus and the International Center for Not-for-Profit Law (ICNL). The fact that INGOs tend to seek out the latest information about their regulatory environment shows that these organizations are active participants in their relationship with their host governments, regularly measuring and testing the acceptable boundaries for their work. 
 
 ![Channels of discovering changes in the regulatory environment for NGOs in host country](../../Output/figures/3-change-how-find-out){#fig:change-how-find-out}
 
@@ -232,7 +234,7 @@ Not all changes in NGO laws lead to restrictions on activities, however. Researc
 
 ![Proportion of countries with laws that require NGO registration and that impose additional burdens on the registration process, by regime type [@ChristensenWeinstein:2013]](../../Output/figures/3-dcjw-reg-regime){#fig:djcw-reg-regime}
 
-Survey respondents confirm this. Nearly two-thirds of INGOs that feel the most restricted by government regulations work in autocracies, compared to 25% of organizations that report facing no restrictions in similar regimes (see @fig:restriction-both).[^59] The relationship between host country regime type and feelings of restriction is quite marked, with the proportion of respondents working in autocracies decreasing steadily as the feeling of restriction decreases. Interestingly, there is not as clear of a relationship between the contentiousness of INGO programming and feelings of restriction. Half of highly restricted organizations work on contentious issues, but there is no significant difference between the other levels of restriction—roughly 25% of organizations answering each other level of restriction work have contentious programming. It thus appears that the findings in @fig:djcw-reg-regime hold true—governments are increasingly passing routine NGO laws, but those laws are far more burdensome in autocracies, where they are designed to restrict NGO activities.
+Survey respondents confirm this. Nearly two-thirds of INGOs that feel the most restricted by government regulations work in autocracies, compared to 25% of organizations that report facing no restrictions in similar regimes (see @fig:restriction-both).[^60] The relationship between host country regime type and feelings of restriction is quite marked, with the proportion of respondents working in autocracies decreasing steadily as the feeling of restriction decreases. Interestingly, there is not as clear of a relationship between the contentiousness of INGO programming and feelings of restriction. Half of highly restricted organizations work on contentious issues, but there is no significant difference between the other levels of restriction—roughly 25% of organizations answering each other level of restriction work have contentious programming. It thus appears that the findings in @fig:djcw-reg-regime hold true—governments are increasingly passing routine NGO laws, but those laws are far more burdensome in autocracies, where they are designed to restrict NGO activities.
 
 ![Feeling of restriction in host country, separated by regime type and issue contentiousness (cell heights represent proportion of responses; cell widths represent proportion of organizations working in regime type or on issue)](../../Output/figures/3-restriction-both){#fig:restriction-both}
 
@@ -386,88 +388,90 @@ Thus…
 
 	I use the medians of the simulated values from the MCMC samples as coefficient estimates, and use the 2.5% and 97.5% quantiles as lower and upper limits for 95% credible intervals. Finally, I declare an effect statistically significant if the posterior probability of being different from zero is larger than 0.95.
 
-[^18]:	"Always" and "Most of the time" responses are collapsed to "Almost always"; "About half the time" and "Sometimes" responses are collapsed to "Sometimes."
+[^18]:	See appendix.
 
-[^19]:	Response 1385.
+[^19]:	"Always" and "Most of the time" responses are collapsed to "Almost always"; "About half the time" and "Sometimes" responses are collapsed to "Sometimes."
 
-[^20]:	Response 1605.
+[^20]:	Response 1385.
 
-[^21]:	Response 1472.
+[^21]:	Response 1605.
 
-[^22]:	Response 1419.
+[^22]:	Response 1472.
 
-[^23]:	Response 1448.
+[^23]:	Response 1419.
 
-[^24]:	Response 1339.
+[^24]:	Response 1448.
 
-[^25]:	Response 1233.
+[^25]:	Response 1339.
 
-[^26]:	Responses 1304 and 1703.
+[^26]:	Response 1233.
 
-[^27]:	Response 1193.
+[^27]:	Responses 1304 and 1703.
 
-[^28]:	Response 1558.
+[^28]:	Response 1193.
 
-[^29]:	Responses 1487 and 1660.
+[^29]:	Response 1558.
 
-[^30]:	Response 1643.
+[^30]:	Responses 1487 and 1660.
 
-[^31]:	"Extremely negative" and "Somewhat negative" are collapsed to "Negative"; "Somewhat positive" and "Extremely positive" are collapsed to "Positive."
+[^31]:	Response 1643.
 
-[^32]:	This difference is significant: $P(\text{\% Negative}_\text{Autocracies} - \text{\% Positive}_\text{Autocracies} > 0) = 0.97$.
+[^32]:	"Extremely negative" and "Somewhat negative" are collapsed to "Negative"; "Somewhat positive" and "Extremely positive" are collapsed to "Positive."
 
-[^33]:	This difference is also significant: $P(\text{\% Negative}_\text{Autocracies} - \text{\% Positive}_\text{Autocracies} > 0) = 0.97$.
+[^33]:	This difference is significant: $P(\text{\% Negative}_\text{Autocracies} - \text{\% Positive}_\text{Autocracies} > 0) = 0.97$.
 
-[^34]:	Response 1189.
+[^34]:	This difference is also significant: $P(\text{\% Negative}_\text{Autocracies} - \text{\% Positive}_\text{Autocracies} > 0) = 0.97$.
 
-[^35]:	Response 1192.
+[^35]:	Response 1189.
 
-[^36]:	Responses 1243, 1253, 1284 and 1323.
+[^36]:	Response 1192.
 
-[^37]:	Response 1507.
+[^37]:	Responses 1243, 1253, 1284 and 1323.
 
-[^38]:	Response 1224.
+[^38]:	Response 1507.
 
-[^39]:	Response 1339.
+[^39]:	Response 1224.
 
-[^40]:	Response 1408.
+[^40]:	Response 1339.
 
-[^41]:	Response 1458.
+[^41]:	Response 1408.
 
-[^42]:	Response 1678.
+[^42]:	Response 1458.
 
-[^43]:	Response 1541.
+[^43]:	Response 1678.
 
-[^44]:	Response 1683.
+[^44]:	Response 1541.
 
-[^45]:	Response 1751.
+[^45]:	Response 1683.
 
 [^46]:	Response 1751.
 
-[^47]:	Response 1541.
+[^47]:	Response 1751.
 
-[^48]:	Response 1574.
+[^48]:	Response 1541.
 
-[^49]:	Response 1412.
+[^49]:	Response 1574.
 
-[^50]:	Response 1464.
+[^50]:	Response 1412.
 
-[^51]:	Response 1608.
+[^51]:	Response 1464.
 
-[^52]:	Response 1307.
+[^52]:	Response 1608.
 
-[^53]:	"Extremely familiar" and "Very familiar" are collapsed to "Very familiar"; "Moderately familiar" and "Slightly familiar" are collapsed to "Somewhat familiar."
+[^53]:	Response 1307.
 
-[^54]:	$P(\text{\% Very familiar}_\text{Autocracies} - \text{\% Not familiar at all}_\text{Autocracies} > 0) = 0.99$.
+[^54]:	"Extremely familiar" and "Very familiar" are collapsed to "Very familiar"; "Moderately familiar" and "Slightly familiar" are collapsed to "Somewhat familiar."
 
-[^55]:	$P(\text{\% Very familiar}_\text{High contention} - \text{\% Not familiar at all}_\text{High contention} > 0) = 0.45$.
+[^55]:	$P(\text{\% Very familiar}_\text{Autocracies} - \text{\% Not familiar at all}_\text{Autocracies} > 0) = 0.99$.
 
-[^56]:	"Once a month" and "Once a year" are collapsed to "At least once a year."
+[^56]:	$P(\text{\% Very familiar}_\text{High contention} - \text{\% Not familiar at all}_\text{High contention} > 0) = 0.45$.
 
-[^57]:	$P(\text{\% At least once a year}_\text{Autocracies} - \text{\% Rarely or never}_\text{Autocracies} > 0) = 0.97$.
+[^57]:	"Once a month" and "Once a year" are collapsed to "At least once a year."
 
-[^58]:	Response 1211.
+[^58]:	$P(\text{\% At least once a year}_\text{Autocracies} - \text{\% Rarely or never}_\text{Autocracies} > 0) = 0.97$.
 
-[^59]:	"Very restricted" and "Extremely restricted" are collapsed to "Very restricted." 
+[^59]:	Response 1211.
+
+[^60]:	"Very restricted" and "Extremely restricted" are collapsed to "Very restricted." 
 
 	$P(\text{\% Very restricted}_\text{Autocracies} - \text{\% Not restricted}_\text{Autocracies} > 0) = 1$.
