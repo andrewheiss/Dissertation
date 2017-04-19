@@ -1410,6 +1410,93 @@ side.by.side(registered.table,
 ```
 
 
+## Government involvement in INGO activity
+
+### Contact and reporting frequency
+
+```{r plot-report-frequency}
+df.freq.report <- survey.clean.all %>%
+  mutate(Q4.8.collapsed = fct_recode(Q4.8.clean,
+    `More than once a year` = "More than once a week", 
+    `More than once a year` = "Once a week", 
+    `More than once a year` = "More than once a month,\nless than once a week", 
+    `More than once a year` = "Once a month", 
+    `More than once a year` = "More than once a year,\nless than once a month",
+    `Annually` = "Once a year",
+    `Once every 2+ years` = "Once every 2+ years",
+    `Never` = "Rarely",
+    `Never` = "Never",
+    `As necessary` = "As necessary/depends",
+    NULL = "Don't know"
+  )) %>%
+  mutate(Q4.8.collapsed = fct_relevel(Q4.8.collapsed, "As necessary", after=1)) %>%
+  filter(!is.na(Q4.8.collapsed)) %>%
+  group_by(target.regime.type, Q4.8.collapsed) %>%
+  summarise(num = n()) %>%
+  rename(freq = Q4.8.collapsed)
+```
+
+```{r plot-contact-frequency}
+df.freq.contact <- survey.clean.all %>%
+  mutate(Q4.5.collapsed = fct_recode(Q4.5.clean,
+    `More than once a year` = "More than once a week", 
+    `More than once a year` = "Once a week", 
+    `More than once a year` = "More than once a month,\nless than once a week", 
+    `More than once a year` = "Once a month", 
+    `More than once a year` = "More than once a year,\nless than once a month",
+    `Annually` = "Once a year",
+    `Once every 2+ years` = "Once every 2+ years",
+    `Never` = "Rarely",
+    `Never` = "Never",
+    `As necessary` = "As necessary/depends",
+    NULL = "Don't know"
+  )) %>%
+  mutate(Q4.5.collapsed = fct_relevel(Q4.5.collapsed, "As necessary", after=1)) %>%
+  filter(!is.na(Q4.5.collapsed)) %>%
+  group_by(target.regime.type, Q4.5.collapsed) %>%
+  summarise(num = n()) %>%
+  rename(freq = Q4.5.collapsed)
+```
+
+```{r plot-freq-govt-both}
+df.freq.both <- bind_rows(df.freq.contact, df.freq.report, .id="report.type") %>%
+  mutate(report.type = recode(report.type, `1` = "Contact with the government", 
+                              `2` = "Reporting to the government"))
+
+plot.freq.both <- ggplot(df.freq.both, aes(x=num, y=freq, 
+                                           colour=target.regime.type)) +
+  geom_pointrangeh(aes(xmin=0, xmax=num), position=position_dodgev(height=0.5),
+                   size=0.5) + 
+  scale_colour_manual(values=ath.palette("regime2"), name=NULL) +
+  guides(colour=guide_legend(reverse=TRUE)) +
+  labs(x="Number of responses", y=NULL) +
+  facet_wrap(~ report.type) +
+  theme_ath() + theme(panel.grid.major.y=element_blank())
+plot.freq.both
+
+fig.save.cairo(plot.freq.both,
+               filename="3-freq-both",
+               width=6, height=3)
+```
+
+```{r plot-officials-contact}
+df.officials.contact.most <- survey.clean.all %>%
+  group_by(Q4.7) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num)) %>%
+  filter(!is.na(Q4.7)) %>%
+  mutate(issue = factor(Q4.7, levels=rev(Q4.7), ordered=TRUE))
+
+plot.officials.contact.most <- ggplot(df.officials.contact.most, 
+                                      aes(x=num, y=issue)) + 
+  geom_pointrangeh(aes(xmin=0, xmax=num)) + 
+  labs(x="Times selected", y=NULL) +
+  theme_ath() + theme(panel.grid.major.y=element_blank())
+
+plot.officials.contact.most
+```
+
+
 ## Restrictions on INGOs
 
 ### Routine regulation vs. burdensome regulation
