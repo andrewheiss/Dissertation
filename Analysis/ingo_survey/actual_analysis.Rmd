@@ -1549,17 +1549,19 @@ dcjw.registration.summary <- dcjw.registration.panel %>%
   mutate(ever.autocracy = 
            factor(ever.autocracy, levels=c(TRUE, FALSE),
                   labels=c("Autocracies", "Democracies"))) %>%
+  mutate(ever.autocracy = factor(ever.autocracy, levels=rev(levels(ever.autocracy)),
+                                 ordered=TRUE)) %>%
   filter(year > 1990)
 
 plot.dcjw.reg.regime <- ggplot(dcjw.registration.summary, 
-                               aes(x=year, y=prop.with.reg, colour=question)) + 
+                               aes(x=year, y=prop.with.reg, colour=ever.autocracy)) + 
   geom_line() + 
   labs(x=NULL, y="Proportion of countries\nwith regulations") +
   scale_y_continuous(labels=scales::percent) +
   coord_cartesian(ylim=c(0, 0.65)) +
-  scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
+  scale_colour_manual(values=ath.palette("regime2"), name=NULL) +
   theme_ath() +
-  facet_wrap(~ ever.autocracy)
+  facet_wrap(~ question)
 plot.dcjw.reg.regime
 
 fig.save.cairo(plot.dcjw.reg.regime,
