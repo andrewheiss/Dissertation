@@ -1803,7 +1803,7 @@ plot.regs.capture
 
 fig.save.cairo(plot.regs.capture,
                filename="3-regs-faced-capture",
-               width=2.25, height=3)
+               width=2.75, height=3)
 ```
 
 
