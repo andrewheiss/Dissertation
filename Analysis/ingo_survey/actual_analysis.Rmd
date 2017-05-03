@@ -1722,6 +1722,91 @@ fig.save.cairo(plot.registration.all,
                width=6.5, height=3)
 ```
 
+
+### Gatekeeping and program capture restrictions
+
+```{r}
+labels.regs <- data_frame(levels=c("registration", "assembly",
+                                   "resources", "operations"),
+                          labels=c("Registration",
+                                   "Assembly, speech, and advocacy",
+                                   "Resources and funding",
+                                   "Operations"),
+                          type=c("Gatekeeping", "Gatekeeping", 
+                                 "Gatekeeping", "Capture"))
+
+gatekeeping.regs <- filter(labels.regs, type == "Gatekeeping")$labels
+
+df.reg.types <- survey.countries.clean %>%
+  select(potential.contentiousness, dplyr::contains("Q4.16"), -dplyr::contains("TEXT")) %>%
+  gather(question, response, -potential.contentiousness) %>%
+  mutate(question = str_replace(question, "Q4\\.16_", "")) %>%
+  mutate(question = recode(question,
+    speech = "assembly",
+    communications = NA_character_)) %>%
+  filter(!is.na(question)) %>%
+  filter(!(response %in% c("Don't know", "Not applicable"))) %>%
+  group_by(question, response, potential.contentiousness) %>%
+  summarise(num = n()) %>%
+  ungroup() %>%
+  mutate(response = factor(response,
+                           levels=levels(survey.orgs.clean$Q3.8_individual),
+                           ordered=TRUE))
+
+df.reg.types.plot <- df.reg.types %>%
+  mutate(response = fct_collapse(response,
+    "Substantially" = c("A great deal", "A lot"),
+    "Moderately" = c("A moderate amount", "A little"),
+    "Not at all" = "None at all"
+  )) %>%
+  group_by(question, response, potential.contentiousness) %>%
+  summarise(num = sum(num)) %>%
+  group_by(potential.contentiousness, question) %>%
+  mutate(total = sum(num)) %>%
+  ungroup() %>%
+  mutate(prop = num / total) %>%
+  arrange(response, desc(potential.contentiousness), desc(prop)) %>%
+  mutate(question = factor(question, levels=labels.regs$levels,
+                           labels=labels.regs$labels, ordered=TRUE))
+
+plot.regs.gatekeeping <- ggplot(filter(df.reg.types.plot, question %in% gatekeeping.regs), 
+                                aes(x=prop, y=fct_rev(response),
+                                    colour=potential.contentiousness)) +
+  geom_pointrangeh(aes(xmin=0, xmax=prop), position=position_dodgev(height=0.75),
+                   size=0.5) +
+  labs(x="Proportion selected", y="How INGO is affected by regulation") +
+  scale_colour_manual(values=ath.palette("contention1"), name=NULL) +
+  scale_x_continuous(labels=scales::percent) +
+  guides(colour=guide_legend(reverse=TRUE)) +
+  facet_wrap(~ question) +
+  theme_ath() + theme(strip.text=element_text(size=rel(0.75)),
+                      panel.grid.major.y=element_blank())
+plot.regs.gatekeeping
+
+fig.save.cairo(plot.regs.gatekeeping,
+               filename="3-regs-faced-gatekeeping",
+               width=6.5, height=3)
+
+plot.regs.capture <- ggplot(filter(df.reg.types.plot, !(question %in% gatekeeping.regs)), 
+                                aes(x=prop, y=fct_rev(response),
+                                    colour=potential.contentiousness)) +
+  geom_pointrangeh(aes(xmin=0, xmax=prop), position=position_dodgev(height=0.75),
+                   size=0.5) +
+  labs(x="Proportion selected", y="How INGO is affected by regulation") +
+  scale_colour_manual(values=ath.palette("contention1"), name=NULL) +
+  scale_x_continuous(labels=scales::percent) +
+  guides(colour=guide_legend(reverse=TRUE)) +
+  facet_wrap(~ question) +
+  theme_ath() + theme(strip.text=element_text(size=rel(0.75)),
+                      panel.grid.major.y=element_blank())
+plot.regs.capture
+
+fig.save.cairo(plot.regs.capture,
+               filename="3-regs-faced-capture",
+               width=2.25, height=3)
+```
+
+
 ```{r}
 # ### Staffing details
 # 
