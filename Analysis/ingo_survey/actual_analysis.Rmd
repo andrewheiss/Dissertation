@@ -1795,7 +1795,7 @@ labels.regs <- data_frame(levels=c("registration", "assembly",
                                    "Resources and funding",
                                    "Operations"),
                           type=c("Gatekeeping", "Gatekeeping", 
-                                 "Gatekeeping", "Capture"))
+                                 "Capture", "Capture"))
 
 gatekeeping.regs <- filter(labels.regs, type == "Gatekeeping")$labels
 
@@ -1847,7 +1847,7 @@ plot.regs.gatekeeping
 
 fig.save.cairo(plot.regs.gatekeeping,
                filename="3-regs-faced-gatekeeping",
-               width=6.5, height=3)
+               width=4.5, height=3)
 
 plot.regs.capture <- ggplot(filter(df.reg.types.plot, !(question %in% gatekeeping.regs)), 
                                 aes(x=prop, y=fct_rev(response),
@@ -1865,7 +1865,7 @@ plot.regs.capture
 
 fig.save.cairo(plot.regs.capture,
                filename="3-regs-faced-capture",
-               width=2.75, height=3)
+               width=4.5, height=3)
 ```
 
 
