@@ -805,6 +805,69 @@ high.contention.work <- survey.orgs.clean %>%
   select(clean.id, matches("Q3\\.3_.*_TEXT"))
 ```
 
+### Challenges and obstacles to mission
+
+```{r analyze-obstacles}
+df.plot.obstacles.raw <- survey.orgs.clean %>%
+  filter(!is.na(Q3.12_obstacle)) %>%
+  mutate(obstacle = str_split(Q3.12_obstacle, ", ")) %>%
+  unnest(obstacle) %>%
+  mutate(obstacle = recode(obstacle,
+    `access to country` = "bureaucratic, legal, and political",
+    `political context` = "bureaucratic, legal, and political",
+    `bureaucratic and legal` = "bureaucratic, legal, and political"
+  )) %>%
+  group_by(obstacle) %>%
+  summarise(num = n()) %>%
+  arrange(desc(num))
+
+df.plot.obstacles.denom <- survey.orgs.clean %>%
+  filter(!is.na(Q3.12_obstacle)) %>%
+  nrow()
+
+df.plot.obstacles <- df.plot.obstacles.raw %>%
+  mutate(prop = num / df.plot.obstacles.denom) %>%
+  mutate(obstacle = capitalize(obstacle)) %>%
+  filter(num > 20, obstacle != "Other")
+
+plot.obstacles <- ggplot(df.plot.obstacles, aes(x=prop, y=obstacle)) +
+  geom_pointrangeh(aes(xmin=0, xmax=prop)) +
+  # scale_colour_manual(values=ath.palette("contention1"), name=NULL) +
+  scale_x_continuous(labels=scales::percent) +
+  labs(x="Obstacles", y=NULL) +
+  theme_ath() #+ theme(legend.position=c(1, 0), legend.justification = c(1, 0),
+                      legend.direction="horizontal", panel.grid.major.y=element_blank())
+plot.obstacles
+```
+
+
+```{r}
+df.issues.most.clean <- survey.orgs.clean %>%
+  group_by(Q3.2.clean, potential.contentiousness) %>%
+  summarise(num = n()) %>%
+  filter(!is.na(Q3.2.clean)) %>%
+  ungroup() %>%
+  arrange(desc(num)) %>%
+  mutate(issue = factor(Q3.2.clean, levels=rev(unique(Q3.2.clean)), ordered=TRUE)) %>%
+  mutate(prop = num / sum(num), cum.prop = cumsum(prop))
+
+df.issues.most.denom <- sum(df.issues.most.clean$num)
+
+plot.issues.most.clean <- ggplot(df.issues.most.clean,
+                                 aes(x=num, y=issue,
+                                     colour=potential.contentiousness)) +
+  geom_pointrangeh(aes(xmin=0, xmax=num)) +
+  scale_x_continuous(sec.axis = sec_axis(~ . / df.issues.most.denom,
+                                         labels=scales::percent)) +
+  scale_colour_manual(values=ath.palette("contention1"), name=NULL) +
+  labs(x="Organizations", y=NULL) +
+  theme_ath() + theme(legend.position=c(1, 0), legend.justification = c(1, 0),
+                      legend.direction="horizontal", panel.grid.major.y=element_blank())
+plot.issues.most.clean
+```
+
+
+
 ## Instrumental factors
 
 ### Staffing

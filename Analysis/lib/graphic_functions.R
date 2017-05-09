@@ -289,3 +289,8 @@ styleColorBarCentered <- function(column, color.negative, color.positive) {
              max_val, color.negative, max_val, color.negative, 
              color.positive, color.positive, max_val, max_val))
 } 
+
+capitalize <- function(x) {
+  substr(x, 1, 1) <- toupper(substr(x, 1, 1))
+  x
+}

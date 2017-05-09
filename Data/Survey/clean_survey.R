@@ -1215,7 +1215,26 @@ survey.countries.clean.for.realz <- survey.countries.clean %>%
                       contentiousness, 
                       by=c("main.issue" = "Q3.2.clean")),
             by="clean.id")
-  
+
+# Merge in hand-coded data created later
+survey.orgs.clean.final.for.realz %>%
+  filter(!is.na(Q3.12)) %>%
+  arrange(clean.id) %>%
+  select(clean.id, Q3.12) %>%
+  mutate(obstacle = "") %>%
+  write_csv(file.path(PROJHOME, "Data", "data_processed",
+                      "handcoded_survey_stuff",
+                      "obstacles_WILL_BE_OVERWRITTEN.csv"))
+
+obstacles.coded <- read_csv(file.path(PROJHOME, "Data", "data_processed",
+                                      "handcoded_survey_stuff",
+                                      "obstacles.csv")) %>%
+  select(clean.id, Q3.12_obstacle = obstacle)
+
+survey.orgs.clean.final.for.realz <- survey.orgs.clean.final.for.realz %>%
+  left_join(obstacles.coded, by="clean.id")
+
+
 # Combine with country-level data
 survey.clean.all <- survey.orgs.clean.final.for.realz %>%
   left_join(survey.countries.clean.for.realz,
