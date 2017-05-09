@@ -111,7 +111,7 @@ theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
     theme(panel.background = element_rect(fill="#ffffff", colour=NA),
           title=element_text(size=rel(1.1), vjust=1.2, family="Source Sans Pro Semibold"),
           plot.subtitle=element_text(size=rel(0.8), family="Source Sans Pro Light"),
-          plot.caption=element_text(margin=margin(t=10), size=rel(0.6),
+          plot.caption=element_text(margin=margin(t=base_size), size=rel(0.6),
                                     family="Source Sans Pro Light"),
           panel.border = element_blank(), 
           panel.spacing = unit(1, "lines"),
@@ -120,8 +120,11 @@ theme_ath <- function(base_size=9, base_family="Source Sans Pro Light") {
           axis.line = element_blank(),
           axis.ticks = element_blank(),
           axis.title = element_text(size=rel(0.8), family="Source Sans Pro Semibold"),
-          axis.title.y = element_text(margin = margin(r = 10)),
-          axis.title.x = element_text(margin = margin(t = 10)),
+          axis.title.y = element_text(margin = margin(r = base_size)),
+          axis.title.x = element_text(margin = margin(t = base_size)),
+          # Having a bottom legend adds too much space between the axis title
+          # and the legend, so add some negative margin to the top
+          legend.margin = margin(-(base_size / 2), 0, 0, 0),
           legend.position = "bottom",
           legend.title = element_text(size=rel(0.8)),
           legend.key.size=unit(.7, "line"),
