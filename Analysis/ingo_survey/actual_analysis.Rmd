@@ -841,7 +841,7 @@ plot.obstacles
 
 fig.save.cairo(plot.obstacles,
                filename="3-obstacles",
-               width=4.5, height=2.5)
+               width=4.5, height=2)
 ```
 
 
