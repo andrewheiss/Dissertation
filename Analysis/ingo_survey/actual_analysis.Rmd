@@ -1037,6 +1037,8 @@ fig.save.cairo(plot.operations,
                width=4.5, height=2)
 ```
 
+#### Size and number of changes
+
 ```{r analyze-strategies-size, results="asis"}
 df.strategies.size <- survey.clean.all %>%
   mutate(num.strategies = Q4.3_value %>% map_int(length)) %>%
@@ -1052,14 +1054,18 @@ strategies.size.bayes$samples.summary %>% pandoc.table()
 strategies.size.bayes$diffs.summary %>% pandoc.table()
 ```
 
+#### Collaborations, funding sources, and number of strategies
+
 ```{r analyze-strategies-funding}
 df.strategies.funding <- survey.clean.all %>%
   mutate(num.strategies = Q4.3_value %>% map_int(length)) %>%
   filter(!is.na(Q4.3_value), Q3.8.num < 7) %>%
   select(num.strategies, Q3.8.num)
   
-ggplot(df.strategies.funding, aes(x=Q3.8.num, y=num.strategies, group=Q3.8.num)) +
-  geom_point(position=position_jitter()) + 
+plot.strategies.funding <- ggplot(df.strategies.funding, 
+                                  aes(x=Q3.8.num, y=num.strategies,
+                                      group=Q3.8.num)) +
+  geom_point(position=position_jitter(), size=0.5) + 
   geom_violin() +
   labs(x="Number of funding sources", y="Number of operational strategies") +
   theme_ath()
@@ -1072,12 +1078,24 @@ df.strategies.collaboration <- survey.clean.all %>%
   filter(!is.na(Q4.3_value), !is.na(Q3.6_num)) %>%
   select(num.strategies, num.collaborations)
 
-ggplot(df.strategies.collaboration, aes(x=num.collaborations, y=num.strategies, 
-                                        group=num.collaborations)) +
-  geom_point(position=position_jitter()) + 
+plot.strategies.collaboration <- ggplot(df.strategies.collaboration, 
+                                        aes(x=num.collaborations, y=num.strategies, 
+                                            group=num.collaborations)) +
+  geom_point(position=position_jitter(), size=0.5) + 
   geom_violin() +
   labs(x="Number of collaborative partners", y="Number of operational strategies") +
   theme_ath()
+```
+
+```{r instrumental-stuff-strategies}
+plot.strategies.both <- rbind(ggplotGrob(plot.strategies.collaboration),
+                              ggplotGrob(plot.strategies.funding))
+grid::grid.newpage()
+grid::grid.draw(plot.strategies.both)
+
+fig.save.cairo(plot.strategies.both,
+               filename="3-instrumental-stuff-strategies",
+               width=4.5, height=4)
 ```
 
 
