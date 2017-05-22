@@ -795,6 +795,43 @@ fig.save.cairo(plot.activities,
                width=7, height=3)
 ```
 
+```{r activities-differences, results="asis"}
+run.indiv.activities <- function(df) {
+  df %>%
+    diff.groups.bayes(cbind(num, total) ~ potential.contentiousness, 
+                      data=., prop=TRUE)
+}
+
+activities.table.bayes <- df.activities.plot %>%
+  mutate(response = fct_drop(response)) %>%
+  select(-total, -prop) %>%
+  group_by(question, potential.contentiousness) %>%
+  mutate(total = sum(num)) %>%
+  ungroup() %>%
+  nest(-question, -response) %>%
+  mutate(bayes.results = data %>% map(run.indiv.activities))
+
+activities.table.p <- activities.table.bayes %>%
+  mutate(mean.diff = bayes.results %>% map_dbl(c("diffs.summary", "mean")),
+         diff.p = bayes.results %>% map_dbl(c("diffs.summary", "p.greater0"))) %>%
+  mutate(diff.pgt0 = paste0(round(mean.diff, 2), "\\ \n(", 
+                            round(diff.p, 2), ")")) %>%
+  select(question, response, diff.pgt0) %>%
+  arrange(question, response) %>%
+  spread(response, diff.pgt0) %>%
+  rename(` ` = question)
+
+caption <- "Differences in proportion of high and low contention INGOs selecting frequency of type of work (accompanies @fig:main-activities). Posterior probability that the proportion is greater than 0 given in parentheses. {#tbl:main-activities-p}"
+clean.table <- pandoc.table.return(activities.table.p,
+                                   keep.line.breaks=TRUE,
+                                   justify="lccc", caption=caption)
+
+cat(clean.table)
+cat(clean.table, file=file.path(PROJHOME, "Output", "tables", 
+                                "3-main-activities-p.md"))
+```
+
+
 ```{r manual-reading-filtering}
 low.contention.work <- survey.orgs.clean %>%
   filter(potential.contentiousness == "Low contention") %>%
