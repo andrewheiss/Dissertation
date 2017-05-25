@@ -11,9 +11,10 @@ FRONTMATTER = metadata.md
 FILES = 0_introduction/introduction.md 
 FILES += 1_cs_regime_stability/cs_regime_stability.md
 FILES += 2_country_case_studies/country_case_studies.md
-FILES += 3_ingo_survey/ingo_survey.md
-FILES += 4_ingo_case_studies/ingo_case_studies.md
-FILES += 5_conclusion/conclusion.md
+FILES += 3_ingo_mechanisms/ingo_mechanisms.md
+FILES += 4_gatekeeping/gatekeeping.md
+FILES += 5_program_capture/program_capture.md
+FILES += 6_conclusion/conclusion.md
 
 FILES_TMP = $(FILES:.md=.md.tmp)
 
