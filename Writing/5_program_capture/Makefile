@@ -123,7 +123,7 @@ bib:	$(BIB)
 %.html:	%.md
 	@echo "$(WARN_COLOR)Converting Markdown to HTML using standard template...$(NO_COLOR)"
 	replace_includes $< | replace_pdfs $(PNG_CONVERT) | \
-	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block --mathjax -w html -S \
+	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w html -S \
 		$(CROSSREF) \
 		--default-image-extension=png \
 		--template=$(PREFIX)/templates/html.template \
@@ -136,7 +136,7 @@ bib:	$(BIB)
 
 %.pdf:	%.md
 	@echo "$(WARN_COLOR)Converting Markdown to PDF using hikma-article template...$(NO_COLOR)"
-	./vc; replace_includes $< | replace_reference_title | \
+	replace_includes $< | replace_reference_title | \
 	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S \
 		$(CROSSREF) \
 		--default-image-extension=pdf \
@@ -146,15 +146,14 @@ bib:	$(BIB)
 		--csl=$(PREFIX)/csl/$(CSL).csl \
 		--bibliography=$(BIB_FILE) \
 		-V chapterstyle=hikma-article \
-		-V pagestyle=athgit \
-		-V vc \
+		-V pagestyle=ath \
 		--base-header-level=2 \
 	-o $@
 	@echo "$(OK_COLOR)All done!$(NO_COLOR)"
 
 %.tex:	%.md
 	@echo "$(WARN_COLOR)Converting Markdown to TeX using hikma-article template...$(NO_COLOR)"
-	./vc; replace_includes $< | \
+	replace_includes $< | \
 	pandoc -r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -s -S \
 		$(CROSSREF) \
 		--default-image-extension=pdf \
@@ -164,9 +163,8 @@ bib:	$(BIB)
 		-V $(TEX_REF) \
 		--bibliography=$(BIB_FILE) \
 		-V chapterstyle=hikma-article \
-		-V pagestyle=athgit \
-		-V vc \
-		--base-header-level=1 \
+		-V pagestyle=ath \
+		--base-header-level=2 \
 	-o $@
 	@echo "$(WARN_COLOR)...converting TeX to PDF with latexmk (prepare for lots of output)...$(NO_COLOR)"
 	latexmk -outdir=$(MS_DIR_FOR_TEX)$(TEX_DIR) -xelatex -quiet $@
