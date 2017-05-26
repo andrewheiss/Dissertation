@@ -19,8 +19,9 @@
 \usepackage{setspace}
 \usepackage{longtable}
 \usepackage{booktabs}
-\usepackage{pbox}       % For multi-line table cells
-\usepackage{pdflscape}  % For landscape PDF pages
+\usepackage{pbox}          % For multi-line table cells
+\usepackage{pdflscape}     % For landscape PDF pages
+\usepackage{unicode-math}  % For custom math fonts
 
 
 % ZOMG!!!1!
@@ -79,11 +80,22 @@
 }}
 
 
-% Polyglossia has to come before biblatex and after hyperref
+% polyglossia has to come before biblatex and after hyperref
 \usepackage{polyglossia}
 \setmainlanguage{english}
-\setotherlanguage{arabic}
+\setotherlanguages{arabic, russian}
+\usepackage[space]{xeCJK}  % polyglossia doesn't support Chinese but xeCJK does
+
+
+% Font settings
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont[Mapping=tex-text]{Linux Libertine O}
+\setsansfont[Mapping=tex-text]{Source Sans Pro}
+\setmonofont[Mapping=tex-ansi, Scale=MatchLowercase]{InconsolataGo}
+\setmathfont{Libertinus Math}
 \newfontfamily\arabicfont[Script = Arabic]{Amiri}
+\newfontfamily\cyrillicfont{Linux Libertine O}
+\setCJKmainfont{Noto Serif CJK SC}
 
 
 % Bibliography
@@ -97,6 +109,9 @@
 %------------------------------------------------------------------------------
 % Other custom commands and settings
 %------------------------------------------------------------------------------
+% Scale all images to the full text width
+%\setkeys{Gin}{width=1\textwidth}
+
 % Don't typeset URLs in a monospaced font
 \urlstyle{same}
 % Add - to url's default breaks
