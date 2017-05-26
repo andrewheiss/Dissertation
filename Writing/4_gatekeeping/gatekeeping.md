@@ -26,7 +26,7 @@ Regulations that *are* designed to be burdensome target both elements of an INGO
 
 TODO: A couple paragraphs outlining:
 
-- Theoretical form of regulation (see gatekeeping part of @fig:regulation-purpose-theory): Host governments constrict the civil society regulatory environment in order to limit organizational flexibility and control which INGOs are allowed in the country
+- Theoretical form of regulation (see gatekeeping part of @fig:theory-regulation-purpose): Host governments constrict the civil society regulatory environment in order to limit organizational flexibility and control which INGOs are allowed in the country
 - Effects on INGOs: Laws slow things down, make life difficult, filter out the most contentious; limit funding, decrease efficacy of programs
 - Expected INGO reactions: When relationship is not contentious, organizations will maintain good relationship with the government, follow registration laws, keep within government limits. When relationship is more contentious, organizations will find ways around registration, avoid fees, outsource regulations, work regardless of registration status, work in exile, create smaller programs, fund irregularly, channel funds through domestic partners, etc.
 - Organizations with most resources and flexibility are best able to deal with changes

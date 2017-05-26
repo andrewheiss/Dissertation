@@ -261,7 +261,7 @@ In some cases, the empirical implications of these hypotheses are obvious, as se
 
 The link between restrictions and flexibility is clearest (and most interesting) when applied to organizations that are in tension with the regime and that face smaller, more dynamic overlapping preferences  (the center column highlighted in grey in @fig:working-theory). In this environment, organizations with lower levels of flexibility will struggle to maneuver and circumvent regime regulations, often leading to unwanted cooperation with the regime. For example, if a hypothetical INGO that teaches new media skills to state-employed reporters wants to teach skills that promote independent antagonistic reporting, but is unable to because it is unable to mitigate or challenge existing INGO regulations, it will necessarily cooperate with the regime and shift its preferences leftward. If that INGO had more flexibility, however, such as formal backing from the State Department, or other in-country programs it could shift its attention to, its ZOPA with regime preferences would increase and it would be less inclined to change its programming.
 
-# Methods
+# Research methods
 
 Explain approach; integrated multimethod research, with quantitative analysis feeding into and informing qualitative stuff…
 

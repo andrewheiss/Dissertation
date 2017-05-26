@@ -20,7 +20,7 @@ They're mostly focused on just doing their mission - priority isn't taking on go
 
 TODO: A couple paragraphs outlining:
 
-- Theoretical form of regulation (see capture part of @fig:regulation-purpose-theory): Host governments constrict the civil society regulatory environment in an effort to target INGO missions and capture the benefits from their work or coerce INGO missions to be more amenable to regime preferences
+- Theoretical form of regulation (see capture part of @fig:theory-regulation-purpose): Host governments constrict the civil society regulatory environment in an effort to target INGO missions and capture the benefits from their work or coerce INGO missions to be more amenable to regime preferences
 - Effects on INGOs: Laws lock INGOs into their programs, change their missions; make them pawns in greater political game within country
 - Expected INGO reactions: When relationship is not contentious and/or when flexibility is limited, organizations will be more likely to align their missions with the government and explicitly shape their programs to match government objectives. When relationship is more contentious, organizations will act more strategically to protect against changes: choosing regulatory body, using more/fewer local/foreign staff, moving to a different country
 - Organizations with most resources and flexibility are best able to deal with changes
