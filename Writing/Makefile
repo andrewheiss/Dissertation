@@ -5,6 +5,7 @@
 PREFIX = /Users/andrew/.pandoc
 
 TEX_DIR = compiled
+DUKE_DIR = duke
 FILENAME = compiled
 
 FRONTMATTER = metadata.md
@@ -70,6 +71,8 @@ ERROR_COLOR = \x1b[31;01m
 # --------------------
 # Target definitions
 # --------------------
+.PHONY: duke
+
 all: tex
 
 tex: 
@@ -101,3 +104,23 @@ tex:
 	$(foreach file, $(FILES_TMP), rm $(file);)
 	@echo "$(OK_COLOR)All done!$(NO_COLOR)"
 
+duke:
+	@echo "$(WARN_COLOR)Converting Markdown to TeX using dukedissertation template...$(NO_COLOR)"
+	@echo "$(WARN_COLOR)...preprocessing files...$(NO_COLOR)"
+	$(foreach file, $(FILES), replace_includes $(file) | chapterize > $(file).tmp;)
+	$(foreach file, $(FILES_TMP), pandoc --atx-headers -t markdown -o $(file) $(file) --id-prefix `uuidgen`:;)
+	@echo "$(WARN_COLOR)...converting to TeX...$(NO_COLOR)"
+	pandoc $(FRONTMATTER) $(FILES_TMP) \
+		-r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -S \
+		$(CROSSREF) \
+		--default-image-extension=pdf \
+		--biblatex \
+		--base-header-level=1 \
+		--top-level-division=chapter \
+		--id-prefix `uuidgen`: \
+	-o $(DUKE_DIR)/$(FILENAME).tex
+	@echo "$(WARN_COLOR)...converting TeX to PDF with latexmk (prepare for lots of output)...$(NO_COLOR)"
+	cd $(DUKE_DIR); latexmk -xelatex -quiet dissertation.tex
+	@echo "$(WARN_COLOR)...removing preprocessed files...$(NO_COLOR)"
+	$(foreach file, $(FILES_TMP), rm $(file);)
+	@echo "$(OK_COLOR)All done!$(NO_COLOR)"

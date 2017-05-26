@@ -116,6 +116,9 @@ Writing/*/*.tex
 Writing/*/tex_out/
 Writing/*/vc*
 Writing/compiled/*
+Writing/duke/*
+!Writing/duke/dissertation.tex
+!Writing/duke/dukedissertation.cls
 
 # ----------
 # Graphics

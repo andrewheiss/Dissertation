@@ -1,0 +1,204 @@
+%!TEX program = xelatex
+\documentclass[]{dukedissertation}
+
+%------------------------------------------------------------------------------
+% Main packages
+%------------------------------------------------------------------------------
+\usepackage{amsmath, amssymb, amsfonts, amsthm}
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{url}
+\usepackage[american]{babel}
+\usepackage[babel]{csquotes}
+\usepackage{color}
+\usepackage{bm}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{mathabx}
+\usepackage{multirow}
+\usepackage{setspace}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{pbox}       % For multi-line table cells
+\usepackage{pdflscape}  % For landscape PDF pages
+
+
+% ZOMG!!!1!
+% For whatever reason, either bidi or polyglossia redefine \maketitle,
+% @makechapterhead, and @makecaption when you load them, which then kills the
+% fancy title page stuff that dukedissertation.cls provides. The only way
+% around it is this dumb hack, found at
+% https://tex.stackexchange.com/a/149295/11851:
+%
+% - Save the original macros as \kept<macro-name-here>
+% - Load polyglossia and let it do its destructive thing
+% - Right before \begin{document}, redefine \<macro-name-here> with the 
+%     original one that was saved as \kept<macro-name-here>
+\let\keptmaketitle\maketitle
+\makeatletter
+\let\kept@makechapterhead\@makechapterhead
+\let\kept@makecaption\@makecaption
+\makeatother
+
+
+%------------------------------------------------------------------------------
+% Title page stuff
+%------------------------------------------------------------------------------
+\author{Andrew Heiss}
+\title{Amicable Contempt: The Strategic Balance between Dictators
+       and International NGOs}
+\supervisor{Judith Kelley}
+\department{Sanford School of Public Policy}
+\date{2017}
+
+\copyrighttext{All rights reserved except the rights granted by the\\
+  \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}
+       {Creative Commons Attribution-Noncommercial-ShareAlike 4.0 Licence}
+}
+
+\member{Tim Büthe}
+\member{Tana Johnson}
+\member{Timur Kuran}
+
+
+%------------------------------------------------------------------------------
+% References, hyperlinks, and language stuff
+%------------------------------------------------------------------------------
+\usepackage[pdfusetitle, plainpages=false, 
+            bookmarks, bookmarksnumbered,
+            colorlinks, linkcolor=black, citecolor=black,
+            filecolor=black, urlcolor=black]{hyperref}
+
+\hypersetup{pdfinfo={
+  Title={Amicable Contempt: The Strategic Balance between Dictators
+       and International NGOs},
+  Author={Andrew Heiss},
+  Creator={Markdown, pandoc, and TeX},
+  Subject={Public policy}
+  % Keywords={things, go, here}
+}}
+
+
+% Polyglossia has to come before biblatex and after hyperref
+\usepackage{polyglossia}
+\setmainlanguage{english}
+\setotherlanguage{arabic}
+\newfontfamily\arabicfont[Script = Arabic]{Amiri}
+
+
+% Bibliography
+\usepackage[authordate, backend=biber,
+            autolang=hyphen, bibencoding=inputenc,
+            strict, isbn=false, uniquename=false]{biblatex-chicago}
+
+\addbibresource{/Users/andrew/Dropbox/Readings/Papers.bib}
+
+
+%------------------------------------------------------------------------------
+% Other custom commands and settings
+%------------------------------------------------------------------------------
+% Don't typeset URLs in a monospaced font
+\urlstyle{same}
+% Add - to url's default breaks
+\def\UrlBreaks{\do\.\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]%
+    \do\)\do\,\do\?\do\&\do\'\do+\do\=\do\#\do-}
+
+% pandoc makes tightlists sometimes for whatever reason
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% pandoc will not convert text within \begin{} XXX \end{} to Markdown and will
+% treat it as regular TeX. Because of this, it's impossible to do stuff like
+% this:
+
+% \begin{landscape}
+%
+% | One | Two   |
+% |-----+-------|
+% | my  | table |
+% | is  | nice  |
+%
+% \end{landscape}
+%
+% Since it'll render like: | One | Two | |—–+——-| | my | table | | is | nice |
+% 
+% BUT, from this http://stackoverflow.com/a/41945462/120898 we can get around
+% this by creating new commands for \begin and \end, like this:
+\newcommand{\blandscape}{\begin{landscape}}
+\newcommand{\elandscape}{\end{landscape}}
+
+% \blandscape
+%
+% | One | Two   |
+% |-----+-------|
+% | my  | table |
+% | is  | nice  |
+%
+% \elandscape
+
+
+% Restore the commands that polyglossia broke
+\let\maketitle\keptmaketitle
+\makeatletter
+\let\@makechapterhead\kept@makechapterhead
+\let\@makecaption\kept@makecaption
+\makeatother
+
+
+%------------------------------------------------------------------------------
+% Start document
+%------------------------------------------------------------------------------
+\begin{document}
+
+%------------------------------------------------------------------------------
+% TITLE PAGE -- provides UMI abstract title page and copyright note
+%------------------------------------------------------------------------------
+\maketitle
+
+%------------------------------------------------------------------------------
+% ABSTRACT -- start file with '\abstract'.
+%------------------------------------------------------------------------------
+%\include{{./Abstract/abstract}}
+
+%------------------------------------------------------------------------------
+% FRONT MATTER
+%------------------------------------------------------------------------------
+\tableofcontents
+\listoftables
+\listoffigures
+%\include{{./Abbreviations/listofabbr}} % start file with '\abbreviations'
+
+%------------------------------------------------------------------------------
+% ACKNOWLEDGEMENTS -- start file with '\acknowledgements'
+%------------------------------------------------------------------------------
+%\include{{./Acknowledgements/acknowledgements}}
+
+%------------------------------------------------------------------------------
+% MAIN BODY OF PAPER
+%------------------------------------------------------------------------------
+% This is generated by compiling the individual Markdown files for each chapter
+% with ../Makefile (`make duke`)
+\include{{./compiled}}
+
+%------------------------------------------------------------------------------
+% APPENDICES
+%------------------------------------------------------------------------------
+%\appendix
+%\include{{./Appendix1/chLorem3}} % start file with '\chapter{Title}'
+
+%------------------------------------------------------------------------------
+% BIBLIOGRAPHY 
+%------------------------------------------------------------------------------
+\cleardoublepage
+\normalbaselines  % Fixes spacing of bibliography
+\printbibliography[heading=bibintoc, title=Bibliography]
+
+%------------------------------------------------------------------------------
+% BIOGRAPHY -- start file with '\biography'
+%------------------------------------------------------------------------------
+%\include{{./Biography/biography}}
+
+%------------------------------------------------------------------------------
+% All done \(•◡•)/
+%------------------------------------------------------------------------------
+\end{document}
