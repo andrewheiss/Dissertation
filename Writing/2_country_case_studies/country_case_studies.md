@@ -77,7 +77,7 @@ Why now?
 
 HRW connects it to instability, but only cursorily - points out that Egypt is less stable since Sisi took office, but based on the monthly average of terrorist attacks [https://freedomhouse.org/article/repression-and-instability-egypt-s-downward-spiral](https://freedomhouse.org/article/repression-and-instability-egypt-s-downward-spiral)
 
-# Jordan
+
 
 Short comparison with Jordan
 
@@ -109,7 +109,7 @@ AJ on start of new foreign NGO law: [http://www.aljazeera.com/news/2017/01/china
 
 
 
-# Myanmar
+
 
 Short comparison with Myanmar
 
@@ -203,7 +203,6 @@ Tarnavsky argued that the strict regulations would loom large for INGOs, like a 
 Events leading to the 2012 Foreign Agents and 2015 Undesirable Organizations laws provide moderate evidence for my hypotheses. As internal political stability decreased (especially in response to Putin's irredentist annexation of Crimea and subsequent war with Ukraine) and threats of revolutionary contagion and external political stability increased, civil society restrictions intensified correspondingly, as anticipated. However, the regime was apparently not responsive to international shaming and condemnation.
 
 
-# Kazakhstan
 
 Short comparison with Kazakhstan
 
