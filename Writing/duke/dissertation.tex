@@ -112,15 +112,26 @@
 % Scale all images to the full text width
 %\setkeys{Gin}{width=1\textwidth}
 
+
+% Command for manually adding hanging indents
+\newcommand{\hangstart}%
+{\setlength{\parindent}{-15pt}%
+\setlength{\leftskip}{15pt}%
+% \setlength{\parskip}{4pt}%
+\noindent}
+
+
 % Don't typeset URLs in a monospaced font
 \urlstyle{same}
 % Add - to url's default breaks
 \def\UrlBreaks{\do\.\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]%
     \do\)\do\,\do\?\do\&\do\'\do+\do\=\do\#\do-}
 
+
 % pandoc makes tightlists sometimes for whatever reason
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
 
 % pandoc will not convert text within \begin{} XXX \end{} to Markdown and will
 % treat it as regular TeX. Because of this, it's impossible to do stuff like
@@ -198,8 +209,8 @@
 %------------------------------------------------------------------------------
 % APPENDICES
 %------------------------------------------------------------------------------
-%\appendix
-%\include{{./Appendix1/chLorem3}} % start file with '\chapter{Title}'
+\appendix
+\include{{./appendix}}
 
 %------------------------------------------------------------------------------
 % BIBLIOGRAPHY 

@@ -7,6 +7,7 @@ PREFIX = /Users/andrew/.pandoc
 TEX_DIR = compiled
 DUKE_DIR = duke
 FILENAME = compiled
+APPENDIX_FILENAME = appendix
 
 FRONTMATTER = metadata.md
 FILES = 0_introduction/introduction.md 
@@ -17,7 +18,12 @@ FILES += 4_gatekeeping/gatekeeping.md
 FILES += 5_program_capture/program_capture.md
 FILES += 6_conclusion/conclusion.md
 
+APPENDIX = 7_methods_appendix/methods_appendix.md
+APPENDIX += 8_results_appendix/results_appendix.md
+
+
 FILES_TMP = $(FILES:.md=.md.tmp)
+APPENDIX_TMP = $(APPENDIX:.md=.md.tmp)
 
 # Word and HTML can choke on PDF images, so those targets use a helper script
 # named replace_pdfs to replace all references to PDFs with PNGs and convert
@@ -108,7 +114,9 @@ duke:
 	@echo "$(WARN_COLOR)Converting Markdown to TeX using dukedissertation template...$(NO_COLOR)"
 	@echo "$(WARN_COLOR)...preprocessing files...$(NO_COLOR)"
 	$(foreach file, $(FILES), replace_includes $(file) | chapterize > $(file).tmp;)
+	$(foreach file, $(APPENDIX), replace_includes $(file) | chapterize > $(file).tmp;)
 	$(foreach file, $(FILES_TMP), pandoc --atx-headers -t markdown -o $(file) $(file) --id-prefix `uuidgen`:;)
+	$(foreach file, $(APPENDIX_TMP), pandoc --atx-headers -t markdown -o $(file) $(file) --id-prefix `uuidgen`:;)
 	@echo "$(WARN_COLOR)...converting to TeX...$(NO_COLOR)"
 	pandoc $(FRONTMATTER) $(FILES_TMP) \
 		-r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -S \
@@ -119,8 +127,18 @@ duke:
 		--top-level-division=chapter \
 		--id-prefix `uuidgen`: \
 	-o $(DUKE_DIR)/$(FILENAME).tex
+	pandoc $(APPENDIX_TMP) \
+		-r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -S \
+		$(CROSSREF) \
+		--default-image-extension=pdf \
+		--biblatex \
+		--base-header-level=1 \
+		--top-level-division=chapter \
+		--id-prefix `uuidgen`: \
+	-o $(DUKE_DIR)/$(APPENDIX_FILENAME).tex
 	@echo "$(WARN_COLOR)...converting TeX to PDF with latexmk (prepare for lots of output)...$(NO_COLOR)"
 	cd $(DUKE_DIR); latexmk -xelatex -quiet dissertation.tex
 	@echo "$(WARN_COLOR)...removing preprocessed files...$(NO_COLOR)"
 	$(foreach file, $(FILES_TMP), rm $(file);)
+	$(foreach file, $(APPENDIX_TMP), rm $(file);)
 	@echo "$(OK_COLOR)All done!$(NO_COLOR)"
