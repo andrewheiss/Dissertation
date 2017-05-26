@@ -25,6 +25,8 @@ This chapter investigates these questions, ultimately seeking to identify the de
 
 # When do dictators restrict civil society?
 
+TODO: Connect this with the amicable contempt theory, show figure with just the CSRE
+
 As with other institutions, autocrats engage with international organizations and transnational civil society selectively, depending on rational calculations of how that engagement might be beneficial to the regime. Authoritarian regimes in particular tend to follow international norms and allow INGO operations only when doing so "allows the regime to [(1)] shore up its authority and legitimacy and to [(2)] deflect international pressures" [@Hawkins:1997, 407–8]. Key to harnessing this institutional dissonance for stability, however, is the autocrat's ability to manage and control these external actors. Through formal regulations and legislation and the de facto implementation of those laws, autocrats can use INGOs and other non-state actors to stabilize and reinforce their political power at home.
 
 ![Theory of the determinants of a regime's civil society regulatory environment](../../Graphics/1-theory-simple){#fig:theory}
@@ -204,59 +206,6 @@ According to my second hypothesis, fears of contagion from instability in neighb
 Finally, there is no conclusive support for or against the hypothesis that concerns over international reputation influence the decision to expand or constrict institutional dissonance. Formal, high-level diplomatic shaming and condemnation from other states is not consistently associated with changes in the regulatory environment for civil society. 
 
 While these findings provide strong statistical evidence for some of the institutional determinants of authoritarian civil society restrictions, some of the results run contrary to what I had expected. Within the nested analytical approach, such contradictory findings are welcome and provide grist for deeper small-*n* case studies that investigate these causal mechanisms further. In the next chapter, I analyze how well the model fits six different cases—Egypt, Jordan, China, Myanmar, Russia, and Kazakhstan—and discover additional nuance within and evidence for each hypothesized mechanism.
-
-\newpage
-
-# Appendix
-
-## Autocracies included in analysis
-
-\small
-!INCLUDE "../../Output/tables/1-autocracies.md"
-\normalsize
-
-\newpage
-
-## Summary of variables used in models
-
-\begingroup
-\renewcommand\arraystretch{1.6}
-!INCLUDE "../../Output/tables/1-var-summary.md"
-\endgroup
-
-\newpage
-
-## Regression results
-
-\begingroup
-\renewcommand\arraystretch{1.6}
-!INCLUDE "../../Output/tables/1-results-basic.md"
-\endgroup
-
-\newpage
-
-\begingroup
-\renewcommand\arraystretch{1.6}
-!INCLUDE "../../Output/tables/1-results-alternate.md"
-\endgroup
-
-\newpage
-
-# Software
-
-All the figures, tables, and other results can be replicated using code available at [https://github.com/andrewheiss/Dissertation/tree/master/Analysis/ngo\_regs\_regime\_stability](https://github.com/andrewheiss/Dissertation/tree/master/Analysis/ngo_regs_regime_stability) and the following open source software:
-
-\ 
-
-\begingroup \hangstart
-
-R Core Team. 2016. *R: A language and environment for statistical computing.* Vienna, Austria: R Foundation for Statistical Computing. [http://www.r-project.org](#). Version 3.3.0.
-
-Stan Development Team. 2016a. *RStan: The R Interface to Stan.* [http://mc-stan.org](#). Version 2.11.2
-
-Wickham, Hadley. 2009. *ggplot2: Elegant Graphics for Data Analysis.* Springer New York. [http://had.co.nz/ggplot2/book](#). Version 2.1.0.
-
-\endgroup
 
 [^1]:	"KAZAKHSTANI MFA 'DISAPPOINTED' WITH CERTIFICATION DECISION," State Department Cable 05ALMATY1938, [https://wikileaks.org/cable/2005/05/05ALMATY1938.html](https://wikileaks.org/cable/2005/05/05ALMATY1938.html)
 
