@@ -22,12 +22,9 @@ knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
                       options(width=120))  # For output
 
 # Load libraries
-library(dplyr)
-library(tidyr)
-library(readr)
+library(tidyverse)
 library(countrycode)
 library(lubridate)
-library(ggplot2)
 library(gtable)
 library(gridExtra)
 library(scales)
@@ -40,7 +37,7 @@ my.seed <- 1234
 set.seed(my.seed)
 
 # Countries to plot
-cases <- c("EGY", "JOR", "CHN", "MMR", "RUS", "KAZ")
+cases <- c("EGY", "CHN", "RUS")
 
 
 # -----------
@@ -182,7 +179,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
                     ylim=c(0, 12)) +
     theme_ath()
-
+  
   plot.icrg.internal.stab <- ggplot(df.icrg, 
                                     aes(x=ymd(Date),
                                         y=icrg.pol.risk.internal.nostab.scaled)) +
@@ -200,7 +197,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     theme_ath()
   
   plot.icrg.external <- ggplot(df.country, aes(x=ymd(year.actual), 
-                                                y=icrg.pol.risk_wt)) +
+                                               y=icrg.pol.risk_wt)) +
     geom_line(size=1) + 
     geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
                size=0.5, colour="grey50", linetype="dotted") +
@@ -215,7 +212,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
                     ylim=c(40, 90)) +
     theme_ath()
-
+  
   plot.protests <- ggplot(df.protests, aes(x=year.actual, y=value, linetype=protest.type)) +
     geom_hline(yintercept=3, colour="grey50") +
     geom_line(size=1) + 
@@ -255,7 +252,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     geom_segment(data=df.leaders, aes(x=Date_start, xend=Date_end, 
                                       y=0.5, yend=0.5, colour=president), size=3) +
     geom_rect(data=df.wars, aes(x=NULL, y=NULL, xmin=Date_start, xmax=Date_end, 
-                             ymin=0, ymax=0.25, fill=war)) + 
+                                ymin=0, ymax=0.25, fill=war)) + 
     geom_vline(data=df.laws, aes(xintercept=as.numeric(Date)),
                size=0.5, colour="grey50", linetype="dotted") +
     scale_colour_manual(values=ath.palette("leaders"), name=NULL) +
@@ -269,7 +266,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
           panel.grid.major.y=element_blank(),
           panel.grid.minor.y=element_blank(),
           legend.key.size=unit(0.65, "lines"),
-          legend.key=element_blank(), legend.margin=unit(0.25, "lines"),
+          legend.key=element_blank(), legend.spacing=unit(0.25, "lines"),
           axis.text=element_blank())
   
   plot.laws <- ggplot(df.laws, aes(x=Date, y=0)) + 
@@ -307,61 +304,25 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
   return(plot.timeline)
 }
 
-# plot.country <- function(country) {
-#   p.timeline <- plot.timeline(country)
-#   
-#   fig.save.cairo(p.timeline, filename=sprintf("timeline-%s", tolower(country)),
-#                  width=6, height=7.5)
-#   
-#   return(TRUE)
-# }
-# 
+plot.country <- function(country) {
+  p.timeline <- plot.timeline(country)
+  
+  grid::grid.draw(p.timeline)
+  
+  fig.save.cairo(p.timeline, filename=sprintf("timeline-%s", tolower(country)),
+                 width=6, height=7.5)
+}
+
 # suppressWarnings(sapply(cases, FUN=plot.country))
 
 #' ## Egypt
 #+ warning=FALSE, fig.width=6, fig.height=7.5
-country <- "EGY"
-grid::grid.draw(plot.timeline(country))
-fig.save.cairo(plot.timeline(country), 
-               filename=sprintf("2-timeline-%s", tolower(country)),
-               width=6, height=7.5)
-
-#' ## Jordan
-#+ warning=FALSE, fig.width=6, fig.height=7.5
-country <- "JOR"
-grid::grid.draw(plot.timeline(country))
-fig.save.cairo(plot.timeline(country), 
-               filename=sprintf("2-timeline-%s", tolower(country)),
-               width=6, height=7.5)
+suppressWarnings(plot.country("EGY"))
 
 #' ## China
 #+ warning=FALSE, fig.width=6, fig.height=7.5
-country <- "CHN"
-grid::grid.draw(plot.timeline(country))
-fig.save.cairo(plot.timeline(country), 
-               filename=sprintf("2-timeline-%s", tolower(country)),
-               width=6, height=7.5)
-
-#' ## Myanmar
-#+ warning=FALSE, fig.width=6, fig.height=7.5
-country <- "MMR"
-grid::grid.draw(plot.timeline(country))
-fig.save.cairo(plot.timeline(country), 
-               filename=sprintf("2-timeline-%s", tolower(country)),
-               width=6, height=7.5)
+suppressWarnings(plot.country("CHN"))
 
 #' ## Russia
 #+ warning=FALSE, fig.width=6, fig.height=7.5
-country <- "RUS"
-grid::grid.draw(plot.timeline(country))
-fig.save.cairo(plot.timeline(country), 
-               filename=sprintf("2-timeline-%s", tolower(country)),
-               width=6, height=7.5)
-
-#' ## Kazakhstan
-#+ warning=FALSE, fig.width=6, fig.height=7.5
-country <- "KAZ"
-grid::grid.draw(plot.timeline(country))
-fig.save.cairo(plot.timeline(country), 
-               filename=sprintf("2-timeline-%s", tolower(country)),
-               width=6, height=7.5)
+suppressWarnings(plot.country("RUS"))
