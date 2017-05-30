@@ -201,10 +201,10 @@ gw.codes <- bind_rows(gw.codes, manual.gw) %>%
 # readr::read_csv chokes on the raw V-Dem file, so read.csv it is :(
 # But only temporarily/once. Read the file in with read.csv then save as RDS
 vdem.original.location <- file.path(PROJHOME, "Data", "data_raw", 
-                                    "External", "V-Dem", "v6.2",
-                                    "V-Dem-DS-CY+Others-v6.2.csv")
+                                    "External", "V-Dem", "v7",
+                                    "V-Dem-DS-CY+Others-v7.csv")
 vdem.rds <- file.path(PROJHOME, "Data", "data_processed",
-                      "V-Dem-DS-CY+Others-v6.2.rds")
+                      "V-Dem-DS-CY+Others-v7.rds")
 
 if (!file.exists(vdem.rds)) {
   vdem.raw <- read_csv(vdem.original.location,
@@ -244,7 +244,7 @@ if (!file.exists(vdem.rds)) {
 
 vdem.raw <- readRDS(vdem.rds)
 
-testthat::expect_equal(nrow(vdem.raw), 16675)
+testthat::expect_equal(nrow(vdem.raw), 17604)
 
 # COW issues
 # vdem.raw %>% filter(is.na(COWcode)) %>% select(country_name) %>% unique
@@ -1159,6 +1159,7 @@ full.data <- tidyr::expand(vdem.cso, year, cowcode) %>%
   left_join(gwf.simplfied.extended, by=c("cowcode", "year")) %>%
   rename(year.num = year) %>%
   mutate(year.factor = factor(year.num)) %>%
+  mutate(year.actual = ymd(paste0(year.num, "-01-01"))) %>%
   # Standardize all country names and ISO codes
   select(-dplyr::contains("country"), -iso) %>%
   mutate(country = countrycode(cowcode, "cown", "country.name",
