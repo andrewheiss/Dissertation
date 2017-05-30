@@ -30,6 +30,9 @@ library(rstanarm)
 library(ggrepel)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
+coef.names <- coef.names %>%
+  filter(term != "icrg.pol.risk.internal.scaled") %>%
+  filter(term != "shaming.ingos.std")
 
 # Load data
 models.bayes <- readRDS(file.path(PROJHOME, "Data", "data_processed",
@@ -71,10 +74,10 @@ datatable(autocracies.modeled, extensions="Responsive") %>%
   formatRound(vars.used)
 
 #' ## Predicted vs. actual CSRE
-cases <- data_frame(cowcode = c(710, 651, 365, 663, 775, 705),
+cases <- data_frame(cowcode = c(710, 651, 365),
                     country.name = countrycode(cowcode, "cown", "country.name"),
-                    colour = ath.palette("palette1", n=6),
-                    fill = ath.palette("palette1", n=6),
+                    colour = ath.palette("palette1", n=3),
+                    fill = ath.palette("palette1", n=3),
                     linetype = 1, alpha = 1, point.size = 1) %>%
   mutate(country.name = ifelse(cowcode == 365, "Russia", country.name))
 
@@ -329,23 +332,6 @@ percentile.table.by.country %>%
 #' - External stability - moderate, then low
 #' - International reputation/shaming - high
 #' 
-#' #### Jordan
-#' 
-#' - 😃 Political stability - high
-#' - 😡 Government stability - medium high
-#' - 😡 Years in office - super high
-#' - 😡 Years since election - high
-#' - 😃 Opposition vote share - medium
-#' - 😃 Neighbor political stability - medium
-#' - 😃 Neighbor coup activity - medium
-#' - 😃 Neighbor violent protests - low (high during 2011–13)
-#' - 😃 Neighbor nonviolent protests - low (high during 2011–13)
-#' - State-based shaming - medium
-#' 
-#' - Internal stability - moderate (−1)
-#' - External stability - high, then moderate
-#' - International reputation/shaming - medium
-#' 
 #' #### China
 #' 
 #' - 😃 Political stability - high
@@ -363,23 +349,6 @@ percentile.table.by.country %>%
 #' - External stability - high
 #' - International reputation/shaming - high
 #' 
-#' #### Myanmar
-#' 
-#' - 😡 Political stability - low
-#' - 😡 Government stability - medium
-#' - 😡 Years in office - medium
-#' - 😡 Years since election - high
-#' - 😡 Opposition vote share - low
-#' - 😃 Neighbor political stability - medium
-#' - 😡 Neighbor coup activity - low
-#' - 😡 Neighbor violent protests - high
-#' - 😃 Neighbor nonviolent protests - medium
-#' - State-based shaming - medium
-#' 
-#' - Internal stability - low (−5)
-#' - External stability - low
-#' - International reputation/shaming - medium
-#' 
 #' #### Russia
 #' 
 #' - 😡 Political stability - medium
@@ -395,23 +364,6 @@ percentile.table.by.country %>%
 #' 
 #' - Internal stability - moderate (−1)
 #' - External stability - high
-#' - International reputation/shaming - low
-#' 
-#' #### Kazakhstan
-#' 
-#' - 😃 Political stability - high
-#' - 😡 Government stability - high
-#' - 😡 Years in office - medium
-#' - 😃 Years since election - low
-#' - 😡 Opposition vote share - low
-#' - 😃 Neighbor political stability - medium
-#' - 😃 Neighbor coup activity - medium
-#' - 😡 Neighbor violent protests - high
-#' - 😃 Neighbor nonviolent protests - high
-#' - State-based shaming - low
-#' 
-#' - Internal stability - moderate (−1)
-#' - External stability - low
 #' - International reputation/shaming - low
 #' 
 #' ### Table
