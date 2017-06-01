@@ -13,6 +13,8 @@ git-repo: https://github.com/andrewheiss/Dissertation
 
 
 
+TODO: Connect this with the amicable contempt model, show the figure with just regime preferences
+
 
 While the statistical models in the previous chapter provide some observational evidence for the internal, external, and reputational determinants of authoritarian restrictions on global civil society, there are limits in what the statistics can reveal. Most importantly, as explained previously, there is no good way to disentangle the regulatory environment for domestic NGOS from international NGOs. Examining changes in the civil society regulatory environment in a specific case over time is instructive, as it allows us to (1) unravel the specific regulations for INGOs, and (2) determine how well the statistical findings reflect reality.
 
@@ -35,6 +37,22 @@ Based on this table and the timelines, here’s the typological table of expecte
 \endgroup
 
 See full table at [https://stats.andrewheiss.com/dissertation/country\_case\_studies/case\_selection.html#table](https://stats.andrewheiss.com/dissertation/country_case_studies/case_selection.html#table)
+
+# Structure of each case
+
+## Background + overview of legal environment
+
+One page overview of the progression of the laws
+
+## Internal factors
+
+## External factors
+
+## Reputational factors
+
+## Expected vs. actual outcome
+
+
 
 # Egypt
 
@@ -77,12 +95,6 @@ Why now?
 
 HRW connects it to instability, but only cursorily - points out that Egypt is less stable since Sisi took office, but based on the monthly average of terrorist attacks [https://freedomhouse.org/article/repression-and-instability-egypt-s-downward-spiral](https://freedomhouse.org/article/repression-and-instability-egypt-s-downward-spiral)
 
-
-
-Short comparison with Jordan
-
-![Jordan timeline](../../Output/figures/2-timeline-jor){#fig:2-timeline-jor}
-
 # China
 
 ![China timeline](../../Output/figures/2-timeline-chn){#fig:2-timeline-chn}
@@ -108,12 +120,6 @@ Council on Foundations summary of China laws specific to foreign foundations: [h
 AJ on start of new foreign NGO law: [http://www.aljazeera.com/news/2017/01/china-ngo-law-170101083414954.html](http://www.aljazeera.com/news/2017/01/china-ngo-law-170101083414954.html)
 
 
-
-
-
-Short comparison with Myanmar
-
-![Myanmar timeline](../../Output/figures/2-timeline-mmr){#fig:2-timeline-mmr}
 
 # Disentangling restrictions on domestic and international civil society in Russia
 
@@ -202,11 +208,6 @@ Tarnavsky argued that the strict regulations would loom large for INGOs, like a 
 
 Events leading to the 2012 Foreign Agents and 2015 Undesirable Organizations laws provide moderate evidence for my hypotheses. As internal political stability decreased (especially in response to Putin's irredentist annexation of Crimea and subsequent war with Ukraine) and threats of revolutionary contagion and external political stability increased, civil society restrictions intensified correspondingly, as anticipated. However, the regime was apparently not responsive to international shaming and condemnation.
 
-
-
-Short comparison with Kazakhstan
-
-![Kazakhstan timeline](../../Output/figures/2-timeline-kaz){#fig:2-timeline-kaz}
 
 # Cross-region comparisons
 
