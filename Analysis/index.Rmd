@@ -36,3 +36,7 @@ output:
 - [Summary](ingo_survey/survey_summary.html)
 - [Analysis](ingo_survey/survey_analysis.html)
 - [Actual analysis](ingo_survey/actual_analysis.html)
+
+## Miscellaneous stuff
+
+- [Miscellaneous analysis](misc/misc_analysis.html)

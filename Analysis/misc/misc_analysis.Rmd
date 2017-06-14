@@ -1,0 +1,46 @@
+---
+title: "Miscellaneous stuff"
+author: "Andrew Heiss"
+date: "`r format(Sys.time(), '%B %e, %Y')`"
+output: 
+  html_document: 
+    css: ../html/fixes.css
+    code_folding: hide
+    toc: yes
+    toc_float: true
+    toc_depth: 4
+    highlight: pygments
+    theme: cosmo
+    self_contained: no
+    includes:
+      after_body: ../html/add_home_link.html
+bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
+csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
+                      tidy.opts=list(width.cutoff=140),  # For code
+                      options(width=140))  # For output
+
+library(tidyverse)
+
+source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
+```
+
+## Goals of government regulation of INGOs and corresponding INGO responses
+
+```{r goals-summary, message=FALSE, results="asis"}
+goals <- read_csv(file.path(PROJHOME, "Data", 
+                            "data_base", "ingo_reactions_summary.csv")) %>%
+  mutate_each(funs(str_replace(., "XXX", "\\\n")))
+
+caption <- "Goals of government regulation of INGOs and corresponding INGO responses {#tbl:ingo-reactions-summary}"
+goals.out <- pandoc.table.return(goals, keep.line.breaks=TRUE,
+                                 justify="lllll", caption=caption, style="grid")
+
+cat(goals.out)
+cat(goals.out, file=file.path(PROJHOME, "Output", "tables", 
+                              "3-ingo-reactions-summary.md"))
+```
+
