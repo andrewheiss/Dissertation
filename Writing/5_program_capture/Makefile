@@ -128,6 +128,7 @@ bib:	$(BIB)
 		--default-image-extension=png \
 		--template=$(PREFIX)/templates/html.template \
 		--css=$(PREFIX)/styles/marked/kultiad-serif.css \
+		--self-contained \
 		--filter pandoc-citeproc \
 		--csl=$(PREFIX)/csl/$(CSL).csl \
 		--bibliography=$(BIB_FILE) \
