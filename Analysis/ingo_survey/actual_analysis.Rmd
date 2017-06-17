@@ -1858,6 +1858,7 @@ df.reg.types.plot <- df.reg.types %>%
     "Moderately" = c("A moderate amount", "A little"),
     "Not at all" = "None at all"
   )) %>%
+  mutate(response = fct_drop(response)) %>%
   group_by(question, response, potential.contentiousness) %>%
   summarise(num = sum(num)) %>%
   group_by(potential.contentiousness, question) %>%
@@ -1884,7 +1885,7 @@ plot.regs.gatekeeping
 
 fig.save.cairo(plot.regs.gatekeeping,
                filename="3-regs-faced-gatekeeping",
-               width=4.5, height=3)
+               width=4.5, height=2.5)
 
 plot.regs.capture <- ggplot(filter(df.reg.types.plot, !(question %in% gatekeeping.regs)), 
                                 aes(x=prop, y=fct_rev(response),
@@ -1902,8 +1903,58 @@ plot.regs.capture
 
 fig.save.cairo(plot.regs.capture,
                filename="3-regs-faced-capture",
-               width=4.5, height=3)
+               width=4.5, height=2.5)
 ```
+
+#### Check for differences in contentiousness
+
+```{r regs.differences.gatekeeping, results="asis"}
+run.indiv.regs <- function(df) {
+  df %>%
+    diff.groups.bayes(cbind(num, total) ~ potential.contentiousness, 
+                      data=., prop=TRUE)
+}
+
+regs.differences.table.bayes <- df.reg.types.plot %>%
+  group_by(question, potential.contentiousness) %>%
+  mutate(total = sum(num)) %>%
+  ungroup() %>%
+  nest(-question, -response) %>%
+  mutate(bayes.results = data %>% map(run.indiv.activities))
+
+regs.differences.table.p <- regs.differences.table.bayes %>%
+  mutate(mean.diff = bayes.results %>% map_dbl(c("diffs.summary", "mean")),
+         diff.p = bayes.results %>% map_dbl(c("diffs.summary", "p.greater0"))) %>%
+  mutate(diff.pgt0 = paste0(round(mean.diff, 2), "\\ \n(", 
+                            round(diff.p, 2), ")")) %>%
+  select(question, response, diff.pgt0) %>%
+  arrange(question, response) %>%
+  spread(response, diff.pgt0) %>%
+  rename(` ` = question)
+
+caption <- "Differences in proportion of high and low contention INGOs reporting severity of gatekeeping regulations (accompanies @fig:regs-faced-gatekeeping). Posterior probability that the proportion is greater than 0 given in parentheses. {#tbl:regs-differences-p}"
+clean.table <- pandoc.table.return(filter(regs.differences.table.p, 
+                                          ` ` %in% gatekeeping.regs),
+                                   keep.line.breaks=TRUE,
+                                   justify="lccc", caption=caption)
+
+cat(clean.table)
+cat(clean.table, file=file.path(PROJHOME, "Output", "tables", 
+                                "3-regs-differences-gatekeeping-p.md"))
+```
+
+```{r regs.differences.capture, results="asis"}
+caption <- "Differences in proportion of high and low contention INGOs reporting severity of program capture regulations (accompanies @fig:regs-faced-capture). Posterior probability that the proportion is greater than 0 given in parentheses. {#tbl:regs-differences-p}"
+clean.table <- pandoc.table.return(filter(regs.differences.table.p, 
+                                          !(` ` %in% gatekeeping.regs)),
+                                   keep.line.breaks=TRUE,
+                                   justify="lccc", caption=caption)
+
+cat(clean.table)
+cat(clean.table, file=file.path(PROJHOME, "Output", "tables", 
+                                "3-regs-differences-capture-p.md"))
+```
+
 
 
 ```{r}
