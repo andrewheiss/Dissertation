@@ -1932,7 +1932,7 @@ regs.differences.table.p <- regs.differences.table.bayes %>%
   spread(response, diff.pgt0) %>%
   rename(` ` = question)
 
-caption <- "Differences in proportion of high and low contention INGOs reporting severity of gatekeeping regulations (accompanies @fig:regs-faced-gatekeeping). Posterior probability that the proportion is greater than 0 given in parentheses. {#tbl:regs-differences-p}"
+caption <- "Differences in proportion of high and low contention INGOs reporting severity of gatekeeping regulations (accompanies @fig:regs-faced-gatekeeping). Posterior probability that the proportion is greater than 0 given in parentheses. {#tbl:regs-differences-gatekeeping-p}"
 clean.table <- pandoc.table.return(filter(regs.differences.table.p, 
                                           ` ` %in% gatekeeping.regs),
                                    keep.line.breaks=TRUE,
@@ -1940,11 +1940,11 @@ clean.table <- pandoc.table.return(filter(regs.differences.table.p,
 
 cat(clean.table)
 cat(clean.table, file=file.path(PROJHOME, "Output", "tables", 
-                                "3-regs-differences-gatekeeping-p.md"))
+                                "4-regs-differences-gatekeeping-p.md"))
 ```
 
 ```{r regs.differences.capture, results="asis"}
-caption <- "Differences in proportion of high and low contention INGOs reporting severity of program capture regulations (accompanies @fig:regs-faced-capture). Posterior probability that the proportion is greater than 0 given in parentheses. {#tbl:regs-differences-p}"
+caption <- "Differences in proportion of high and low contention INGOs reporting severity of program capture regulations (accompanies @fig:regs-faced-capture). Posterior probability that the proportion is greater than 0 given in parentheses. {#tbl:regs-differences-capture-p}"
 clean.table <- pandoc.table.return(filter(regs.differences.table.p, 
                                           !(` ` %in% gatekeeping.regs)),
                                    keep.line.breaks=TRUE,
@@ -1952,5 +1952,5 @@ clean.table <- pandoc.table.return(filter(regs.differences.table.p,
 
 cat(clean.table)
 cat(clean.table, file=file.path(PROJHOME, "Output", "tables", 
-                                "3-regs-differences-capture-p.md"))
+                                "5-regs-differences-capture-p.md"))
 ```
