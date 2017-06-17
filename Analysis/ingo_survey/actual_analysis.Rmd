@@ -1884,7 +1884,7 @@ plot.regs.gatekeeping <- ggplot(filter(df.reg.types.plot, question %in% gatekeep
 plot.regs.gatekeeping
 
 fig.save.cairo(plot.regs.gatekeeping,
-               filename="3-regs-faced-gatekeeping",
+               filename="4-regs-faced-gatekeeping",
                width=4.5, height=2.5)
 
 plot.regs.capture <- ggplot(filter(df.reg.types.plot, !(question %in% gatekeeping.regs)), 
@@ -1902,7 +1902,7 @@ plot.regs.capture <- ggplot(filter(df.reg.types.plot, !(question %in% gatekeepin
 plot.regs.capture
 
 fig.save.cairo(plot.regs.capture,
-               filename="3-regs-faced-capture",
+               filename="5-regs-faced-capture",
                width=4.5, height=2.5)
 ```
 
