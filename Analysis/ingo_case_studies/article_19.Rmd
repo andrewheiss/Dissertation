@@ -148,3 +148,25 @@ plot.offices
 fig.save.cairo(plot.offices, filename="4-a19-offices", 
                width=5.5, height=4)
 ```
+
+## Reports in the Middle East
+
+Middle Eastern countries where Article 19 has issues 10+ reports between 2011 and 2017, based on counts from June 19, 2017 at the [Resources database](https://www.article19.org/resources.php?action=resourcesearch&search=test&lang=en).
+
+```{r me-reports}
+a19.me <- read_csv(file.path(PROJHOME, "Data", 
+                             "data_base", "a19_me_reports.csv"))  %>%
+  arrange(reports) %>%
+  mutate(country = fct_inorder(country))
+
+plot.me.reports <- ggplot(a19.me, aes(x=reports, y=country, colour=hq)) + 
+  geom_pointrangeh(aes(xmin=0, xmax=reports)) +
+  labs(x="Advocacy letters, reports, statements, and updates (2011–17)", y=NULL) +
+  scale_colour_manual(values=c("grey30", "#FF851B"), guide=FALSE) +
+  theme_ath() + theme(panel.grid.major.y=element_blank())
+plot.me.reports
+
+fig.save.cairo(plot.me.reports, filename="4-a19-me-reports", 
+               width=4.5, height=2)
+```
+

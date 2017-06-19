@@ -55,6 +55,7 @@ Icon?
 Data/**.ods
 Data/**.odb
 Data/**.db
+*~lock*
 
 Data/data_raw/External/*
 !Data/data_raw/External/external_data.yml
