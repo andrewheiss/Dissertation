@@ -153,7 +153,7 @@ fig.save.cairo(plot.offices, filename="4-a19-offices",
 
 Middle Eastern countries where Article 19 has issues 10+ reports between 2011 and 2017, based on counts from June 19, 2017 at the [Resources database](https://www.article19.org/resources.php?action=resourcesearch&search=test&lang=en).
 
-```{r me-reports}
+```{r me-reports, message=FALSE, fig.width=4.5, fig.height=2}
 a19.me <- read_csv(file.path(PROJHOME, "Data", 
                              "data_base", "a19_me_reports.csv"))  %>%
   arrange(reports) %>%
