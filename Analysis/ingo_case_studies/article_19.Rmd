@@ -1,0 +1,108 @@
+---
+title: "Article 19 analysis"
+author: "Andrew Heiss"
+date: "`r format(Sys.time(), '%B %e, %Y')`"
+output: 
+  html_document: 
+    css: ../html/fixes.css
+    code_folding: hide
+    toc: yes
+    toc_float: true
+    toc_depth: 4
+    highlight: pygments
+    theme: cosmo
+    self_contained: no
+    includes:
+      after_body: ../html/add_home_link.html
+bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
+csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
+                      tidy.opts=list(width.cutoff=140),  # For code
+                      options(width=140))  # For output
+
+library(tidyverse)
+library(forcats)
+
+source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
+```
+
+## Budget and staff over time
+
+```{r budget-staff, message=FALSE}
+a19.budget <- read_csv(file.path(PROJHOME, "Data", 
+                                 "data_base", "a19_budget.csv")) %>%
+  gather(key, value, -Year) %>%
+  mutate(type = ifelse(key == "Staff", "Staff", "Budget"))
+
+plot.budget <- ggplot(filter(a19.budget, type == "Budget"),
+                      aes(x=Year, y=value, colour=key)) +
+  geom_line(size=1) +
+  guides(colour=guide_legend(title=NULL)) +
+  labs(x=NULL, y="Reported amount") +
+  scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+  theme_ath()
+
+plot.staff <- ggplot(filter(a19.budget, type == "Staff"),
+                     aes(x=Year, y=value)) +
+  geom_line(size=1) +
+  labs(x=NULL, y="Full time employees") +
+  theme_ath()
+
+plot.both <- rbind(ggplotGrob(plot.budget),
+                   ggplotGrob(plot.staff))
+
+panels <- plot.both$layout$t[grep("panel", plot.both$layout$name)]
+plot.both$heights[panels] <- unit(c(1, 0.5), "null")
+
+grid::grid.newpage()
+grid::grid.draw(plot.both)
+
+fig.save.cairo(plot.both, filename="4-a19-budget-staff", 
+               width=4.5, height=3)
+```
+
+
+## Regional expenses over time
+
+```{r regional-expenses, message=FALSE}
+a19.regional <- read_csv(file.path(PROJHOME, "Data", 
+                                 "data_base", "a19_regional_expenses.csv")) %>%
+  filter(!(Category %in% c("Governance", "Fundraising", "Law and policy"))) %>%
+  mutate(Category = ordered(fct_relevel(Category, "Global"))) %>%
+  group_by(Year, Category) %>%
+  summarise(Amount = sum(Amount))
+
+plot.regions <- ggplot(a19.regional, aes(x=Year, y=Amount, colour=Category)) +
+  geom_line(size=1) +
+  guides(colour=FALSE) +
+  labs(x=NULL, y="Reported amount") +
+  scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+  theme_ath()
+
+
+a19.percent <- a19.regional %>%
+  group_by(Year) %>%
+  mutate(total = sum(Amount),
+         percent = Amount / total)
+
+plot.percent <- ggplot(a19.percent, aes(x=Year, y=percent, colour=Category)) +
+  geom_line(size=1) +
+  guides(colour=guide_legend(title=NULL)) +
+  labs(x=NULL, y="Percent spent on region") +
+  scale_y_continuous(labels=scales::percent) +
+  theme_ath()
+
+plot.regions.both <- rbind(ggplotGrob(plot.regions),
+                           ggplotGrob(plot.percent))
+
+grid::grid.newpage()
+grid::grid.draw(plot.regions.both)
+
+fig.save.cairo(plot.regions.both, filename="4-a19-regions-expenses", 
+               width=4.5, height=4)
+```
+
+
