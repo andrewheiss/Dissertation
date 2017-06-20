@@ -161,7 +161,7 @@ a19.me <- read_csv(file.path(PROJHOME, "Data",
 
 plot.me.reports <- ggplot(a19.me, aes(x=reports, y=country, colour=hq)) + 
   geom_pointrangeh(aes(xmin=0, xmax=reports)) +
-  labs(x="Advocacy letters, reports, statements, and updates (2011–17)", y=NULL) +
+  labs(x="Advocacy letters, reports, statements, and updates", y=NULL) +
   scale_colour_manual(values=c("grey30", "#FF851B"), guide=FALSE) +
   theme_ath() + theme(panel.grid.major.y=element_blank())
 plot.me.reports
