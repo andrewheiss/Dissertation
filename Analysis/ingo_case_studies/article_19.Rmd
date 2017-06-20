@@ -128,15 +128,16 @@ offices.robinson <- project(as.matrix(a19.offices %>% select(long, lat)),
 
 offices.to.plot <- bind_cols(a19.offices, as.data.frame(offices.robinson))
 
-plot.offices <- ggplot(possible.countries, aes(map_id=id)) +
-  geom_map(map=countries.ggmap, size=0.15, colour="black", fill="grey90") + 
+plot.offices <- ggplot(possible.countries) +
+  geom_map(aes(map_id=id), map=countries.ggmap, 
+           size=0.15, colour="black", fill="grey90") + 
   geom_point(data=offices.to.plot, 
              aes(x=long.robinson, y=lat.robinson, 
-                 fill=NULL, map_id=NULL), 
-             colour="black", size=2.5) + 
+                 fill=NULL), 
+             colour="black", size=1.5) + 
   geom_label_repel(data=offices.to.plot,
                    aes(x=long.robinson, y=lat.robinson, 
-                       label=office, fill=hq, map_id=NULL),
+                       label=office, fill=hq),
                    size=3) +
   expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) + 
   coord_equal() +
@@ -146,7 +147,7 @@ plot.offices <- ggplot(possible.countries, aes(map_id=id)) +
 plot.offices
 
 fig.save.cairo(plot.offices, filename="4-a19-offices", 
-               width=5.5, height=4)
+               width=5.5, height=2.5)
 ```
 
 ## Reports in the Middle East
