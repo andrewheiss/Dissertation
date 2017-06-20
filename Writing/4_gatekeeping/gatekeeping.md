@@ -86,7 +86,7 @@ Expectations: organizations that are larger, better funded, that work with more 
 
 ## Mission and strategy
 
-Article 19 was founded in 1987 by the children of American businessman and philanthropist J. Roderick MacArthur, who himself was the son of John MacArthur, a famous American philanthropist whose endowment funds the John D. And Catherine T. MacArthur Foundation based in Chicago. The younger philanthropist was a champion of civil rights who "believed that foundations should be at the cutting edge of social change" [@Nielsen:1996, 132]. Before his death in 1984, he laid out his vision to establish an international organization to combat censorship [@Fein:1992]. Though he died before the organization was incorporated, his children provided a $500,000 seed grant and founded what has become one of the most prominent freedom of expression NGOs in the world.
+Article 19 was founded in 1987 by the children of American businessman and philanthropist J. Roderick MacArthur, who himself was the son of John MacArthur, a famous American philanthropist whose endowment established the Chicago-based John D. And Catherine T. MacArthur Foundation. The younger philanthropist was a champion of civil rights who "believed that foundations should be at the cutting edge of social change" [@Nielsen:1996, 132]. Before his death in 1984, he laid out his vision to establish an international organization to combat censorship [@Fein:1992]. Though he died before the organization was incorporated, his children provided a $500,000 seed grant and founded what has become one of the most prominent freedom of expression NGOs in the world.
 
 The organization takes its name from the UN's Universal Declaration of Human Rights, which establishes that
 
