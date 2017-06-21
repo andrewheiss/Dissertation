@@ -1,0 +1,120 @@
+---
+title: "AMERA UK/Egypt/International analysis"
+author: "Andrew Heiss"
+date: "`r format(Sys.time(), '%B %e, %Y')`"
+output: 
+  html_document: 
+    css: ../html/fixes.css
+    code_folding: hide
+    toc: yes
+    toc_float: true
+    toc_depth: 4
+    highlight: pygments
+    theme: cosmo
+    self_contained: no
+    includes:
+      after_body: ../html/add_home_link.html
+bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
+csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
+                      tidy.opts=list(width.cutoff=140),  # For code
+                      options(width=140))  # For output
+
+library(tidyverse)
+library(forcats)
+library(countrycode)
+library(rgdal)
+
+source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
+```
+
+## Budget and staff over time
+
+```{r budget-staff, message=FALSE}
+amera.budget <- read_csv(file.path(PROJHOME, "Data", 
+                                   "data_base", "amera_budget.csv")) 
+
+amera.budget.long <- amera.budget %>%
+  gather(key, value, -Year) %>%
+  mutate(type = ifelse(key == "Staff", "Staff", "Budget"))
+
+plot.budget <- ggplot(filter(amera.budget.long, type == "Budget"),
+                      aes(x=Year, y=value, colour=key)) +
+  geom_line(size=1) +
+  labs(x=NULL, y="Reported amount") +
+  scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+  scale_color_manual(values=ath.palette("palette1")[3:4], name=NULL) +
+  theme_ath()
+
+plot.staff <- ggplot(filter(amera.budget.long, type == "Staff"),
+                     aes(x=Year, y=value)) +
+  geom_line(size=1) +
+  labs(x=NULL, y="Full time employees") +
+  theme_ath()
+
+plot.both <- rbind(ggplotGrob(plot.budget),
+                   ggplotGrob(plot.staff))
+
+panels <- plot.both$layout$t[grep("panel", plot.both$layout$name)]
+plot.both$heights[panels] <- unit(c(1, 0.5), "null")
+
+grid::grid.newpage()
+grid::grid.draw(plot.both)
+
+fig.save.cairo(plot.both, filename="4-amera-budget-staff", 
+               width=4.5, height=3)
+```
+
+```{r results="asis"}
+amera.budget %>%
+  mutate(Surplus = Income - Expenses) %>%
+  pander::pandoc.table()
+```
+
+
+## Regional offices
+
+```{r regional-offices, message=FALSE, warning=FALSE}
+# Load Robinson map projection
+countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                                     "countries110_robinson_ggmap.rds"))
+
+# All possible countries (to fix the South Sudan issue)
+possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
+
+# Manually geocode cities with http://latitude.to/
+# Convert office city coordinates to Robinson projection
+amera.partners <- read_csv(file.path(PROJHOME, "Data", 
+                                    "data_base", "amera_partners.csv")) %>%
+  mutate(iso = countrycode(country, "country.name", "iso3c"))
+
+partners.robinson <- project(as.matrix(amera.partners %>% select(long, lat)), 
+                             proj="+proj=robin") %>%
+  as.data.frame %>% rename(long.robinson = long, lat.robinson = lat)
+
+partners.to.plot <- bind_cols(amera.partners, as.data.frame(partners.robinson))
+
+plot.partners <- ggplot(possible.countries) +
+  geom_map(aes(map_id=id), map=countries.ggmap, 
+           size=0.15, colour="black", fill="grey90") + 
+  geom_point(data=partners.to.plot, 
+             aes(x=long.robinson, y=lat.robinson, 
+                 fill=NULL), 
+             colour="black", size=1.5) + 
+  geom_label_repel(data=partners.to.plot,
+                   aes(x=long.robinson, y=lat.robinson, 
+                       label=office, fill=hq),
+                   size=3) +
+  expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) +
+  coord_equal() +
+  scale_fill_manual(values=c("#FFDC00", "#FF851B"), guide=FALSE) +
+  scale_colour_manual(values=c("#FFDC00", "#FF851B"), guide=FALSE) +
+  theme_ath_map()
+plot.partners
+
+fig.save.cairo(plot.partners, filename="4-amera-partners", 
+               width=5.5, height=2.5)
+```

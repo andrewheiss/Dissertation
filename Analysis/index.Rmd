@@ -40,6 +40,7 @@ output:
 ## Case studies of INGOs
 
 - [Article 19](ingo_case_studies/article_19.html)
+- [AMERA UK/Egypt/International](ingo_case_studies/amera.html)
 
 ## Miscellaneous stuff
 
