@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: June 20, 2017
+date: June 21, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -104,7 +104,7 @@ Since its initial $500,000 grant from the J. Roderick MacArthur foundation, Arti
 
 More importantly than steady revenue, however, is the alignment of Article 19's vision with that of its donors. To avoid mission drift, the organization seeks out foundations that already have a history of funding freedom of expression and anti-censorship work, such as OSF and the Ford Foundation. Article 19 consults with its donors to ensure that their visions and missions align. This is particularly important for the type of legislative advocacy Article 19 engages in—lobbying is expensive, time consuming, and runs a high risk of failure, even in democratic political systems. Article 19 staffers noted that foundations looking for guaranteed quick returns on their social investments can lack the patience and flexibility to fund the organization's lobbying efforts. One compared the slowness of their work with the Polish Solidarity movement in the 1980s, which received funds from Western donors while making little visible progress in promoting human rights until the fall of communist rule in Poland. The staffer observed that Solidarity would not have existed had donors thought about the movement like they do today, with donor emphasis on results-based outcomes.[^46] Evidence from @Bush:2015 supports this view, showing that donors' increasing emphasis on professionalization and measurable results has led to a taming of confrontational democracy assistance programs. Accordingly, Article 19 seeks out donors with longer time horizons and more permissive standards of results to ensure that their programs are not tamed by donor demands.
 
-Another key source of flexibility is Article 19's geographic proximity to the countries it targets. Since at least the early 2000s, Article 19 has divided its advocacy work primarily by region, assigning staff to portfolios of countries in Africa, Asia, Europe, Latin America, and the Middle East and North Africa,[^47] each overseen by an expert program officer. The organization also maintains a issue-specific programs focused on legal issues, operations, and digital advocacy,[^48] covering its work across all regions. Prior to 2005, beyond a few small regional offices in Latin America, most of Article 19's staff were based in London, with program officers traveling regularly to their assigned regions and communicating with implementing partners remotely. In 2004, under the direction of executive director Agnès Callamard, the organization established a 5-year strategic vision that included a goal to strengthen Article 19's global presence, starting by exploring options for creating permanent local offices in each region [@a19:2005, 41]. By 2007, that goal had crystalized into a more specific target of establishing "a presence in all five regions by 2010, including through posting of staff, opening of local/regional offices, and/or institutionalised partnership (franchise) with local NGOs" [a19:2007, 18]. 
+Another key source of flexibility is Article 19's geographic proximity to the countries it targets. Since at least the early 2000s, Article 19 has divided its advocacy work primarily by region, assigning staff to portfolios of countries in Africa, Asia, Europe, Latin America, and the Middle East and North Africa,[^47] each overseen by an expert program officer. The organization also maintains a issue-specific programs focused on legal issues, operations, and digital advocacy,[^48] covering its work across all regions. Prior to 2005, beyond a few small regional offices in Latin America, most of Article 19's staff were based in London, with program officers traveling regularly to their assigned regions and communicating with implementing partners remotely. In 2004, under the direction of executive director Agnès Callamard, the organization established a 5-year strategic vision that included a goal to strengthen Article 19's global presence, starting by exploring options for creating permanent local offices in each region [@a19:2005, 41]. By 2007, that goal had crystalized into a more specific target of establishing "a presence in all five regions by 2010, including through posting of staff, opening of local/regional offices, and/or institutionalised partnership (franchise) with local NGOs" [@a19:2007, 18]. 
 
 ![Article 19's headquarters and regional offices](../../Output/figures/4-a19-offices){#fig:a19-offices}
 
@@ -122,74 +122,117 @@ Restrictions on individual freedom of expression have increased in concert with 
 
 ### Responses to entry restrictions
 
-On its face, moving strategic planning and implementation away from the organization's central offices in London was designed to enhance the organization's access to remote partners, allowing it to "respond more swiftly to opportunities or crises, … be closer to [its] partners, work more closely with them, and thus be more capable to respond to their demands and strengthen interactions and capacities."[@a19:2008, 38]. Beyond enhancing the organization's programmatic efficiency by moving its experts to the field, decentralization also provided legal and regulatory benefits and allowed Article 19's central offices to better handle the complexities of each country's gatekeeping and registration regulations. These offices were formally registered according to each country's foreign NGO regulations, and to smooth the registration process, each office was established as part of projects funded by large donors. Article 19 Mexico, for example, was created in 2008 as part of an RTI advocacy campaign funded by the Hewlett Foundation—its local registration was incidental to the overall program. The other regional offices followed a similar pattern: Article 19 Brazil and Article 19 Bangladesh were both incorporated in 2008 while implementing RTI programs funded by DIFD, while Article 19 Kenya was registered in 2007 to undertake a project in Sudan funded by the European Commission and the Norwegian Ministry of Foreign Affairs [@a19:2008, 38]. Article 19 collaborated with its funders to overcome and avoid registration hurdles. Not only did bundling the registration of its regional offices with larger grants sponsored by governmental aid agencies like DFID and the European Commission expedite the registration process in each country, linking registration to grant fulfillment imbued Article 19's regional offices and programs with international backing and legitimacy.
+On its face, moving strategic planning and implementation away from the organization's central offices in London was designed to enhance the organization's access to remote partners, allowing it to "respond more swiftly to opportunities or crises, … be closer to [its] partners, work more closely with them, and thus be more capable to respond to their demands and strengthen interactions and capacities"[@a19:2008, 38]. Beyond enhancing the organization's programmatic efficiency by moving its experts to the field, decentralization also provided legal and regulatory benefits and allowed Article 19's central offices to better handle the complexities of each country's gatekeeping and registration regulations. These offices were formally registered according to each country's foreign NGO regulations, and to smooth the registration process, each office was established as part of projects funded by large donors. Article 19 Mexico, for example, was created in 2008 as part of an RTI advocacy campaign funded by the Hewlett Foundation—its local registration was incidental to the overall program. The other regional offices followed a similar pattern: Article 19 Brazil and Article 19 Bangladesh were both incorporated in 2008 while implementing RTI programs funded by DIFD, while Article 19 Kenya was registered in 2007 to undertake a project in Sudan funded by the European Commission and the Norwegian Ministry of Foreign Affairs [@a19:2008, 38]. Article 19 collaborated with its funders to overcome and avoid registration hurdles. Not only did bundling the registration of its regional offices with larger grants sponsored by governmental aid agencies like DFID and the European Commission expedite the registration process in each country, linking registration to grant fulfillment imbued Article 19's regional offices and programs with international backing and legitimacy.
 
 Article 19 further ensured the success of their remote registration status by strategically selecting countries with the most amenable and navigable civil society regulatory environments, essentially choosing the "best house in a bad neighborhood" [@BarryBellClay:2015]. As mentioned previously, Article 19 reanalyzes legal trends in its various host countries to ensure that its mission aligns with the regulatory environments of its various target countries. Gatekeeping regulations factor into their decisions to expand to other countries. In the past decade, the organization has considered establishing a more formal presence in countries like Egypt and China, but concluded that the regulatory environments for INGOs in these countries would require too much effort and too many legal resources to keep any offices open.[^53]
 
-When deciding where to expand its regional offices, Article 19 selects countries where it can have the most impact—both in-country and throughout the region—with the least amount of government interference. Brazil, Bangladesh, Mexico, Kenya, Senegal, and Tunisia each have more relaxed and friendlier laws than their regional neighbors. Registering as an international NGO in India, Ethiopia, Sudan, or Egypt, for instance, is more expensive, complicated, and risky than working from Bangladesh, Kenya, or Tunisia. The organization formally registered its office in Tunisia in 2011 precisely because it was the "safe option"[^54]. Because post-revolutionary laws regarding NGO registration were more open than any other country in the region, Tunis became a safe central home base for Article 19's Middle Eastern work. 
+When deciding where to expand its regional offices, Article 19 selects countries where it can have the most impact—both in-country and throughout the region—with the least amount of government interference. Brazil, Bangladesh, Mexico, Kenya, Senegal, and Tunisia each have more relaxed and friendlier laws than their regional neighbors. Registering as an international NGO in India, Ethiopia, Sudan, or Egypt, for instance, is more expensive, complicated, and risky than working from Bangladesh, Kenya, or Tunisia. The organization formally registered its office in Tunisia in 2011 precisely because it was the "safe option."[^54] Because post-revolutionary laws regarding NGO registration were more open than any other country in the region, Tunis became a safe central home base for Article 19's Middle Eastern work. 
 
 The organization can afford to be selective in where it places its regional offices because of its large budget and international flexibility. Since it already has an established headquarters in London, it can take time to deliberate and debate possible regional offices. With consistent revenue, it can take more risks as it expands its programs. The Tunis office was formally incorporated in 2011, but as explained below, Article 19 has been active in Tunisia since at least 2004. Rather than establish regional offices from scratch, the organization builds on existing work and connections. Additionally, because it has multiple programs spread across the world, the organization can close and relocate its offices more easily. In the 1990s, prior to the organization's official policy of decentralization, it incorporated Article 19 South Africa as a regional subsidiary organization. Rising operational costs and increasing difficulties with coordination led to the office's closure in 2004 [@Stroup:2012, 180; @a19-fin:2004], but leaving the country did not have an overly negative effect on the Article 19's programs in the region. From its base in London, the organization continued to hold workshops, lobby politicians, consult bureaucrats, and litigate against censorship throughout the region in 2004 [@a19:2004; @a19:2005]. While it has not yet been forced out of any of its current regional offices because of gatekeeping regulations, past experience shows that Article 19 would likely be able to absorb and adapt to such a change because of its flexibility, shifting resources and staff around to different regional or home offices.
 
 ### Responses to programmatic restrictions
 
-Strategies for overcoming programming laws
+Gatekeeping laws exist not only to filter out organizations that can cause potential political risks—governments can enact legislation or arbitrarily implement existing regulations to make life difficult for organizations already in their countries. While registration laws predominantly affect Article 19's regional offices, the organization must contend with regulations that target and restrict the organization's programming in all countries where it engages in advocacy, including countries where it does not have a permanent formal presence. In its 2014 annual report, dedicated to closing civic space, Article 19 noted that programming restrictions—particularly legal and security threats against in-country staff—were one of the most urgent challenges to undertaking its mission. Executive director Thomas Hughes observed, "Unfortunately, 2014 was marked by a deteriorating security environment for us and our partners. Threats against staff increased, mirroring the global trend of greater suppression and restriction of individuals and institutions defending human rights" [@a19:2014, 4]. 
 
-Increase spending to ensure security
-"Unfortunately, 2014 was marked by a deteriorating security environment for us and our partners. Threats against staff increased, mirroring the global trend of greater suppression and restriction of individuals and institutions defending human rights." - Thomas Hughes, 2014
-Staff detained in Ethiopia - We believe this was an attempt to prevent our staff from continuing our vital work in the country and from providing the UN with an independent source of information about human rights violations in Ethiopia. (Page 15, 2014)
-Practical operating environment shrunk, specifically in Kenya because of its new national security law restricting civic space and free expression - more spending spent on security - as much as 10% of the operating costs in some countries
+Article 19 has responded to rising security threats by increasing its spending on security services, hiring and contracting additional guards, translators, fixers, and support staff. This additional security support has allowed the organization to continue its work in its various target countries, but it has imposed significant costs and increased expenditures by roughly 10%.[^55] For instance, in 2014 one staff member was detained in Ethiopia on his way to conduct a safety training workshop. Immigration officials confiscated his passport and phone and denied him access to legal advice [@a19:2014, 15]. In response, Article 19 had to unexpectedly increase its Ethiopian advocacy, lobbying against the government both for imprisoned journalists and bloggers and for the safety and continued access of program staff in the country. Similarly, following the passage of a new anti-terrorism and national security law in Kenya that granted the government the ability to arbitrarily reexamine or cancel the registrations of civil society organizations,[^56] Article 19 increased both its security spending and its litigation against the regime, responses made possible by the organization's reliable access to revenue and its professional legal staff. 
 
+In many of its target countries, laws and regulations prohibit Article 19 from engaging in different forms of advocacy. The organization has a diverse menu of possible advocacy activities, and it selects which programs to offer based on both the needs and the practical  operating environment of the target country. Because Article 19 works in dozens of different countries and engages in a wide variety of forms of advocacy, it can match its programming to its host legal environment, continue its mission, and maintain some access to the country without fundamentally changing its vision.
 
+In countries with strict blasphemy laws, for instance, the organization faces intense opposition to its pro-speech litigation and its attempts to repeal those laws. In Sudan in 2008, the organization created the Khartoum Advocacy Centre Blog and worked with local lawyers to advocate on behalf of a journalist imprisoned on charges of blasphemy. However, in 2009, following government hostility and threats, Article 19 closed down the blog and helped its local partners leave the country [@a19:2009, 7]. The organization adopted a "new strategy of interventions" targeted at Sudan and has continued its advocacy efforts from exile, criticizing the country for censorship and speech-based discrimination through regular reports and through presentations before the African Commission on Human and Peoples' Rights [@a19:2009; @a19:2011]. In the case of Iran, which prohibits all speech that promotes homosexuality, all of Article 19's LGBT-focused advocacy occurs online only, and the organization makes no attempt to have a physical presence in the country.[^57] Gatekeeping laws focused on INGO programs keep Article 19 out of the country, but through regular contact with exiled activists and their prolific use of internet publishing (as seen in @fig:a19-me-reports, Iran receives the most published attention in the Middle East), the organization continues to engage in its mission of promoting freedom of expression. Article 19's diverse menu of programming enables it to creatively respond and adapt to regulations that restrict its in-country activities.
 
-Tunisia
+As Article 19 regularly notes, the rights of expression and assembly are deeply linked: "the defence of freedom of expression and access to information is essentially the defence of civic space" [@a19:2014, 8]. Because improvements expression rights one lead to improvements in the assembly rights, one of Article 19's more unique responses to legal restrictions on civil society is to lobby the government for regulatory and statutory reforms in both expression and assembly, advancing "progressive interpretations of human rights laws that allow people to gather, speak, and seek information" [@a19:2014, 8] and "embed[ding] freedom of expression in the infrastructure of government" [@a19:2015, 31]. Article 19's litigation and consultation on issues of freedom of expression allow the organization to shape the legal environments of its target countries. This, in turn, has powerful knock-on effects: improving the legal environment in one country allows the organization to maintain its access throughout the region. 
 
-Close connections with government partners - litigation, lobbying - constitutional changes - heavily engaged in the country despite their contentiousness
+Tunisia provides a prime example of this phenomenon. Article 19 began working in the country in 2005 as part of the Tunisia Monitoring Group (IFEX-TMG), a special eight-year endeavor organized by IFEX. Working with regional and international partners such as the Arabic Network for Human Rights Information, Index on Censorship, Freedom House, and the Egyptian Organization for Human Rights, IFEX-TMG sent regular fact-finding and consulting missions to Tunisia, culminating in multiple reports outlining legislative recommendations to enhance media freedom, end censorship, and improve the rights of association, assembly, and movement [@ifex-tmg:2005; @ifex-tmg:2010]. Under President Zine El Abidine Ben Ali, few of the recommendations had a change of being implemented. However, following the president's overthrow during the 2011 Arab Spring uprising, Article 19 was ideally positioned to influence human rights policy in the country, and it opened a formal regional office in Tunis. Building on relationships established during IFEX-TMG missions, newly-elected Tunisian politicians solicited technical advice from Article 19 on issues related to freedom of expression and human rights more generally. The organization held workshops for legislators, offered regular comments on the nascent constitution, and worked with the president and party chairs to ensure that the legal environment for speech and assembly in the newly democratizing country would be safe and inviting [@a19:2012]. In January 2014, the country's National Constituent Assembly (NCA) adopted a new constitution that generally accorded with international human rights standards. Prominent politicians cited Article 19's assistance throughout the drafting process, including interim president Moncef Marzouki and NCA president Mustapha Ben Jafar [@a19:2014, 16].
 
-Programs - changes depending on legal environment
-
-A19 continues its work in these countries, though, by acting creatively. Gatekeeping regulations change how they work in the country. In Iran, all programs are based online - they issue reports, contact activists, etc. all through the internet and have no physical presence in the country. Egypt and other Middle Eastern countries are closed off, but they host trainings in their regional hub in Tunisia 
+The final post-revolutionary constitution was not perfect, and subsequent governments have continued to infringe on expression rights. However, secure in its legal status, Article 19 has been able to maintain the contentiousness of its work in Tunisia, issuing 87 advocacy letters and statements since the fall of Ben Ali in 2011 (see @fig:a19-me-reports), condemning government abuses, censorship, and arrests of journalists and activists. The organization's close connections with local politicians—as well as the more permissive legal environment for advocacy in general—allow Article 19 to continue its mission and litigate against the government.
 
 ![Advocacy letters, reports, legal analyses, policy briefs, press releases, statements, and updates published by Article 19 in the Middle East, 2011–2017](../../Output/figures/4-a19-me-reports){#fig:a19-me-reports}
 
-It has been quite successful in Tunisia, but only because of long-standing connections to government officials there and deep knowledge of the political system.
-Long history in Tunisia - part of the IFEX Tunisia working group since 2005
-Helped shape freedom of expression-related constitutional provisions in the country's first post-revolution constitution in 2014 - consults with politicians and government employees on how to draft and implement laws related to transparency, freedom of information, censorship, and freedom of expression
-
-
-Since it it secure in its legal status and with its positive track record in the country, Article 19 has been able to maintain the contentiousness of its work in Tunisia, issuing 87 advocacy letters and statements calling for increased respect blah blah - as expected, they're most active in Tunisia, except Iran, where they work online exclusively and make no attempt to enter the country[^55]
-
-Comfort zones vs. stretch zones
-
-
-The new constitution 
-On 26 January 2014, a new constitution, broadly in accordance with international standards, was adopted with wide political consensus. Our work to ensure that media freedom and freedom of expression were included in the new constitution was cited by a number of politicians, including Moncef Marzouki, the then interim President of Tunisia, and Mustapha Ben Jafar, President of the National Constituent Assembly. 
-(2014)
-
-Tunisia:  Technical meetings were held with individual parliamentarians before and after the publication of the first draft of the constitution. Despite increasing polarization within Tunisian society and the political sphere, ARTICLE 19 has managed to retain its credibility and impartiality and has been constructively received by the President of the Republic, the President of the NCA and the Chairman of Ennadha. During the meeting with the NCA President, it was announced that the government was organising regional workshops on the second draft of the constitution. The idea of regional workshops was initiated by ARTICLE 19 to ensure voices from traditionally marginalised zones were heard.   
-(2012)
-
-In Tunisia, ARTICLE 19 contributed to three laws that were subsequently adopted in May and November 2011, including the Press Code and a Broadcasting law establishing an independent regulatory body.   
-(2011)
-
-Final question (39 minutes) 
-Why the more professional annual reports - new ED - Thomas ? Started then , organization became more professionalized
-More internal accountability, emphasis on performance
-Create a space internally where there's better performance
-
-
-Advice for other organizations
-
-- Know what you're talking about, make sure your research is solid
-- Be connected with local partners, ensure that agendas match at domestic and international level
-- Be friends with national, local, host governments
+Additionally, Article 19 has been able to use Tunisia as a regional home base. Egypt, Syria, Bahrain, and other Middle Eastern countries have all imposed strict gatekeeping regulations, either by preventing registration or by imposing rules that make human rights advocacy illegal. To get around these restrictions, Article 19 brings regional activists to its Tunisia office for training and research, rather than sending staff to those more restrictive countries.[^58] As a result, despite closed and dangerous civic space, Article 19 has been able to maintain the contentiousness of its post-Arab Spring advocacy, issuing reports and policy briefs to countries throughout the region (see @fig:a19-me-reports). Using its Tunisian office as a regional hub and tool for circumventing gatekeeping laws, however, is only possible because of the organization's instrumental flexibility. Collaboration with IFEX-TMG, politicians, and local NGOs in the years prior to the revolution, consistent government- and foundation-based funding, and highly trained staff allowed Article 19 to rapidly establish an office in 2011 and have positioned the organization to remain active in the region.
 
 # Amera International
 
 ## Mission and strategy
 
-## Sources of flexibility
+## Sources of flexibility (and inflexibility)
 
-## How it maintains access to countries
+Inconstant revenue, revenue going to separate entities - like how in 2012 the majority of funds went to Uganda, caused a huge deficit
+
+![AMERA's income, expenditures, and full time staff, 2004–15](../../Output/figures/4-amera-budget-staff){#fig:amera-budget-staff}
+
+Small staff - that's fine, Article 19 has a small staff too
+
+Partners - lots of partner organizations in Egypt, which helped
+
+![AMERA's offices and primary partners](../../Output/figures/4-amera-partners){#fig:amera-partners}
+
+Donations mostly from Comic Relief, with its global Red Nose Day - Some foundations too, like Ford Foundation in 2007, and embassies
+
+Fiscal year ends on January 31 - to align it with a standard calendar year, I move everything back one year, so the financial report for the year ending on January 31, 2009 counts as 2008.
+
+2012 - first notes about precariousness of Egypt security - created backup plan in case office has to close
+
+2014 report - activities all focused on transitioning out of the country, moving operations to other organizations like EFRR - staff drops to 1, ED in the UK
+
+Now EFFR and St. Andrews in Egypt
+
+## Reactions to restrictions
+
+mostly just registration ones, not programmatic ones - laws regulating speech, assembly, advocacy weren't ever an issue - it was all about security and registration
+
+Gatekeeping - it tried to follow the law in Egypt, registration process began in 2010 prior to the revolution - no huge rush to do it - regulations in Egypt were discretionary more than anything, so it was more of just getting around to finally registering
+
+Revolution was bad for the organization - forced them to shut down for a while, work offsite. They're not a contentious organization though, so they weren't seen as a political threat
+
+Registration continued, restarted in 2012, but still nothing came through. Security situation became worse, legal situation became more precarious, etc. But they persisted. The practical operating environment became more constrained, but they were able to continue their work regardless, relying heavily on their Egyptian partners
+
+All this coincided with a severe resource crunch - they 
+
+
+
+---- 
+
+Locations
+Uganda (Refugee Law Project) - 2003, 2004, 2005. 2006, 2007, 2008 (Legal Aid Clinic/LAC) - spun off into separate Refugee Law Project, but AMERA keeps raising funds for them from Comic Relief, forwards the money to Uganda
+Egypt (Refugee Law Project, Refugee Legal Aid project) - 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+
+
+
+Funders
+2004 - Comic Relief
+2005 - Comic Relief, Amberstone Trust
+2006 - Comic Relief, Ford Foundation, Sigrid Rausing Trust, Amberstone Trust, USIP Kenya
+2007 - Comic Relief, Ford, Sigrid, USIP Kenya, The Bromley Trust, Stichting 3R, Oak Foundation, Ward Trauma Foundatino, UN voluntary fund for victims of torture
+2008 - Same, plus ICRC
+2009 - Roughly the same, plus US Embassy
+2010 - Roughly the same, plus OSI, but lost Ford, Bromley, US embassy, Oak foundation, UN, war trauma foundation
+2011 - Ford back, ICRC back, OSA back, new from Julia Taft and Flora foundation
+2012 - Comic Relief, but majority for Uganda (203162 for Uganda, 78236 for Egypt) + ICRC, Flora - that's all!!!
+2013 - Lots of new grants, including Oxfam Swiss Embassy, US State Department - nothing from Comic Relief Uganda
+2014 - Comic Relief, Sigrid Rausing, PRM grant, Oxfam, US State department, that's all
+2015 - Nothing from anyone except PRM (goodbye Comic Relief, even!) - PRM = Population, Refugees, and Migration (State Department)
+
+2010 - Started the process of registering as indepdendent NGO
+2011 - Offices had to be closed for safety reasons, some disruption to services, staff met with cleints in other locations
+2012 - Identified new partners in Morocco (Droit et Justice) and Cameroon (REWAC; Refugee Welfare Association Cameroon), but focus was primarily on Egypt - registration process continues - reserves set aside in case of closure
+2013 - Big influx of refugees from Syria that put pressure on AMERA Egypt's services - still waiting for registration status
+ - Decided to merge AMERA with the Egyptian Foundation for Refugee Rights "in order to provide security and sustainability for the programmes, clients, and staff" - lack of registration = main culprit - "The continued lack of registration of AMERA Egypt has posed a large threat to the continuation of services to refugees in Egypt. In order to ensure sustainable programmes and security for clients and staff, the Board decided that this risk was best mitigated by merging AMERA Egypt's programmes with those of an organisation that was already registered in Egypt, the Egyptian Foundation for Refufee Rights"
+	 - Turned more to on-the-ground partners like Refuge Egypt, Caritas, ICRC, St. Andrews Refugee Services, Catholic Relief Services, and the El Nadeem Center for Psychological Rehabilitation of Victims of Violence and Torture
+2014 - name changed to International Refugee Rights Initiative (IRRI) - programs fully transferred to EFRR - grants to them now + to Droit et Justice
+2015 - name change from IRRI to Amera International Limited - main focus is finishing the transition to EFRR, biggest risk = legal threats + security threats, mitigated by integrating programs with EFRR
+
+Programs - pro bono litigation and advocacy for refugees, sex and gender based violence (SGBV) survivors, trafficking,  - resettlement (as of 2010 only NGO in Egypt with a direct referral system with the US State Department), unaccompanied minors, refugee status determination
+
+Super hard to rely exclusively on one constant stream of fundgs
+2011 - Objectives finally laid out - three ¶s here
+
+Relies on staff + volunteer interns + partnerships with local law offices
+
+# Conclusion
+
+Main advice from A19: Be friends with national, local, host governments
+
+Article 19 was successful in proactively reshaping the associational and speech laws in Tunisia because of its longstanding relationships with key government officials and its deep connections with local partners and larger networks of similar INGOs. As a result of the more open legal environment in Tunisia, the organization has been able to maintain the contentiousness of its work there and throughout the region.
 
 [^1]:	Response 1678.
 
@@ -299,4 +342,10 @@ Advice for other organizations
 
 [^54]:	Interview ¿?.
 
-[^55]:	Interview.
+[^55]:	Interview ¿?.
+
+[^56]:	Human Rights Watch, "Kenya: Security Bill Tramples Basic Rights," December 13, 2014, [https://www.hrw.org/news/2014/12/13/kenya-security-bill-tramples-basic-rights](https://www.hrw.org/news/2014/12/13/kenya-security-bill-tramples-basic-rights).
+
+[^57]:	Interview ¿?.
+
+[^58]:	Interview ¿?.
