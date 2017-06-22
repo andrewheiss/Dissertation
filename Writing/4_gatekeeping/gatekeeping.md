@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: June 21, 2017
+date: June 22, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -150,25 +150,58 @@ The final post-revolutionary constitution was not perfect, and subsequent govern
 
 Additionally, Article 19 has been able to use Tunisia as a regional home base. Egypt, Syria, Bahrain, and other Middle Eastern countries have all imposed strict gatekeeping regulations, either by preventing registration or by imposing rules that make human rights advocacy illegal. To get around these restrictions, Article 19 brings regional activists to its Tunisia office for training and research, rather than sending staff to those more restrictive countries.[^58] As a result, despite closed and dangerous civic space, Article 19 has been able to maintain the contentiousness of its post-Arab Spring advocacy, issuing reports and policy briefs to countries throughout the region (see @fig:a19-me-reports). Using its Tunisian office as a regional hub and tool for circumventing gatekeeping laws, however, is only possible because of the organization's instrumental flexibility. Collaboration with IFEX-TMG, politicians, and local NGOs in the years prior to the revolution, consistent government- and foundation-based funding, and highly trained staff allowed Article 19 to rapidly establish an office in 2011 and have positioned the organization to remain active in the region.
 
-# Amera International
+# AMERA UK / Egypt / International
 
 ## Mission and strategy
 
-## Sources of flexibility (and inflexibility)
+In the wake of mass displacements of people in India and Pakistan in 1947 and Korea in 1950, the United Nations held a Conference of Plenipotentiaries on the Status of Refugees and Stateless Persons in 1951. This conference issued the 1951 Refugee Convention (later expanded with a 1967 protocol), which established the Office of the United Nations High Commissioner for Refugees (UNHCR), created legal standards for designating displaced people as refugees, and laid out the responsibilities of signatory states in protecting refugee rights. Specifically, the Convention and subsequent Protocol define a refugee as someone who is out of their country of nationality, has a well-founded fear of persecution because of race, religion, nationality, social group, or political opinion, and is unable to return to their home country for fear of persecution [@unhcr-protocol]. Recipient countries have a responsibility provide a standard of care for refugees, but legal refugee status is not automatic—recipient countries must determine the cause and extent of the fear of persecution and the reason behind that persecution. 
 
-Inconstant revenue, revenue going to separate entities - like how in 2012 the majority of funds went to Uganda, caused a huge deficit
+As a result of this ambiguity, the contemporary legal landscape for refugees is fraught with complications. Determination of asylum status is expensive, time consuming, and fraught with risk, as recipient countries are often unwilling to accept refugees. Refugees are also particularly vulnerable to sex and labor trafficking, especially since many are dependent on smugglers to leave their home countries [@Gallagher:2002]. Obtaining legal services is cost prohibitive and asylum seekers are often unable to access their rights as refugees. 
 
-![AMERA's income, expenditures, and full time staff, 2004–15](../../Output/figures/4-amera-budget-staff){#fig:amera-budget-staff}
-
-Small staff - that's fine, Article 19 has a small staff too
-
-Partners - lots of partner organizations in Egypt, which helped
+After 15 years of fieldwork among refugees in West Africa, British anthropologist Dr. Barbara Harrell-Bond founded the Refugee Studies Centre at Oxford, one of the first academic research centers focused on the modern complexities of refugee law. Following her retirement, she moved between Kenya, Uganda, and Egypt, establishing legal assistance programs for refugees in those countries. Building on her years of expertise in studying and working with refugees, in 2003, Dr. Harrell-Bond and a board of trustees founded Africa and Middle East Refugee Assistance UK (AMERA UK), driven by the belief that "legal aid … is the right of all refugees,"[^59] with a mission to "provide pro bono legal aid for refugees in countries where such services are non-existent or limited and where legal representation might assist them in actualizing their rights."[^60] Since its incorporation in 2003, AMERA UK (now AMERA International)[^61] has provided a variety of programs designed to assist refugees, including pro bono litigation and advocacy, refugee status determination, social support for survivors of human trafficking and sex- and gender-based violence, resettlement assistance, and assistance for unaccompanied minors. True to its name, AMERA has worked exclusively in the Middle East and North Africa, operating primarily in Egypt and Uganda, with new partnerships in Cameroon and Morocco beginning in 2012 (see @fig:amera-partners).
 
 ![AMERA's offices and primary partners](../../Output/figures/4-amera-partners){#fig:amera-partners}
 
-Donations mostly from Comic Relief, with its global Red Nose Day - Some foundations too, like Ford Foundation in 2007, and embassies
+## Sources of flexibility (and inflexibility)
 
-Fiscal year ends on January 31 - to align it with a standard calendar year, I move everything back one year, so the financial report for the year ending on January 31, 2009 counts as 2008.
+When compared with Article 19, AMERA has had a far more tumultuous experience with anti-INGO laws, despite its less contentious mission. The fall of former Egyptian president Hosni Mubarak during the 2011 Arab Spring uprising marked a crisis for the organization and eventually led to its exit from the country. AMERA's lower levels of instrumental resources meant that as the civil society regulatory environment in post-revolutionary Egypt shrank, the practical operating environment—or the overlap between AMERA's flexibility and the Egyptian regime's tolerance for INGO services—constricted accordingly. AMERA had multiple sources of flexibility while working in Egypt, including well-trained staff and close collaborative relationships with similar refugee rights organizations, but because of inconstant and uncertain revenue, it was unable to continue operating in the new legal environment. Between 2013–14, AMERA UK closed down its AMERA Egypt office, transferred its operations to the Egyptian Foundation for Refugee rights, a local Egyptian-run NGO, and rebranded itself as AMERA International.
+
+AMERA enjoyed multiple sources of flexibility that were valuable in maintaining its access to Egypt for so long. First, the organization had a small and nimble staff, ranging from 20–30 full time employees between 2004 and 2013, split between AMERA UK and AMERA Egypt (see bottom panel of @fig:amera-budget-staff).[^62] The organization also relied on volunteer interns to help with paralegal, administrative, and translation work. Staff and volunteers are diverse, well-trained, and fit the needs of the organization's constituents. For instance, in 2010, the ten staff and volunteer members of AMERA's refugee status determination legal team consisted of five Americans, and one each from Rwanda, France, Ireland, Palestine, and Egypt. The team's language skills and legal expertise helped it provide legal aid and representation to nearly 1,400 clients [@amera:2010, 3]. All other departments saw similar diversity in the nationality of their staff—again in 2010, the psychosocial counseling department was led by British, Somali, Italian, and Egyptian psychologists, while the community outreach department was headed by an Egyptian assisted by staff from Sudan, Somalia, Ethiopia, and Eritrea, each of whom were able to maintain close contacts with refugees from their respective countries [@amera:2010]. Egyptians on staff gave AMERA resources to confront the changing legal environment, while staff and volunteers from East Africa allowed the organization to maximize its impact in the refugee community in Cairo.
+
+AMERA also cultivated many partnerships with various refugee and human rights organizations in Egypt, including the Egyptian Foundation for Refugee Rights, Refuge Egypt, Caritas, the International Committee of the Red Cross (ICRC), St. Andrews Refugee Services, Catholic Relief Services, and the El Nadeem Center for Psychological Rehabilitation of Victims of Violence and Torture. In partnering with these organizations, AMERA Egypt was able to connect refugees with additional psychological, financial, and legal support, as well as shelter, food, family reunion services, education, and medical care. More importantly, this collaboration put AMERA at the center of a growing network of refugee-related NGOs in Cairo [@amera:2013, 2], a position that later proved instrumental for continued service provision after the organization left the country.
+
+Unlike Article 19, which was able to operate in dozens of different countries from its home and regional offices, AMERA did not enjoy geographic flexibility, primarily because the type of programming the two organization offer is fundamentally different. While Article 19 can send activists and researchers into countries to gather information and data, AMERA's refugee assistance requires direct one-on-one legal advocacy on the ground. As such, the organization was naturally more limited in the geographic scope of their work. AMERA UK was created to be an overarching international umbrella organization for assisting with refugee rights throughout the region, serving "as a model and catalyst for the development of new refugee legal aid programs throughout the global south" [@amera:2007, 3]. AMERA UK began its work in Uganda and Egypt, establishing the Refugee Law Project and AMERA Egypt respectively as the main organization's in-country headquarters. Due to their labor-intensive programs, running these offices required significant funding and time to build up connections to funders, partners, and refugees. AMERA's work in Uganda was an early success, and the Refugee Law Project was soon spun off into an independent NGO. AMERA UK stopped including updates about the Refugee Law Project in its 2010 trustees' report, and its fundraising commitments ended in 2013 [@amera:2010, 3; @amera:2013]. In 2012, AMERA UK identified and began working with new partners in Morocco (Droit et Justice) and Cameroon (Refugee Welfare Association Cameroon, or REWAC) [@amera:2012], but due to budget crises and legal challenges in Egypt, the expansion has been slow. Moving its programs between countries that impose legal restrictions, therefore, is a cumbersome and long process and has not proven to be an effective response to legal crackdowns.
+
+![AMERA's income, expenditures, and full time staff, 2004–15](../../Output/figures/4-amera-budget-staff){#fig:amera-budget-staff}
+
+AMERA's most significant obstacle to maintaining its instrumental flexibility in the face of repressive regulations, however, was its inconsistent and unpredictable revenue (see @fig:amera-budget-staff). Since its inception, the organization has received the majority of its funding from donations from Comic Relief, a UK-based nonprofit that raises millions pounds during its annual Red Nose Day celebrity-heavy comedy specials broadcast on the BBC. As seen in the middle panel of @fig:amera-budget-staff, grants from Comic Relief accounted for roughly 85% of AMERA's income in 2004, and has constituted between 50–90% of the organization's revenue since then. Comic Relief funding sharply decreased in 2013, just as AMERA Egypt faced the most pressure and scrutiny, and by 2015 the two organizations' partnership appears to have ended. Recognizing the lack of diversification in its income, AMERA sought out other sources of revenue and between 2005–07, it received grants from the Sigrid Rausing Trust, the Amberstone Trust, and the Ford Foundation. In 2007–08, AMERA UK hired its first executive director with the intention of stabilizing the organization's revenue [@amera:2008, 2]. AMERA received grants from many other family foundations and NGOs like the ICRC, and the organization sought out grants from foreign governments, ultimately receiving money from the Swiss and US embassies in Cairo and the US State Department's Bureau of Population, Refugees, and Migration (PRM). In 2008, AMERA's income peaked at more than £600,000, but in following years, the organization slowly lost foundation and government funding, and by 2015, it was funded exclusively by a grant from PRM and £5,000 in private donations. Losing its funding from Comic Relief and struggling to maintain regular foundation and government funding put AMERA in a precarious situation as it confronted legal and safety challenges in Egypt, and the organization's lack of flexibility in revenue was a key factor in leaving the country.
+
+## Reactions to registration restrictions and losing access to Egypt
+
+AMERA faced few programmatic restrictions while working in Egypt—laws regulating speech, assembly, and advocacy were rarely an issue for the organization, as it dealt primarily with individual refugees confronting the international and Egyptian legal systems. Its most challenging legal obstacle, and the issue that led to its withdrawal from the country, was its inability to formally register, which in turn posed a threat to its safety and continued operations in Egypt.
+
+Unlike AMERA's Refugee Law Project in Uganda, AMERA Egypt was never able to become fully independent because of unclear and uncertain gatekeeping laws. 
+
+, and AMERA UK held legal power over its affairs while AMERA Egypt awaited approval of its registration. After AMERA UK transferred all of AMERA Egypt's operations to the Egyptian Foundation for Refugee Rights (EFRR) in 2014, it temporarily reincorporated as the International Refugee Rights Initiative (IRRI) in the UK [@amera:2014]. In 2015, it changed its name to AMERA International and expanded its fundraising and training activities in Morocco and Cameroon [@amera:2015]. 
+
+Never successful with getting registered with MFA - every attempt went smoothly, but the letter from MFA security never arrived, so they were never approved - they always operated illegally - registration constantly pending
+
+"Because we were doing what the government was happy to have done, the government tolerated us."[^63]
+
+Why the change?
+- Arab Spring - pressure on foreign NGOs became more intense - she took action during a visit to Egypt - got the two NGOs together, proposed the merger - approved by the board in London - because they were getting worried - 
+- Problem with transferring funds 
+- They didn't experience the pressure - they saw the handwriting on the wall and left early - they saw Oxfam and others getting pressure - 
+- More and more pressure 
+
+
+Gatekeeping - it tried to follow the law in Egypt, registration process began in 2010 prior to the revolution - no huge rush to do it - regulations in Egypt were discretionary more than anything, so it was more of just getting around to finally registering
+
+Partnered with a local law firm, Sharkawy and Sarah, who provided pro bono legal support for the registration process (@amera:2011, 7)
+
+Revolution was bad for the organization - forced them to shut down for a while, work offsite. They're not a contentious organization though, so they weren't seen as a political threat
+
+Registration continued, restarted in 2012, but still nothing came through. Security situation became worse, legal situation became more precarious, etc. But they persisted. The practical operating environment became more constrained, but they were able to continue their work regardless, relying heavily on their Egyptian partners
 
 2012 - first notes about precariousness of Egypt security - created backup plan in case office has to close
 
@@ -176,59 +209,14 @@ Fiscal year ends on January 31 - to align it with a standard calendar year, I mo
 
 Now EFFR and St. Andrews in Egypt
 
-## Reactions to restrictions
+All this coincided with a severe resource crunch
 
-mostly just registration ones, not programmatic ones - laws regulating speech, assembly, advocacy weren't ever an issue - it was all about security and registration
-
-Gatekeeping - it tried to follow the law in Egypt, registration process began in 2010 prior to the revolution - no huge rush to do it - regulations in Egypt were discretionary more than anything, so it was more of just getting around to finally registering
-
-Revolution was bad for the organization - forced them to shut down for a while, work offsite. They're not a contentious organization though, so they weren't seen as a political threat
-
-Registration continued, restarted in 2012, but still nothing came through. Security situation became worse, legal situation became more precarious, etc. But they persisted. The practical operating environment became more constrained, but they were able to continue their work regardless, relying heavily on their Egyptian partners
-
-All this coincided with a severe resource crunch - they 
-
-
-
----- 
-
-Locations
-Uganda (Refugee Law Project) - 2003, 2004, 2005. 2006, 2007, 2008 (Legal Aid Clinic/LAC) - spun off into separate Refugee Law Project, but AMERA keeps raising funds for them from Comic Relief, forwards the money to Uganda
-Egypt (Refugee Law Project, Refugee Legal Aid project) - 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-
-
-
-Funders
-2004 - Comic Relief
-2005 - Comic Relief, Amberstone Trust
-2006 - Comic Relief, Ford Foundation, Sigrid Rausing Trust, Amberstone Trust, USIP Kenya
-2007 - Comic Relief, Ford, Sigrid, USIP Kenya, The Bromley Trust, Stichting 3R, Oak Foundation, Ward Trauma Foundatino, UN voluntary fund for victims of torture
-2008 - Same, plus ICRC
-2009 - Roughly the same, plus US Embassy
-2010 - Roughly the same, plus OSI, but lost Ford, Bromley, US embassy, Oak foundation, UN, war trauma foundation
-2011 - Ford back, ICRC back, OSA back, new from Julia Taft and Flora foundation
-2012 - Comic Relief, but majority for Uganda (203162 for Uganda, 78236 for Egypt) + ICRC, Flora - that's all!!!
-2013 - Lots of new grants, including Oxfam Swiss Embassy, US State Department - nothing from Comic Relief Uganda
-2014 - Comic Relief, Sigrid Rausing, PRM grant, Oxfam, US State department, that's all
-2015 - Nothing from anyone except PRM (goodbye Comic Relief, even!) - PRM = Population, Refugees, and Migration (State Department)
-
-2010 - Started the process of registering as indepdendent NGO
-2011 - Offices had to be closed for safety reasons, some disruption to services, staff met with cleints in other locations
-2012 - Identified new partners in Morocco (Droit et Justice) and Cameroon (REWAC; Refugee Welfare Association Cameroon), but focus was primarily on Egypt - registration process continues - reserves set aside in case of closure
-2013 - Big influx of refugees from Syria that put pressure on AMERA Egypt's services - still waiting for registration status
- - Decided to merge AMERA with the Egyptian Foundation for Refugee Rights "in order to provide security and sustainability for the programmes, clients, and staff" - lack of registration = main culprit - "The continued lack of registration of AMERA Egypt has posed a large threat to the continuation of services to refugees in Egypt. In order to ensure sustainable programmes and security for clients and staff, the Board decided that this risk was best mitigated by merging AMERA Egypt's programmes with those of an organisation that was already registered in Egypt, the Egyptian Foundation for Refufee Rights"
-	 - Turned more to on-the-ground partners like Refuge Egypt, Caritas, ICRC, St. Andrews Refugee Services, Catholic Relief Services, and the El Nadeem Center for Psychological Rehabilitation of Victims of Violence and Torture
-2014 - name changed to International Refugee Rights Initiative (IRRI) - programs fully transferred to EFRR - grants to them now + to Droit et Justice
-2015 - name change from IRRI to Amera International Limited - main focus is finishing the transition to EFRR, biggest risk = legal threats + security threats, mitigated by integrating programs with EFRR
-
-Programs - pro bono litigation and advocacy for refugees, sex and gender based violence (SGBV) survivors, trafficking,  - resettlement (as of 2010 only NGO in Egypt with a direct referral system with the US State Department), unaccompanied minors, refugee status determination
-
-Super hard to rely exclusively on one constant stream of fundgs
-2011 - Objectives finally laid out - three ¶s here
-
-Relies on staff + volunteer interns + partnerships with local law offices
 
 # Conclusion
+
+Stuff about what the survey shows
+
+Conclusionary, comparisony stuff about A19 and AMERA
 
 Main advice from A19: Be friends with national, local, host governments
 
@@ -350,4 +338,12 @@ Article 19 was successful in proactively reshaping the associational and speech 
 
 [^58]:	Interview 1056, October 13, 2016, London.
 
+[^59]:	AMERA UK, "Objectives and History," [https://web.archive.org/web/20130820091141/http://amera-uk.org/index.php/who-we-are/objectives-a-history](https://web.archive.org/web/20130820091141/http://amera-uk.org/index.php/who-we-are/objectives-a-history).
 
+[^60]:	AMERA International, "Background," [http://www.amerainternational.org/background/](http://www.amerainternational.org/background/); AMERA International, "Who We Are," [http://www.amerainternational.org/who-we-are/](http://www.amerainternational.org/who-we-are/).
+
+[^61]:	As described below, there is technically a legal distinction between AMERA UK, AMERA Egypt, and AMERA International. For the sake of narrative simplicity, I refer to the organization simply as AMERA unless describing something specific to the organization's operations in the UK or Egypt.
+
+[^62]:	AMERA's fiscal year ends on January 31 of the following year. To align its financial reports with a January–December calendar year, I shift all reported numbers back one year. Thus, financial figures for the year ending on January 31, 2009 are marked as 2008.
+
+[^63]:	Interview 1036, August 17, 2016.
