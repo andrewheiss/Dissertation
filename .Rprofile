@@ -5,7 +5,7 @@ if (file.exists("/Users/andrew/.Rprofile")) {
 }
 
 .First <- function() {
-  days.left <- as.numeric(lubridate::ymd("2017-06-01") - lubridate::today())
+  days.left <- as.numeric(lubridate::ymd("2017-07-06") - lubridate::today())
   
   cat("\n          ---------------------------------------------------------")
   cat("\n          😱 Write day and night like you're running out of time 😱 ")
