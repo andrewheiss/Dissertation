@@ -324,28 +324,30 @@ Article 19 was successful in proactively reshaping the associational and speech 
 
 [^45]:	Article 19, "Mission," [https://www.article19.org/pages/en/mission.html](https://www.article19.org/pages/en/mission.html).
 
-[^46]:	Interview ¿?
+[^46]:	Interview 1056, October 13, 2016, London.
 
 [^47]:	The Middle East and North Africa program was separated out of the Africa program in 2006 to allow for more intense focus on the region [@a19:2006]; the first program officer was hired in 2007 [@a19:2007, 19].
 
 [^48]:	Article 19's digital advocacy program is its newest, established in 2015.
 
-[^49]:	Interview ¿¿??.
+[^49]:	Interview 1056, October 13, 2016, London.
 
 [^50]:	Article 19, "What we do," [https://www.article19.org/pages/en/what-we-do.html](https://www.article19.org/pages/en/what-we-do.html).
 
 [^51]:	IFEX, "Our Network," [https://www.ifex.org/our\_network/](https://www.ifex.org/our_network/).
 
-[^52]:	Interview ¿?.
+[^52]:	Interview 1056, October 13, 2016, London.
 
-[^53]:	Interview ¿?.
+[^53]:	Interview 1056, October 13, 2016, London.
 
-[^54]:	Interview ¿?.
+[^54]:	Interview 1056, October 13, 2016, London.
 
-[^55]:	Interview ¿?.
+[^55]:	Interview 1056, October 13, 2016, London.
 
 [^56]:	Human Rights Watch, "Kenya: Security Bill Tramples Basic Rights," December 13, 2014, [https://www.hrw.org/news/2014/12/13/kenya-security-bill-tramples-basic-rights](https://www.hrw.org/news/2014/12/13/kenya-security-bill-tramples-basic-rights).
 
-[^57]:	Interview ¿?.
+[^57]:	Interview 1056, October 13, 2016, London.
 
-[^58]:	Interview ¿?.
+[^58]:	Interview 1056, October 13, 2016, London.
+
+
