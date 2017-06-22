@@ -35,9 +35,12 @@ source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
 
 ```{r budget-staff, message=FALSE}
 amera.budget <- read_csv(file.path(PROJHOME, "Data", 
-                                   "data_base", "amera_budget.csv")) 
+                                   "data_base", "amera_budget.csv")) %>%
+  mutate(cr_total = `Comic Relief` + Uganda,
+         cr_percent = cr_total / Income)
 
 amera.budget.long <- amera.budget %>%
+  select(Year, Income, Expenses, Staff) %>%
   gather(key, value, -Year) %>%
   mutate(type = ifelse(key == "Staff", "Staff", "Budget"))
 
@@ -49,23 +52,30 @@ plot.budget <- ggplot(filter(amera.budget.long, type == "Budget"),
   scale_color_manual(values=ath.palette("palette1")[3:4], name=NULL) +
   theme_ath()
 
+plot.cr <- ggplot(amera.budget, aes(x=Year, y=cr_percent)) +
+  geom_line(size=1, colour="#FF4136") +
+  labs(x=NULL, y="Percent of income\nfrom Comic Relief") +
+  scale_y_continuous(labels=scales::percent) +
+  theme_ath()
+
 plot.staff <- ggplot(filter(amera.budget.long, type == "Staff"),
                      aes(x=Year, y=value)) +
   geom_line(size=1) +
-  labs(x=NULL, y="Full time employees") +
+  labs(x=NULL, y="Full time\nemployees") +
   theme_ath()
 
-plot.both <- rbind(ggplotGrob(plot.budget),
-                   ggplotGrob(plot.staff))
+plot.all <- rbind(ggplotGrob(plot.budget),
+                  ggplotGrob(plot.cr),
+                  ggplotGrob(plot.staff))
 
-panels <- plot.both$layout$t[grep("panel", plot.both$layout$name)]
-plot.both$heights[panels] <- unit(c(1, 0.5), "null")
+panels <- plot.all$layout$t[grep("panel", plot.all$layout$name)]
+plot.all$heights[panels] <- unit(c(1, 0.5, 0.5), "null")
 
 grid::grid.newpage()
-grid::grid.draw(plot.both)
+grid::grid.draw(plot.all)
 
-fig.save.cairo(plot.both, filename="4-amera-budget-staff", 
-               width=4.5, height=3)
+fig.save.cairo(plot.all, filename="4-amera-budget-staff", 
+               width=4.5, height=3.5)
 ```
 
 ```{r results="asis"}
