@@ -76,10 +76,7 @@ Thus, as with registration restrictions, INGOs facing assembly and speech restri
 
 # Article 19
 
-Article 19 like Index, but Index doesn't set up offices, stays home in London. A19 works abroad, but is highly selective
-
-IRI and Amera both left Egypt, but for different reasons
-
+TODO
 
 Expectations: organizations that are larger, better funded, that work with more organizations, employ more staff and volunteers, and have closer connections with local government officials are best able to adapt to changing gatekeeping regulations
 
@@ -178,41 +175,21 @@ AMERA's most significant obstacle to maintaining its instrumental flexibility in
 
 ## Reactions to registration restrictions and losing access to Egypt
 
-AMERA faced few programmatic restrictions while working in Egypt—laws regulating speech, assembly, and advocacy were rarely an issue for the organization, as it dealt primarily with individual refugees confronting the international and Egyptian legal systems. Its most challenging legal obstacle, and the issue that led to its withdrawal from the country, was its inability to formally register, which in turn posed a threat to its safety and continued operations in Egypt.
+AMERA faced few programmatic restrictions while working in Egypt—laws regulating speech, assembly, and advocacy were rarely an issue for the organization, as it dealt primarily with individual refugees confronting the international and Egyptian legal systems. Its most challenging legal obstacle, and the issue that led to its withdrawal from the country, was its inability to formally register as a civil society organization, which in turn posed a threat to its safety and continued operations in Egypt. Unlike AMERA's Refugee Law Project in Uganda, AMERA Egypt was never able to become fully independent because of unclear and uncertain gatekeeping laws.
 
-Unlike AMERA's Refugee Law Project in Uganda, AMERA Egypt was never able to become fully independent because of unclear and uncertain gatekeeping laws. 
+As described in chapter 3, prior to the bevy of draft legislation in the wake of the 2011 uprising, civil society organizations in Egypt were governed solely by Law 84 of 2002. Though the law ostensibly required that all civil society organizations—both domestic and foreign—be registered with the Ministry of Foreign Affairs and prohibited informal or unregistered associations. In practice, however, Egyptian officials enforced this law with great discretion, and many NGOs did not register. AMERA UK began the process of registering AMERA Egypt as its official branch in Cairo in 2010, having already worked in the country for several years [@amera:2010, 3]. The organization did not feel overly rushed to complete the process, and it received little pressure from the government. One AMERA director noted that "[b]ecause we were doing what the government was happy to have done, the government tolerated us,"[^63] despite the lack of official registration. AMERA Egypt partnered with a local law firm that provided pro bono legal support for the registration process [@amera:2011, 7], and it waited for its application to work through the slow Egyptian bureaucracy. 
 
-, and AMERA UK held legal power over its affairs while AMERA Egypt awaited approval of its registration. After AMERA UK transferred all of AMERA Egypt's operations to the Egyptian Foundation for Refugee Rights (EFRR) in 2014, it temporarily reincorporated as the International Refugee Rights Initiative (IRRI) in the UK [@amera:2014]. In 2015, it changed its name to AMERA International and expanded its fundraising and training activities in Morocco and Cameroon [@amera:2015]. 
+In January 2011, however, the practical operating environment for AMERA and all international NGOs working in Egypt changed dramatically. AMERA Egypt periodically shut down its main offices during the worst political unrest, and staff met with clients offsite to continue the organization's work with as few interruptions as possible [@amera:2011, 2]. Despite the unrest, AMERA continued to assist with asylum applications, legal consulting, and victim counseling, but at the same time, the trustees began to set aside reserves to ensure that the organization could "meet the costs of closure or wind-down" if circumstances warranted it [@amera:2011, 5]. The registration application with the Ministry of Foreign Affairs stalled amidst the political upheaval and the organization continued to wait.
 
-Never successful with getting registered with MFA - every attempt went smoothly, but the letter from MFA security never arrived, so they were never approved - they always operated illegally - registration constantly pending
+AMERA continued its work through 2012 and 2013, but a large influx of refugees from Syria, an increasingly restricted and dangerous practical operating environment, and a dramatic drop in funds put incredible pressure on the organization. To cope with these challenges, AMERA Egypt increasingly relied on assistance from its partners, working with ten different NGOs to supplement their services. The organization's registration application remained in flux, and President Morsi's draft legislation targeting foreign funding raised the specter of uncertainty. Without formal registration as a civil society organization, AMERA Egypt would not be able to obtain permission to receive funding from AMERA UK, and the organization would need to close. 
 
-"Because we were doing what the government was happy to have done, the government tolerated us."[^63]
+The relationship between AMERA Egypt and the Egyptian government was amicable—police never raided their offices, detained staff, or confiscated resources. Every time the organization communicated with its contacts at the Ministry of Foreign Affairs, they were told that the application was in order, but final approval from the Ministry never arrived and their registration status was perpetually pending. However, beginning in 2013, AMERA UK worried that the détente would soon come to an end. The Ministry had upped its pressure on other international humanitarian organizations like Oxfam, and state security forces regularly raided local NGOs receiving foreign funding.[^64] By the end of 2013, AMERA UK "saw the handwriting on the wall," assumed that its legal status would never be secured, and began the process of transferring the operations of AMERA Egypt to the Egyptian Foundation for Refugee Rights (EFRR).[^65]
 
-Why the change?
-- Arab Spring - pressure on foreign NGOs became more intense - she took action during a visit to Egypt - got the two NGOs together, proposed the merger - approved by the board in London - because they were getting worried - 
-- Problem with transferring funds 
-- They didn't experience the pressure - they saw the handwriting on the wall and left early - they saw Oxfam and others getting pressure - 
-- More and more pressure 
-
-
-Gatekeeping - it tried to follow the law in Egypt, registration process began in 2010 prior to the revolution - no huge rush to do it - regulations in Egypt were discretionary more than anything, so it was more of just getting around to finally registering
-
-Partnered with a local law firm, Sharkawy and Sarah, who provided pro bono legal support for the registration process (@amera:2011, 7)
-
-Revolution was bad for the organization - forced them to shut down for a while, work offsite. They're not a contentious organization though, so they weren't seen as a political threat
-
-Registration continued, restarted in 2012, but still nothing came through. Security situation became worse, legal situation became more precarious, etc. But they persisted. The practical operating environment became more constrained, but they were able to continue their work regardless, relying heavily on their Egyptian partners
-
-2012 - first notes about precariousness of Egypt security - created backup plan in case office has to close
-
-2014 report - activities all focused on transitioning out of the country, moving operations to other organizations like EFRR - staff drops to 1, ED in the UK
-
-Now EFFR and St. Andrews in Egypt
-
-All this coincided with a severe resource crunch
-
+As AMERA's practical operating environment in Egypt shrunk (i.e. the overlap of its instrumental flexibility with the regime's civil society regulatory environment), the organization lacked sufficient resources to maintain its access to the country—in particular because of its irregular and uncertain income. As a result, the organization divested its operations to EFFR. In 2014, AMERA UK closed AMERA Egypt, temporarily reincorporated as the International Refugee Rights Initiative (IRRI) in the UK [@amera:2014], and continued to send grants to to EFFR, though with little input into the management of its programs. In October 2014, EFFR took full control over all programs, and in 2015, IRRI completed its drawdown from Egypt, changed its name to AMERA International, and slowly began to expand its fundraising and training activities in Morocco and Cameroon [@amera:2015]. 
 
 # Conclusion
+
+TODO
 
 Stuff about what the survey shows
 
@@ -221,6 +198,8 @@ Conclusionary, comparisony stuff about A19 and AMERA
 Main advice from A19: Be friends with national, local, host governments
 
 Article 19 was successful in proactively reshaping the associational and speech laws in Tunisia because of its longstanding relationships with key government officials and its deep connections with local partners and larger networks of similar INGOs. As a result of the more open legal environment in Tunisia, the organization has been able to maintain the contentiousness of its work there and throughout the region.
+
+AMERA Egypt's departure from Egypt occurred because of a worsening civil society regulatory environment. Facing the threat of political instability, Presidents Morsi and Sisi constrained the allowable space for civil society advocacy by threatening to pass (and later, actually passing) additional gatekeeping laws to keep foreign NGOs out of the country.
 
 [^1]:	Response 1678.
 
@@ -347,3 +326,7 @@ Article 19 was successful in proactively reshaping the associational and speech 
 [^62]:	AMERA's fiscal year ends on January 31 of the following year. To align its financial reports with a January–December calendar year, I shift all reported numbers back one year. Thus, financial figures for the year ending on January 31, 2009 are marked as 2008.
 
 [^63]:	Interview 1036, August 17, 2016.
+
+[^64]:	See, for instance, @emhrn:2013.
+
+[^65]:	Interview 1036, August 17, 2016.
