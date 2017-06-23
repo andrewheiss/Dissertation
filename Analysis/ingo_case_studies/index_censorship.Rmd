@@ -51,7 +51,9 @@ plot.budget <- ggplot(filter(index.budget.long, type == "Budget"),
                       aes(x=Year, y=value, colour=key)) +
   geom_line(size=1) +
   labs(x=NULL, y="Reported amount") +
-  scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+  # Automatic y-axis scaling to 0!
+  scale_y_continuous(labels=scales::dollar_format(prefix="£"),
+                     limits=c(0, NA)) +
   scale_color_manual(values=ath.palette("palette1")[3:4], name=NULL) +
   theme_ath()
 
@@ -59,6 +61,8 @@ plot.staff <- ggplot(filter(index.budget.long, type == "Staff"),
                      aes(x=Year, y=value)) +
   geom_line(size=1) +
   labs(x=NULL, y="Full time employees") +
+  # Automatic y-axis scaling to 0!
+  expand_limits(y=0) +
   theme_ath()
 
 plot.both <- rbind(ggplotGrob(plot.budget),

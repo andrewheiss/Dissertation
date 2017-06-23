@@ -50,6 +50,7 @@ plot.budget <- ggplot(filter(amera.budget.long, type == "Budget"),
   labs(x=NULL, y="Reported amount") +
   scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
   scale_color_manual(values=ath.palette("palette1")[3:4], name=NULL) +
+  expand_limits(y=0) +
   theme_ath()
 
 plot.cr <- ggplot(amera.budget, aes(x=Year, y=cr_percent)) +
@@ -62,6 +63,7 @@ plot.staff <- ggplot(filter(amera.budget.long, type == "Staff"),
                      aes(x=Year, y=value)) +
   geom_line(size=1) +
   labs(x=NULL, y="Full time\nemployees") +
+  expand_limits(y=0) +
   theme_ath()
 
 plot.all <- rbind(ggplotGrob(plot.budget),
