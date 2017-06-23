@@ -48,7 +48,7 @@ plot.budget <- ggplot(filter(a19.budget.long, type == "Budget"),
   scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
   scale_color_manual(values=ath.palette("palette1")[3:4], name=NULL) +
   theme_ath()
-plot.budget
+
 plot.staff <- ggplot(filter(a19.budget.long, type == "Staff"),
                      aes(x=Year, y=value)) +
   geom_line(size=1) +
