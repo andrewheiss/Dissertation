@@ -93,6 +93,8 @@ index.budget %>%
 countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
                                      "countries110_robinson_ggmap.rds"))
 
+possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
+
 # via http://techslides.com/list-of-countries-and-capitals
 countries.geocoded <- read_csv(file.path(PROJHOME, "Data", "data_raw",
                                          "External", "country-capitals.csv")) %>%
@@ -101,41 +103,54 @@ countries.geocoded <- read_csv(file.path(PROJHOME, "Data", "data_raw",
 
 index.awards <- read_csv(file.path(PROJHOME, "Data", 
                                    "data_base", "index_awards.csv")) %>%
-  mutate(iso3 = countrycode(`Home country`, "country.name", "iso3c"))
-
-# Count number of times a country gets an award
-awards.geo <- index.awards %>%
-  group_by(iso3) %>%
-  summarise(num = n()) %>%
+  mutate(iso3 = countrycode(`Home country`, "country.name", "iso3c")) %>%
   left_join(countries.geocoded, by="iso3")
   
 # Conver coordinates to Robinson projection
-awards.robinson <- project(as.matrix(awards.geo %>% select(long, lat)), 
+awards.robinson <- project(as.matrix(index.awards %>% select(long, lat)), 
                            proj="+proj=robin") %>%
   as.data.frame %>% rename(long.robinson = long, lat.robinson = lat)
 
-awards.to.map <- bind_cols(awards.geo, as.data.frame(awards.robinson)) %>%
+# Count number of times a country gets an award
+awards.aggregated <- bind_cols(index.awards, as.data.frame(awards.robinson)) %>%
+  count(iso3, lat, long, long.robinson, lat.robinson) %>%
   filter(!is.na(iso3))
 
-# All possible countries (to fix the South Sudan issue)
-possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id))) %>%
-  left_join(awards.to.map, by=c("id" = "iso3")) %>%
-  replace_na(list(num = 0)) %>%
-  mutate(presence = num > 0)
+awards.individual <- bind_cols(index.awards, as.data.frame(awards.robinson)) %>%
+  filter(!is.na(iso3))
 
-plot.awards <- ggplot(possible.countries) +
-  geom_map(aes(map_id=id, fill=presence), map=countries.ggmap, 
+# Load country-level autocracy data
+autocracies <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                                 "autocracies.rds"))
+
+countries.to.plot <- possible.countries %>%
+  left_join(awards.aggregated, by=c("id" = "iso3")) %>%
+  replace_na(list(n = 0)) %>%
+  mutate(presence = n > 0,
+         autocracy = id %in% unique(autocracies$iso3)) %>%
+  mutate(autocracy.presence = case_when(
+           .$presence & .$autocracy ~ "Autocracy",
+           .$presence & !.$autocracy ~ "Non-autocracy",
+           TRUE ~ "No recipients"
+         )) %>%
+  mutate(autocracy.presence = factor(autocracy.presence, 
+                                     levels=c("Autocracy", "Non-autocracy", "No recipients"),
+                                     ordered=TRUE))
+
+plot.awards <- ggplot(countries.to.plot) +
+  geom_map(aes(map_id=id, fill=autocracy.presence), map=countries.ggmap, 
            size=0.15, colour="black") + 
-  geom_point(data=awards.to.map, 
-             aes(x=long.robinson, y=lat.robinson, 
-                 fill=NULL, size=num), 
+  geom_point(data=awards.aggregated, 
+             aes(x=long.robinson, y=lat.robinson, size=n), 
              colour="black") + 
   expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) +
   coord_equal() +
-  scale_fill_manual(values=c("white", "grey80"), guide=FALSE) +
-  scale_size(range=c(0.5, 2.5), name="Number of award recipients:") +
-  guides(size=guide_legend(nrow=1)) +
-  theme_ath_map() + theme(legend.position="bottom")
+  scale_fill_manual(values=c("#FF4136", "grey50", "white")) +
+  scale_radius(range=c(0.5, 3.5)) +
+  guides(size=guide_legend(nrow=1, order=0, title="Number of award recipients:"),
+         fill=guide_legend(order=1, title=NULL)) +
+  theme_ath_map() + theme(legend.position="bottom",
+                          legend.key.size=unit(0.65, "lines"))
 plot.awards
 
 fig.save.cairo(plot.awards, filename="5-index-awards", 
