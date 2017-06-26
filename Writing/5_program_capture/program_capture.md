@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: June 23, 2017
+date: June 26, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -82,7 +82,9 @@ Approximately three fourths of respondents indicated that they face moderate to 
 
 ![Frequency of contact with government and formal reporting to government](../../Output/figures/3-freq-both){#fig:freq-both}
 
-In addition to demanding oversight through reporting, one common method states use to manage international NGOs is to position government officials within the governance structures of these organizations. In the previous case study on China, I described how the Chinese government now requires that all international NGOs have a formal sponsor from the Communist Party. Many responding organizations report similar arrangements in their countries. In Eastern Europe, an MP who chairs the education committee personally monitors the educational programming of one INGO,[^37] a foreign affairs minister works directly with an education INGO in South America,[^38] and the former president of a European nation is a member of and consults for a human rights INGO, representing the diplomatic interests of their country through the NGO's programming.[^39] The consequences of going against government preferences when officials are so closely involved in INGO decisions are unclear—few respondents with bureaucrats and politicians in their organizations opted to describe what might happen. However, a human rights INGO working in East Africa explained that officials "could close down the project" if government demands are not met.[^40]
+In addition to demanding oversight through reporting, one common method states use to manage international NGOs is to position government officials within the governance structures of these organizations. 
+
+ In the previous case study on China, I described how the Chinese government now requires that all international NGOs have a formal sponsor from the Communist Party. Many responding organizations report similar arrangements in their countries. In Eastern Europe, an MP who chairs the education committee personally monitors the educational programming of one INGO,[^37] a foreign affairs minister works directly with an education INGO in South America,[^38] and the former president of a European nation is a member of and consults for a human rights INGO, representing the diplomatic interests of their country through the NGO's programming.[^39] The consequences of going against government preferences when officials are so closely involved in INGO decisions are unclear—few respondents with bureaucrats and politicians in their organizations opted to describe what might happen. However, a human rights INGO working in East Africa explained that officials "could close down the project" if government demands are not met.[^40]
 
 Regulations can give bureaucrats final say in INGO programming even without formal participation in governance. An advocacy organization working in West Africa must have its work checked and approved by the government and its programs are sometimes vetoed and "over powered,"[^41] while other organizations are required to get final ministry-level approval for their activities, programs, and publications.[^42] In other cases, regulations dictate that INGO programming falls under the direct supervision and control of local governments, leaving organizations with little flexibility in how they operate, essentially turning them into arms of the government—an organization working in West Africa had several of its programmatic themes subsumed by the government,[^43] with bureaucrats determining which activities the NGO should handle.
 
@@ -104,9 +106,79 @@ More commonly, INGOs outsource their operations to local staff in response to in
 
 Cultivating relationships with government officials requires time and resources. Thus, when they enjoy sufficient flexibility and are able to make consistent and positive contact with oversight agencies, INGOs can harness and shape direct government involvement in their favor, pushing back against—and even reversing—regime attempts to shift or tame organizational missions and ideals. In the absence of flexibility, though, INGOs are more likely to find themselves locked into expensive programming that benefits the host regime or  come under direct government management.
 
-# IRI
+# Index on Censorship
+
+## Mission and strategy
+
+In 1972, amidst American debates over the newly leaked *Pentagon Papers* and a Soviet crackdown on dissident writers such as Aleksandr Solzhenitsyn and Natalya Gorbanevskaya, British authors Stephen Spender and Michael Scammel began publishing a quarterly magazine entitled *Index on Censorship*.[^52] The editors laid out their primary motivation in its inaugural issue, declaring that "[f]reedom of expression is not self-perpetuating, but rather has to be maintained through the constant vigilance of those who care about it."[^53] The magazine was designed to serve as a vehicle for this constant vigilance in three different ways. First, the journal solicits articles that "record and analyse all forms of inroads into freedom of expression," publishing political and legal research related to anti-freedom of expression laws around the world [@Spender:1972, 13]. Second, the journal acts as sort of literary magazine, providing an outlet for censored artists, writers, poets, and musicians by publishing their work on an international platform. Finally, the organization uses the journal as an advocacy tool with its annual "Index Index," where it highlights and chronicles arrests, instances of censorship, and other violations of freedom of expression around the world, with the intention of shaming the states that engage in these crackdowns.
+
+Since 1972, Index on Censorship has evolved into a fully fledged nonprofit advocacy organization and a prominent voice in promoting freedom of expression rights around the globe. The mission of today's Index on Censorship, under the leadership of CEO Jodie Ginsberg, comprises four components: informing, influencing, debating, and supporting.[^54] Index *informs* the public about ongoing threats to freedom of expression by continuing to publish the *Index on Censorship* magazine on a quarterly basis, in addition to publishing regular reports and analysis on their website and social media accounts. The organization *influences* policy by selecting topics and countries where they feel they can have the most impact—due to staff expertise in the region or issue, or because few other organizations have taken up the issue in the given country—and launching targeting advocacy campaigns to shame offending governments, call for the release of prisoners, or lobby for changes in laws. Its "Index Index" and its Mapping Media Freedom project[^55]—the modern incarnation of the "Index Index" which collects realtime crowdsourced reports of threats and violations of media freedom—are also central to the organization's advocacy and influencing mission. Index encourages *debate* about issues of expression by hosting public events such as talks, concerts, and performances in their headquarters in London. Finally the organization *supports* those facing censorship by presenting annual jury-selected Freedom of Expression Awards to organizations and individuals that it feels deserve special recognition for their journalism, activism, or art. In 2015, Index expanded its Awards program and now provides recipients with a one-year fellowship of personalized support, including a weeklong training in London and continued assistance with practical issues, such as website design and professional networking [@index:2015, 5]. 
+
+## Sources of flexibility
+
+Publishing more than 250 magazine issues while simultaneously lobbying and advocating against censorious governments requires a substantial amount of resources. Complicating its mission, repressive governments limit Index's access to their countries with gatekeeping laws and attempt to capture the organization's resources and harness its programs for their own benefit. When facing program capture regulations, INGOs are primarily concerned with protecting their missions and resisting government efforts to control or co-opt their programs. Index on Censorship's instrumental flexibility—with its consistent income, small staff, and wide networks of freelancers and collaborators—allows it to protect itself and its foreign partners from threats of capture.
+
+Compared to Article 19, with its regional offices spread throughout the world and multi-million pound budget, Index on Censorship is a lean organization, with an average income of roughly £850,000 over the past eight years (see top panel of @fig:index-budget-staff). The organization's budget has been relatively stable over time as well—the largest recent fluctuation in its income occurred from 2011–13 with an influx of grants for projects in the post-Arab Spring Middle East. Index's income comes from multiple sources, including donations from individuals; smaller foundations such as the Eranda Foundation, the David & Elaine Potter Foundation, and Fritt Ord; larger foundations like the Open Society Institute; and corporations like Google, Twitter, Facebook, and The Guardian. The organization also benefits from sales of its *Index on Censorship* magazine.[^56] 
+
+![Index on Censorhip's income, expenditures, and full time staff, 2008–15](../../Output/figures/5-index-budget-staff){#fig:index-budget-staff}
+
+In contrast with Article 19, Index tends to avoid income from government agencies. It does not eschew them entirely—its Mapping Media Freedom project is funded, in part, by the European Commission, for instance [@index:2015, 6]—but it is extremely careful in how it pursues them. In most cases, Index shies away from government funders because their income could pose a direct threat to the organization's programs. When the organization does accept government funds, it maintains a Chinese wall between itself and its funders, limiting their involvement in its projects "so they don't get to have any kind of influence on what we do [on] the ground."[^57] This influence from government funders can work in two ways. First, receiving government funds can have a chilling effect on the programs of human rights INGOs. Sarah @Stroup:2012 finds that American human rights organizations like Human Rights Watch are more reticent in their criticisms of rights violations committed by the United States because they receive substantial funding from US government grants. Meanwhile, UK-based organizations like Amnesty International—which, like Index, does not rely on government funds—has been far less reluctant to criticize rich, democratic countries. Since it does not fear the loss of government revenue, Index has been critical of Western democracies. Index presented its 2001 Award for Services to Censorship to the UK's Ministry of Defense for prosecuting a whistleblower,[^58] and in 2004 named US Attorney General John Ashcroft as the Censor of the Year for his role in defending the USA PATRIOT Act and arguing for the legality of the Guantanamo Bay military prison.[^59] Second, government funding can influence the perceptions of the organization's programs in more repressive countries. Taking money from the US State Department, for example, would harm Index's efforts in nations in conflict with the United States, allowing regimes to discount Index's advocacy as merely an arm of American foreign policy.[^60] Avoiding government grants thus allows Index to remain contentious toward democracies and maintain its independence and perceptions of objectivity when targeting autocracies. The organization's consistent streams of revenue from private donors, foundations, and corporations provides Index with the flexibility to avoid controversial and potentially damaging government grants.
+
+Index on Censorship's London office is run by a small staff of 8–12 people who develop the organization's mission and strategy and oversee its operations (see top panel of @fig:index-budget-staff). Much of the organization's work, however, is done through freelance journalists and activists associated with Index. The magazine commissions work from foreign correspondents and the organization's research teams communicate with researchers in the various countries they target. Index's small staff limits the number of countries the organization can target simultaneously. In accordance with its mission to influence freedom of expression policy, Index selects two to three countries each year that necessitate special attention. These countries are chosen deliberately based on staff expertise, personal connections with domestic NGOs, activists, and journalists, or alignment with specific funders.[^61] Index then works to "influence the policy makers and the general media to put pressure on those governments" and attempt to induce reforms by supporting freelance journalists and activists in these countries, protesting against those governments' embassies in the UK, and by creating resources in London that can be delivered to people on the ground.[^62] In the lead up to the first European Games, held in Azerbaijan in June 2015, Index participated in protests outside the Azerbaijan Embassy in London, "calling for an end to the ongoing human rights crackdown in Azerbaijan, and the release of the country’s jailed journalists and human rights defenders" [@a19-azerbaijan:2015]. The organization also created special toolkits—or "guidance packs"—that it distributed to foreign sports correspondents on their way to cover the games in Baku, offering warnings about how to stay safe and advice on how to best cover the country's human rights abuses. In spite of its small size, Index's intense needling prompted a perturbed response from Azerbaijan's ambassador, and the organization considered the campaign a success [@index:2015, 7].
+
+![Index on Censorship award winners, 2001–2016](../../Output/figures/5-index-awards){#fig:index-awards}
+
+Index expands the reach of its advocacy through its annual Freedom of Expression Awards. These awards are well suited to the organization's small size, as they require minimal staff resources to undertake, but have the potential to empower and boost the influence of recipients. Index solicits nominations for awards celebrating activists involved in arts, political campaigning, digital activism, and journalism, and winners are selected by a panel of volunteer judges. Since 2001, Index has given 79 awards to recipients in 42 different countries, predominantly in more restrictive autocracies (see @fig:index-awards). Index promotes award winners through press releases and media coverage (especially in *The Guardian*, one of Index's corporate sponsors), and highlights their work in its magazine, providing winners with international recognition and allowing the organization to shame recipients' home countries.
+
+Relying on the awards for a deliberate expansion of Index's global advocacy work, however, is impossible, as the selection committee has no control over who is nominated. In a given year, award winners rarely come from countries where Index engages in deeper advocacy work. For instance, in 2016, Index ran targeted campaigns in Azerbaijan, Bahrain and Turkey, but its five award winners came from Burkina Faso, China, Pakistan, Syria, and Yemen. As such, the awards are often not linked to Index's overall advocacy strategy. However, the global distribution of award recipients can provide the organization with additional resources in the future, and award winners can assist with Index's more formal advocacy efforts. In 2012, the organization presented its advocacy award to the president of the Bahrain Center for Human Rights (BCHR), Nabeel Rajab, who gained international prominence for his role in protesting against the Bahraini government during the 2011 Arab Spring uprisings. Index was able to draw on its relationship with Rajab and BCHR when it helped lead a successful campaign to release Maryam Al-Khawaja—a Bahraini activist and daughter of one of the founders of BCHR, Abdulhadi Alkhawaja—after she was imprisoned in September 2014 under charges of assaulting a police officer [@index:2015]. Though the award had been presented two years earlier, Index had maintained its relationship with Rajab and was well positioned to continue to advocate for human rights activists in the country, continuing through the organization's ongoing Bahrain campaign.[^63]
+
+Finally, Index cultivates collaborative relationships with organizations beyond its awards program. For instance, Index is a member of the International Freedom of Expression Exchange (IFEX) and has partnered with member organizations to engage in country-specific advocacy campaigns. Prior to the Arab Spring uprisings, Index worked with Article 19 and other groups in IFEX's Tunisia Monitoring Group (IFEX-TMG) and contributed to the Group's reports and recommendations, relying on the cover of the working group to gain safe access to the country. Additionally, by partnering with IFEX-TMG members and local Tunisian and Egyptian NGOs, Index built on those relationships and sponsored training sessions for media rights activists throughout Tunisia in 2011 [@index:2012, 4]. Collaboration thus plays a key role in Index's flexibility. With few permanent employees and a single office in London the organization by necessity has to rely on other organizations and activists to effectively engage in its programming. 
+
+## Protecting its mission from abroad
+
+Survey responses revealed several methods governments use to capture the benefits and resources of INGOs in their country. Resource-related regulations attempt to take some control of the money, expertise, and programs of guest INGOs, while oversight regulations allow governments to assert managerial control over some programming decisions. These laws can pull an organization's core mission, vision, and values closer in line with government preferences, leading to tamer, less confrontational programming. Index on Censorship takes a unique approach to avoiding program capture regulations: it protects its core mission by not going to repressive countries in the first place and instead running all of its campaigns and advocacy from its home in London. 
+
+This strategy is rooted, in part, to Index's historical legacy as a magazine. For decades, Index has been a publisher and a platform, acting as a gadfly from London and using its journal to distribute its criticisms globally. The organization's later advocacy-focused programs have continued in this vein. In parallel with its strategy of publishing works from authors in other countries, Index has made a "very conscious decision not to parachute in a bunch of foreigners to assess the situation and then report back,"[^64] and instead relies on activists, journalists, and authors in other countries to report on violations of expression rights and lobby for policy improvements. The organization thus protects against intrusions on its own core mission by not attempting to maintain a legal presence in its target countries. Not only would such a process be time- and resource-intensive, it could compromise their ability to effectively shame governments and support dissidents journalists, musicians, and artists, since such support would run afoul of gatekeeping regulations and risk their registration status.[^65] Index's small budget, lean staff, and large network shape the organization's strategy and programs—it cannot target all countries in the world, but maintains a global footprint from its headquarters in London. These resources provide the organization with flexibility to avoid government-induced changes to its programming and help it maintain the contentiousness of its advocacy.
+
+While Index insulates itself from program capture regulations by remaining in London, it is aware that its foreign partners—its freelancers, award recipients, and partners—are more susceptible to capture and co-optation, and it DOES XXX to prevent governments from taking advantage of those foreign partners. 
+
+**Circumvent laws to keep more money in hands of activists, avoid PR capture* 
+Some state officials want your services - Index faces threats to capture - money for award recipients + legitimacy
+
+Bringing people to London allows them to circumvent some import control laws, visa regulations
+Avoid losing money the fellowship recipients receive - get around resource capture by bringing people to London for the awards, working with recipients about however to present the awards
+
+
+Governments want to avoid the attention of Index, and this is largely what they do,
+
+but they can also benefit from them - showing off the fact that investigative journalism is allowed + limiting, seizing award money + benefiting from in-country training of journalists to boost their reputation
+
+Allowing a handful dissident media outlets and activists can lend regimes legitimacy - awarding activists can potentially boost the profile of the regime. They get around this by working closely with award recipients
+
+Regimes can say "Hey! We still have investigative outlets. We still have some [human rights] organizations. You can't say we're completely authoritarian."[^66]
+
+
+
+Index helps prevent persecution and co-optation of award recipients by working with them to see how they want to be presented at home + secure, encrypted communications with PGP, Signal, VPNs, etc. - freelance relationship with contributors keep people a step removed from the INGO. 
+
+"if organizations are seen to be backed by Western NGOs that can be problematic. And we would always talk to whatever collaborator we're talking to about how they want that presented."[^67]
+
+It doesn't just give them an award and then leave—receiving an award or fellowship often leads to years of collaboration and support
+
+# International Republican Institute
+
+Article 19 like Index, but Index doesn't set up offices, stays home in London. A19 works abroad, but is highly selective
+
+IRI and AMERA both left Egypt, but for different reasons
 
 TODO: In the case of IRI and Index, though, governments aren't friendly - IRI used as signal of power to domestic audience; Index avoids resource capture
+
+Labeled as undesirable, but that's a show of force of Russian gosudarstvenost and nationalism
+
+[http://www.politico.com/story/2016/08/international-republican-institute-russia-undesirable-227150](http://www.politico.com/story/2016/08/international-republican-institute-russia-undesirable-227150)
+
+Similar to A19, IRI shifts its programs around when needed and benefits from multiple offices. Egypt case was inverted instance of program capture where the government used the organization as a symbol of western intervention and its crackdown as a signal of power to its domestic audience
+
 
 ## Mission and strategy
 
@@ -120,21 +192,6 @@ Similar to when HRW's Kenneth Roth, other activists turned away. [https://www.hr
 
 - Turn capture on head - adaptive management - try to induce government changes
 - But also protect mission - Egypt closing, for example
-
-# Index on Censorship
-
-Avoids capture through funding mechanisms
-
-Index on Censorship includes section on anti-authoritarian lobbying in 2015 annual report
-
-## Mission and strategy
-
-## Sources of flexibility
-
-## How it protects its core mission
-
-- Don't operate directly in countries, support local journalists only
-- Chinese wall in funding, don't let mission get captured
 
 [^1]:	Response 1412.
 
@@ -237,3 +294,35 @@ Index on Censorship includes section on anti-authoritarian lobbying in 2015 annu
 [^50]:	Response 1615.
 
 [^51]:	Responses 1436, 1535, 1563, 1615, 1683, and 1760.
+
+[^52]:	Index on Censorship, "About Index on Censorship," archived on January 20, 2011, [https://web.archive.org/web/20110120140649/http://www.indexoncensorship.org:80/about-index-on-censorship/](https://web.archive.org/web/20110120140649/http://www.indexoncensorship.org:80/about-index-on-censorship/).
+
+[^53]:	Originally published in @index:1972. See also Index on Censorship, "About Freedom of Expression," [https://www.indexoncensorship.org/about-free-of-expression/](https://www.indexoncensorship.org/about-free-of-expression/).
+
+[^54]:	Index on Censorship, "What We Do," [https://www.indexoncensorship.org/what-we-do/](https://www.indexoncensorship.org/what-we-do/).
+
+[^55]:	See [https://mappingmediafreedom.org/](https://mappingmediafreedom.org/).
+
+[^56]:	Index on Censorship relies on two separate legal entities to publish its magazine. The bulk of the organization's operations fall under the purview of the Writers & Scholars Educational Trust, which is registered as a UK-based charity. Index outsources the publication and distribution of the magazine to Writers and Scholars International Limited, a subsidiary non-profit company limited by guarantee. Index reports the the activities of both entities in its annual reports, and it transfers revenues, profits, and debts between the Trust and its subsidiary as needed.
+
+[^57]:	Interview 1050, October 14, 2016, London.
+
+[^58]:	Index on Censorship, "Freedom of Expression Awards 2001," [https://www.indexoncensorship.org/2001/03/awards-2001/](https://www.indexoncensorship.org/2001/03/awards-2001/).
+
+[^59]:	Index on Censorship, "Freedom of Expression Awards 2004," [https://www.indexoncensorship.org/2004/03/awards-2004/](https://www.indexoncensorship.org/2004/03/awards-2004/).
+
+[^60]:	Interview 1050, October 14, 2016, London.
+
+[^61]:	For instance, Index worked intensively in Iraq from 2009–2011 because it had received a large grant from the United Nations Development Program [@index:2012, 2].
+
+[^62]:	Interview 1050, October 14, 2016, London.
+
+[^63]:	See @Manning:2017; @index-bahrain:2017. Rajab was also a judge for Index's 2016 awards.
+
+[^64]:	Interview 1050, October 14, 2016, London.
+
+[^65]:	Interview 1026, October 14, 2016, London.
+
+[^66]:	Interview 1026, October 14, 2016, London.
+
+[^67]:	Interview 1050, October 14, 2016, London.

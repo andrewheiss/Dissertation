@@ -84,6 +84,8 @@ fig.save.cairo(plot.both, filename="5-index-budget-staff",
 index.budget %>%
   mutate(Surplus = Income - Expenses) %>%
   pander::pandoc.table()
+
+index.budget$Income %>% mean()
 ```
 
 ## Awards and fellowships
@@ -155,4 +157,16 @@ plot.awards
 
 fig.save.cairo(plot.awards, filename="5-index-awards", 
                width=5.5, height=2.5)
+```
+
+Unique countries:
+
+```{r}
+awards.aggregated %>% nrow()
+```
+
+Number of recipients:
+
+```{r}
+awards.individual %>% nrow()
 ```
