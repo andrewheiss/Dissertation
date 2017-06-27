@@ -166,7 +166,8 @@ plot.iri.regions <- ggplot(iri.regions.total, aes(x=year_end, y=expenditures)) +
   labs(x=NULL, y="Expenditures") +
   scale_y_continuous(labels=scales::dollar_format()) +
   scale_color_manual(values=ath.palette("palette1"), name=NULL, guide=FALSE) +
-  theme_ath() + theme(strip.text=element_text(size=rel(0.8))) +
+  theme_ath() + theme(strip.text=element_text(size=rel(0.8)),
+                      strip.background=element_rect(fill="grey90")) +
   facet_wrap(~ region.collapsed)
 plot.iri.regions
 
