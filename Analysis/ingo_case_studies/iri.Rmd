@@ -228,3 +228,16 @@ fig.save.cairo(plot.iri.regional.offices.page1, filename="5-iri-regional-staff-p
 fig.save.cairo(plot.iri.regional.offices.page2, filename="5-iri-regional-staff-page2", 
                width=5.5, height=2.5)
 ```
+
+## Total number of field offices
+
+```{r total-field-offices, results="asis"}
+total.offices <- iri.regional.offices %>%
+  filter(key == "Field offices") %>%
+  group_by(year_end) %>%
+  summarise(total = sum(total))
+
+total.offices %>% pander::pandoc.table()
+```
+
+## References
