@@ -86,6 +86,8 @@ amera.budget %>%
   pander::pandoc.table()
 ```
 
+Average income per year: `r amera.budget$Income %>% mean() %>% scales::dollar()`
+
 
 ## Regional offices
 

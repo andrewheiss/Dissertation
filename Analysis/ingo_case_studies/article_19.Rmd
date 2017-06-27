@@ -76,6 +76,8 @@ a19.budget %>%
   pander::pandoc.table()
 ```
 
+Average income per year: `r a19.budget$Income %>% mean() %>% scales::dollar()`
+
 
 ## Regional expenses over time
 

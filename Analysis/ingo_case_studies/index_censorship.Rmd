@@ -84,9 +84,9 @@ fig.save.cairo(plot.both, filename="5-index-budget-staff",
 index.budget %>%
   mutate(Surplus = Income - Expenses) %>%
   pander::pandoc.table()
-
-index.budget$Income %>% mean()
 ```
+
+Average income per year: `r index.budget$Income %>% mean() %>% scales::dollar()`
 
 ## Awards and fellowships
 
