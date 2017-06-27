@@ -1,0 +1,214 @@
+---
+title: "IRI analysis"
+author: "Andrew Heiss"
+date: "`r format(Sys.time(), '%B %e, %Y')`"
+output: 
+  html_document: 
+    css: ../html/fixes.css
+    code_folding: hide
+    toc: yes
+    toc_float: true
+    toc_depth: 4
+    highlight: pygments
+    theme: cosmo
+    self_contained: no
+    includes:
+      after_body: ../html/add_home_link.html
+bibliography: /Users/andrew/Dropbox/Readings/Papers.bib
+csl: /Users/andrew/.pandoc/csl/american-political-science-association.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
+                      tidy.opts=list(width.cutoff=140),  # For code
+                      options(width=140))  # For output
+
+library(tidyverse)
+library(jsonlite)
+library(forcats)
+library(countrycode)
+library(rgdal)
+
+source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
+```
+
+## Budget and staff over time
+
+```{r budget-staff, message=FALSE}
+# Yay GuideStar!
+# https://www.guidestar.org/profile/52-1340267
+iri.budget <- read_csv(file.path(PROJHOME, "Data", 
+                                 "data_base", "iri_budget.csv")) %>%
+  mutate(gov_percent = Government / Income)
+
+iri.budget.long <- iri.budget %>%
+  select(Year, Income, Expenses, Staff) %>%
+  gather(key, value, -Year) %>%
+  mutate(type = ifelse(key == "Staff", "Staff", "Budget"))
+
+plot.budget <- ggplot(filter(iri.budget.long, type == "Budget"),
+                      aes(x=Year, y=value, colour=key)) +
+  geom_line(size=1) +
+  labs(x=NULL, y="Reported amount") +
+  scale_y_continuous(labels=scales::dollar_format(),
+                     limits=c(0, NA)) +
+  scale_color_manual(values=ath.palette("palette1")[3:4], name=NULL) +
+  theme_ath()
+
+plot.gov <- ggplot(iri.budget, aes(x=Year, y=gov_percent)) +
+  geom_line(size=1, colour="#FF4136") +
+  labs(x=NULL, y="Percent of income from\ngovernment grants") +
+  scale_y_continuous(labels=scales::percent) +
+  expand_limits(y=0) +
+  theme_ath()
+
+plot.staff <- ggplot(filter(iri.budget.long, type == "Staff"),
+                     aes(x=Year, y=value)) +
+  geom_line(size=1) +
+  labs(x=NULL, y="Full time\nemployees") +
+  expand_limits(y=0) +
+  theme_ath()
+
+plot.all <- rbind(ggplotGrob(plot.budget),
+                  ggplotGrob(plot.gov),
+                  ggplotGrob(plot.staff))
+
+panels <- plot.all$layout$t[grep("panel", plot.all$layout$name)]
+plot.all$heights[panels] <- unit(c(1, 0.5, 0.5), "null")
+
+grid::grid.newpage()
+grid::grid.draw(plot.all)
+
+fig.save.cairo(plot.all, filename="5-iri-budget-staff", 
+               width=4.5, height=3.5)
+```
+
+Average income per year:
+
+```{r results="asis"}
+iri.budget %>%
+  mutate(Surplus = Income - Expenses) %>%
+  pander::pandoc.table()
+
+iri.budget$Income %>% mean()
+```
+
+## Program locations
+
+```{r program-locations, message=FALSE, warning=FALSE}
+# Load Robinson map projection
+countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                                     "countries110_robinson_ggmap.rds"))
+
+possible.countries <- data_frame(id = unique(as.character(countries.ggmap$id)))
+
+# IRI has an interactive map of all the countries it works in at 
+# http://test-iri.pantheon.io/iri-around-world. It uses jvectormap to display data 
+# from a JSON file at http://test-iri.pantheon.io/feeds/countries_interactive_map
+# So, I downloaded that and parse it here.
+iri.countries.raw <- fromJSON(file.path(PROJHOME, "Data", 
+                                       "data_base", "iri_countries.json"))
+
+iri.countries <- iri.countries.raw$countries$country %>%
+  mutate(country.name = countrycode(field_country_code, "iso2c", "country.name"),
+         iso3 = countrycode(field_country_code, "iso2c", "iso3c"))
+
+countries.to.plot <- possible.countries %>%
+  left_join(iri.countries, by=c("id" = "iso3")) %>%
+  replace_na(list(field_bool_current_program = 2)) %>%
+  mutate(presence = factor(field_bool_current_program, levels=c(1, 0, 2),
+                           labels=c("Programs in 2017", "Past programs", "No programming"),
+                           ordered=TRUE))
+
+plot.iri <- ggplot(countries.to.plot) +
+  geom_map(aes(map_id=id, fill=presence), map=countries.ggmap, 
+           size=0.15, colour="black") + 
+  expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) +
+  coord_equal() +
+  scale_fill_manual(values=c("#FF4136", "grey50", "white")) +
+  scale_radius(range=c(0.5, 3.5)) +
+  guides(size=guide_legend(nrow=1, order=0, title="Number of award recipients:"),
+         fill=guide_legend(order=1, title=NULL)) +
+  theme_ath_map() + theme(legend.position="bottom",
+                          legend.key.size=unit(0.65, "lines"))
+plot.iri
+
+fig.save.cairo(plot.iri, filename="5-iri-work", 
+               width=5.5, height=2.5)
+```
+
+## Expenses by region
+
+```{r regional-expenses, message=FALSE}
+iri.regional <- read_csv(file.path(PROJHOME, "Data", "data_base",
+                                   "iri_budget_regions.csv")) %>%
+  # Collapse regions:
+  # North, Central, and South America go together (since North America is just Mexico)
+  mutate(region.collapsed = recode(region,
+                                   `North America` = "Central and South America",
+                                   `South America` = "Central and South America",
+                                   `Central America and the Caribbean` 
+                                   = "Central and South America",
+                                   `South Asia` = "South and Central Asia"))
+
+iri.regions.total <- iri.regional %>%
+  group_by(year_end, region.collapsed) %>%
+  summarise(expenditures = sum(expenditures))
+
+plot.iri.regions <- ggplot(iri.regions.total, aes(x=year_end, y=expenditures,
+                                                  colour=region.collapsed)) +
+  geom_vline(xintercept = 2011, size=0.5, colour="grey75", linetype="dashed") +
+  geom_line(size=1) +
+  labs(x=NULL, y="Expenditures") +
+  scale_y_continuous(labels=scales::dollar_format()) +
+  guides(color=guide_legend(title=NULL)) +
+  # scale_color_manual(values=ath.palette("palette1"), name=NULL) +
+  theme_ath()
+plot.iri.regions
+
+fig.save.cairo(plot.iri.regions, filename="5-iri-expenditures-region", 
+               width=5.5, height=3)
+```
+
+```{r iri2010-me}
+iri.2010 <- tribble(
+  ~grant, ~number, ~amount,
+  "Iraqi Governance, Civil Society, and Political Party Programs", "DOS S-LMAQM-07-GR-209 6495", 12815842,
+  "Iraq Post-Election Initiatives", "DOS S-LMAQM-10-GR-535 6984", 5660233
+)
+```
+
+2010 is wonky in the Middle East, but that's because they got some massive grants in Iraq, like `r iri.2010$amount %>% sum() %>% scales::dollar()`—the "largest grant ever managed by IRI" [@iri:2009, 2].
+
+```{r results="asis"}
+iri.2010 %>% pander::pandoc.table()
+```
+
+## Staff and offices by region
+
+```{r staff-offices-region}
+iri.regional.offices <- iri.regional %>%
+  gather(key, value, offices, employees) %>%
+  filter(!is.na(value)) %>%
+  group_by(year_end, region.collapsed, key) %>%
+  summarise(total = sum(value)) %>%
+  mutate(key = factor(key, levels=c("offices", "employees"), ordered=TRUE)) %>%
+  mutate(key = fct_recode(key, 
+                          `Field offices` = "offices",
+                          `Employees in field offices` = "employees"))
+
+plot.iri.regional.offices <- ggplot(iri.regional.offices, 
+                                    aes(x=year_end, y=total, 
+                                        colour=region.collapsed)) +
+  geom_vline(xintercept = 2011, size=0.5, colour="grey75", linetype="dashed") +
+  geom_line(size=1) +
+  labs(x=NULL, y="Reported amount") +
+  guides(color=guide_legend(title=NULL)) +
+  # scale_color_manual(values=ath.palette("palette1"), name=NULL) +
+  theme_ath() +
+  facet_wrap(~ key, nrow=2, scales="free_y")
+plot.iri.regional.offices
+
+fig.save.cairo(plot.iri.regional.offices, filename="5-iri-regional-staff", 
+               width=5.5, height=4.5)
+```

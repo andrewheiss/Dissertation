@@ -42,6 +42,7 @@ output:
 - [Article 19](ingo_case_studies/article_19.html)
 - [AMERA UK/Egypt/International](ingo_case_studies/amera.html)
 - [Index on Censorship](ingo_case_studies/index_censorship.html)
+- [IRI](ingo_case_studies/iri.html)
 
 ## Miscellaneous stuff
 
