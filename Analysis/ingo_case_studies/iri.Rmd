@@ -136,6 +136,8 @@ fig.save.cairo(plot.iri, filename="5-iri-work",
                width=5.5, height=2.5)
 ```
 
+Number of countries it works in in 2017: `r filter(iri.countries, field_bool_current_program == "1") %>% nrow()`
+
 ## Expenses by region
 
 ```{r regional-expenses, message=FALSE, warning=FALSE}
