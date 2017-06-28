@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: June 26, 2017
+date: June 28, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -150,31 +150,57 @@ To enhance its support of award recipients and institutionalize methods for avoi
 
 # International Republican Institute
 
-Article 19 like Index, but Index doesn't set up offices, stays home in London. A19 works abroad, but is highly selective
 
-IRI and AMERA both left Egypt, but for different reasons
 
 TODO: In the case of IRI and Index, though, governments aren't friendly - IRI used as signal of power to domestic audience; Index avoids resource capture
 
-Labeled as undesirable, but that's a show of force of Russian gosudarstvenost and nationalism
 
-[http://www.politico.com/story/2016/08/international-republican-institute-russia-undesirable-227150](http://www.politico.com/story/2016/08/international-republican-institute-russia-undesirable-227150)
 
 Similar to A19, IRI shifts its programs around when needed and benefits from multiple offices. Egypt case was inverted instance of program capture where the government used the organization as a symbol of western intervention and its crackdown as a signal of power to its domestic audience
 
 
+IRI is a sprawling org that undertakes hundreds of projects in dozens of countries. Many countries are repressive. Here I look at Egypt 2011+ because it garnered immense press attention - undertaking a full analysis of IRI's reactions to government regulations around the world goes beyond the scope of this project. However, briefly looking at how it has handed regulations in Egypt is instructive, and while not representative of possible reactions in all its target countries, the analysis reveals important features of the INGO–dictator relationship
+
+It's difficult though to find blatant instances of capture in the wild. Attempts at capture are subtle. And governments are even more subtle when capturing large western INGOs, going beyond resource and managerial capture. There's a PR benefit, both positive and negative, too.
+
+
 ## Mission and strategy
+
+In 1983, as part of President Ronald Reagan's push for increased global democratization, Congress passed the National Endowment for Democracy (NED) Act, which established an eponymous charitable foundation backed by more than $30 million from the US State Department.[^71] The NED was "premised on the idea that American assistance on behalf of democracy efforts abroad would be good both for the U.S. and for those struggling around the world for freedom and self-government," [@ned-lowe] and since its creation, it has poured hundreds of millions of dollars into democratization and political development projects around the world. The NED does not engage in practical, on-the-ground democracy promotion advocacy—instead, it channels its government grants through four main partner organizations: the Center for International Private Enterprise (CIPE), backed by the US Chamber of Commerce; the Solidarity Center, associated with the AFL-CIO; the National Democratic Institute of International Affairs (NDI), loosely affiliated with the US Democratic Party; and the International Republican Institute (IRI), loosely affiliated with the US Republican Party [@Bush:2015, 110].[^72] 
+
+In the 1980s, IRI used its NED funds to engage in democracy promotion activities primarily in Latin America, and following the collapse of the Soviet Union in the early 1990s, it expanded its operations to Eastern Europe. Today it runs programs in 86 countries throughout the world (see @fig:iri-work). Since its creation, IRI's work has been centered elections, and the organization has become of the world's most credible international election monitoring organizations [@Kelley:2012, 120], observing more than 200 elections in 57 countries.[^73] In addition to monitoring elections, IRI also trains candidates and political parties in the election process, provides technical assistance for election commissions, and helps with general election preparedness. In the late 1990s and early 2000s, elections became a standard fixture of authoritarian politics, though, and the politicians that won in IRI-observed elections were regularly swept out of power in subsequent less-democratic elections. IRI adjusted by expanding the scope of its election-focused programming.[^74] Instead of appearing on the scene a few weeks before an election, IRI began working with election officials six to twelve months in advance and staying actively engaged for several months after the election. 
+
+![IRI program locations, 2017](../../Output/figures/5-iri-work){#fig:iri-work}
+
+Beyond longer-term election monitoring, IRI's mission today encompasses a more expansive vision of democracy promotion:
+
+> IRI encourages democracy in places where it is absent, helps democracy become more effective where it is in danger, and shares best practices where democracy is flourishing.[^75]
+
+Today, IRI's programing is designed to improve the political and social infrastructure for electoral democracy. The organization continues to engage in election-focused work, including trainings in multi-party political systems and governance in emerging democracies. But much of IRI's work is now aimed at cultivating civil society, increasing citizen involvement in government, and engaging marginalized groups—in particular women and youth—in the political process.[^76]
 
 ## Sources of flexibility
 
-## How it protects its core mission
+IRI's close affiliation with the NED and the US democracy promotion establishment provide the organization with multiple key sources of flexibility, including large and reliable sources of income, deep connections with the US government, and a wide global presence. This instrumental flexibility, in turn, allows the organization to maneuver within the uncertain regulatory, political, and social environments of the countries it works in and resist government attempts at capturing their programs.
 
-make them pawns in greater political game within country - blatant show of force - TODO: how many other foreign NGOs were caught up in the raid? How many had cabinet-level connections to the Obama administration?
+Compared to Article 19, AMERA, and Index on Censorship, IRI's budget is massive—its average income from 2004–2015 was $70.4 million, more than 18 times larger than the other three INGOs combined (see @fig:iri-budget-staff).[^77] Nearly 100% of its revenue comes from government grants, primarily from the State Department, USAID, and the NED. While this guarantees access to a substantial pool of resources and allows IRI to have a global presence, its reliance on government funds also poses potential barriers to its advocacy abroad. First, IRI's revenue is deeply connected to trends in domestic American politics and can reflect the priorities of US foreign policy. For instance, in his 2004 State of the Union Address, in the early days of American military intervention in Iraq and Afghanistan, President George W. Bush proposed doubling the NED's budget in order to "to focus its new work on the development of free elections, and free markets, free press, and free labor unions in the Middle East" [@Bush:2004]. Accordingly, IRI's revenue more than doubled between 2004 and 2005, peaking at nearly $100 million in 2009–2010, including $18.5 million in two State Department grants to fund its observation of the 2010 Iraqi parliamentary elections [@iri:2009]. Under President Barack Obama, however, IRI's income declined steadily as its programs in Iraq wound down and the NED's priorities shifted elsewhere. Domestic politics can also deplete IRI's funding—the Trump administration's proposed 2018 budget proposes a 40% cut in funding to the State Department, USAID, and the NED, which would subsequently lead to a substantial drawdown in IRI's programming if approved by Congress [@ToosiEverett:2017; @Wadhams:2017].
 
-Similar to when HRW's Kenneth Roth, other activists turned away. [https://www.hrw.org/news/2017/01/12/egypt-consolidating-repression-under-al-sisi](https://www.hrw.org/news/2017/01/12/egypt-consolidating-repression-under-al-sisi)
+![IRI's income, expenditures, and full time staff, 2004–15](../../Output/figures/5-iri-budget-staff){#fig:iri-budget-staff}
 
-- Turn capture on head - adaptive management - try to induce government changes
-- But also protect mission - Egypt closing, for example
+Second, reliance on government funds influences perceptions of IRI's autonomy and objectivity. IRI claims to be nonpartisan and independent, but it has struggled to shake off perceptions of US government influence. In the 1980s, scholars argued that it was being wielded as a weapon in the "'war of ideas' between communism and democracy" [@Carothers:1994, 134] and that it has been too closely linked to US foreign policy interests. Its missions since then can also be traced to US foreign policy goals—President Bush strategically used the NED, and IRI in turn, throughout his presidency to help reshape political structures in concert with American military action in the Middle East. The organization also maintains a close affiliation with conservative political figures and is often accused of promoting right-wing values [@Shelley:2000, 227]. Republican US senator John McCain has been chair of IRI's board since 2003, and the board includes many former and current Republican members of Congress including Kelly Ayotte, Tom Cotton, Kay Bailey Hutchison, and Mark Kirk.[^78] 
+
+Despite these political and perceptual hurdles, IRI's complete reliance on government funding provides it with financial flexibility as it adapts its programs to the changing political contexts of its target countries. Funding from nominally independent donors like the NED gives IRI access to countries that USAID and the State Department either cannot access or are uninterested in. IRI has used NED funds to work in countries like China, Cuba, and Sudan, where the US government has been banned by law from providing foreign aid [@Epstein:1999, 2], and it has relied on NED grants to work in smaller countries like Gambia that pose less strategic interest for the State Department or USAID.[^79]
+
+<div id="fig:iri-regional-staff">
+![](../../Output/figures/5-iri-regional-staff-page1){#fig:iri-regional-staff1}
+
+![](../../Output/figures/5-iri-regional-staff-page2){#fig:iri-regional-staff2}
+
+IRI field offices and field employees, 2009–2015
+</div>
+
+Similar to Article 19, which relies on a handful of in-country offices to improve the reach of its mission, a second source of IRI's instrumental flexibility its global presence. The scale of IRI's international work, though, is enormous. The organization works in more than 80 different countries and maintains 30–35 field offices staffed by 200–400 in-field employees. Working in its target countries is an essential part of IRI's mission. IRI makes a claim similar to Index on Censorship, which makes a conscious effort "not to parachute in a bunch of foreigners"[^80] when working abroad, but takes the opposite approach—Index remains in London, while IRI embeds itself abroad. With its shift away from basic election monitoring, rather than parachute into a country and present a preset menu of democratization programs, IRI now makes long-term commitments to the countries it works in and plans on remaining for many years. Recognizing that democracy is a "long term, iterative process,"[^81] IRI develops networks of domestic civil society and political leaders to further its mission of democratization. IRI's dozens of field offices allow the organization to maintain robust in-country presence and keep in contact with domestic partners that help the organization pay attention to the political, economic, legal, and social contexts of its host countries.
+
+While some of its field offices are more permanent, many are set up temporarily according to the needs of the country and proximity to other states in the region. For instance, for several months in 2016, IRI maintained a small temporary office in Gambia, and from a single field office in the Sahel, IRI runs trainings and works with activists in multiple neighboring countries because due to linguistic, cultural, and geographic proximity.[^82] @fig:iri-regional-staff demonstrates the volatility of the distribution of IRI's regional offices and employees, with rapid shifts in personnel and headquarters over time, particularly in the Middle East and Asia, where many countries have passed restrictive NGO laws. IRI's large network of field offices enables it to respond quickly to changing needs and remain embedded in its target countries for the long term. Crucially, it also allows the organization to effectively confront anti-NGO crackdowns and avoid regulations aimed at capturing their programs.
 
 [^1]:	Response 1412.
 
@@ -315,3 +341,27 @@ Similar to when HRW's Kenneth Roth, other activists turned away. [https://www.hr
 [^69]:	PGP, or Pretty Good Privacy, is a form of public key cryptography used to encrypt e-mails, messages, and files. See Electronic Frontier Foundation, "PGP," [https://ssd.eff.org/en/glossary/pgp](https://ssd.eff.org/en/glossary/pgp).
 
 [^70]:	Interview 1050, October 14, 2016, London.
+
+[^71]:	*Department of State Authorization Act, Fiscal Years 1984 and 1985,* Public Law 98-164, *US Statutes at Large* 97 (November 22, 1983): 1017–1063. [https://www.gpo.gov/fdsys/pkg/STATUTE-97/pdf/STATUTE-97-Pg1017.pdf](https://www.gpo.gov/fdsys/pkg/STATUTE-97/pdf/STATUTE-97-Pg1017.pdf).
+
+[^72]:	CIPE, NDI, and IRI were all created with the establishment of the NED in 1983; the Solidarity Center took the place of the American Institute for Free Labor Development in 1997, which had previously been an outlet for NED funds.
+
+[^73]:	International Republican Institute, "Election Observation & Assessment Reports," [http://www.iri.org/election-observation-assessment-reports](http://www.iri.org/election-observation-assessment-reports).
+
+[^74]:	Interview 1072, November 11, 2016, Washington, DC.
+
+[^75]:	International Republican Institute, "FAQs," [http://www.iri.org/who-we-are/faqs](http://www.iri.org/who-we-are/faqs).
+
+[^76]:	Interviews 1092 and 1072, November 16, 2016, Washington, DC. See also International Republican Institute, "What We Do," [http://www.iri.org/what-we-do](http://www.iri.org/what-we-do) and International Republican Institute, "Civil Society Initiatives, [http://www.iri.org/program/civil-society-initiatives](http://www.iri.org/program/civil-society-initiatives).
+
+[^77]:	IRI's fiscal year runs from October 1–September 30. To align its financial reports with a January–December calendar year, I use the second year of reporting period. The IRS 990 form is dated from the first year of the period. Thus, all data marked as 2010 in the following figures come from IRI's 2009 990 form.
+
+[^78]:	International Republican Institute, "Board of Directors," [http://www.iri.org/who-we-are/board-of-directors](http://www.iri.org/who-we-are/board-of-directors).
+
+[^79]:	Interview 1091, November 11, 2016, Washington, DC.
+
+[^80]:	Interview 1050, October 14, 2016, London.
+
+[^81]:	Interview 1092, November 16, 2016, Washington, DC.
+
+[^82]:	Interviews 1072 and 1092, November 16, 2016, Washington, DC.
