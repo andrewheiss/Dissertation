@@ -190,6 +190,8 @@ Second, reliance on government funds influences perceptions of IRI's autonomy an
 
 Despite these political and perceptual hurdles, IRI's complete reliance on government funding provides it with financial flexibility as it adapts its programs to the changing political contexts of its target countries. Funding from nominally independent donors like the NED gives IRI access to countries that USAID and the State Department either cannot access or are uninterested in. IRI has used NED funds to work in countries like China, Cuba, and Sudan, where the US government has been banned by law from providing foreign aid [@Epstein:1999, 2], and it has relied on NED grants to work in smaller countries like Gambia that pose less strategic interest for the State Department or USAID.[^79]
 
+Similar to Article 19, which relies on a handful of in-country offices to improve the reach of its mission, a second source of IRI's instrumental flexibility its global presence. The scale of IRI's international work, though, is enormous. The organization works in more than 80 different countries and maintains 30–35 field offices staffed by 200–400 in-field employees. Working in its target countries is an essential part of IRI's mission. IRI makes a claim similar to Index on Censorship, which makes a conscious effort "not to parachute in a bunch of foreigners"[^80] when working abroad, but takes the opposite approach—Index remains in London, while IRI embeds itself abroad. With its shift away from basic election monitoring, rather than parachute into a country and present a preset menu of democratization programs, IRI now makes long-term commitments to the countries it works in and plans on remaining for many years. Recognizing that democracy is a "long term, iterative process,"[^81] IRI develops networks of domestic civil society and political leaders to further its mission of democratization. IRI's dozens of field offices allow the organization to maintain robust in-country presence and keep in contact with domestic partners that help the organization pay attention to the political, economic, legal, and social contexts of its host countries.
+
 <div id="fig:iri-regional-staff">
 ![](../../Output/figures/5-iri-regional-staff-page1){#fig:iri-regional-staff1}
 
@@ -198,9 +200,69 @@ Despite these political and perceptual hurdles, IRI's complete reliance on gover
 IRI field offices and field employees, 2009–2015
 </div>
 
-Similar to Article 19, which relies on a handful of in-country offices to improve the reach of its mission, a second source of IRI's instrumental flexibility its global presence. The scale of IRI's international work, though, is enormous. The organization works in more than 80 different countries and maintains 30–35 field offices staffed by 200–400 in-field employees. Working in its target countries is an essential part of IRI's mission. IRI makes a claim similar to Index on Censorship, which makes a conscious effort "not to parachute in a bunch of foreigners"[^80] when working abroad, but takes the opposite approach—Index remains in London, while IRI embeds itself abroad. With its shift away from basic election monitoring, rather than parachute into a country and present a preset menu of democratization programs, IRI now makes long-term commitments to the countries it works in and plans on remaining for many years. Recognizing that democracy is a "long term, iterative process,"[^81] IRI develops networks of domestic civil society and political leaders to further its mission of democratization. IRI's dozens of field offices allow the organization to maintain robust in-country presence and keep in contact with domestic partners that help the organization pay attention to the political, economic, legal, and social contexts of its host countries.
-
 While some of its field offices are more permanent, many are set up temporarily according to the needs of the country and proximity to other states in the region. For instance, for several months in 2016, IRI maintained a small temporary office in Gambia, and from a single field office in the Sahel, IRI runs trainings and works with activists in multiple neighboring countries because due to linguistic, cultural, and geographic proximity.[^82] @fig:iri-regional-staff demonstrates the volatility of the distribution of IRI's regional offices and employees, with rapid shifts in personnel and headquarters over time, particularly in the Middle East and Asia, where many countries have passed restrictive NGO laws. IRI's large network of field offices enables it to respond quickly to changing needs and remain embedded in its target countries for the long term. Crucially, it also allows the organization to effectively confront anti-NGO crackdowns and avoid regulations aimed at capturing their programs.
+
+## Protecting its mission from abroad
+
+Changes in the civil society regulatory environment of IRI's target countries influence the types of programming IRI. Because IRI has a large amount of instrumental flexibility, though, the practical operating environment—or the overlap in IRI's and the government's preferences—tends to be large, even amidst regulatory pressure and anti-NGO crackdowns. IRI draws on its reserves of resources its mission from regime capture and remain engaged in its democratization efforts despite some governments' attempts to shut them down.
+
+IRI's deep connection to the US government provides the organization with legal and political support in its target countries. In order to obtain grants from government agencies like USAID and the State Department, IRI must prove its compliance with local laws, and they are encouraged by their funders to "play ball, follow regulations, and get registered."[^83] As such, IRI is in the process of registration or has completed its registration in all the countries it works in.[^84] Complying with gatekeeping rules is often streamlined because, like Article 19, IRI bundles registration with large donor-funded projects and can work with the local US embassy to speed the process along. US support is not a panacea for gatekeeping laws, and getting through the registration process can still be slow, arbitrary, and uncertain. To register its offices in Kyrgyzstan, IRI needed to obtain a live signature from a government employee in Washington, DC—a digital, stamped, or reproduced signature was unacceptable. One of the documents in their thick application packet was deemed invalid, however, because Kyrgyz officials found a stamped signature, the organization's application was denied and delayed for nine months. Once the registration was finally approved, though, IRI faced few regulatory hurdles, and it continues to work in the country.[^85]
+
+Having obtained formal legal status in its target countries with the assistance of the US government, IRI can continue to rely on the cover of the US government to avoid program capture. Bilateral treaties and Congressional mandates can limit foreign government control over IRI's resources and management.[^86] For instance, in 2010, Congress approved legislation ordering that all NGOs implementing NED-sponsored democracy, human rights, and governance programs "shall not be subject to the prior approval by the government of any foreign country," [@pl111-117, §7034(m)(4)] protecting these organizations from laws that give target governments the ability to deny foreign funding. As I will explore below, this statutory protection from managerial and resource capture grew out of IRI's experiences in Egypt from 2005–2009—stymied by foreign funding laws, IRI wielded its legislative connections to pass laws that grant it (and other NGOs) additional protection when working abroad.
+
+Finally, IRI's large budget and relationships with government aid agencies provide it with the ability to respond quickly to political and legal changes in its target countries. For example, IRI does not sign traditional contracts when working with USAID, opting instead to work under more flexible cooperative agreements. USAID contracts lay out a set of specific deliverables and provide little implementation flexibility. Cooperative agreements, on the other hand, consist of a list of broader goals and objectives for the grant, providing a margin for adapting to changes. After unforeseen political events or elections, IRI's intermediate goals might change, but the long term goals outlined in the cooperative agreement remain the same and USAID funding can continue.[^87] 
+
+This donor-based flexibility was an essential element in IRI's response to its 2012 closure in Russia. In December 2012, Russia announced that IRI had been designated as a foreign agent under the country's newly passed anti-NGO law [@Rogin:2012]. As explored in chapter 3, Russia's 2006, 2012, and 2015 anti-NGO laws were part of Vladimir Putin's *gosudarstvenost* nationalist agenda, and labeling organizations as undesirable foreign agents played into the regime's public image. Similar to the positive spin governments use when they are shamed by Index on Censorship, using award recipients as proof of a free press, prosecuting foreign NGOs is a form of public relations capture—by expelling INGOs, Putin's regime could further its Russia-first agenda by proving that foreign organizations meddle in politics.
+
+Despite their expulsion, IRI's Russia programming did not end in 2012. The organization moved its Russia staff and operations to a neighboring country in Eastern Europe and continued to train Russian politicians, activists, and civil society leaders from abroad. The number of people they train decreased substantially, since providing participants with safe transportation out of the country is costly, but their programs nevertheless continued[^88]—so much so that in August 2016, the Russian prosecutor general declared that IRI was an undesirable organization in an attempt to further limit its remote work [@iri-russia-2016]. 
+
+![IRI's expenditures by region, 2009–15](../../Output/figures/5-iri-expenditures-region){#fig:iri-expenditures-region}
+
+IRI's rapid retreat and reestablishment in the wake of Russian attempts at negative public relations capture was possible because of the organization's flexible funding arrangements and its large network of field offices. Because their work in Russia was funded under cooperative agreements (and not contracts), USAID was quite permissive in allowing them to move their staff and change short-term programmatic priorities and objectives without modifying the terms of the original grant.[^89] Additionally, as seen in @fig:iri-regional-staff1, IRI has the greatest number of field offices and employees in Europe and the former Soviet Union, and the organization could therefore choose to relocate to one of several possible countries. Due to its large budget, IRI could afford to move its extensive Russian operations quickly and leaving the country caused minimal disruption to IRI's overall operations—@fig:iri-expenditures-region shows relatively consistent program expenditures in Europe and Russia since 2012.
+
+**Egypt**
+
+IRI's experience in Egypt demonstrates how it deals with attempts at a kind of managerial capture + public relations - it left the country, continued working, came back, left again
+
+2005 Egypt closure
+
+IRI shut down in Egypt in 2005 during the presidential campaign. It closed not because of gatekeeping restrictions, but because of attempted capture. Mubarak doubled down on NGOs accepting foreign funding and insisted on being able to approve the flow of NGO grants. However, Congress mandated that
+
+"Democracy and governance activities shall not be subject to the prior approval of the GoE" [@Bush:2015, 36; @Sharp:2012, 8]
+
+Connections to USG, while not overt, do exist, and the organization is an easy and popular scapegoat
+
+The post-revolutionary military regime/SCAF applied existing NGOs regulations selectively. IRI's application for registration had been in progress since 2006 and was renewed in 2011 after they were told that the original paperwork had been lost to fires in government buildings.[^90] 
+
+make them pawns in greater political game within country - blatant show of force - TODO: how many other foreign NGOs were caught up in the raid? How many had cabinet-level connections to the Obama administration?
+17 civil society organisations, including NDI and IRI
+
+Press release: @iri-crackdown:2012
+
+> I was smeared in public by the ludicrous accusations that I was advancing Israeli interests, seeking to break up Egypt and working against the aims of the Egyptian revolution. In an equally absurd parallel, the Al Jazeera journalists were accused of being terrorists and members of the Muslim Brotherhood and of having written false stories. These accusations would have been comical if they didn’t have such serious consequences.
+
+@LaHood:2014
+
+Beyond drumming up popular support through conspiracies and scapegoating, the raid on IRI 
+
+IRI's statement regarding the raid hints at another purpose behind the targeted crackdown on foreign NGOs
+
+Reminding readers that US statues declare that government-funded human rights and democratization programming "shall not be subject to the prior approval by the government of any foreign country" [@iri-crackdown:2012, 2]. 
+
+They make sure everything is done discretely, encrypted - ensure safety - 
+
+Mission doesn't change, strategy shifts - Egypt under Mubarak they had to stop doing in-country work and bring activists to other countries for training - mission continued (that was in 2010; trained 100s); they were back in 2011, between March–December, trained like 8,000 people
+
+Government capture - how does it work for IRI
+Presence in country could result in a hostage office, but the donor really wanted them to be there
+
+- PR capture, but negative
+- Scapegoat 
+- Connect them to "foreign hands" - play into popular conspiracy theories
+
+TODO
+
+Ultimately presence isn't end goal - they have the resources to be able to do this though. AMERA did one thing; Article 19 works in a few countries; Index works from London; IRI can go anywhere
 
 [^1]:	Response 1412.
 
@@ -365,3 +427,19 @@ While some of its field offices are more permanent, many are set up temporarily 
 [^81]:	Interview 1092, November 16, 2016, Washington, DC.
 
 [^82]:	Interviews 1072 and 1092, November 16, 2016, Washington, DC.
+
+[^83]:	Interview 1091, November 16, 2016, Washington, DC.
+
+[^84]:	Interview 1053, November 16, 2016, Washington DC.
+
+[^85]:	Interview 1010, November 16, 2016, Washington, DC.
+
+[^86]:	Interview 1053, November 16, 2016, Washington DC.
+
+[^87]:	Interview 1092, November 16, 2016, Washington, DC.
+
+[^88]:	Interview 1010, November 16, 2016, Washington, DC.
+
+[^89]:	Interview 1092, November 16, 2016, Washington, DC.
+
+[^90]:	Interview 1091, November 16, 2016, Washington, DC.
