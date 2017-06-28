@@ -158,7 +158,12 @@ iri.regions.total <- iri.regional %>%
   group_by(year_end, region.collapsed) %>%
   summarise(expenditures = sum(expenditures)) %>%
   arrange(desc(expenditures)) %>%
-  mutate(crackdown = ifelse(region.collapsed == "Middle East and North Africa", 2011, NA)) %>%
+  ungroup() %>%
+  mutate(crackdown = case_when(
+    .$region.collapsed == "Middle East and North Africa" ~ 2011L,
+    .$region.collapsed == "Europe (includes Russia)" ~ 2012L,
+    TRUE ~ NA_integer_
+  )) %>%
   mutate(region.collapsed = fct_inorder(region.collapsed))
 
 plot.iri.regions <- ggplot(iri.regions.total, aes(x=year_end, y=expenditures)) +
@@ -203,7 +208,12 @@ iri.regional.offices <- iri.regional %>%
   mutate(key = fct_recode(key, 
                           `Field offices` = "offices",
                           `Employees in field` = "employees")) %>%
-  mutate(crackdown = ifelse(region.collapsed == "Middle East and North Africa", 2011, NA))
+  ungroup() %>%
+  mutate(crackdown = case_when(
+    .$region.collapsed == "Middle East and North Africa" ~ 2011L,
+    .$region.collapsed == "Europe (includes Russia)" ~ 2012L,
+    TRUE ~ NA_integer_
+  ))
 
 plot.iri.regional.offices.all <- ggplot(iri.regional.offices, 
                                         aes(x=year_end, y=total)) +
