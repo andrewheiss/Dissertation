@@ -393,7 +393,7 @@ expected.outcomes.simple <- expected.outcomes %>%
 
 caption <- "Expected and actual outcomes, simple {#tbl:expected-outcomes-simple}"
 outcomes <- pandoc.table.return(expected.outcomes.simple, keep.line.breaks=TRUE,
-                                justify="llllll", caption=caption, style="grid",
+                                justify="llllll", caption=caption, style="simple",
                                 emphasize.strong.cols=1)
 
 #+ results="asis"
