@@ -784,7 +784,7 @@ plot.activities <- ggplot(df.activities.plot, aes(x=prop, y=fct_rev(response),
   scale_colour_manual(values=ath.palette("contention1"), name=NULL) +
   scale_x_continuous(labels=scales::percent) +
   guides(colour=guide_legend(reverse=TRUE)) +
-  facet_wrap(~ question) +
+  facet_wrap(~ question, ncol=2) +
   theme_ath() + theme(legend.position=c(1, 0), legend.justification = c(1, 0),
                       legend.direction="vertical", strip.text=element_text(size=rel(0.75)),
                       panel.grid.major.y=element_blank())
@@ -792,7 +792,7 @@ plot.activities
 
 fig.save.cairo(plot.activities,
                filename="3-main-activities",
-               width=7, height=3)
+               width=5, height=4)
 ```
 
 ```{r activities-differences, results="asis"}

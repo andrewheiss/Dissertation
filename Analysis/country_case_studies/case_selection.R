@@ -123,7 +123,7 @@ plot.sna.selection
 
 fig.save.cairo(plot.sna.selection,
                filename="2-sna-selection",
-               width=6, height=4.5)
+               width=4.5, height=3.5)
 
 #' ## Data for case studies
 #' 
