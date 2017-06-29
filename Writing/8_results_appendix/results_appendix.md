@@ -17,7 +17,7 @@ All the figures, tables, and other results for the dissertation can be replicate
 
 \ 
 
-\begingroup \hangstart
+\stgroup \hangstart
 
 R Core Team. 2016. *R: A language and environment for statistical computing.* Vienna, Austria: R Foundation for Statistical Computing. [http://www.r-project.org](#). Version 3.3.0.
 
@@ -25,45 +25,44 @@ Stan Development Team. 2016a. *RStan: The R Interface to Stan.* [http://mc-stan.
 
 Wickham, Hadley. 2009. *ggplot2: Elegant Graphics for Data Analysis.* Springer New York. [http://had.co.nz/ggplot2/book](#). Version 2.1.0.
 
-\endgroup
+\fingroup
 
 
 # Additional figures and analysis
 
-## Chapter 1
+## Chapter 2
 
 ### Autocracies included in analysis
 
-\small
+\footnotesize
 !INCLUDE "../../Output/tables/1-autocracies.md"
 \normalsize
 
-\newpage
+\blandscape
 
 ### Summary of variables used in models
 
-\begingroup
+\footnotesize
 \renewcommand\arraystretch{1.6}
 !INCLUDE "../../Output/tables/1-var-summary.md"
-\endgroup
+\elandscape
 
-\newpage
+\blandscape
 
 ### Regression results
 
-\begingroup
-\scriptsize
-\renewcommand\arraystretch{1.6}
+\footnotesize
+\renewcommand\arraystretch{1.3}
 !INCLUDE "../../Output/tables/1-results-basic.md"
-\endgroup
+\elandscape
 
 \clearpage
 
-\begingroup
-\scriptsize
-\renewcommand\arraystretch{1.6}
+\blandscape
+\footnotesize
+\renewcommand\arraystretch{1.3}
 !INCLUDE "../../Output/tables/1-results-alternate.md"
-\endgroup
+\elandscape
 
 \clearpage
 
@@ -71,12 +70,24 @@ Wickham, Hadley. 2009. *ggplot2: Elegant Graphics for Data Analysis.* Springer N
 
 ![Frequency of selected number of countries](../../Output/figures/3-countries-per-response){#fig:countries-per-response}
 
-\newpage
-
 ![Collaborative partners, funding sources, and selected operational strategies](../../Output/figures/3-instrumental-stuff-strategies){#fig:instrumental-stuff-strategies}
 
-\small
+\footnotesize
 !INCLUDE "../../Output/tables/3-main-activities-p.md"
 \normalsize
+\clearpage
 
-\newpage
+## Chapter 4
+
+\footnotesize
+!INCLUDE "../../Output/tables/4-regs-differences-gatekeeping-p.md"
+\normalsize
+\clearpage
+
+## Chapter 5
+
+\footnotesize
+!INCLUDE "../../Output/tables/5-regs-differences-capture-p.md"
+\normalsize
+
+
