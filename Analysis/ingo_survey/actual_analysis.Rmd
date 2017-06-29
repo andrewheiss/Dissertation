@@ -34,7 +34,8 @@ library(pander)
 library(DT)  # yay fancy HTML tables
 library(tm)  # yay text analysis
 library(countrycode)
-library(riverplot)
+# library(riverplot)
+library(alluvial)
 library(pryr)
 library(gridExtra)
 
@@ -528,7 +529,7 @@ nodes.fancy <- edges.fancy %>%
   select(ID, x, col) %>%
   as.data.frame()
 
-continents.river <- makeRiver(nodes.fancy, edges.fancy)
+# continents.river <- makeRiver(nodes.fancy, edges.fancy)
 
 # Save plot to an object using a null PDF device
 # http://stackoverflow.com/a/14742001/120898
@@ -545,13 +546,16 @@ continents.river <- makeRiver(nodes.fancy, edges.fancy)
 # code to an object that can then get re-run later, like a macro.
 countries.marked.plot %<a-% {
   capture.output({
-    plot(continents.river, srt=0, lty=0, fix.pdf=TRUE,
-         plot_area=1)
+    alluvial(edges.fancy[1:2], freq=edges.fancy$Value,
+         col = cont.colors$col[1:4], border = NA, 
+         gap.width = 0.25, alpha = 0.75,
+         blocks=FALSE, axis_labels=c("HQ", "Target"))
   }, file="/dev/null")
-  text(0, 1, "HQ", adj=c(0, -1.5), font=2)
-  text(1, 1, "Target", adj=c(1, -1.5), font=2)
-  text(0.5, 1, "Countries selected\n", adj=c(0.5, -0.5), font=2)
 }
+
+filename <- "3-countries-selected"
+ggsave.fake.pdf(countries.marked.plot, filename, 4.5, 2.5)
+ggsave.fake.png(countries.marked.plot, filename, 4.5, 2.5)
 ```
 
 #### Overall summary
@@ -619,18 +623,21 @@ nodes.fancy.answered <- edges.fancy %>%
   select(ID, x, col) %>%
   as.data.frame()
 
-continents.river.answered <- makeRiver(nodes.fancy.answered,
-                                       edges.fancy.answered)
+# continents.river.answered <- makeRiver(nodes.fancy.answered,
+#                                        edges.fancy.answered)
 
 countries.answered.plot %<a-% {
   capture.output({
-    plot(continents.river.answered, srt=0, lty=0, fix.pdf=TRUE,
-         plot_area=1)
+    alluvial(edges.fancy.answered[1:2], freq=edges.fancy.answered$Value,
+         col = cont.colors$col[1:4], border = NA, 
+         gap.width = 0.25, alpha = 0.75,
+         blocks=FALSE, axis_labels=c("HQ", "Target"))
   }, file="/dev/null")
-  text(0, 1, "HQ", adj=c(0, -1.5), font=2)
-  text(1, 1, "Target", adj=c(1, -1.5), font=2)
-  text(0.5, 1, "Countries answered\n", adj=c(0.5, -0.5), font=2)
 }
+
+filename <- "3-countries-answered"
+ggsave.fake.pdf(countries.answered.plot, filename, 4.5, 2.5)
+ggsave.fake.png(countries.answered.plot, filename, 4.5, 2.5)
 ```
 
 #### Overall summary
@@ -663,10 +670,12 @@ plot.target.regions.answered +
 ```{r plot-hq-work-regions}
 plot.regions <- cbind(ggplotGrob(plot.hq.regions + 
                                    labs(title="Home countries") +
-                                   theme(plot.title=element_text(size=rel(1)))),
+                                   theme(plot.title=element_text(size=rel(1),
+                                                                 hjust=0.5))),
                       ggplotGrob(plot.target.regions.answered +
                                    labs(title="Target countries") +
-                                   theme(plot.title=element_text(size=rel(1)))))
+                                   theme(plot.title=element_text(size=rel(1),
+                                                                 hjust=0.5))))
 
 fig.save.cairo(plot.regions,
                filename="3-work-hq-regions",
@@ -688,19 +697,9 @@ countries.marked.answered.both %<a-% {
 
 countries.marked.answered.both
 
-# Save to file
 filename <- "3-countries-marked-answered"
-
-cairo_pdf(file.path(PROJHOME, "Output", "figures", paste0(filename, ".pdf")),
-          width=8, height=3.5, family="Source Sans Pro")
-countries.marked.answered.both
-invisible(dev.off())
-
-png(file.path(PROJHOME, "Output", "figures", paste0(filename, ".png")), 
-    width=8, height=3.5, family="Source Sans Pro", 
-    bg="white", units="in", res=300, type="cairo")
-countries.marked.answered.both
-invisible(dev.off())
+ggsave.fake.pdf(countries.marked.answered.both, filename, 9, 3.5)
+ggsave.fake.png(countries.marked.answered.both, filename, 9, 3.5)
 ```
 
 
