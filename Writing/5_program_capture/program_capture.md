@@ -439,6 +439,6 @@ AMERA and IRI both faced uncertain registration status in Egypt. Both soldiered 
 
 [^93]:	Including Kentucky Fried Chicken. See @Keating:2011.
 
-[^94]:	The $40 million pack in 2010 is unrelated to Egypt, the revolution, or the NGO raids—until 2010 the majority of IRI's Middle Eastern programming was focused on large grants in Iraq.
+[^94]:	The $40 million peak in 2010 is unrelated to Egypt, the revolution, or the NGO raids—until 2010 the majority of IRI's Middle Eastern programming was focused on large grants in Iraq.
 
 [^95]:	Interview 1053, November 16, 2016, Washington, DC.
