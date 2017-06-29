@@ -297,3 +297,19 @@ capitalize <- function(x) {
   substr(x, 1, 1) <- toupper(substr(x, 1, 1))
   x
 }
+
+# Capture base R plots with pryr::%<a-% and save them like ggsave
+ggsave.fake.pdf <- function(object, filename, width, height) {
+  cairo_pdf(file.path(PROJHOME, "Output", "figures", paste0(filename, ".pdf")),
+            width=width, height=height, family="Source Sans Pro")
+  object
+  invisible(dev.off())
+}
+
+ggsave.fake.png <- function(object, filename, width, height) {
+  png(file.path(PROJHOME, "Output", "figures", paste0(filename, ".png")), 
+      width=width, height=height, family="Source Sans Pro", 
+      bg="white", units="in", res=300, type="cairo")
+  object
+  invisible(dev.off())
+}
