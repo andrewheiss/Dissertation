@@ -162,6 +162,11 @@
 %
 % \elandscape
 
+% Same thing, but for generic groups
+% But can't use \bgroup and \egroup because those are built-in TeX things
+\newcommand{\stgroup}{\begingroup}
+\newcommand{\fingroup}{\endgroup}
+
 
 % Restore the commands that polyglossia broke
 \let\maketitle\keptmaketitle
