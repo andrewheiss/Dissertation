@@ -160,7 +160,7 @@ response.summary.in.paper <- response.summary.display %>%
 
 caption <- "Number of valid and invited NGOs {#tbl:summary-list}"
 clean.table <- pandoc.table.return(response.summary.in.paper,
-                                   keep.line.breaks=TRUE,
+                                   keep.line.breaks=TRUE, style="multiline",
                                    justify="lrrrrcc", caption=caption)
 
 #+ results="asis"
