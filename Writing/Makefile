@@ -136,6 +136,9 @@ duke:
 		--top-level-division=chapter \
 		--id-prefix `uuidgen`: \
 	-o $(DUKE_DIR)/$(APPENDIX_FILENAME).tex
+	@echo "$(WARN_COLOR)Removing weird space above lists in tables...$(NO_COLOR)"
+	perl -i -0777 -pe 's/\\strut\n\\begin{itemize}/\n\\begin{itemize}/gm;' $(DUKE_DIR)/$(FILENAME).tex
+	perl -i -0777 -pe 's/\\strut\n\\begin{itemize}/\n\\begin{itemize}/gm;' $(DUKE_DIR)/$(APPENDIX_FILENAME).tex
 	@echo "$(WARN_COLOR)...converting TeX to PDF with latexmk (prepare for lots of output)...$(NO_COLOR)"
 	cd $(DUKE_DIR); latexmk -xelatex -quiet dissertation.tex
 	@echo "$(WARN_COLOR)...removing preprocessed files...$(NO_COLOR)"
