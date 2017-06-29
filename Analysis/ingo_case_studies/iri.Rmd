@@ -133,7 +133,7 @@ plot.iri <- ggplot(countries.to.plot) +
 plot.iri
 
 fig.save.cairo(plot.iri, filename="5-iri-work", 
-               width=5.5, height=2.5)
+               width=5.5, height=3)
 ```
 
 Number of countries it works in in 2017: `r filter(iri.countries, field_bool_current_program == "1") %>% nrow()`
