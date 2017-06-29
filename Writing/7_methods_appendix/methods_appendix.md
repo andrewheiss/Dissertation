@@ -13,7 +13,7 @@ git-repo: https://github.com/andrewheiss/Dissertation
 
 # Global survey of international NGOs
 
-## Definition of international NGO
+## Definition of international NGO {#sec:ingo-def}
 
 There is no central database of all international NGOs active in the world, and indeed, creating such a directory is impossible, due to issues with both definitions and logistics. There is no universally accepted definition of "international" or "nongovernmental," and existing directories vary in what counts as an INGO. For instance, the UN's Economic and Social Council (ECOSOC) defines international NGOs as any internationally-focused organization that is not created by an intergovernmental agreement, which essentially designates NGOs as a catch-all category for any organization that is not a purely governmental body [@ecosoc-resolution]. In an effort to narrow this definition, the Yearbook of International Organizations—a widely used source for research on international organizations [see @SmithWest:2005; @Munck:2010; @BarryBellClay:2015; @Murdie:2014; @Johnson:2014; among others]—defines international NGOs based on a set of seven rules related to an entity's organizational structure, purpose, and activity, and adds the additional stipulation that an organization's operations target three or more countries [@ybio-explanation]. 
 

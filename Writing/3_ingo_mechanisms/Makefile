@@ -67,7 +67,7 @@ TEX_REF = bibstyle-chicago-authordate
 TEX_DIR = tex_out
 
 # Cross reference options
-CROSSREF = --filter pandoc-crossref -M figPrefix:"Figure" -M eqnPrefix:"Equation" -M tblPrefix:"Table"
+CROSSREF = --filter pandoc-crossref -M figPrefix:"Figure" -M eqnPrefix:"Equation" -M tblPrefix:"Table" -M secPrefix:"Section"
 
 # To add version control footer support in PDFs:
 #   1. Run vcinit in the directory
