@@ -577,24 +577,25 @@
 %----------------------------------------------------------------
 % Figure format
 %----------------------------------------------------------------
-% Note smallcaps 'Figure' instead of bold
-\ifthenelse{\boolean{oldstyle}}{ }{%
-\def\fnum@figure{{\sc \figurename\nobreakspace\thefigure}}
-}
-\setlength\abovecaptionskip{\z@} % reduced from 10pt
-\setlength\belowcaptionskip{12pt plus 12 pt minus 12pt} % increased from 0\p@
-% Single space captions
-\long\def\@makecaption#1#2{%
-  \vskip\abovecaptionskip
-  \sbox\@tempboxa{\normalbaselines #1: #2}%
-  \ifdim \wd\@tempboxa >\hsize
-   \normalbaselines #1: #2\par
-  \else
-    \global \@minipagefalse
-	 \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
-  \fi
-  \vskip\belowcaptionskip
-}
+% Handle this with \captionsetup
+% \ifthenelse{\boolean{oldstyle}}{ }{%
+% \def\fnum@figure{{\it \figurename\nobreakspace\thefigure}}
+% \def\fnum@table{{\it \tablename\nobreakspace\thetable}}
+% }
+% \setlength\abovecaptionskip{6pt plus 3pt minus 3pt}
+% \setlength\belowcaptionskip{6pt plus 3pt minus 3pt}
+% % Single space captions
+% \long\def\@makecaption#1#2{%
+%   \vskip\abovecaptionskip
+%   \sbox\@tempboxa{\normalbaselines #1: #2}%
+%   \ifdim \wd\@tempboxa >\hsize
+%    \normalbaselines #1: #2\par
+%   \else
+%     \global \@minipagefalse
+% 	 \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+%   \fi
+%   \vskip\belowcaptionskip
+% }
 
 
 
