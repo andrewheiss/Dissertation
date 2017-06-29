@@ -33,6 +33,9 @@ They're mostly focused on just doing their mission - priority isn't taking on go
 
 TODO: In this chapter, I continue to draw on survey responses and case studies of the International Republican Institute (IRI) and Index on Censorship to …
 
+
+Then, in case studies of Index on Censorship and the International Republican Institute (IRI), I explore how these two INGOs have protected their missions against government attempts to capture their resources and management. The case studies also reveal a third type of INGO capture—public relations asdflqw 
+
 # Nonprofit mission evolution and the importance of agency
 
 Before looking at how governments work to capture INGO programs and how organizations respond and react to these attempts, a brief discussion of nonprofit mission evolution is helpful. Nonprofit missions can and should evolve in response to changes in the institutional environment, including revisions to government regulations, shifting donor preferences, and developments in stakeholder needs. Successful nonprofit strategy is "contingent on appropriate interpretation of environmental conditions and formulating an organizational response to address those conditions" [@Brown:2010, 207; @Mintzberg:1979; @Moore:2000]. To be effective, strategic evolution must take external trends and political developments into account [@Bryson:2010; @PoisterStreib:1999]. Importantly, changes in strategy should be purposeful and aligned with organizational values [@Scheimann:2009]. Survey respondents describe a variety of reasons for strategically shifting and refining their core missions over time. Organizations report that they "respond to issues in society,"[^6] "change [their] programming based on the needs and suggestions of the villagers"[^7] and "flex [their] priorities and reorganize in accordance with the immediate needs at the time they had arisen,"[^8] strategically changing their core missions to better align with the social environment and needs of their stakeholders. 
@@ -134,7 +137,7 @@ Relying on the awards for a deliberate expansion of Index's global advocacy work
 
 Finally, Index cultivates collaborative relationships with organizations beyond its awards program. For instance, Index is a member of the International Freedom of Expression Exchange (IFEX) and has partnered with member organizations to engage in country-specific advocacy campaigns. Prior to the Arab Spring uprisings, Index worked with Article 19 and other groups in IFEX's Tunisia Monitoring Group (IFEX-TMG) and contributed to the Group's reports and recommendations, relying on the cover of the working group to gain safe access to the country. Additionally, by partnering with IFEX-TMG members and local Tunisian and Egyptian NGOs, Index built on those relationships and sponsored training sessions for media rights activists throughout Tunisia in 2011 [@index:2012, 4]. Collaboration thus plays a key role in Index's flexibility. With few permanent employees and a single office in London the organization by necessity has to rely on other organizations and activists to effectively engage in its programming. 
 
-## Protecting its mission from abroad
+## Protecting mission from abroad
 
 Survey responses revealed several methods governments use to capture the benefits and resources of INGOs in their country. Resource-related regulations attempt to take some control of the money, expertise, and programs of guest INGOs, while oversight regulations allow governments to assert managerial control over some programming decisions. These laws can pull an organization's core mission, vision, and values closer in line with government preferences, leading to tamer, less confrontational programming. Index on Censorship takes a unique approach to avoiding program capture regulations: it protects its core mission by not going to repressive countries in the first place and instead running all of its campaigns and advocacy from its home in London. 
 
@@ -202,7 +205,7 @@ IRI field offices and field employees, 2009–2015
 
 While some of its field offices are more permanent, many are set up temporarily according to the needs of the country and proximity to other states in the region. For instance, for several months in 2016, IRI maintained a small temporary office in Gambia, and from a single field office in the Sahel, IRI runs trainings and works with activists in multiple neighboring countries because due to linguistic, cultural, and geographic proximity.[^82] @fig:iri-regional-staff demonstrates the volatility of the distribution of IRI's regional offices and employees, with rapid shifts in personnel and headquarters over time, particularly in the Middle East and Asia, where many countries have passed restrictive NGO laws. IRI's large network of field offices enables it to respond quickly to changing needs and remain embedded in its target countries for the long term. Crucially, it also allows the organization to effectively confront anti-NGO crackdowns and avoid regulations aimed at capturing their programs.
 
-## Protecting its mission from abroad
+## Protecting mission with flexibility
 
 Changes in the civil society regulatory environment of IRI's target countries influence the types of programming IRI. Because IRI has a large amount of instrumental flexibility, though, the practical operating environment—or the overlap in IRI's and the government's preferences—tends to be large, even amidst regulatory pressure and anti-NGO crackdowns. IRI draws on its reserves of resources its mission from regime capture and remain engaged in its democratization efforts despite some governments' attempts to shut them down.
 
@@ -212,6 +215,8 @@ Having obtained formal legal status in its target countries with the assistance 
 
 Finally, IRI's large budget and relationships with government aid agencies provide it with the ability to respond quickly to political and legal changes in its target countries. For example, IRI does not sign traditional contracts when working with USAID, opting instead to work under more flexible cooperative agreements. USAID contracts lay out a set of specific deliverables and provide little implementation flexibility. Cooperative agreements, on the other hand, consist of a list of broader goals and objectives for the grant, providing a margin for adapting to changes. After unforeseen political events or elections, IRI's intermediate goals might change, but the long term goals outlined in the cooperative agreement remain the same and USAID funding can continue.[^87] 
 
+### Reacting in Russia
+
 This donor-based flexibility was an essential element in IRI's response to its 2012 closure in Russia. In December 2012, Russia announced that IRI had been designated as a foreign agent under the country's newly passed anti-NGO law [@Rogin:2012]. As explored in chapter 3, Russia's 2006, 2012, and 2015 anti-NGO laws were part of Vladimir Putin's *gosudarstvenost* nationalist agenda, and labeling organizations as undesirable foreign agents played into the regime's public image. Similar to the positive spin governments use when they are shamed by Index on Censorship, using award recipients as proof of a free press, prosecuting foreign NGOs is a form of public relations capture—by expelling INGOs, Putin's regime could further its Russia-first agenda by proving that foreign organizations meddle in politics.
 
 Despite their expulsion, IRI's Russia programming did not end in 2012. The organization moved its Russia staff and operations to a neighboring country in Eastern Europe and continued to train Russian politicians, activists, and civil society leaders from abroad. The number of people they train decreased substantially, since providing participants with safe transportation out of the country is costly, but their programs nevertheless continued[^88]—so much so that in August 2016, the Russian prosecutor general declared that IRI was an undesirable organization in an attempt to further limit its remote work [@iri-russia-2016]. 
@@ -220,49 +225,33 @@ Despite their expulsion, IRI's Russia programming did not end in 2012. The organ
 
 IRI's rapid retreat and reestablishment in the wake of Russian attempts at negative public relations capture was possible because of the organization's flexible funding arrangements and its large network of field offices. Because their work in Russia was funded under cooperative agreements (and not contracts), USAID was quite permissive in allowing them to move their staff and change short-term programmatic priorities and objectives without modifying the terms of the original grant.[^89] Additionally, as seen in @fig:iri-regional-staff1, IRI has the greatest number of field offices and employees in Europe and the former Soviet Union, and the organization could therefore choose to relocate to one of several possible countries. Due to its large budget, IRI could afford to move its extensive Russian operations quickly and leaving the country caused minimal disruption to IRI's overall operations—@fig:iri-expenditures-region shows relatively consistent program expenditures in Europe and Russia since 2012.
 
-**Egypt**
+### Reacting in Egypt
 
-IRI's experience in Egypt demonstrates how it deals with attempts at a kind of managerial capture + public relations - it left the country, continued working, came back, left again
+IRI's experience in Egypt provides another example of using flexibility to prevent managerial and public relations capture. In early 2005, then-President Hosni Mubarak announced the first competitive presidential elections, which were then followed by three rounds of regularly scheduled quinquennial parliamentary elections. The general feeling in the country was hopeful—though Mubarak's challenger Ayman Nour only received roughly 10% of the vote, "it appeared that the Egyptian government had made political reform a priority and was committed to opening the door to greater political competition" [@iri-egypt-par:2005, 3]. However, IRI's final reports of the presidential and parliamentary elections were critical of the process and the organization noted dozens of irregularities [@iri-egypt-par:2005; @iri-egypt-pres:2005]. Subsequently, Mubarak ordered IRI to close its offices and leave the country [@Bush:2015, 36]. As it would later do in Russia, IRI quickly pulled its staff from the country, moved to other regional offices, and continued its work. 
 
-2005 Egypt closure
+In 2006, IRI faced new restrictions on its work in Egypt, despite working from abroad. The Egyptian government began to selectively enforce the foreign funding provisions of Law 84 of 2002 against IRI, demanding that it be allowed to approve the flow of the organization's grants. In response to this attempt to capture the organization's resources, IRI and other NED-funded NGOs in Egypt worked with Congress to draft a provision that would protect them from Egyptian control over NGO budgets. In the 2005 budget, Congress included a clause in its appropriations for USAID and NED funds that specifically targeted Egypt, declaring that "democracy and governance activities shall not be subject to the prior approval of the Government of Egypt" [@pl108-447, 2976]. This Egypt-specific clause remained in the budget from 2006–2009 until it became a universal injunction for all NED-associated NGOs in all countries in 2010 [@pl111-117, §7034(m)(4); @Sharp:2012, 8]. Because of its close ties to the US government, IRI thus enjoyed Congressional support for its remote work in Egypt until formally returning in 2011.
 
-IRI shut down in Egypt in 2005 during the presidential campaign. It closed not because of gatekeeping restrictions, but because of attempted capture. Mubarak doubled down on NGOs accepting foreign funding and insisted on being able to approve the flow of NGO grants. However, Congress mandated that
+After the Arab Spring uprisings in January–February 2011, IRI continued its work in from a field office in Cairo, assisting with post-revolutionary electoral reforms, preparing candidates, activists, and political parties for the 2011 parliamentary elections, ultimately training thousands of participants.[^90] As explored in chapter 3, the regulatory environment for INGOs under the Supreme Council of the Armed Forces (SCAF) was uncertain and regulations based on Law 84 of 2002 were still as applied arbitrarily as they had been under Mubarak. IRI's legal partners in Egypt had advised the organization to apply for formal legal status in 2006. By 2011, the organization still had not been officially registered and it restarted the process.[^91] The absence of formal registration was not overly concerning, though. INGOs working in Egypt understood that there would never be any real end to the registration process and that having an application under review was ordinarily sufficient.[^92]
 
-"Democracy and governance activities shall not be subject to the prior approval of the GoE" [@Bush:2015, 36; @Sharp:2012, 8]
+On December 29, 2011, however, Egyptian security used IRI's lack of registration as a pretext to raid its three offices in Cairo, Alexandria, and Luxor, arresting 17 staff members and confiscating the organization's equipment, supplies, and cash [@iri-crackdown:2012]. The raids on IRI were part of a larger anti-INGO operation that included NDI, Freedom House, and the International Center for Journalists. The raids led to a year-long public trial *in absentia* for the NGO staff involved, and in June 2013, 43 NGO employees—including 17 Americans—were sentenced to 1–5 years in prison [@Loveluck:2013]. Most foreign NGO staff avoided prison and left the country before the trial, including IRI's country director Sam LaHood, who took refuge with several other IRI employees in the US embassy until the end of January 2012, when they were flown out on a State Department plane [@Fadel:2012]. 
 
-Connections to USG, while not overt, do exist, and the organization is an easy and popular scapegoat
+On its face, Egypt's sudden NGO raid in 2011 appears to be motivated by gatekeeping concerns, with authorities trying to remove organizations it had deemed problematic. While this may be true to some extent, the incident has an element of public relations flair, similar to Russia's 2012 expulsion of its foreign agent NGOs. During the actual uprising in January–February 2011, the regime blamed much of the violence on *ayadi agnabiya*, or *foreign hands*—shady Western organizations[^93] that had conspired to bring down the Egyptian government. As SCAF faced increasing political instability, continuing riots and violence, and an uncertain future, reviving the foreign hands trope by cracking down on NGOs appeared to be a way to renew its popular support. IRI and other INGOs thus faced program capture by non-regulatory means, becoming political pawns in a negative public relations campaign designed to induce changes in their mission.
 
-The post-revolutionary military regime/SCAF applied existing NGOs regulations selectively. IRI's application for registration had been in progress since 2006 and was renewed in 2011 after they were told that the original paperwork had been lost to fires in government buildings.[^90] 
+Government officials and state media, led by Mubarak-era Minister Fayza Abou el-Naga, accused IRI of "working to sow unrest in Egypt" and working as part of a joint American and Israeli plot to divide the country [@Fadel:2012]. In the court case, prosectors used a confiscated IRI map that had separated Egypt into four shaded regions as proof that the organization was working with the CIA to split up the country—though, the divisions were simply mapped out IRI's plans to distribute observers for the parliamentary elections. Several years later, Sam LaHood spoke of this campaign, noting 
 
-make them pawns in greater political game within country - blatant show of force - TODO: how many other foreign NGOs were caught up in the raid? How many had cabinet-level connections to the Obama administration?
-17 civil society organisations, including NDI and IRI
+> I was smeared in public by the ludicrous accusations that I was advancing Israeli interests, seeking to break up Egypt and working against the aims of the Egyptian revolution. … These accusations would have been comical if they didn’t have such serious consequences [@LaHood:2014].
 
-Press release: @iri-crackdown:2012
+In a distortion of this chapter's title—"some state officials want your services"—SCAF hoped to capture the services of its guest INGOs and hold them up as proof of foreign machinations. By selectively enforcing its gatekeeping laws, drumming up popular support through conspiracies, and scapegoating foreign INGOs, the Egyptian regime was able to boost its popular support at home. 
 
-> I was smeared in public by the ludicrous accusations that I was advancing Israeli interests, seeking to break up Egypt and working against the aims of the Egyptian revolution. In an equally absurd parallel, the Al Jazeera journalists were accused of being terrorists and members of the Muslim Brotherhood and of having written false stories. These accusations would have been comical if they didn’t have such serious consequences.
+IRI relied on its instrumental flexibility to insulate itself from the negative campaign and attempts at capture. As they had done in 2005, IRI took advantage of its US government connections and its network of field offices and relocated its Egypt operations either to neighboring countries or back to its headquarters in Washington, DC. Unlike the 2012 crackdown in Russia, which had minimal impact on IRI's work in the region, IRI's presence in the Middle East dropped significantly. @fig:iri-expenditures-region shows a substantial drop in expenditures in the Middle East, falling from $15.3 million in 2011 to $8.6 million in 2013.[^94] IRI's physical presence in the region also decreased during the same time period (see @fig:iri-regional-staff2). In 2011, the organization had more than 100 employees working in 10 field offices, and one year later, it had 40 employees in 6 offices. By 2013, IRI ran a single field office with 3 employees (though in 2014 its operations began to pick up again). Though it no longer maintained a regional presence, IRI worked with its project funders to get permission to shift its Egypt-focused programming abroad, and the organization continued offering out-of-country trainings and support for Egyptian politicians and activists.[^95] IRI's relationship with the US government, its large budget, its accommodating donors, and its wide geographic reach all allowed the organization to respond quickly to the raids and continue its work in Egypt.
 
-@LaHood:2014
-
-Beyond drumming up popular support through conspiracies and scapegoating, the raid on IRI 
-
-IRI's statement regarding the raid hints at another purpose behind the targeted crackdown on foreign NGOs
-
-Reminding readers that US statues declare that government-funded human rights and democratization programming "shall not be subject to the prior approval by the government of any foreign country" [@iri-crackdown:2012, 2]. 
-
-They make sure everything is done discretely, encrypted - ensure safety - 
-
-Mission doesn't change, strategy shifts - Egypt under Mubarak they had to stop doing in-country work and bring activists to other countries for training - mission continued (that was in 2010; trained 100s); they were back in 2011, between March–December, trained like 8,000 people
-
-Government capture - how does it work for IRI
-Presence in country could result in a hostage office, but the donor really wanted them to be there
-
-- PR capture, but negative
-- Scapegoat 
-- Connect them to "foreign hands" - play into popular conspiracy theories
+# Conclusion
 
 TODO
 
 Ultimately presence isn't end goal - they have the resources to be able to do this though. AMERA did one thing; Article 19 works in a few countries; Index works from London; IRI can go anywhere
+
+AMERA and IRI both faced uncertain registration status in Egypt. Both soldiered on as much as possible, but AMERA couldn't do much in the end
 
 [^1]:	Response 1412.
 
@@ -442,4 +431,14 @@ Ultimately presence isn't end goal - they have the resources to be able to do th
 
 [^89]:	Interview 1092, November 16, 2016, Washington, DC.
 
-[^90]:	Interview 1091, November 16, 2016, Washington, DC.
+[^90]:	Interviews 1053 and 1072, November 16, 2016, Washington, DC.
+
+[^91]:	It was rumored that their registration packet had inadvertently been burned during the revolution when protestors stormed and burned down the headquarters of Mubarak's National Democratic Party during the January–February uprising. See Interview 1091, November 26, 2016, Washington, DC.
+
+[^92]:	Interview 1091, November 16, 2016, Washington, DC.
+
+[^93]:	Including Kentucky Fried Chicken. See @Keating:2011.
+
+[^94]:	The $40 million pack in 2010 is unrelated to Egypt, the revolution, or the NGO raids—until 2010 the majority of IRI's Middle Eastern programming was focused on large grants in Iraq.
+
+[^95]:	Interview 1053, November 16, 2016, Washington, DC.
