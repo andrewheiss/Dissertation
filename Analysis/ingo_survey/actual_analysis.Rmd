@@ -996,9 +996,13 @@ plot.funding.both <- arrangeGrob(plot.funding.totals,
 grid::grid.newpage()
 grid::grid.draw(plot.funding.both)
 
-fig.save.cairo(plot.funding.both,
-               filename="3-funding-size",
-               width=7, height=3.5)
+fig.save.cairo(plot.funding.totals,
+               filename="3-funding-size-totals",
+               width=4.5, height=1.75)
+
+fig.save.cairo(plot.funding,
+               filename="3-funding-size-pct",
+               width=4.5, height=3.5)
 ```
 
 
@@ -1816,9 +1820,14 @@ plot.registration.all <- arrangeGrob(plot.registration.both,
 grid::grid.newpage()
 grid::grid.draw(plot.registration.all)
 
-fig.save.cairo(plot.registration.all,
-               filename="3-registration-all",
-               width=6.5, height=3)
+fig.save.cairo(plot.registration.both,
+               filename="3-registration-both",
+               width=4.5, height=1.25)
+
+fig.save.cairo(plot.restriction.reg.issue,
+               filename="3-registration-reg-issue",
+               width=6, height=3)
+
 ```
 
 
