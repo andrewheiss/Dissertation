@@ -204,11 +204,11 @@ Controlling funding is not the only strategy for linking civil society to the re
 
 Authoritarian governments thus design their civil society regulatory environment to target different elements of an INGO's organizational preferences—gatekeeping regulations keep potentially harmful organizations out of the country and seek to limit the practical operating environment by reducing organizational flexibility, while program capture regulations allow regimes to take advantage of their guest organizations and seek to distort organizational values. Given the different purposes of these types of regulations, international NGOs are motivated by different concerns when contemplating how to react to government restrictions. Likewise, institutional and organizational characteristics—namely the contentiousness of the INGO–government relationship and the amount of instrumental flexibility enjoyed by the INGO—help determine these organizations' reactions. @tbl:ingo-reactions-summary provides a helpful overview of these different pressures, concerns, and reactions.
 
-\blandscape
+\stgroup
 \footnotesize
 \renewcommand\arraystretch{1.6}
 !INCLUDE "../../Output/tables/3-ingo-reactions-summary.md"
-\elandscape
+\fingroup
 
 When confronting gatekeeping regulations, an INGO's primary concern is to gain or maintain access to the country. An INGO's level of contentiousness, in concert with the government's civil society regulatory environment, determines how much regulatory pressure the INGO will face. Highly contentious organizations will face higher scrutiny as regimes attempt to limit their access to the country, head off potential political threats, and make the practical operating environment more difficult. In response, organizations that enjoy greater instrumental flexibility can make creative adjustments on the margins of their missions (i.e. without redefining their core) to adapt to these laws. Organizations with less flexibility, on the other hand, are less likely to be able to adjust to the operating environment and will cease their work, exit the country, avoid entering the country in the first place, or maintain a low profile and avoid contact with the government as much as possible. Correspondingly, because they pose less of a political threat to the regime, low contention organizations will face less pressure and scrutiny and should not need to make as many creative adjustments to remain in the country.
 
