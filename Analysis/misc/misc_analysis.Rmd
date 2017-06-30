@@ -38,7 +38,7 @@ goals <- read_csv(file.path(PROJHOME, "Data",
 
 caption <- "Goals of government regulation of INGOs and corresponding INGO responses {#tbl:ingo-reactions-summary}"
 goals.out <- pandoc.table.return(goals, keep.line.breaks=TRUE,
-                                 justify="lllll", caption=caption, style="grid")
+                                 justify="llll", caption=caption, style="grid")
 
 cat(goals.out)
 cat(goals.out, file=file.path(PROJHOME, "Output", "tables", 
