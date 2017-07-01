@@ -239,28 +239,52 @@ In this dissertation, I blah…
 
 In chapter X I do Y…
 
-[^1]:	Though it is important to note that NGOs do not represent all of civil society; that is, all NGOs are civil society organizations, but not all civil society organizations are NGOs [@Yerkes:2012, 18].
+Scope conditions of the theory—do INGOs always react the same way to regulations? Do regimes always target specific NGOs in the same way?
 
-[^2]:	This trust can also be described in game theoretic terms as a state of equilibrium, where institutional arrangements structure the payoffs such that players have little incentive to move [@Weingast:1997; @Greif:2004; @Calvert:1995].
+[^1]:	See "The Price of Protest, So Far,” *The Economist*, July 14, 2011, [http://www.economist.com/blogs/dailychart/2011/07/arab-spring-death-toll](http://www.economist.com/blogs/dailychart/2011/07/arab-spring-death-toll).
 
-[^3]:	Defined as "Civil Society I" and "Civil Society II" by @FoleyEdwards:1996.
+[^2]:	See Sarah Carr, "A Firsthand Account: Marching from Shubra to Deaths at Maspero," *Egypt Independent*, October 10, 2011, [http://www.egyptindependent.com/firsthand-account-marching-shubra-deaths-maspero/](http://www.egyptindependent.com/firsthand-account-marching-shubra-deaths-maspero/).
 
-[^4]:	Antonio Gramsci offers a bleaker view, arguing that civil society actually contributes to "a more subtle and sophisticated form of state power"—one that "serves as an outer perimeter of defense for a hegemonic state" [@Cook:2007, 7, 143].
+[^3]:	In all, Egyptian security forces raided 17 local and international NGOs. See @FadelWarrick:2011.
 
-[^5]:	Data collected from the Yearbook of International Organizations and provided in @Murdie:2013.
+[^4]:	See, for instance, ICNL's Civic Freedom Monitor ([http://www.icnl.org/research/monitor/](http://www.icnl.org/research/monitor/)), which provides detailed briefs of the regulatory environment in more than 50 countries, as well as the Carnegie Endowment's regular reports on closing space [@CarothersBrechenmacher:2014; @Carothers:2015].
 
-[^6]:	Survey respondents were asked "How much is your organization’s work restricted by government regulations in [the country you work in]?" and offered a range of five responses: not restricted, very little restricted, a little restricted, somewhat restricted, and very restricted.
+[^5]:	See also [https://monitor.civicus.org/findings/](https://monitor.civicus.org/findings/).
 
-[^7]:	Interview 1002, February 25, 2016.
+[^6]:	Cairo Institute for Human Rights Studies, "After 20 years: CIHRS moves its regional and international programs outside Egypt," [http://www.cihrs.org/?p=10298&lang=en](http://www.cihrs.org/?p=10298&lang=en).
 
-[^8]:	Interview 1002, February 25, 2016.
+[^7]:	See [http://www.ayudahumanitariavenezuela.org](http://www.ayudahumanitariavenezuela.org).
 
-[^9]:	[http://www.theguardian.com/global-development-professionals-network/2014/aug/12/china-ngo-government-civil-society](http://www.theguardian.com/global-development-professionals-network/2014/aug/12/china-ngo-government-civil-society)
+[^8]:	See [http://www.liftinghandsinternational.org](http://www.liftinghandsinternational.org).
 
-[^10]:	The *best* way to understand the theory is to visit explorable explanation at [ingorestrictions.org/theory/](https://ingorestrictions.org/theory/) and see the different outcomes dynamically [@Gourarie:2016].
+[^9]:	Interview 1034, June 30, 2017.
 
-[^11]:	For example, dictatorships will invite international election monitors to oversee an election to gain credibility, while also fully intending to cheat [@Kelley:2012].
+[^10]:	Though it is important to note that NGOs do not represent all of civil society; that is, all NGOs are civil society organizations, but not all civil society organizations are NGOs [@Yerkes:2012, 18].
 
-[^12]:	For example, as Kazakhstan mulled over a more restrictive NGO law in 2005, the United States argued that "the best way for Kazakhstan to distinguish itself from its neighbors" was to respect international and domestic institutions, conducting fair presidential elections in 2006 and not passing the NGO law. See "KAZAKHSTANI MFA 'DISAPPOINTED' WITH CERTIFICATION DECISION," State Department Cable 05ALMATY1938, [https://wikileaks.org/cable/2005/05/05ALMATY1938.html](https://wikileaks.org/cable/2005/05/05ALMATY1938.html)).
+[^11]:	This trust can also be described in game theoretic terms as a state of equilibrium, where institutional arrangements structure the payoffs such that players have little incentive to move [@Weingast:1997; @Greif:2004; @Calvert:1995].
 
-[^13]:	For example, smaller INGOs in Russia in 1990s that were funded exclusively by USAID were unable to pursue any public health programming that involved AIDS or birth control [@Henderson:2003, 86–87].
+[^12]:	Defined as "Civil Society I" and "Civil Society II" by @FoleyEdwards:1996.
+
+[^13]:	Antonio Gramsci offers a bleaker view, arguing that civil society actually contributes to "a more subtle and sophisticated form of state power"—one that "serves as an outer perimeter of defense for a hegemonic state" [@Cook:2007, 7, 143].
+
+[^14]:	This measure is based on a count of the number of INGOs citizens of a country have membership in, as reported by the *Yearbook of International Organizations* [@ybio]. The count was originally developed @Hafner-BurtonTsutsui:2005, and later expanded by @DancyMichel:2016.
+
+[^15]:	@HeissKelley:2016, Response 1157.
+
+[^16]:	@HeissKelley:2016, Response 1280.
+
+[^17]:	I delve into the results of this survey in chapters 4–6.
+
+[^18]:	@HeissKelley:2016, Response 1157.
+
+[^19]:	Interview 1053, February 25, 2016.
+
+[^20]:	Interview 1053, February 25, 2016.
+
+[^21]:	The *best* way to understand the theory is to visit explorable explanation at [ingorestrictions.org/theory/](https://ingorestrictions.org/theory/) and see the different outcomes dynamically [@Gourarie:2016].
+
+[^22]:	For example, dictatorships will invite international election monitors to oversee an election to gain credibility, while also fully intending to cheat [@Kelley:2012].
+
+[^23]:	For example, as Kazakhstan mulled over a more restrictive NGO law in 2005, the United States argued that "the best way for Kazakhstan to distinguish itself from its neighbors" was to respect international and domestic institutions, conducting fair presidential elections in 2006 and not passing the NGO law [@05ALMATY1938a].
+
+[^24]:	For example, smaller INGOs in Russia in 1990s that were funded exclusively by USAID were unable to pursue any public health programming that involved AIDS or birth control [@Henderson:2003, 86–87].
