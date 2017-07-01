@@ -148,7 +148,7 @@ bib:	$(BIB)
 		--bibliography=$(BIB_FILE) \
 		-V chapterstyle=hikma-article \
 		-V pagestyle=ath \
-		--base-header-level=2 \
+		--base-header-level=1 \
 	-o $@
 	@echo "$(OK_COLOR)All done!$(NO_COLOR)"
 
@@ -165,7 +165,7 @@ bib:	$(BIB)
 		--bibliography=$(BIB_FILE) \
 		-V chapterstyle=hikma-article \
 		-V pagestyle=ath \
-		--base-header-level=2 \
+		--base-header-level=1 \
 	-o $@
 	@echo "$(WARN_COLOR)...converting TeX to PDF with latexmk (prepare for lots of output)...$(NO_COLOR)"
 	latexmk -outdir=$(MS_DIR_FOR_TEX)$(TEX_DIR) -xelatex -quiet $@
