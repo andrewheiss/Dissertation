@@ -42,7 +42,7 @@ PREFIX = /Users/andrew/.pandoc
 # from R with ggsave+Cairo. To disable on-the-fly conversion and supply your
 # own PNGs, uncomment PNG_CONVERT below. The script will still replace
 # references to PDFs with PNGs, but will not convert the PDFs
-# PNG_CONVERT = --no-convert
+PNG_CONVERT = --no-convert
 
 
 # Location of your working bibliography file
