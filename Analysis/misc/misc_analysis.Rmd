@@ -160,4 +160,77 @@ fig.save.cairo(p,
                width=4.5, height=3)
 ```
 
+## Human trafficking INGO survey stuff
+
+Data from @HeissKelley:2016 and @Kelley:2017 and available at <https://www.scorecarddiplomacy.org/survey/data/>.
+
+```{r htingos, message=FALSE, results="asis"}
+htingos <- read_csv(file.path(PROJHOME, "Data", "data_raw", "External", 
+                         "Kelley2017", "responses_full_anonymized.csv"))
+
+htingos.restrictions <- htingos %>%
+  select(clean.id, work.country, work.iso3, sit.on.board = Q3.27, 
+         board.required = Q3.28, restricted = Q3.29, how.restricted = Q3.30) %>%
+  mutate(restricted.bin = recode(restricted,
+                                 `Very little restricted` = "Not restricted",
+                                 `A little restricted` = "Not restricted",
+                                 `Somewhat restricted` = "Restricted",
+                                 `Very restricted` = "Restricted"))
+
+total.countries <- htingos.restrictions %>%
+  distinct(work.iso3) %>%
+  nrow()
+
+num.countries.restricted <- htingos.restrictions %>%
+  filter(restricted.bin == "Restricted") %>%
+  group_by(work.iso3) %>%
+  summarize(reports = n()) %>%
+  nrow()
+
+htingos.restrictions %>%
+  count(restricted.bin) %>%
+  mutate(prop = prop.table(n)) %>%
+  pandoc.table()
+```
+
+Total number of countries: `r total.countries`. Number of countries where INGOs report restrictions: `r num.countries.restricted`
+
+## My own survey
+
+Basically the same analysis as the human trafficking NGO survey above, but with my data…
+
+```{r my-survey, message=FALSE, results="asis"}
+survey.clean.all <- readRDS(file.path(PROJHOME, "Data", "data_processed", 
+                                      "survey_clean_all.rds")) %>%
+  mutate(restricted.bin = 
+           fct_collapse(Q4.17,
+                        "Not restricted" = c("Not restricted at all", 
+                                             "Slightly restricted"),
+                        "Restricted" = c("Moderately restricted",
+                                         "Very restricted",
+                                         "Extremely restricted"),
+                        NULL = c("Don’t know")),
+         restricted.bin = ordered(restricted.bin))
+
+survey.clean.restrictions <- survey.clean.all %>%
+  select(clean.id, work.iso3 = Q4.1_iso3, restricted = Q4.17, restricted.bin)
+
+total.countries <- survey.clean.restrictions %>%
+  distinct(work.iso3) %>%
+  nrow()
+
+num.countries.restricted <- survey.clean.restrictions %>%
+  filter(restricted.bin == "Restricted") %>%
+  group_by(work.iso3) %>%
+  summarize(reports = n()) %>%
+  nrow()
+
+survey.clean.restrictions %>%
+  count(restricted.bin) %>%
+  mutate(prop = prop.table(n)) %>%
+  pandoc.table()
+```
+
+Total number of countries: `r total.countries`. Number of countries where INGOs report restrictions: `r num.countries.restricted`
+
 ## References
