@@ -25,8 +25,67 @@ knitr::opts_chunk$set(cache=FALSE, fig.retina=2,
 
 library(tidyverse)
 library(haven)
+library(forcats)
+library(countrycode)
+library(rgdal)
 
 source(file.path(PROJHOME, "Analysis", "lib", "graphic_functions.R"))
+```
+
+## Global crackdown on civic space (from CIVICUS)
+
+Data downloaded from CIVICUS's [Tableau visualizations online](https://monitor.civicus.org/findings/). See also @CIVICUS:2017.
+
+```{r civicus-crackdown, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=2}
+rating.levels <- c("Open", "Narrowed", "Obstructed", "Repressed", "Closed")
+
+# Data from the Tableau visualizations at https://monitor.civicus.org/findings/
+civicus <- read_csv(file.path(PROJHOME, "Data", "data_raw", "External", 
+                              "CIVICUS", "civicus_monitor_2017.csv"),
+                    na="Null") %>%
+  mutate(Population = as.double(Population),  # integers can't handle world population
+         Rating = factor(Rating, levels=rating.levels, ordered=TRUE),
+         iso3 = countrycode(Country, "country.name", "iso3c"))
+
+civicus.population <- civicus %>%
+  group_by(Rating) %>%
+  summarise(pop.per.rating = sum(Population),
+            perc.per.rating = pop.per.rating / sum(civicus$Population))
+
+plot.civicus.population <- ggplot(civicus.population, 
+                                  aes(x=perc.per.rating, y=fct_rev(Rating))) + 
+  geom_pointrangeh(aes(xmin=0, xmax=perc.per.rating)) +
+  labs(x="Percent of world population", y=NULL) +
+  scale_x_continuous(labels=scales::percent) +
+  theme_ath()
+plot.civicus.population
+
+fig.save.cairo(plot.civicus.population, filename="0-civicus-population", 
+               width=4.5, height=1.75)
+```
+
+```{r civicus-map, fig.width=5.5, fig.height=3}
+countries.ggmap <- readRDS(file.path(PROJHOME, "Data", "data_processed",
+                                     "countries110_robinson_ggmap.rds"))
+
+countries.to.plot <- countries.ggmap %>% 
+  distinct(id) %>%
+  left_join(civicus, by = c("id" = "iso3"))
+
+plot.civicus.map <- ggplot(countries.to.plot) +
+  geom_map(aes(map_id=id, fill=Rating), map=countries.ggmap, 
+           size=0.15, colour="black", alpha=0.8) + 
+  expand_limits(x=countries.ggmap$long, y=countries.ggmap$lat) +
+  coord_equal() +
+  scale_fill_manual(values=c("#2ECC40", "#0074D9", "#B10DC9", "#FF851B", "#FF4136"),
+                    breaks=levels(civicus$Rating), na.value = "grey80") +
+  guides(fill=guide_legend(title=NULL)) +
+  theme_ath_map() + theme(legend.position = "bottom",
+                          legend.key.size = unit(0.65, "lines"))
+plot.civicus.map
+
+fig.save.cairo(plot.civicus.map, filename="0-civicus-map", 
+               width=5.5, height=3)
 ```
 
 ## Goals of government regulation of INGOs and corresponding INGO responses
@@ -92,3 +151,5 @@ fig.save.cairo(p,
                filename="0-ingos-dictatorships",
                width=4.5, height=3)
 ```
+
+## References
