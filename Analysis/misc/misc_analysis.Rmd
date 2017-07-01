@@ -106,6 +106,8 @@ cat(goals.out, file=file.path(PROJHOME, "Output", "tables",
 
 ## Dictatorships using INGOs with other institutions
 
+Base data from @Kendall-TaylorFrantz:2014a; INGO data from @Hafner-BurtonTsutsui:2005 and expanded by @DancyMichel:2016.
+
 ```{r ingos-dictatorships, message=FALSE, warning=FALSE}
 institutions <- read_stata(file.path(PROJHOME, "Data", "data_raw", "External",
                                      "twq15byyeardta.dta"))
@@ -113,23 +115,28 @@ institutions <- read_stata(file.path(PROJHOME, "Data", "data_raw", "External",
 autocrats <- read_stata(file.path(PROJHOME, "Data", "data_raw", "External",
                                      "GWF Autocratic Regimes", "GWFtscs.dta"))
 
-murdie <- read_stata(file.path(PROJHOME, "Data", "data_raw", "External",
-                               "Murdie 2014", "11558_2013_9180_MOESM1_ESM.dta")) %>%
-  select(year, cowcode, ingos = ingos_1num) %>%
-  filter(cowcode %in% autocrats$cowcode) %>%
-  mutate(ingos_present = ifelse(ingos > 50, TRUE, FALSE)) %>%
+# https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/10487
+hf <- read_dta(file.path(PROJHOME, "Data", "data_raw", "External", 
+                         "Hafner-BurtonTsutsui2005", "data_paradox.dta"))
+
+# https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/T0G0NU&version=1.0
+dancy <- read_dta(file.path(PROJHOME, "Data", "data_raw", "External", 
+                            "DancyMichel2016", "MD-ISQ.dta")) %>%
+  select(country, year, ccode, ingos = ingo) %>%
+  filter(ccode %in% autocrats$cowcode) %>%
+  mutate(ingos_present = ifelse(ingos > 500, TRUE, FALSE)) %>%
   group_by(year) %>%
   summarize(ingos = sum(ingos_present, na.rm=TRUE) / n()) %>%
   mutate(ingos = ifelse(ingos == 0, NA, ingos))
 
-inst.labels <- c("More than 50 INGOs with members", "At least one party",
+inst.labels <- c("More than 500 INGOs with members", "At least one party",
                  "Multiple parties and legislature", "Election in last six years")
 inst.order <- c("At least one party", "Multiple parties and legislature",
-                "Election in last six years", "More than 50 INGOs with members")
+                "Election in last six years", "More than 500 INGOs with members")
 
 plot.data <- institutions %>%
-  left_join(murdie, by="year") %>%
-  filter(year < 2009 & year > 1950) %>%
+  left_join(dancy, by="year") %>%
+  filter(year < 2009 & year > 1970) %>%
   select(year, ingos, percentage_w_party, 
          percentage_partisan_leg, percentage_election_last6) %>%
   gather(variable, value, -year) %>%
@@ -141,7 +148,8 @@ p <- ggplot(plot.data, aes(x=year, y=value, colour=variable)) +
   geom_hline(yintercept=seq(0.6, 0.9, by=0.1), size=0.25, colour="grey90") + 
   geom_line(size=1) + 
   labs(x=NULL, y="Percentage of dictatorships") + 
-  scale_y_continuous(labels=scales::percent) +
+  scale_y_continuous(labels=scales::percent,
+                     limits=c(NA, 1)) +
   scale_colour_manual(name="", values=ath.palette("palette1")) + 
   guides(colour = guide_legend(nrow=2, byrow=TRUE)) + 
   theme_ath() + theme(legend.key = element_blank())
