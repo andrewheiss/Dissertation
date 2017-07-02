@@ -149,9 +149,9 @@ autocracies <- full.data %>%
 #'
 #' ## Explanatory variables
 #' 
-#' ### Internal stability
+#' ### Domestic (internal) stability
 #' 
-#' - `icrg.stability`: Government stability (0-12; 12 is stable, 0 is unstable)
+#' - `icrg.stability`: Government cohesion (0-12; 12 is stable, 0 is unstable)
 #' - `icrg.pol.risk.internal`: `icrg.stability` + `icrg.socioeconomic` + 
 #'   `icrg.investment` + `icrg.internal` + `icrg.corruption` +
 #'   `icrg.military` + `icrg.religion` + `icrg.law` + `icrg.ethnic` + 
@@ -355,7 +355,7 @@ models.bayes <- models.raw.bayes %>%
 #' ## Bayesian results
 #' 
 #' - Basic model = everything
-#' - Alternate model = just government stability and internal political
+#' - Alternate model = just government cohesion and internal domestic
 #'   stability, just coups and protests externally (so those events don't get
 #'   double counted in general ICRG stability)
 #'
@@ -451,7 +451,7 @@ rstan::stan_diag(model.to.check, information="divergence")
 #' 
 #' ## Internal
 #' 
-#' ### Internal political stability
+#' ### domestic political stability
 #' 
 #' ICRG political stability by itself
 #' 
@@ -479,7 +479,7 @@ plot.predict.int.risk <- augment(model.to.use,
   mutate(pred = .fitted,
          pred.lower = pred + (qnorm(0.025) * .se.fit),
          pred.upper = pred + (qnorm(0.975) * .se.fit)) %>%
-  mutate(stability = "ICRG internal stability (scaled)")
+  mutate(stability = "ICRG domestic stability (scaled)")
 
 # What should happen, in theory:
 # new.post.pred <- posterior_predict(model.to.use, new.data.int.stability,
@@ -503,14 +503,14 @@ plot.int.risk.pred <- ggplot(plot.predict.int.risk,
   coord_cartesian(xlim=c(15, 70)) +
   scale_colour_manual(values="#0074D9", name=NULL) +
   scale_fill_manual(values="#0074D9", name=NULL, guide=FALSE) +
-  labs(x="Internal political stability", y="Predicted CSRE in following year") +
+  labs(x="Domestic political stability", y="Predicted CSRE in following year") +
   theme_ath()
 plot.int.risk.pred
 
 fig.save.cairo(plot.int.risk.pred, filename="1-int-risk-pred",
                width=5, height=3)
 
-#' ### Government stability
+#' ### Government cohesion
 #' 
 #' ICRG stability + years in office
 #' 
@@ -547,7 +547,7 @@ plot.int.stability.pred <- ggplot(plot.predict.int.stability,
   scale_x_continuous(breaks=seq(3, 12, 3)) +
   scale_colour_manual(values=ath.palette("contention"), name=NULL) +
   scale_fill_manual(values=ath.palette("contention"), name=NULL, guide=FALSE) +
-  labs(x="Government stability", y="Predicted CSRE in following year") +
+  labs(x="Government cohesion", y="Predicted CSRE in following year") +
   theme_ath()
 plot.int.stability.pred
 

@@ -485,7 +485,7 @@ datatable(risk.stats)
 #' a few example countries can help. Figure out which countries have change the
 #' least/most since 2000.
 #' 
-#' Internal political stability:
+#' Domestic political stability:
 #' 
 risk.stats %>%
   select(country, change.risk) %>%
@@ -519,7 +519,7 @@ plot.icrg.risk.examples <- ggplot(example.countries,
                                       y=icrg.pol.risk.internal.scaled,
                                       colour=country)) + 
   geom_line(size=1) +
-  labs(x=NULL, y="Internal political stability (ICRG)") + 
+  labs(x=NULL, y="Domestic political stability (ICRG)") + 
   coord_cartesian(xlim=ymd(c("2000-01-01", "2015-01-01"))) +
   scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
   theme_ath()
@@ -529,7 +529,7 @@ plot.icrg.stability.examples <- ggplot(example.countries,
                                            y=icrg.stability,
                                            colour=country)) + 
   geom_line(size=1) +
-  labs(x=NULL, y="Government stability (ICRG)") + 
+  labs(x=NULL, y="Government cohesion (ICRG)") + 
   coord_cartesian(xlim=ymd(c("2000-01-01", "2015-01-01")),
                   ylim=c(2, 12)) +
   scale_y_continuous(breaks=c(seq(2, 12, 2))) +
@@ -577,7 +577,7 @@ ggplot(autocracies, aes(x=icrg.stability, y=cs_env_sum.lead)) +
   geom_smooth(method="loess") + 
   theme_ath()
 
-#' This holds when removing stability from the internal political stability
+#' This holds when removing stability from the domestic political stability
 #' index, too. The general risk score is still positively correlated; stability
 #' is negatively correlated.
 #' 
