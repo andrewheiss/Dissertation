@@ -80,7 +80,7 @@ bayesgazer <- function(model) {
     arrange(term.clean) %>%
     select(`Term` = term.clean, `Posterior median` = estimate, 
            `Posterior SD` = std.error, `2.5%`, `97.5%`,
-           `P(β > 0)` = p.greater0, `P(β < 0)` = p.less0) %>%
+           `P(β > 0)` = p.greater0) %>%
     mutate(Term = as.character(Term))
   
   # N = number of observations
@@ -402,7 +402,7 @@ caption <- "Results from basic Bayesian generalized linear regression model {#tb
 tbl.full.model <- pandoc.table.return(filter(models.bayes, 
                                              model.name == "lna.JGI.b")$output[[1]],
                                       keep.line.breaks=TRUE,
-                                      justify="lcccccc", caption=caption)
+                                      justify="lccccc", caption=caption)
 cat(tbl.full.model)
 cat(tbl.full.model, file=file.path(PROJHOME, "Output", "tables", 
                                    "1-results-basic.md"))
@@ -417,7 +417,7 @@ caption <- "Results from alternate Bayesian generalized linear regression model 
 tbl.alt.model <- pandoc.table.return(filter(models.bayes, 
                                             model.name == "lna.EHI.b")$output[[1]],
                                      keep.line.breaks=TRUE,
-                                     justify="lcccccc", caption=caption)
+                                     justify="lccccc", caption=caption)
 cat(tbl.alt.model)
 cat(tbl.alt.model, file=file.path(PROJHOME, "Output", "tables", 
                                   "1-results-alternate.md"))
