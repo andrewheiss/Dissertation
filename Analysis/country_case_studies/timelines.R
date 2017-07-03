@@ -104,7 +104,8 @@ wars.cases <- read_csv(file.path(PROJHOME, "Data", "data_base",
                          war = col_character(),
                          note = col_character()
                        )) %>%
-  mutate(Date_start = ymd(Date_start), Date_end = ymd(Date_end)) %>%
+  mutate(Date_start = ymd(Date_start), Date_end = ymd(Date_end),
+         war = gsub("XXX", "\n", war)) %>%
   arrange(ISO3, Date_start)
 
 plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31") {
@@ -173,7 +174,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
              hjust=0, vjust="top", size=2.5, alpha=0.8,
              colour="black", fill="grey70",
              family="Source Sans Pro Semibold",
-             label="Government stability") +
+             label="Government cohesion") +
     labs(x=NULL, y=NULL) + 
     scale_y_continuous(breaks=c(0, 3, 6, 9, 12)) +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
@@ -190,7 +191,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
              hjust=0, vjust="top", size=2.5, alpha=0.8,
              colour="black", fill="grey70",
              family="Source Sans Pro Semibold",
-             label="Internal political stability") +
+             label="Domestic stability") +
     labs(x=NULL, y=NULL) + 
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
                     ylim=c(20, 70)) +
@@ -206,7 +207,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
              hjust=0, vjust="top", size=2.5, alpha=0.8,
              colour="black", fill="grey70",
              family="Source Sans Pro Semibold",
-             label="Political risk in neigbhors ( • = coup activity)") +
+             label="Political stability in neigbhors ( • = coup activity)") +
     labs(x=NULL, y=NULL) +
     scale_size_identity(guide="none") +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
@@ -258,8 +259,10 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
     scale_colour_manual(values=ath.palette("leaders"), name=NULL) +
     scale_fill_manual(values=ath.palette("wars"), name=NULL) + 
     coord_cartesian(xlim=ymd(c(start.date, end.date))) +
-    guides(colour=guide_legend(order=1),
-           fill=guide_legend(order=2)) +
+    guides(colour=guide_legend(order=1, ncol=2, title="Leaders",
+                               title.vjust=0.95),
+           fill=guide_legend(order=2, title="Key events",
+                             title.vjust=0.95)) +
     labs(x=NULL, y=NULL) +
     theme_ath() +
     theme(legend.position="bottom", 
@@ -274,7 +277,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
                  size=0.5, colour="grey30") +
     geom_label(data=df.laws,
                aes(x=Date, y=plot_y, label=law, hjust=plot_h),
-               family="Source Sans Pro Semibold", size=2.5,
+               family="Source Sans Pro Semibold", size=2.3,
                fill="grey30", colour="white", label.padding=unit(0.3, "lines")) +
     geom_point(size=2, colour="grey30") +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
@@ -309,7 +312,7 @@ plot.country <- function(country) {
   
   grid::grid.draw(p.timeline)
   
-  fig.save.cairo(p.timeline, filename=sprintf("timeline-%s", tolower(country)),
+  fig.save.cairo(p.timeline, filename=sprintf("2-timeline-%s", tolower(country)),
                  width=6, height=7.5)
 }
 
