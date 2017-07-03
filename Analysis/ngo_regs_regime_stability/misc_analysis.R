@@ -165,7 +165,9 @@ fig.save.cairo(plot.autocracy.map, filename="1-autocracies-map",
 #+ results="asis"
 autocracies.countries <- sort(unique(autocracies$country))
 
-autocracies.output <- matrix(autocracies.countries, ncol=3, byrow=FALSE)
+# autocracies.output <- matrix(autocracies.countries, ncol=3, byrow=FALSE)
+autocracies.output <- matrix(c(autocracies.countries, rep(NA, 2)),
+                             ncol=3, byrow=FALSE)
 
 caption <- "Countries identified as autocracies by either Geddes et. al or scoring less than zero in UDS {#tbl:autocracies}"
 tbl.autocracies <- pandoc.table.return(autocracies.output, caption=caption)
