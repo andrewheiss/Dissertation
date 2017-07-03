@@ -1,10 +1,10 @@
 ---
-title: '"They do not want us to operate there": INGO responses to gatekeeping regulations'
+title: '"They do not want us to operate there": INGO Responses to Gatekeeping Regulations'
 author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: June 29, 2017
+date: July 3, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation

@@ -1,10 +1,10 @@
 ---
-title: '"Some state officials want your services": INGO responses to program capture regulations'
+title: '"Some state officials want your services": INGO Responses to Program Capture Regulations'
 author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: June 30, 2017
+date: July 3, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -257,7 +257,7 @@ In contrast, as part of its strategy to promote democratization worldwide, IRI t
 
 [^11]:	Response 1486. See also Response 1541.
 
-[^12]:	The probability that the difference in proportion of high and low contention INGOs is greater than zero is low or null for all of the possible levels of resource and funding restrictions: high contention organizations lean toward more substantial pressure ($P(\Delta > 0) = 0.26$) but there is no substantial difference between high and low contention organizations feeling moderate ($P(\Delta > 0) = 0.68$) or no restrictions($P(\Delta > 0) = 0.5$). All posterior probabilities are available in @tbl:regs-differences-capture-p in the appendix.
+[^12]:	The probability that the difference in proportion of high and low contention INGOs is greater than zero is low or null for all of the possible levels of resource and funding restrictions: high contention organizations lean toward more substantial pressure ($P(\Delta > 0) = 0.26$) but there is no substantial difference between high and low contention organizations feeling moderate ($P(\Delta > 0) = 0.68$) or no restrictions ($P(\Delta > 0) = 0.5$). All posterior probabilities are available in @tbl:regs-differences-capture-p in the appendix.
 
 [^13]:	Response 1672.
 

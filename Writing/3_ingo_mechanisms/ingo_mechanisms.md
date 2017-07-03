@@ -1,10 +1,10 @@
 ---
-title: '"We changed our strategy… without losing our values, vision and mission": Mission, money, and the practical operating environment'
+title: '"We changed our strategy… without losing our values, vision and mission": Mission, Money, and the Practical Operating Environment'
 author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@duke.edu
-date: June 30, 2017
+date: July 3, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
