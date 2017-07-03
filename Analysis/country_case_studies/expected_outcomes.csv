@@ -1,13 +1,13 @@
-"Country","Internal environment","External environment","Reputational environment","Expected CSRE (mean predicted value)","Actual CSRE (mean)"
+"Country","Internal risk","External threats","Reputational concerns","Expected CSRE (mean predicted value)","Actual CSRE (mean)"
 "Egypt","Low","Moderate, then low","High","Moderate–high","Low"
-"","- *Restricting factors* (−): Moderate–low political stability, high government stability (before 2011), many years in office (before 2011), unsuccessful opposition
-- *Enabling factors* (+): Low government stability (after 2011), short time in office (after 2011), frequent elections","- (−) High–moderate regional stability (before 2011), few coups in region (before 2011), many violent protests in region (after 2011), few nonviolent protests in region (before 2011)
+"","- *Restricting factors* (−): Moderate–low domestic stability, high government cohesion (before 2011), many years in office (before 2011), unsuccessful opposition
+- *Enabling factors* (+): Low government cohesion (after 2011), short time in office (after 2011), frequent elections","- (−) High–moderate regional stability (before 2011), few coups in region (before 2011), many violent protests in region (after 2011), few nonviolent protests in region (before 2011)
 - (+) Low regional stability (after 2011), coups in region (after 2011), few violent protests in region (before 2011), many nonviolent protests in region (after 2011)","- High levels of state-based shaming, especially after 2005","≈ 1","≈ −1"
 "China","Moderate","High","High","Low","Low"
-"","- (−) High–moderate government stability, no elections, unsuccessful/nonexistent opposition
-- (+) High political stability, few years in office","- (−) High–moderate regional stability, few violent protests in region
+"","- (−) High–moderate government cohesion, no elections, unsuccessful/nonexistent opposition
+- (+) High domestic stability, few years in office","- (−) High–moderate regional stability, few violent protests in region
 - (+) Coups in region, few nonviolent protests in region","- High levels of state-based shaming, especially after 2005","≈ 0.5","≈ −2"
 "Russia","Moderate","High","Low","Moderate","Moderate"
-"","- (−) Moderate–low political stability (very low in 2000), high government stability, many de facto years in office (because of Putin's shadow presidency during Medvedev's term)
+"","- (−) Moderate–low domestic stability (very low in 2000), high government cohesion, many de facto years in office (because of Putin's shadow presidency during Medvedev's term)
 - (+) Frequent elections, successful opposition","- (−) High regional stability, few nonviolent protests in region
 - (+) Coups in region (especially in 1990s), few violent protests in region","- Low levels of state-based shaming (with peaks in 2008 and 2014)","≈ 0.75","≈ 0.5"
