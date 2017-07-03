@@ -766,11 +766,11 @@ fig.save.cairo(plot.shaming, filename="1-shaming-pred-wide",
 hypotheses <- read_csv(file.path(PROJHOME, "Analysis", 
                                  "ngo_regs_regime_stability", 
                                  "hypothesis_summary.csv")) %>%
-  mutate_each(funs(str_replace(., "XXX", "\\\n")))
+  mutate_each(funs(str_replace(., "XXX", "; ")))
 
 caption <- "Summary of all hypotheses {#tbl:hypothesis-summary}"
-h.summary <- pandoc.table.return(hypotheses, keep.line.breaks=TRUE,
-                                 justify="lll", caption=caption, style="multiline")
+h.summary <- pandoc.table.return(hypotheses, justify="lll",
+                                 caption=caption, style="multiline")
 
 cat(h.summary)
 cat(h.summary, file=file.path(PROJHOME, "Output", "tables", 
