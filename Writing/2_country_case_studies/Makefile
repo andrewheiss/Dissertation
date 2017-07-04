@@ -167,6 +167,8 @@ bib:	$(BIB)
 		-V pagestyle=ath \
 		--base-header-level=1 \
 	-o $@
+	@echo "$(WARN_COLOR)Removing weird space above lists in tables...$(NO_COLOR)"
+	perl -i -0777 -pe 's/\\strut\n\\begin{itemize}/\n\\begin{itemize}/gm;' $@
 	@echo "$(WARN_COLOR)...converting TeX to PDF with latexmk (prepare for lots of output)...$(NO_COLOR)"
 	latexmk -outdir=$(MS_DIR_FOR_TEX)$(TEX_DIR) -xelatex -quiet $@
 	@echo "$(OK_COLOR)All done!$(NO_COLOR)"
