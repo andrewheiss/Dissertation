@@ -770,7 +770,7 @@ hypotheses <- read_csv(file.path(PROJHOME, "Analysis",
 
 caption <- "Summary of all hypotheses {#tbl:hypothesis-summary}"
 h.summary <- pandoc.table.return(hypotheses, justify="lll",
-                                 caption=caption, style="multiline")
+                                 caption=caption, style="grid")
 
 cat(h.summary)
 cat(h.summary, file=file.path(PROJHOME, "Output", "tables", 
