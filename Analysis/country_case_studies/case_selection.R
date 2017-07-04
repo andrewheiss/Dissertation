@@ -109,7 +109,7 @@ plot.sna.selection <- ggplot(plot.data.sna.selection,
   geom_point(aes(alpha=alpha, size=point.size)) +
   # stat_ellipse(aes(linetype=linetype), type="norm", size=0.5) +
   stat_chull(aes(linetype=linetype, fill=fill), alpha=0.1, show.legend=FALSE) +
-  stat_smooth(aes(linetype=linetype, colour=colour), method="lm", se=FALSE) +
+  stat_smooth(aes(linetype=linetype, colour=colour), method="lm", se=FALSE, linetype="dashed") +
   scale_color_identity(guide="legend", labels=c(cases$country.name, "Other"),
                        name=NULL) +
   scale_fill_identity() +
