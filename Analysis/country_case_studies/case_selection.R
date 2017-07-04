@@ -377,9 +377,8 @@ expected.outcomes <- read_csv(file.path(PROJHOME, "Analysis",
                                         "expected_outcomes.csv"))
 
 caption <- "Expected and actual outcomes with all restricting and enabling factors {#tbl:expected-outcomes-full}"
-outcomes <- pandoc.table.return(expected.outcomes, keep.line.breaks=TRUE,
-                                justify="llllll", caption=caption, style="grid",
-                                emphasize.strong.cols=1)
+outcomes <- pandoc.table.return(select(expected.outcomes, -Country), keep.line.breaks=TRUE,
+                                justify="lllll", caption=caption, style="grid")
 
 #+ results="asis"
 cat(outcomes)
@@ -393,8 +392,7 @@ expected.outcomes.simple <- expected.outcomes %>%
 
 caption <- "Expected and actual outcomes, simple {#tbl:expected-outcomes-simple}"
 outcomes <- pandoc.table.return(expected.outcomes.simple, keep.line.breaks=TRUE,
-                                justify="llllll", caption=caption, style="simple",
-                                emphasize.strong.cols=1)
+                                justify="llllll", caption=caption, style="simple")
 
 #+ results="asis"
 cat(outcomes)
