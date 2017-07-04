@@ -115,8 +115,8 @@ duke:
 	@echo "$(WARN_COLOR)...preprocessing files...$(NO_COLOR)"
 	$(foreach file, $(FILES), replace_includes $(file) | chapterize > $(file).tmp;)
 	$(foreach file, $(APPENDIX), replace_includes $(file) | chapterize > $(file).tmp;)
-	$(foreach file, $(FILES_TMP), pandoc --atx-headers -t markdown -o $(file) $(file) --id-prefix `uuidgen`:;)
-	$(foreach file, $(APPENDIX_TMP), pandoc --atx-headers -t markdown -o $(file) $(file) --id-prefix `uuidgen`:;)
+	$(foreach file, $(FILES_TMP), pandoc --columns=1000 --atx-headers -t markdown -o $(file) $(file) --id-prefix `uuidgen`:;)
+	$(foreach file, $(APPENDIX_TMP), pandoc --columns=1000 --atx-headers -t markdown -o $(file) $(file) --id-prefix `uuidgen`:;)
 	@echo "$(WARN_COLOR)...converting to TeX...$(NO_COLOR)"
 	pandoc $(FRONTMATTER) $(FILES_TMP) \
 		-r markdown+simple_tables+table_captions+yaml_metadata_block -w latex -S \
