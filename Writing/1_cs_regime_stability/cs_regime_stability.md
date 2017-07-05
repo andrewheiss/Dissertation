@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Sanford School of Public Policy, Duke University
   email: andrew.heiss@duke.edu
-date: July 1, 2017
+date: July 4, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -210,11 +210,7 @@ According to my second hypothesis, fears of contagion from instability in neighb
 
 Finally, there is no conclusive support for or against the hypothesis that concerns over international reputation influence the decision to expand or constrict institutional dissonance. Formal, high-level diplomatic shaming and condemnation from other states is not consistently associated with changes in the regulatory environment for civil society. This null result could indicate that international shaming truly has no effect on a country's CSRE, but it is more likely an artifact of the data. Susceptibility to shaming is subtle and difficult to detect. Preemptive shaming through diplomatic efforts are typically unobservable (except when leaked cables reveal them), and instances of reactive shaming to specific anti-NGO crackdowns are difficult to systematically count or measure.
 
-While these findings provide strong statistical evidence for some of the institutional determinants of authoritarian civil society restrictions, some of the results run contrary to what I had hypothesized. Within the nested analytical approach I use, though, such contradictory findings are welcome and provide grist for deeper small-*n* case studies that investigate these causal mechanisms further—these correct (and incorrect) hypotheses allow for iterative folk Bayesianism [@McKeown:1999] by establishing priors for in-depth qualitative analysis.
-
-What do these findings tell us about the larger argument? 
-
-TODO: From Judith (2017-04-07): discuss what this means for your larger argument. what does it tell us about the motivations and what does that tell us about who wins and loses and about what sort of adaptations autocrats may accept etc?
+While these findings provide strong statistical evidence for some of the institutional determinants of authoritarian civil society restrictions, other results run contrary to what I had hypothesized. Within a nested analytical approach, though, such contradictory findings are welcome and provide grist for deeper small-*n* case studies that investigate these causal mechanisms further—these correct (and incorrect) hypotheses allow for iterative folk Bayesianism [@McKeown:1999] by adjusting my prior beliefs for in-depth qualitative analysis. Before connecting these results to the larger argument of determining what influences a regime's decision to expand or constrict its civil society regulatory environment, we must first examine these divergent findings in paradigmatic cases of international civil society restrictions. 
 
 [^1]:	Interview 1078, August 31, 2016, Durham, NC.
 
