@@ -512,11 +512,12 @@ risk.stats %>%
 #' 
 example.countries <- c("Somalia", "Syria", "Qatar")
 
-example.countries <- autocracies %>%
+example.countries.plot <- autocracies %>%
   filter(year.num > 2000, 
-         country %in% example.countries)
+         country %in% example.countries) %>%
+  mutate(country = factor(country, levels=example.countries, ordered=TRUE))
 
-plot.icrg.risk.examples <- ggplot(example.countries, 
+plot.icrg.risk.examples <- ggplot(example.countries.plot, 
                                   aes(x=year.actual, 
                                       y=icrg.pol.risk.internal.scaled,
                                       colour=country)) + 
@@ -524,9 +525,10 @@ plot.icrg.risk.examples <- ggplot(example.countries,
   labs(x=NULL, y="Domestic political stability (ICRG)") + 
   coord_cartesian(xlim=ymd(c("2000-01-01", "2015-01-01"))) +
   scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
+  guides(colour=guide_legend(reverse=T)) + 
   theme_ath()
 
-plot.icrg.stability.examples <- ggplot(example.countries, 
+plot.icrg.stability.examples <- ggplot(example.countries.plot, 
                                        aes(x=year.actual, 
                                            y=icrg.stability,
                                            colour=country)) + 
@@ -536,6 +538,7 @@ plot.icrg.stability.examples <- ggplot(example.countries,
                   ylim=c(2, 12)) +
   scale_y_continuous(breaks=c(seq(2, 12, 2))) +
   scale_colour_manual(values=ath.palette("palette1"), name=NULL) +
+  guides(colour=guide_legend(reverse=T)) + 
   theme_ath()
 
 #+ warning=FALSE
