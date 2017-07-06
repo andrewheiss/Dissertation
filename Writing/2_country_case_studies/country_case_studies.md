@@ -10,38 +10,23 @@ reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
 ---
 
+While the statistical models in the previous chapter provide some preliminary evidence for the internal, external, and reputational determinants of authoritarian restrictions on global civil society, the preliminary large-*n* analysis did not produce robust and satisfactory results. Several of the mechanisms resulted in coefficients that went contrary to my hypothesized expectations—for instance, increased internal regime cohesion and neighborhood instability are associated with a more restricted civil society regulatory environment.
 
-TODO
+In nested analysis, the outcome of the preliminary large-*n* analysis determines how the specific cases should be selected [@Lieberman:2005]. Model fit is determined by plotting the actual outcome variable against the predicted scores from the statistical model—if the model perfectly predicts the outcomes of all cases, the predicted and actual values will be highly correlated, while a poorly fit model will show less correlation. If the statistical model yields robust results, researchers should proceed with model-*testing* small-*n* analysis on a subset of "on-the-line" observations that closely fit the predicted values. If, instead, the preliminary model yields unexpected and unsatisfactory results, researchers should proceed with model-*building* small-*n* analysis on a set of cases that are both "on-the-line" and "off-the-line" to explore why the expectations of the original model do not consistently fit and search for rival hypotheses or missing data. 
 
-While the statistical models in the previous chapter provide some observational evidence for the internal, external, and reputational determinants of authoritarian restrictions on global civil society, there are limits to what the statistics can reveal. 
+![Predicted vs. actual CSRE](../../Output/figures/2-sna-selection){#fig:sna-selection}
 
-
-In this chapter, I analyze how the mechanisms of internal risk, external threats, and international reputation influence the development of specific laws governing international civil society, or the regime's ideal point in the model of amicable contempt (see @fig:theory-regime-dot). Based on the model
-
-
-—Egypt, Russia, and China—and discover additional nuance within and evidence for each hypothesized mechanism.
-
-Explain method, selection of cases, expected direction, etc.
-
-
-
-Integrative mixed methods research + large-N and small-N analysis (LNA/SNA) from @Lieberman:2005
+In @fig:sna-selection, I plot the actual and predicted CSRE values from the basic regression model in @tbl:results-basic. The figure clearly shows low correlation between actual and predicted values—the model's predictions generally range between −2 and 4, while actual CSRE values have a wider range from –6 to 6. Since the model does not fit well, I select three cases that fall both on the line and off the line. Ordinarily, case selection would be based on the performance of a single observation, but because observations in this model are country-years—and because countries might perform better in some years than others—I plot a circle around all the possible years in a given country to check how well all the years for a country fit. Three prominent countries that have imposed restrictions on INGOs stand out in the plot. Russia fits the model fairly well, and the correlation between its actual and predicted scores is positive and hews closely to the plot's 45° reference line. The actual and predicted CSRE scores in China and Egypt, on the other hand, are negatively correlated and do not follow the model's expectations. @tbl:expected-outcomes-full provides a detailed summary of how each of the model's mechanisms under- and over-predict the CSRE in each case. 
 
 ![Regime ideal point: legislative policy preferences](../../Graphics/theory-regime-dot){#fig:theory-regime-dot}
 
-
-Predicted (based on the actual model, not based on theory) vs. actual CSRE in @fig:2-sna-selection
-
-![Predicted vs. actual CSRE](../../Output/figures/2-sna-selection){#fig:2-sna-selection}
-
-Based on this table and the timelines, here’s the typological table of expected outcomes for each case study country:
+In this chapter, I conduct model-building small-*n* case studies of Egypt, Russia, and China with three goals. First, I explore how the mechanisms of internal risk, external threats, and international reputation have worked to determine the de facto civil society regulatory environment, comparing the predictions from the statistical model with actual outcomes in each country. Second, because the CSRE index represents de facto regulations for both domestic and international NGOs, I use the case studies to look more closely at each country's treatment of international NGOs specifically. Finally, the CSRE only measures the de facto implementation of NGO laws, not the formal set of de jure regulations in a regime. I therefore consider how domestic unrest, regional threats to stability, and reputational concerns have determined and shifted each regime's formal policy preferences for INGO activity, or the ideal point in the theory of amicable contempt (see @fig:theory-regime-dot). 
 
 \blandscape
 \scriptsize
 \renewcommand\arraystretch{1.4}
 !INCLUDE "../../Output/tables/2-expected-outcomes-full.md"
 \elandscape
-
 
 # Egypt
 
@@ -270,56 +255,23 @@ The 2017 Overseas NGO Law was designed to limit Western influence and insulate C
 Finally, contrary to Egypt and Russia, there is evidence that concerns over international reputation have influenced China's treatment of international NGOs. As examined above, the "contingent symbiosis" arrangement that gave a subset of INGOs the ability to creatively maneuver within China's regulatory regime was enshrined in "Big Society"-era NGO laws that attempted to restructure the corporatist relationship between state and civil society. Part of this tolerance and flexibility in dealing with international NGOs, though, was also based in China's fear of tarnishing its international image [@Wang:2012, 113]. As it has opened up its economy to global markets and become a more prominent actor in international politics, China has striven to be "recognized as a strong and responsible nation that can be influential in world affairs" [@Yin:2009, 533]. Accordingly, it has faced increased reputational pressure to adhere to international standards and norms in areas like human rights [@Dingding:2009] and climate change [@Hongyuan:2007]. Prior to 2017, the flexibility accorded to friendly, regime compatible INGOs allowed the CCP to project an image of openness to the international community (even if the de facto CSRE in @fig:timeline-chn did not reflect this openness). However, in the wake of the 2017 Overseas NGO law, it is unclear if appeals to international pressure and reputational concerns will continue to influence how the CCP regulates INGOs. Researchers recently noted that INGOs facing restrictions hope for support from their home governments, but that foreign government pressure on the CCP "can probably only help in individual cases; it won't bring about fundamental change."[^20] Fears of external influence and attempts at maintaining domestic stability and regime cohesion overrode China's reputational concerns, and the space for INGOs constricted.
 
 
-# Conclusion
+# Discussion
 
-TODO
+Balancing institutional challengers is crucial for autocrats to maintain power and remain in office. Permitting a degree of dissonance and making concessions to rival institutions is a common strategy for offsetting or neutralizing the political power of these other actors. The statistical model in Chapter 2 and the case studies of Egypt, Russia, and China in this chapter demonstrate that civil society—and international NGOs in particular—fit into authoritarian stability-seeking calculus. This analysis also shows what determines when authoritarian regimes codify their preferences for INGO activity and expand and constrict the allowable space for that activity.
 
+In all three cases, concerns over domestic and regime stability were paramount in regimes' decisions to regulate INGOs. In H~1b~, I hypothesized that regimes would constrict civil society more as they remained in office longer. The statistical model showed otherwise, and duration in office was negatively correlated with the CSRE—states constrict the CSRE more as they become more unified, stable, and durable. Evidence from the case studies supports this conclusion too. In general, the CSRE tended to be more open during rulers' early years as regimes work to find the best balance between other rival actors. Nasser, Mubarak, SCAF, Morsi, and Putin were either dismissive or tolerant of civil society in their early, less cohesive years, and each focused instead on repressing and neutralizing more pressing political, economic, and social threats. Later on, each turned their attention to codifying their preferences for allowable space in formal legislation. Regulating civil society was important, but not generally urgent. The CCP followed a somewhat different pattern in China—Mao's initial crackdown in the early 1950s targeted all domestic institutions, ranging from landed property owners to religious organizations. After the party consolidated its power, it began to open up to the forces of globalization while simultaneously creating and restricting a new legal environment for domestic and international NGOs.  
 
-In each case, governments's practical civil society regulatory environments were shaped by internal, external, and reputational concerns. Moreover, as regimes sought to maintain institutional balance, they adjusted their ideal preferences for NGO activity, shifting their ideal points around eopalk fairlsdfj 
+In H~1a~ I posited that increased domestic instability was associated with a worsening CSRE, and the statistical model and the cases bear this out. In all three cases, domestic crises and unrest were a trigger for increased regulation and harsher crackdowns on civil society activity. In Egypt, both SCAF and Morsi held off from regulating civil society until popular protests and domestic terror attacks led to late night raids and public trials of INGOs. Sisi—enjoying strong regime cohesion because of his behind-the-scenes involvement in Egyptian politics after the revolution—faced similar domestic crises, and in response continued to close civic space, harass activists, and shut down international and foreign-connected NGOs. The unrest eventually led to the passage of a strict anti-NGO law in 2017, providing him with even greater statutory authority to limit civil society.  In Russia, rising domestic unrest was closely linked to the 1995/1999 NGO laws—in the face of an ongoing war in Chechnya economic collapse throughout the country, the regime attempted to reassert control over civil society and return some balance to its constellation of political actors. China saw a similar trend. As economic recession, popular protests, and domestic unrest and violence grew under Xi Jinping, the CCP reversed its marginal transition away from its more symbiotic and discretionary relationship with INGOs, enshrining corporatist regulations in its 2017 Overseas NGO law in an attempt to gain more control over society.
 
+In H~2a–c~ I proposed that fears of instability abroad would lead to a construction of the CSRE at home. With the exception of violent protests in neighboring countries, the statistical model predicted the opposite relationship, showing evidence that increased instability, coup activity, and nonviolent protests in neighboring countries were associated with an expansion of the CSRE. The case studies provide better insight into these conflicting findings, and demonstrate the importance of combining large-*n* analysis with small-*n* investigation. In Egypt, fears that the Second Intifada in Palestine could spill over and enable domestic terrorists led to the passage of Law 84 of 2002, which granted the regime enormous discretionary power over regulating NGOs, thus constricting the civic space. The variables used to measure regional unrest, however, missed this—in @fig:timeline-egy, regional political stability actually increases during the Intifada, likely because stability in Libya, Saudi Arabia, Tunisia, and elsewhere cancelled out the unrest in Palestine in the mean-based index. The model also likely overstated the effect of the Arab Spring on Egypt's spontaneously improved CSRE in 2011–2012. While increased neighborhood unrest did indeed precede the expansion of civil society—Tunisia's Ben ʿAli was deposed, after all—it is unlikely that fears of revolutionary contagion played a direct causal role in the expansion of the CSRE. Mubarak did not expand the CSRE—SCAF and Morsi allowed for more civic space after taking office, largely in an attempt to consolidate power and regime cohesion, and not because they feared a spillover of protests from Tunisia or Libya. Those protests had already spilled over. 
 
+The statistical model also missed the effect of the 2003–2005 Color Revolutions on Russia's restrictive 2006 NGO law. As seen in @fig:timeline-rus, neither the CSRE nor the regional political stability index changed much between 2000–2010. For the regional index, this is likely again a symptom of the law of averages, with stability in countries like Mongolia balancing out revolutions in the Balkans. Beyond this, though, the model failed to take Russian *gosudarstvennost* into account. The case study shows that Putin was far more concerned with global pressures on Russian sovereignty than he was with spillovers of violence from neighboring countries (in fact, he *caused* domestic unrest in Georgia, Ukraine, and Crimea). The model also failed to account for China's parallel concerns with foreign influence in domestic politics. The CCP was more worried about Western influence in Chinese politics, economics, and society's than revolutionary contagion. Thus, external risks do indeed play an important role in maintaining authoritarian stability, but the case studies seem to suggest, contrary to the statistical model, that the CSRE is more likely to constrict when regimes face pressure from abroad.
 
+In my final hypothesis, H~3~, I postulated that the CSRE would expand in response to international shaming, given the theory that regimes care about their international reputation and image. The statistical models gave no clear evidence for this phenomenon, again most likely because measuring international shaming on a large scale cannot capture specific instances of shaming connected to restrictions on NGOs. The case studies show an inkling of a reputational effect, but again, in both directions. Russia rebuffed American efforts to cajole it into showing leniency toward US INGOs preceding the 2006 G8 summit and was not swayed by appeals to the country's image. American diplomats in Cairo raised the specter of international reputation in discussions about possible negative reforms to Law 84, and the law ultimately was not reformed, but it is impossible to draw a causal link between diplomatic pressure and the absence of legal reform. Analysts in China, however do make an explicit connection between reputational concerns and China's treatment of INGOs, but evidence suggests that these concerns only played a minor role. When facing more pressing challenges of deteriorating regime cohesion and increasing external threats to stability, Xi passed the 2017 Overseas NGO law in spite of international condemnation. My reputational hypothesis thus remains inconclusive.
 
-Compare Egypt, China, and Russia - similarities in how/why they regulate INGOs
+Finally, beyond providing evidence for these CSRE-related mechanisms, the case studies reveal a crucial connection between a regime's ideal point and its negotiation space. One benefit of the CSRE index is that it separates de jure legislation from the de facto implementation of that legislation—civil society is regulated by only a handful of laws in each country, but the CSRE shifts more often and is more responsive to changes in internal risk. The cases show that formal legislation does not typically apply to all NGOs universally. Enshrining its preferences into law is a public signal that the regime has shifted its ideal point. Often the CSRE does not immediately move after a new law is passed. In Egypt, the CSRE remained stable between the creation of Law 84 in 2002 and the 2011 Arab Spring uprising. Though the CSRE itself did not shift in aggregate, the regime reserved the right to constrict it on a a case-by-case basis throughout Mubarak's rule. Without the discretionary legal authority provided by Law 84, the regime would likely have struggled to flexibly target and limit civil society organizations that posed a threat. This is also the case in both Russia and China. China's "Big Society, Small Government" laws ostensibly signaled the country's reluctance to work with INGOs, but in practice, the CCP used enormous flexibility when enforcing those laws, showing leniency toward friendly INGOs and ignoring infractions of the registration laws. Aleksandr Tarnavksy described the purpose of formal authoritarian anti-NGO laws best when declaring that the 2015 Undesirable Organizations law would be a "weapon hanging on the wall and that never fires"—authoritarian regimes can use discretion in regulating NGOs and expand the CSRE, all while holding legal "weapons" in reserve, ready to move against civil society organizations that pose a threat.
 
-While Egypt and Russia have passed few formal laws regarding civil society, leaving lots of room of discretion and arbitrary enforcement, China has followed a different pattern.
-
-- China: reputation/internal
-- Egypt: internal/external
-- Russia: internal/external
-
-So what?
-
-Return to each hypothesis, since the SNA should reinforce LNA
-
-but that the issue was "'not urgent' like the revisions to the 
-election law or the new anti-terror law
-Internal concerns are most important - Only in the case of Russia do external concerns play much of a role.
-
-Long-standing dictatorships with more consolidated power are more likely to restrict civil society as they don't need to allow for dissonance and don't need to make concessions to NGOs—domestic and international.
-
-Domestic unrest leads to more crackdowns
-
-External stuff…
-
-Reputation. In the statistics, there was no clear evidence of a reputational effect—it went either way. The Russian case study showed no effect. Egypt showed a possible inkling of an effect—Law 84 was not reformed following comment from the US, but drawing a causal link there isn't possible. Law 84 didn't get formally revised until May 2017
-China, though, shows X
-
-
-Benefits to combining LNA and SNA. Small details and nuances of the individual cases obscure trends in the statistical model - like Egypt's external threats. The model missed the effects of the Second Intifada in Palestine, which encouraged the development of Law 84 of 2002 and gave Mubarak extraordinary discretionary power in dealing with NGOs, and the model overstated the effect of the Arab Spring on Egypt's spontaneously improved CSRE in 2011–2012. While unrest did indeed precede the expansion of civil society, it is highly unlikely that it played a direct causal role—SCAF and Morsi expanded and contracted the space for civil society largely in reaction to internal political crises and challenges to regime cohesion, not because they feared a spillover of protests from Tunisia or Libya.
-
-The model also missed Color Revolutions
-Measurement error likely hides the overriding explanatory factor for these new restrictions. are not reflected in the regional or subregional risk score
-As with the Color Revolutions preceding Russia's 2006 INGO law, the statistical model again fails to account for external instability and fears of contagion. 
-
-Gosudarstvennost and Russian protection against global threats, not just regional threats -the model can't capture that, and it was a critical part of why Russia has cracked down on INGOs
-
-
-Egypt and Russian both enshrine regime preferences in rare-ish laws and use tons of discretion in applying the laws - lets them be highly responsive to domestic pressures, threats to regime cohesion and stability, and threats from abroad. Gives them flexibility too - they can target both domestic and international NGOs as needed. Law 84 (and now law whatever) allows Egypt to shut down local human rights NGOs *and* large international NGOs like Amnesty and IRI. Russia's 2012 and 2015 laws are wielded similarly—Putin can use them to shut down local NGOs, kick out international NGOs like Amnesty, OSF, IRI
-
-[^21] + other laws, like protests laws, the penal code - discretion allowed regime to use civil society to maintain stability + stop NGOs that got too unruly - Egypt had little change in formal legislation between 2002 and 2017 because the 2002 law allowed for a lot of discretion - (2012 version of ICNL monitor says "Law 84 of 2002 is not so much restrictive as it is discretionary. Law 84 of 2002 gives enormous discretionary powers to the Ministry of Social Solidarity.")
-
-
+Knowing what motivates an authoritarian regime to regulate civil society raises questions about INGO motivations. Autocrats have ulterior motivations in opening up space for civil society—expanding and constricting INGO regulations helps balance out other political challenges and contributes to the durability of the regime. Knowing that there's a risk that their services will be co-opted into the service of the regime, why do INGOs choose to work in restrictive societies? How do they respond to increased restrictions on their activities? More importantly, how do they protect themselves against co-optation and capture? 
 
 [^1]:	Interview 1091, November 16, 2016, Washington, DC.
 
@@ -361,5 +313,3 @@ Egypt and Russian both enshrine regime preferences in rare-ish laws and use tons
 [^19]:	Interview 1094, August 8, 2016.
 
 [^20]:	Kristin Shi-Kupfer and Bertram Lang, "Overseas NGOs in China: Left in Legal Limbo," *The Diplomat,* March 4, 2017, [http://thediplomat.com/2017/03/overseas-ngos-in-china-left-in-legal-limbo/](http://thediplomat.com/2017/03/overseas-ngos-in-china-left-in-legal-limbo/).
-
-[^21]:	Interview 1085, September 22, 2016, Washington, DC.
