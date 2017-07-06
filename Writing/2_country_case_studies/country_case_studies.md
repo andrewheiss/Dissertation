@@ -4,13 +4,16 @@ author:
 - name: Andrew Heiss
   affiliation: Sanford School of Public Policy, Duke University
   email: andrew.heiss@duke.edu
-date: July 3, 2017
+date: July 6, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
 ---
 
-While the statistical models in the previous chapter provide some observational evidence for the internal, external, and reputational determinants of authoritarian restrictions on global civil society, there are limits in what the statistics can reveal. 
+
+TODO
+
+While the statistical models in the previous chapter provide some observational evidence for the internal, external, and reputational determinants of authoritarian restrictions on global civil society, there are limits to what the statistics can reveal. 
 
 
 In this chapter, I analyze how the mechanisms of internal risk, external threats, and international reputation influence the development of specific laws governing international civil society, or the regime's ideal point in the model of amicable contempt (see @fig:theory-regime-dot). Based on the model
@@ -206,80 +209,108 @@ TODO: Conclusion
 
 # China: reputation and regularity
 
+TODO
 
-Egypt and Russian both enshrine regime preferences in rare-ish laws and use tons of discretion in applying the laws - lets them be highly responsive to domestic pressures, threats to regime cohesion and stability, and threats from abroad. Gives them flexibility too - they can target both domestic and international NGOs as needed. Law 84 (and now law whatever) allows Egypt to shut down local human rights NGOs *and* large international NGOs like Amnesty and IRI. Russia's 2012 and 2015 laws are wielded similarly—Putin can use them to shut down local NGOs, kick out international NGOs like Amnesty, OSF, IRI
+While Egypt and Russia have passed few formal laws regarding civil society, leaving lots of room of discretion and arbitrary enforcement, China has followed a different pattern.
 
-[^16] + other laws, like protests laws, the penal code - discretion allowed regime to use civil society to maintain stability + stop NGOs that got too unruly - Egypt had little change in formal legislation between 2002 and 2017 because the 2002 law allowed for a lot of discretion - (2012 version of ICNL monitor says "Law 84 of 2002 is not so much restrictive as it is discretionary. Law 84 of 2002 gives enormous discretionary powers to the Ministry of Social Solidarity.")
+The Chinese regime is subject to the same institutional challenges as other authoritarian regimes and must contend with parliament, the judiciary, business and industrial elites, and a growing civil society sector. 
 
 China unique - highly regularized legal framework for NGOs. Only country of the three to have a law dedicated solely to international NGOs and foundations - some discretion is allowed, as we'll see, but not as much—INGOs have to follow rules and can't hide as much
 
-Fewer concessions are made
-
-Mark Sidel: 
-
-> Not all NGOs are created equal: The state could treat all environmental public interest groups the same, or treat all disability rights groups the same – but it doesn't, and that's very interesting. So a complex situation gets even more complex, as the state allows space for some advocacy groups, while not for others [@Leach:2014]
-
-> Law is not just a legal matter - it's a political signal - fear isn't about the precise legality - you can still get around the law - domestic NGOs can still register as businesses, deal with tax issues, accounting, reporting issues - INGOs have been more flexible in partnering with domestic - but it's trickier to do that now since the government is signaling its hostility towards that happening [^17]
-
-Visible in the country's CSRE over time, which is lower than either Egypt or Russia
+In contrast to the typical authoritarian response of absorbing these actors into the regime, China's strategy for balancing and neutralizing the destabilizing effect of these different actors has been to give them limited, regulated autonomy. 
 
 The case of China shows the importance of reputation + fears of domestic instability and foreign influence - not so much threats from instability abroad
 
-HIV/AIDS, disability rights, urban renewal, environmental NGOs appear to be "good" NGOs in China
+In China, NGOs have been "caught up in the larger struggle… to craft a stronger party and a stronger China" [@icnl-china]
+
+Balancing is important - until the 1990s, China engaged in balancing in standard ways, linking institutions to the regime and allowing for minimal dissonance and autonomy. As it began to liberalize in the 1980s and 90s, though, and gained more global economic prominence, it shifted the relationship from corporatist direct links to the regime to contingent symbiosis
+
+Corporatism to openness to (maybe back to) corporatism
 
 ![Timeline of de jure and de facto NGO regulations in China](../../Output/figures/2-timeline-chn){#fig:timeline-chn}
 
-That doesn't mean they don't care about domestic instability - the internet is highly regulated and censored
-
-In China, NGOs have been "caught up in the larger struggle… to craft a stronger party and a stronger China" [@icnl-china]
-
-
 ## Internal stability
 
-> Outside observers see Chinese government as stable - that's a misperception - they have strong control over the media - no coverage of protests, which happen all the time - hundreds every day(!) - March 2013 came in power, has sense of crisis of the CCCP to hold power - worried that party is losing touch with ordinary people - instituted controls on corruption, also civil society, bringing it inline with party policies - anyone threatening party power is hostile, human rights or not - so there *are* internal threats, but we can't observe it - but there is paranoia - [^18]
+### Corporatist civil society
 
-Like Egypt, reshaping CS to be more like the government
+In some aspects, China's early regulation of civil society mirrored Egypt, though on a much larger scale. Following the 1949 Chinese Revolution, Mao Zedong moved quickly to consolidate his power and neutralize the most threatening institutional challengers to his regime. As part of his Great Leap Forward program, Mao confiscated land and property from the country's landlord class and redistributed it to peasants, killing hundreds of thousands of landowners in the process [@Rummel:1991]. Mao moved against the former Kuomintang (KMT) nationalist party in the Campaign to Suppress Counterrevolutionaries, executing as many as 2 million KMT members and arresting hundreds of thousands more [@Changyu:2005]. In addition to targeting the country's core economic and political institutions, Mao dismantled social institutions, dismantling all civil society organizations, including religious associations, professional societies, labor unions, and a handful of early international NGOs like the Red Cross [@Yin:2009, 521]. These dramatic and bloody moves against his rivals permitted Mao to consolidate his party's rule and assert direct control over most of country's institutions. 
 
-> These developments constitute a top-down effort by the party-state to mold a “civil society” in its own image - the party would actually prefer to use a term like “social sector” or “people’s society” - that does not have a strong value preference for what the government perceives as Western-style individual freedoms and rights. These efforts to remake China’s civil society are reflected in the roll out of the Charity Law, the Overseas NGO Law, and important accompanying regulations all in 2016. This regulatory “Great Leap Forward” constitutes arguably the biggest legislative development in the history of the nonprofit sector in the PRC.
+The Chinese Communist Party (CCP) dominated civil society until the 1970s, maintaining strict control over civic and associational life. Foreign associations were barred from the country, and private citizens joined government-run social groups, or *danweis*, which provided for their welfare needs. A handful of government operated NGOs (GONGOs) were permitted, including the Chinese Red Cross, trade associations, and cultural exchange groups, but these were closely monitored and acted as extensions of the CCP [@KallmanClark:2016, 172]. After Mao's death in 1976, China launched a series of liberalizing reforms that restructured the country's economy and opened the country up to the forces of globalization. In concert with the country's economic expansion, Deng Xiaoping and the CCP experimented with formally expanding civic space and passed regulations to create foundations and social organizations. The first formal Chinese foundation was opened in 1988, followed by dozens of social organizations, and by the end of 2008, there were nearly 1,600 officially registered civil society organizations [@KallmanClark:2016, 173].
 
+The relationship between these new forms of civil society and the government followed a corporatist pattern seen in other authoritarian states. The CCP was closely linked to civil society, and regulations helped ensure that social organizations could work as an arm of the government. In 1997, a government official described two purposes of China's growing domestic civil society, encapsulating its corporatist, regime-linked purpose: "first, to communicate the ideas of the people to the Party and government and, second, to engage in activities that serve the public" [@HsiaWhite:2002, 331]. Civil society was thus created to serve the needs and expand the reach of the state. Domestic social organizations were seen as a "transmission belt" for CCP policies, "rather than as autonomous social actors that can monitor the government and ensure that disadvantaged groups are not ignored" [@HsiaWhite:2002, 332]. The regulatory environment for NGOs was highly restrictive (see @fig:timeline-chn), and organizations were largely constrained by state preferences. International NGOs—including the Ford Foundation and Save the Children—found ways around these strict corporatist laws and set up offices in the country as private, for-profit "foreign enterprises," but these organizations were relatively limited in their reach.
 
-New foreign NGO law is a way to finally regularize relations with international NGOs
+The CCP managed this expansion of civic space carefully, paying attention to concerns of regime cohesion and domestic stability. Following the predictions of the statistical model, civil society remained highly restrictive as the government faced rising domestic unrest and increasing regime cohesion between 1995 and 2000. Though the CCP created legal avenues for formal civil society—ostensibly expanding civic space—it ensured that these organizational forms were highly regulated and aligned with government preferences. 
 
+### Big Society, Small Government, and a departure from corporatism
 
-New law puts organizations in incredibly close alignment with the regime - PSUs
+In 2004, under the leadership of president Hu Jintao, the Chinese Communist Party endorsed an ambitious new agenda aimed at radically reshaping state–civil society relations. The CCP's "Big Society, Small Government" initiative was designed to create a
 
-Main obstacle for INGOs working in China is the need to be officially sponsored by a Professional Supervisory Agency (PSU) before registering with the Ministry of Public Safety. Local government partners are unwilling to become PSUs because of political risk for individual careers and agency reputation
+> system of social protection, including social security, social assistance, and charitable undertakings [in which] civilian organizations have become bridges and belts linking the Party and government with the mass, an indispensable force to promote economic development and social progress, and play an important role in the harmonious development of a socialist civilization [@Boychuk:2007, 201].
 
-No clarity about which agencies can count as PSUs - how to handle cross sectoral organizations that span multiple potential PSUs
+The "bridges and belts" analogy in this 2004 pronouncement was consistent with China's previous corporatist approach to civil society, viewing it as a link between the government and society. However, in practice, the "Big Society, Small Government" agenda signaled a significant shift in how the CCP dealt with civil society, leading to a redefinition of the two actors' relationship. Over the next decade, strict corporatism gave way to limited cooperation and autonomy. Under this new relationship—what @Spires:2011 has termed "contingent symbiosis" —as long as NGOs and civil society organizations helped advance the state's goals and did not lobby explicitly for democratization, the government provided significant allowance for innovation and even some degree of advocacy. 
 
-Unclear what “political activities” means
+Instead of treating civil society organizations as direct extensions of the state, the CCP began to view their relationship within a vertical hierarchy of control, with highly regulated GONGOs at the top and unregistered, autonomous, grassroots NGOs at the bottom [@RichterHatch:2013]. This new arrangement was designed to encourage collaboration with the state in specific domains, providing organizations at the bottom of the hierarchy with substantial freedom in pursuing their missions. The CCP enshrined this new relationship in a series of laws in 2004, 2006, and 2009 regulating foundations, and social organizations, and foreign enterprises, making it easier for domestic and international NGOs to register, operate, and cooperate with government officials.
 
+Growing domestic stability contributed to the CCP's turn away from strict corporatism—by the time Hu Jintao came to office in 2003, the domestic unrest of the late 1990s and early 2000s had begun to improve. More importantly, though, the shift away from corporatism allowed the CCP to derive direct benefits from cooperating with domestic and international NGOs, particularly in non-contentious issue areas like the environment, disability rights, public health, and urban renewal. Making legal concessions to some civil society organization could lead to enhanced state capacity, which in turn could shore up the CCP's legitimacy at home and improve its stability-seeking calculus. As such, the CCP worked to cooperate with and "foster certain types of foreign NGOs and to quell those with politically sensitive agendas" [@Yin:2009, 536] in an effort to maintain internal regime stability.
 
-Law requires INGOs to hire local accountants and staff, but smaller organizations can’t afford it. "The burden placed on such small groups is quite great and may result in an outflow of groups that do small but meaningful work in China"
+By operating within the bounds set by the government and working on safe regime-compatible issues, INGOs could enjoy substantial autonomy. In 2002, Hsia and White offered controversial advice to nonprofit practitioners interested in running international NGOs in China, encouraging them to partner with local government officials. They note that although maintaining close connections to these officials could lead to a relationship that was "too close for comfort," "working in isolation of the government [was] scarcely an option [and] choosing helpful government agencies as partners [was] vitally important" [@HsiaWhite:2002, 347–48]. In many cases, government officials turned a blind eye to organizations' legal status (or lack thereof). In 2004, China Development Brief—a nonprofit organization that monitored nonprofit legal developments in the country—explained how INGOs could avoid the bureaucratic red tape associated with registration: 
 
-China - few domestic tensions (apart from Tibet + Uighurs), party is stable since the late 2000s -
+> If you can show that you are cooperating with a recognised Chinese agency, and if you are not doing anything that is particularly contentious or sensitive, it is unlikely that you will encounter any kind of trouble arising from not having official registration and status, apart from the practical difficulties of not being able to open a bank account in the name of the organisation.[^16]
+
+Beyond simply staying within regime boundaries, some INGOs working under Hu Jintao's regime were able to push and redefine those boundaries, becoming co-architects of those regulations [@Teets:2014, 145]. Research by @Teets:2014 shows how several environmental INGOs have taken advantage of close connections with government officials to create a more favorable regulatory environment, inviting officials to special conferences, hiring retired officials with connections to sitting bureaucrats, and publicly shaming supervisory agencies that impose harsher regulations [@HeissKelley:2017].
+
+However, the practical effects of this apparent move away from corporatism did not register on the country's CSRE index until the end of Hu's presidency (see @fig:timeline-chn). Though NGOs saw some increased autonomy, and some well-funded, highly flexible INGOs were able to shape their regulations, for the vast majority of civil society organizations, the regulatory environment remained largely closed. Driven by the need to balance out other institutional challengers and preserve regime cohesion, the CCP successfully created a legal environment that allowed them to maximize the benefits of domestic and international civil society activities while keeping the sector under careful control. 
+
+### A return to corporatism?
+
+After taking office in 2013, Xi Jinping faced declining domestic stability and the country witnessed a series of violent attacks and large scale protests throughout 2014–15. Spurred on by this growing domestic unrest (again, as predicted by the model), Xi moved to close civic space and regain control over the balance of political actors. At the end of 2015, Xi approved a new anti-terrorism law that was designed to give the government more authority to respond to what it claimed was an increase in violence from Uyghur separatists. Commentators noted, though, that the law also gave Xi a pretext to assert more control over the popular unrest, taking advantage of a global rise in terrorist attacks "to increase [the CCP's] control over the domestic population."[^17] In addition to the terrorism law, Xi moved against international NGOs, proposing legislation in 2015 that would constrict the limited autonomy some had enjoyed under Hu.
+
+A key characteristic of Hu's turn away from corporatism was the differential treatment given to INGOs. Broadly speaking, organizations working on less contentious issues were treated differently from those working on human rights, freedom of expression, democracy promotion, and other contentious topics. proposed legislation that would codify this differential treatment, formally cutting off contentious INGOs and closely regulating non-contentious organizations. After months of debate within the ministries charged with regulating INGOs, and consultation with prominent INGO staff and consultants, the law was approved in mid-2016 and took effect on January 1, 2017. 
+
+Article 3 of the 2017 Overseas NGO Law formally defines a host of permissible specific issue areas and establishes the regime's new ideal level of civil society activity: 
+
+> Overseas NGOs that work in fields such as the economy, education, science and technology, culture, health, sports, environmental protection and in areas such as poverty alleviation and disaster relief may carry out activities that legally aid the development of public welfare in accordance with this Law.
+
+Beyond representing the CCP's new ideal point, the new Overseas NGO Law has significant ramifications for the relationship between the government and INGOs, signaling an end of contingent symbiosis, a possible return to corporatism, and more importantly, "a closing to the world" [@Sidel:2016]. The law reframes INGOs as possible partners in development and civil society to potential security threats, requiring that all foreign organizations register with the Ministry of Public Safety instead of the Ministry of Civil Affairs. Additionally, the law puts INGOs in incredibly close alignment with the regime, requiring that all foreign organizations find a pre-approved government agency or GONGO to act as its Professional Supervisory Unit (PSU) prior to registering with the Ministry of Public Safety. INGOs had previously been required to partner with PSUs under the "Big Society, Small Government" laws, but the regulations were rarely enforced as long as the organization stayed in the good graces of the CCP. Between 2004–2016, only 29 international NGOs managed to officially partner with a PSU,[^18] and since January 2017, INGOs have struggled to find PSUs willing to take them on. Because of the uncertainty, distrust, and possible security consequences associated with collaborating with INGOs, many potential PSUs have declined to work with overseas NGOs out of fear of risking their agency's reputation and individual careers. As of April 2017, 62 INGOs had successfully registered with the Ministry of Public Security—a fraction of the estimated 7,000 organizations affected by the law.[^19]
+
+As with the 2015 terrorism law, rising domestic instability in China led Xi to reassert control over international civil society and eliminate the legal grey areas INGOs had been able to manipulate.[^20] The 2017 Overseas NGO marked the end of the move away from corporatist regime–civil society relations (as minuscule as the 2004–2016 had been), signaling that "INGOs were no longer seen as helpful to Chinese civic life, but instead as a threat" [@Plantan:2016].
 
 ## External risk
 
+TODO
+
 Instability from neighbors not much of an issue - few coups, few protests abroad
 
-> There is some external threat - worried about western espionage - South China Sea - Western plots against China - nationalism - hard to tell if that's true [^19]
+> There is some external threat - worried about western espionage - South China Sea - Western plots against China - nationalism - hard to tell if that's true [^21]
 
 Influence from abroad is a concern, but not because of revolutionary contagion - more like social, education, political contagion
 
 Chinese NGO leaders are educated abroad and remain involved in issue area networks - "By socializing Chinese NGO activists, global civil society has shaped the development of the third sector in China" [@Wang:2012, 109]
 
+@Yin:2009
+15 - Government worried about foreign NGOs too - they pose a "potential national threat" 
+
+2006 article in CCP newspaper warned that they "undermine national security," "destroy political stability," foster corruption," and "propagate foreign practices" and "spy on and gather information on China's military, political, and economic information" 
+
+Too much foreign associational life "may lead to adoption of Western ideas of liberty" 
+
+16 - Also fears of color revolution and "peaceful transformation" 
+
 ## Reputation
+
+TODO
 
 China cares about international reputation to a point - Olympics in 2008
 
 Reputation in @Wang:2012, 113 - China more careful when dealing with foreign NGOs because of concerns over China's international image - government tolerates foreign NGOs, tacitly allows them to work - some INGOs aren't registered, some are registered as for-profit organizations, some are affiliated with universities - see also @HsiaWhite:2002 
 
+@Yin:2009
+
+14 - Huge reputational concerns: "The Chinese government’s increased tolerance of foreign social groups has also resulted from the government’s desire to achieve greater influence on the international front. China has benefited significantly from the opening-up policy; it has realized that it cannot develop in isolation from the rest of the world and that its development and prosperity are interrelated with and dependent on that of the world as a whole. As a result, China has been actively seeking to join the globalization process and be accepted into the global village. At the same time, with surging economic strength, China is trying to get rid of its old image as “backward and weak” and desires to be recognized as a strong and responsible nation that can be influential in world affairs. On the one hand, more than ever before, China cares about the views and attitudes of the international community toward it. On the other hand, China faces increasing international pressure to live up to international standards. Due to the special role of international NGOs in international society, cooperating with international NGOs will no doubt further China’s goal of gaining recognition and influence worldwide. Thus, the Chinese government regards cooperation with international NGOs as part of its opening-up and as an inevitable element in the pursuit of globalization." 
+
 # Conclusion
 
-Benefits to combining LNA and SNA. Small details and nuances of the individual cases obscure trends in the statistical model - like Egypt's external threats. The model missed the effects of the Second Intifada in Palestine, which encouraged the development of Law 84 of 2002 and gave Mubarak extraordinary discretionary power in dealing with NGOs, and the model overstated the effect of the Arab Spring on Egypt's spontaneously improved CSRE in 2011–2012. While unrest did indeed precede the expansion of civil society, it is highly unlikely that it played a direct causal role—SCAF and Morsi expanded and contracted the space for civil society largely in reaction to internal political crises and challenges to regime cohesion, not because they feared a spillover of protests from Tunisia or Libya.
-
-
+TODO
 
 Compare Egypt, China, and Russia - similarities in how/why they regulate INGOs
 
@@ -289,10 +320,11 @@ Compare Egypt, China, and Russia - similarities in how/why they regulate INGOs
 
 So what?
 
+Return to each hypothesis, since the SNA should reinforce LNA
+
 but that the issue was "'not urgent' like the revisions to the 
 election law or the new anti-terror law
-
-Return to each hypothesis, since the SNA should reinforce LNA
+Internal concerns are most important - Only in the case of Russia do external concerns play much of a role.
 
 Long-standing dictatorships with more consolidated power are more likely to restrict civil society as they don't need to allow for dissonance and don't need to make concessions to NGOs—domestic and international.
 
@@ -302,6 +334,22 @@ External stuff…
 
 Reputation. In the statistics, there was no clear evidence of a reputational effect—it went either way. The Russian case study showed no effect. Egypt showed a possible inkling of an effect—Law 84 was not reformed following comment from the US, but drawing a causal link there isn't possible. Law 84 didn't get formally revised until May 2017
 China, though, shows X
+
+
+Benefits to combining LNA and SNA. Small details and nuances of the individual cases obscure trends in the statistical model - like Egypt's external threats. The model missed the effects of the Second Intifada in Palestine, which encouraged the development of Law 84 of 2002 and gave Mubarak extraordinary discretionary power in dealing with NGOs, and the model overstated the effect of the Arab Spring on Egypt's spontaneously improved CSRE in 2011–2012. While unrest did indeed precede the expansion of civil society, it is highly unlikely that it played a direct causal role—SCAF and Morsi expanded and contracted the space for civil society largely in reaction to internal political crises and challenges to regime cohesion, not because they feared a spillover of protests from Tunisia or Libya.
+
+The model also missed Color Revolutions
+Measurement error likely hides the overriding explanatory factor for these new restrictions. are not reflected in the regional or subregional risk score
+As with the Color Revolutions preceding Russia's 2006 INGO law, the statistical model again fails to account for external instability and fears of contagion. 
+
+Gosudarstvennost and Russian protection against global threats, not just regional threats -the model can't capture that, and it was a critical part of why Russia has cracked down on INGOs
+
+
+Egypt and Russian both enshrine regime preferences in rare-ish laws and use tons of discretion in applying the laws - lets them be highly responsive to domestic pressures, threats to regime cohesion and stability, and threats from abroad. Gives them flexibility too - they can target both domestic and international NGOs as needed. Law 84 (and now law whatever) allows Egypt to shut down local human rights NGOs *and* large international NGOs like Amnesty and IRI. Russia's 2012 and 2015 laws are wielded similarly—Putin can use them to shut down local NGOs, kick out international NGOs like Amnesty, OSF, IRI
+
+[^22] + other laws, like protests laws, the penal code - discretion allowed regime to use civil society to maintain stability + stop NGOs that got too unruly - Egypt had little change in formal legislation between 2002 and 2017 because the 2002 law allowed for a lot of discretion - (2012 version of ICNL monitor says "Law 84 of 2002 is not so much restrictive as it is discretionary. Law 84 of 2002 gives enormous discretionary powers to the Ministry of Social Solidarity.")
+
+
 
 [^1]:	Interview 1091, November 16, 2016, Washington, DC.
 
@@ -334,10 +382,16 @@ China, though, shows X
 
 [^15]:	See Andrey Kozenko, "Pure Pragmatism—Nothing Personal," *Meduza,* May 21, 2015, [https://meduza.io/en/feature/2015/05/21/pure-pragmatism-nothing-personal](https://meduza.io/en/feature/2015/05/21/pure-pragmatism-nothing-personal).
 
-[^16]:	Interview 1085, September 22, 2016, Washington, DC.
+[^16]:	China Development Brief, "Frequently Asked  Questions on Registering an International NGO in China" (August 10, 2004), [https://web.archive.org/web/20060420085801/http://www.chinadevelopmentbrief.com/node/296](https://web.archive.org/web/20060420085801/http://www.chinadevelopmentbrief.com/node/296).
 
-[^17]:	Interview 1094, August 8, 2016.
+[^17]:	James Leibold, cited in Euan McKirdy, “China approves wide-ranging counter terrorism law,” *CNN*, December 28, 2015, [http://www.cnn.com/2015/12/27/asia/china-terror-law-approved/index.html](http://www.cnn.com/2015/12/27/asia/china-terror-law-approved/index.html).
 
-[^18]:	Interview 1094, August 8, 2016.
+[^18]:	"Follow up on the Overseas NGO Law," NGOs in China, December 21, 2016, [https://ngochina.blogspot.hk/2016/12/follow-up-on-overseas-ngo-law-list-of.html](https://ngochina.blogspot.hk/2016/12/follow-up-on-overseas-ngo-law-list-of.html).
 
-[^19]:	Interview 1094, August 8, 2016.
+[^19]:	See "More Foreign NGOs Register in Yunnan, Sichuan, Shanghai and Guangdong," *NGOs in China,* May 7, 2017, [https://ngochina.blogspot.hk/2017/05/more-foreign-ngos-register-in-yunnan.html](https://ngochina.blogspot.hk/2017/05/more-foreign-ngos-register-in-yunnan.html); Carolyn Hsu et al., "The State of NGOs in China Today" (December 15, 2016), [https://www.brookings.edu/blog/up-front/2016/12/15/the-state-of-ngos-in-china-today/](https://www.brookings.edu/blog/up-front/2016/12/15/the-state-of-ngos-in-china-today/).
+
+[^20]:	Interview 1094, August 8, 2016.
+
+[^21]:	Interview 1094, August 8, 2016.
+
+[^22]:	Interview 1085, September 22, 2016, Washington, DC.
