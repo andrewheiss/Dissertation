@@ -201,25 +201,11 @@ The passage of Law No. 18-FZ in 2006—the first law to specifically target inte
 
 However, in a meeting with one of Putin's presidential aides in May, the US ambassador suggested that the Kremlin try to facilitate the registration of some prominent INGOs prior to the G8 summit as proof that the law was not part of a broad assault on NGOs. The aide rejected the idea, stating that Russia was "not inclined to 'do favors' for the West, which would pocket such steps and continue criticizing Russia with no acknowledgment of positive moves" [@06MOSCOW5372a]. Putin feared losing control over Russian *gosudarstvennost,* and following US suggestions posed several risks to Putin's notion of sovereignty. If Putin complied with US requests, he would (1) be supporting US foreign policy and INGOs like the NED, NDI, and IRI that were subject to registration, and (2) foreclose future opportunities to crack down on these organizations, and (3) risk attracting international criticism and shame from the United States later on. To protect Russia's future reputation, Putin avoided broaching the issue of the 2006 law at the G8 summit. The fact that Putin rejected US advice before the G8 summit in 2006, may indicate that he was likely less susceptible to reputational pressure. However, with the evidence available, it is impossible to determine how influential reputational concerns were in Russia's regulation of civil society.
 
-# China: reputation and regularity
+# China
 
-TODO
+The case of China illustrates how authoritarian regimes can redefine their relationship with international civil society in order to increase their domestic stability and boost their international reputation. In contrast to the typical authoritarian response of attempting to absorb rival political institutions into the regime, China's strategy for balancing and neutralizing the destabilizing effect of these different actors has been to give them limited, regulated autonomy. The preeminent example of this phenomenon has been the country's rapid capitalist economic expansion, which has been tightly regulated to ensure its compatibility with the ideology of the Chinese Communist Party (CCP). From 2004–2016, China treated some international NGOs similarly, partnering directly with foreign NGOs to enhance service delivery, education, disaster response, and environmental protections throughout the country. International NGOs have been "caught up in the larger struggle… to craft a stronger party and a stronger China" [@icnl-china].
 
-While Egypt and Russia have passed few formal laws regarding civil society, leaving lots of room of discretion and arbitrary enforcement, China has followed a different pattern.
-
-The Chinese regime is subject to the same institutional challenges as other authoritarian regimes and must contend with parliament, the judiciary, business and industrial elites, and a growing civil society sector. 
-
-China unique - highly regularized legal framework for NGOs. Only country of the three to have a law dedicated solely to international NGOs and foundations - some discretion is allowed, as we'll see, but not as much—INGOs have to follow rules and can't hide as much
-
-In contrast to the typical authoritarian response of absorbing these actors into the regime, China's strategy for balancing and neutralizing the destabilizing effect of these different actors has been to give them limited, regulated autonomy. 
-
-The case of China shows the importance of reputation + fears of domestic instability and foreign influence - not so much threats from instability abroad
-
-In China, NGOs have been "caught up in the larger struggle… to craft a stronger party and a stronger China" [@icnl-china]
-
-Balancing is important - until the 1990s, China engaged in balancing in standard ways, linking institutions to the regime and allowing for minimal dissonance and autonomy. As it began to liberalize in the 1980s and 90s, though, and gained more global economic prominence, it shifted the relationship from corporatist direct links to the regime to contingent symbiosis
-
-Corporatism to openness to (maybe back to) corporatism
+In this final case study, I outline the development of China's regulatory environment for international NGOs, once again comparing predictions from the statistical model with qualitative evidence. I examine how domestic unrest and fears of regime cohesion have been the primary motivation for China's regulation of global civil society, ultimately resulting in a 2017 law targeted specifically at INGOs. I also examine the minimal role of external risk and the more substantial role of reputational concerns on the country's civil society regulatory environment. @fig:timeline-chn presents a timeline of each of these key factors.
 
 ![Timeline of de jure and de facto NGO regulations in China](../../Output/figures/2-timeline-chn){#fig:timeline-chn}
 
@@ -307,6 +293,9 @@ Reputation in @Wang:2012, 113 - China more careful when dealing with foreign NGO
 TODO
 
 Compare Egypt, China, and Russia - similarities in how/why they regulate INGOs
+
+While Egypt and Russia have passed few formal laws regarding civil society, leaving lots of room of discretion and arbitrary enforcement, China has followed a different pattern.
+
 
 - China: reputation/internal
 - Egypt: internal/external
