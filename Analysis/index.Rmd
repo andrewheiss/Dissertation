@@ -13,7 +13,7 @@ output:
 
 1. [The Strategic Balance between Dictators and International NGOs](Writing/0_introduction/introduction.html)
 2. [Authoritarian Institutions and Restrictions on International Civil Society](Writing/1_cs_regime_stability/cs_regime_stability.html)
-3. [INGOs and Institutional Balancing in Egypt, China, and Russia](Writing/2_country_case_studies/country_case_studies.html)
+3. [INGOs and Institutional Balancing in Egypt, Russia, and China](Writing/2_country_case_studies/country_case_studies.html)
 4. ["We changed our strategy… without losing our values, vision and mission": Mission, Money, and the Practical Operating Environment](Writing/3_ingo_mechanisms/ingo_mechanisms.html)
 5. ["They do not want us to operate there": INGO Responses to Gatekeeping Regulations](Writing/4_gatekeeping/gatekeeping.html)
 6. ["Some state officials want your services": INGO Responses to Program Capture Regulations](Writing/5_program_capture/program_capture.html)
