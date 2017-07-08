@@ -4,14 +4,14 @@ if (file.exists("/Users/andrew/.Rprofile")) {
   source("/Users/andrew/.Rprofile")
 }
 
-.First <- function() {
-  days.left <- as.numeric(lubridate::ymd("2017-07-06") - lubridate::today())
+# .First <- function() {
+#   days.left <- as.numeric(lubridate::ymd("2017-07-06") - lubridate::today())
   
-  cat("\n          ---------------------------------------------------------")
-  cat("\n          😱 Write day and night like you're running out of time 😱 ")
-  cat("\n          ---------------------------------------------------------\n")
-  cat("\n                       💀 Days until the reckoning:", days.left, "💀\n\n")
-}
+#   cat("\n          ---------------------------------------------------------")
+#   cat("\n          😱 Write day and night like you're running out of time 😱 ")
+#   cat("\n          ---------------------------------------------------------\n")
+#   cat("\n                       💀 Days until the reckoning:", days.left, "💀\n\n")
+# }
 
 # Yay @jennybc!
 # https://gist.github.com/jennybc/362f52446fe1ebc4c49f
