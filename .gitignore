@@ -117,6 +117,7 @@ Writing/*/*.tex
 Writing/*/tex_out/
 Writing/*/vc*
 Writing/compiled/*
+Writing/general_output/*
 Writing/duke/*
 !Writing/duke/dissertation.tex
 !Writing/duke/dukedissertation.cls
