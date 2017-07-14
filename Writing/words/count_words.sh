@@ -2,8 +2,11 @@
 #
 # This script traverses all commits of a git repository in the current directory
 # and counts the number of words that are changed, i.e. added or deleted for all
-# TeX files. The output contains a time-stamp (YYYY-MM-DD). Next, there are some
-# counts, viz. the number of added, deleted, and total words.
+# TeX files. It outputs a CSV with an ISO 8601 timestamp, number of words addded,
+# deleted, and running total
+#
+# Script originally by Bastian Rieck 
+# http://bastian.rieck.ru/blog/posts/2017/counting_words_git/
 
 branch="master"
 words=0
