@@ -167,7 +167,7 @@
 %-----------------------------------------------------------------------
 \newcommand\biographyname{Biography}
 \newcommand\ackname{Acknowledgements}
-\newcommand\loaname{List of Abbreviations and Symbols}
+\newcommand\loaname{List of Abbreviations}
 
 %-----------------------------------------------------------------------
 %% Page size specifications
