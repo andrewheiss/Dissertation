@@ -15,10 +15,11 @@ potential_acronyms <- str_extract_all(dissertation,
   arrange(desc(n))
 
 # Save to CSV for manual parsing
-write_csv(potential_acronyms, file.path(PROJHOME, "Writing", "acronyms_WILL_BE_OVERWRITTEN.csv"))
+write_csv(potential_acronyms, file.path(PROJHOME, "Writing",
+                                        "acronyms_WILL_BE_OVERWRITTEN.csv"))
 
 # Load manually defined acronyms and output a TeX file of abbreviations
-clean_acronyms <- read_csv("~/Desktop/acronyms.csv") %>%
+clean_acronyms <- file.path(PROJHOME, "Writing", "acronyms.csv") %>%
   filter(!is.na(full)) %>%
   arrange(acronym) %>%
   mutate(item = paste0("    \\item[", acronym, "] ", full))
