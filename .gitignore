@@ -121,6 +121,7 @@ Writing/general_output/*
 Writing/duke/*
 !Writing/duke/dissertation.tex
 !Writing/duke/dukedissertation.cls
+Writing/*WILL_BE_OVERWRITTEN*
 
 # ----------
 # Graphics
