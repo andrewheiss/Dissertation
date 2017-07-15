@@ -302,7 +302,7 @@
      {\normalsize
       Dissertation submitted in partial fulfillment of the requirements for the
       degree of 
-		\par Doctor~of~Philosophy in the \@department
+		\par Doctor~of~Philosophy in \@department
       \par in the Graduate~School of Duke~University\par}
   \fi
  \else
@@ -351,7 +351,7 @@
    {\normalsize%
    An abstract of a dissertation submitted in partial fulfillment of the 
    requirements for 
-	\par the degree of Doctor~of~Philosophy in the \@department
+	\par the degree of Doctor~of~Philosophy in \@department
 	\par in the Graduate~School of Duke~University } \par
 	{\normalsize \number\year}
    \end{center}% 
