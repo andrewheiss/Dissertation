@@ -538,22 +538,26 @@ plot.responses.timeline <- ggplot() +
   scale_y_continuous(labels=comma) +
   scale_x_datetime(date_labels="%B %e", date_breaks="1 week") +
   guides(fill=FALSE, colour=guide_legend(title=NULL)) +
-  labs(x=NULL, y="Cumulative number of responses") +
+  labs(x="2016", y="Cumulative number of responses") +
   theme_light()
 
 plot.responses.timeline.static <- plot.responses.timeline +
-  geom_vline(data=sending.groups.plot, 
-             aes(xintercept=as.numeric(email_day), 
+  geom_vline(data=sending.groups.plot,
+             aes(xintercept=as.numeric(email_day),
                  colour=email_type),
-             size=0.5) + 
-  geom_label_repel(data=sending.groups.plot,
-                   aes(x=email_day, y=400, 
-                       label=group_names, fill=email_type),
-                   size=2.5, colour="white") +
-  theme(legend.position="bottom", 
-        legend.key.size=unit(0.65, "lines"),
-        legend.key=element_blank(),
-        panel.grid.minor=element_blank())
+             size=0.5) +
+  # geom_label_repel(data=sending.groups.plot,
+  #                  aes(x=email_day, y=400, 
+  #                      label=group_names, fill=email_type),
+  #                  size=2.5, colour="white") +
+  theme_ath() +
+  theme(panel.grid.minor=element_blank(),
+        axis.text.x=element_text(angle=45, hjust=1))
+plot.responses.timeline.static
+
+fig.save.cairo(plot.responses.timeline.static,
+               filename="survey-timeline-static",
+               width=5.5, height=3.5)
 
 plot.responses.timeline.interactive <- plot.responses.timeline +
   geom_vline(data=sending.groups.plot, 
