@@ -158,7 +158,7 @@ plot.timeline <- function(ISO, start.date = "1995-01-01", end.date = "2016-12-31
              hjust=0, vjust="top", size=2.5, alpha=0.8,
              colour="black", fill="grey70",
              family="Source Sans Pro Semibold",
-             label="Civil Society Regulatory Environment") +
+             label="Civil Society Regulatory Environment (de facto regulations)") +
     labs(x=NULL, y=NULL) + 
     scale_y_continuous(breaks=c(-2.5, 0, 2.5)) +
     coord_cartesian(xlim=ymd(c(start.date, end.date)),
