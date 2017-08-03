@@ -148,8 +148,8 @@ response.summary.with.total <- bind_rows(response.summary,
          perc.invited.from.valid = num.invited / num.apparently.valid)
 
 response.summary.display <- response.summary.with.total %>%
-  mutate_each(funs(comma), starts_with("num")) %>%
-  mutate_each(funs(percent), starts_with("perc"))
+  mutate_at(vars(starts_with("num")), .funs=funs(comma)) %>%
+  mutate_at(vars(starts_with("perc")), .funs=funs(percent))
 
 response.summary.in.paper <- response.summary.display %>%
   select(Directory = title, `Listed` = num_rows_raw, 
@@ -471,7 +471,7 @@ sending.groups.summary <- sending.groups %>%
   # timestamp with a regex.
   mutate(email_final_reminder = 
            str_extract(notes, "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}")) %>%
-  mutate_each(funs(ymd_hms), starts_with("email")) %>%
+  mutate_at(vars(starts_with("email")), funs(ymd_hms)) %>%
   gather(email_type, email_date, starts_with("email")) %>%
   # Make Group 9's reminder be the final reminder
   mutate(email_type = ifelse(email_type == "email_reminder" & id_group == 9,
