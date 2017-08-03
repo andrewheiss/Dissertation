@@ -1962,3 +1962,95 @@ cat(clean.table)
 cat(clean.table, file=file.path(PROJHOME, "Output", "tables", 
                                 "5-regs-differences-capture-p.md"))
 ```
+
+
+## Reactions to restrictions by size
+
+Are smaller organizations more likely to leave the country (or otherwise react adversely to burdensome regulations)?
+
+```{r reactions-size-tbl}
+reaction.names <- tribble(
+  ~column, ~question, ~question.clean,
+  1, "funding", "Changed sources of funding",
+  1, "issues", "Changed issues",
+  1, "comm_govt", "Changed communication\nwith government",
+  1, "comm_donors", "Changed communication\nwith donors",
+  2, "locations", "Changed locations\nof work",
+  2, "country_office", "Changed location\nof country office",
+  2, "local_staff", "Used more local staff",
+  2, "foreign_staff", "Used more foreign staff"
+)
+
+df.reactions.size <- survey.clean.all %>%
+  select(potential.contentiousness, Q3.4.num,
+         Q4.21_funding, Q4.21_issues, Q4.21_comm_govt, Q4.21_comm_donors,
+         Q4.21_locations, Q4.21_country_office, 
+         Q4.21_local_staff, Q4.21_foreign_staff) %>%
+  gather(question, response, -potential.contentiousness, -Q3.4.num) %>%
+  mutate(question = str_replace(question, "Q4\\.21_", "")) %>%
+  filter(!(response %in% c("Don't know", "Not applicable"))) %>%
+  replace_na(list(Q3.4.num = 0)) %>%
+  mutate(employees.truncated = ifelse(Q3.4.num > 500, 500, Q3.4.num),
+         employees.median = median(employees.truncated, na.rm=TRUE),
+         size = ifelse(employees.truncated > employees.median,
+                       "More than 6 employees", "Fewer than 6 employees")) %>%
+  mutate(size = factor(size)) %>%
+  group_by(question, response, size) %>%
+  summarise(num = n()) %>%
+  spread(response, num) %>%
+  mutate(perc = Yes / (Yes + No)) %>%
+  left_join(reaction.names, by="question")
+```
+
+```{r plot-reactions-size}
+plot.reactions.size <- ggplot(df.reactions.size, 
+                              aes(x=perc, y=question.clean, colour=fct_rev(size))) +
+  geom_pointrangeh(aes(xmin=0, xmax=perc), position=position_dodgev(height=0.75),
+                   size=0.5) +
+  labs(x="Percent making adjustment", y="Change in program implementation") +
+  scale_colour_manual(values=ath.palette("contention1"), name=NULL) +
+  scale_x_continuous(labels=scales::percent) +
+  guides(colour=guide_legend(reverse=TRUE)) +
+  facet_wrap(~ column, scales="free_y") +
+  theme_ath() + theme(strip.text=element_blank(),
+                      panel.grid.major.y=element_blank())
+plot.reactions.size
+
+fig.save.cairo(plot.reactions.size,
+               filename="5-reactions-size",
+               width=5.5, height=3.5)
+```
+
+```{r reactions.differences.gatekeeping, results="asis"}
+run.indiv.reactions <- function(df) {
+  df %>%
+    diff.groups.bayes(cbind(num, total) ~ size, 
+                      data=., prop=TRUE)
+}
+
+reactions.differences.table.bayes <- df.reactions.size %>%
+  ungroup() %>%
+  mutate(num = Yes,
+         total = Yes + No) %>%
+  nest(-question.clean) %>%
+  mutate(bayes.results = data %>% map(run.indiv.reactions))
+
+reactions.differences.table.p <- reactions.differences.table.bayes %>%
+  mutate(mean.diff = bayes.results %>% map_dbl(c("diffs.summary", "mean")),
+         diff.p = bayes.results %>% map_dbl(c("diffs.summary", "p.greater0"))) %>%
+  mutate(diff.pgt0 = paste0(round(mean.diff, 2), "\\ \n(", 
+                            round(diff.p, 2), ")")) %>%
+  select(question.clean, diff.pgt0) %>%
+  arrange(question.clean) %>%
+  rename(`Reaction to regulations` = question.clean,
+         Difference = diff.pgt0)
+
+caption <- "Differences in proportion of large and small INGOs reporting different reactions to regulations and restrictions (accompanies @fig:reactions-size). Posterior probability that the proportion is greater than 0 given in parentheses. {#tbl:reactions-size-p}"
+clean.table <- pandoc.table.return(reactions.differences.table.p,
+                                   keep.line.breaks=TRUE,
+                                   justify="lc", caption=caption)
+
+cat(clean.table)
+cat(clean.table, file=file.path(PROJHOME, "Output", "tables", 
+                                "5-reactions-size-p.md"))
+```
