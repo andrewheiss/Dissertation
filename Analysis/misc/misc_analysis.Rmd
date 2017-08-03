@@ -93,7 +93,7 @@ fig.save.cairo(plot.civicus.map, filename="0-civicus-map",
 ```{r goals-summary, message=FALSE, results="asis"}
 goals <- read_csv(file.path(PROJHOME, "Data", 
                             "data_base", "ingo_reactions_summary.csv")) %>%
-  mutate_each(funs(str_replace(., "XXX", "\\\n")))
+  mutate_all(funs(str_replace(., "XXX", "\\\n")))
 
 caption <- "Goals of government regulation of INGOs and corresponding INGO responses {#tbl:ingo-reactions-summary}"
 goals.out <- pandoc.table.return(goals, keep.line.breaks=TRUE,
