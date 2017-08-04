@@ -51,7 +51,7 @@ Combining all five of these lists yielded 33,973 potential INGOs (see @tbl:summa
 !INCLUDE "../../Output/tables/3-summary-list.md"
 \elandscape
 
-After cleaning the initial list of e-mails, I divided potential respondents into groups of roughly 600 organizations for ease in mass e-mailing. I sent each potential respondent an initial invitation, followed up with a reminder roughly two weeks later, and a final reminder after another two weeks.[^6] The text of the invitation is presented in @fig:email-invitation and @fig:survey-timeline shows the cumulative number of responses over time following each wave of invitations to each of the smaller groups. A static version of the survey instrument can be accessed online.[^7]
+After cleaning the initial list of e-mails, I divided potential respondents into groups of roughly 600 organizations for ease in mass e-mailing. I sent each potential respondent an initial invitation, followed up with a reminder roughly two weeks later, and a final reminder after another two weeks.[^6] The text of the invitation is presented in @fig:email-invitation and @fig:survey-timeline shows the cumulative number of responses over time following each wave of invitations to each of the smaller groups. A static version of the survey instrument is provided in @fig:complete-survey and can also be accessed online.[^7]
 
 ![Initial survey e-mail invitation](../../Graphics/email-invitation){#fig:email-invitation}
 
@@ -86,6 +86,102 @@ Patterns of headquarters and host country regions for countries about which orga
 Since the survey was designed to not have strong statistical or inferential power (opting to maximize possible international NGO response instead), the findings are not fully representative of all INGOs. Additionally, several INGOs explicitly opted to not take the survey for fears of political reprisal, despite the promised privacy safeguards. As such, the results omit the most at-risk organizations. Despite this, the findings highlight important trends in how INGOs react to the regulatory environments of their host countries and provide useful (albeit imperfect) tests of the theory of amicable contempt. I report basic summary statistics and cross-tabulations of survey responses and I use Bayesian inferential statistics to check for differences in means and associations within responses. Bayesian methods are especially appropriate for making tentative exploratory inferences from this kind of data, particularly when combined with data visualizations and graphs [@Gelman:2003], and accordingly, I rely heavily on statistical graphics when making inferences. As with previous statistical chapters, I use weakly informative prior distributions for sample parameters and I obtain the posterior distribution of the CSRE with Markov Chain Monte Carlo (MCMC) sampling and simulate values from the joint posterior distribution of sample parameters.[^11]
 
 In the absence of strong statistical power, I supplement inferences with interpretive analysis of the survey's free response answers. Only 19 respondents (2.8%) declined to answer any of the survey's 36 open-ended questions, and most answered between 8–16 questions, resulting in a sizable corpus of qualitative insights into INGO experiences with their host governments. Where possible, I quote extensively from these responses to provide deeper anecdotal support of organizations's experiences and decisions working with the governments of their target countries.
+
+\clearpage
+
+## Complete survey
+
+![Complete survey with full Qualtrics settings](../../Graphics/survey_pages1){#fig:complete-survey}
+
+\clearpage
+
+![](../../Graphics/survey_pages2)\
+
+\clearpage
+
+![](../../Graphics/survey_pages3)\
+
+\clearpage
+
+![](../../Graphics/survey_pages4)\
+
+\clearpage
+
+![](../../Graphics/survey_pages5)\
+
+\clearpage
+
+![](../../Graphics/survey_pages6)\
+
+\clearpage
+
+![](../../Graphics/survey_pages7)\
+
+\clearpage
+
+![](../../Graphics/survey_pages8)\
+
+\clearpage
+
+![](../../Graphics/survey_pages9)\
+
+\clearpage
+
+![](../../Graphics/survey_pages10)\
+
+\clearpage
+
+![](../../Graphics/survey_pages11)\
+
+\clearpage
+
+![](../../Graphics/survey_pages12)\
+
+\clearpage
+
+![](../../Graphics/survey_pages13)\
+
+\clearpage
+
+![](../../Graphics/survey_pages14)\
+
+\clearpage
+
+![](../../Graphics/survey_pages15)\
+
+\clearpage
+
+![](../../Graphics/survey_pages16)\
+
+\clearpage
+
+![](../../Graphics/survey_pages17)\
+
+\clearpage
+
+![](../../Graphics/survey_pages18)\
+
+\clearpage
+
+![](../../Graphics/survey_pages19)\
+
+\clearpage
+
+![](../../Graphics/survey_pages20)\
+
+\clearpage
+
+![](../../Graphics/survey_pages21)\
+
+\clearpage
+
+![](../../Graphics/survey_pages22)\
+
+\clearpage
+
+![](../../Graphics/survey_pages23)\
+
+\clearpage
 
 [^1]:	See [http://esango.un.org/civilsociety/](http://esango.un.org/civilsociety/), accessed August 2, 2017.
 
