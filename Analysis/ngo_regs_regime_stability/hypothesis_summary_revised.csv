@@ -1,0 +1,7 @@
+Hypothesis,Large-*n* findings,Small-*n* findings,Final implication
+**H~1a~**: CSRE constricts as domestic instability increases,True,True,States restrict civil society regulations in response to domestic instability
+**H~1b~**: CSRE constricts as government cohesion deteriorates,Opposite true,Opposite true,"States constrict civil society regulations as regimes become more unified, stable, and durable"
+**H~2a~**: CSRE constricts as political instability increases in neighboring countries,Opposite true,True; LNA missed effect,States constrict civil society regulations as neighboring countries become more unstable
+**H~2b~**: CSRE constricts as neighboring countries experience coup activity,Opposite true,True; LNA missed effect,States constrict the regulatory environment for civil society when neighbors experience coup activity
+**H~2c~**: CSRE constricts as neighboring countries experience more popular protests,True for violent protestsXXXopposite true for nonviolent protests,True,States expand civil society regulations as neighboring countries experience nonviolent protestsXXXstates constrict civil society regulations as neighboring countries experience violent protests
+**H~3~**: CSRE expands as international shaming of the regime increases,Inconclusive,Inconclusive,Relationship depends on model specificationXXXdata is poor
