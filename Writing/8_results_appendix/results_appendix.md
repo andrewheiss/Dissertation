@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Duke University
   email: andrew.heiss@;duke.edu
-date: July 7, 2017
+date: August 4, 2017
 published: "Please download the latest version at [ingoresearch.org/research/](https://ingoresearch.org/research/)."
 reference-section-title: References
 git-repo: https://github.com/andrewheiss/Dissertation
@@ -19,11 +19,11 @@ All the figures, tables, and other results for the dissertation can be replicate
 
 \stgroup \hangstart
 
-R Core Team. 2016. *R: A language and environment for statistical computing.* Vienna, Austria: R Foundation for Statistical Computing. [http://www.r-project.org](#). Version 3.3.0.
+R Core Team. 2016. *R: A language and environment for statistical computing.* Vienna, Austria: R Foundation for Statistical Computing. [http://www.r-project.org](#). Version 3.3.3.
 
-Stan Development Team. 2016a. *RStan: The R Interface to Stan.* [http://mc-stan.org](#). Version 2.11.2
+Stan Development Team. 2016a. *RStan: The R Interface to Stan.* [http://mc-stan.org](#). Version 2.15.1
 
-Wickham, Hadley. 2009. *ggplot2: Elegant Graphics for Data Analysis.* Springer New York. [http://had.co.nz/ggplot2/book](#). Version 2.1.0.
+Wickham, Hadley. 2009. *ggplot2: Elegant Graphics for Data Analysis.* Springer New York. [http://had.co.nz/ggplot2/book](#). Version 2.2.1.
 
 \fingroup
 
