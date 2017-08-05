@@ -11,7 +11,7 @@ FILENAME = compiled
 APPENDIX_FILENAME = appendix
 
 FRONTMATTER = abstract.md
-FRONTMATTER += ackowledgments.md
+FRONTMATTER += acknowledgements.md
 FRONTMATTER += biography.md
 
 METADATA = metadata.md
