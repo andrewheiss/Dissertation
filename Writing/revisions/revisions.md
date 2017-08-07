@@ -4,7 +4,7 @@ author:
 - name: Andrew Heiss
   affiliation: Romney Institute of Public Management, Brigham Young University
   email: andrew.heiss@byu.edu
-date: August 4, 2017
+date: August 6, 2017
 ---
 
 
@@ -19,7 +19,7 @@ Timur noted that I was using two different definitions of institutions, looking 
 
 ## Judith: Flexibility / tautology
 
-In her comments on my original manuscript—and in in-person discussions prior to the defense—Judith noted that the idea of organizational instrumental flexibility is almost tautological and attempts to carry too much of the theory. In particular, the manuscript conflated instrumental/resource-based flexibility, programmatic flexibility, and normative flexibility all together. That is, even if an NGO has tons of money (like Index on Censorship), they won't necessarily engage in programming that fits with regime desires, but will instead stay out of the country due to their normative flexibility.
+In her comments on my original manuscript—and in in-person discussions prior to the defense—Judith noted that the idea of organizational instrumental flexibility is almost tautological and attempts to carry too much of the theory. In particular, the manuscript conflated instrumental/resource-based flexibility, programmatic flexibility, and normative flexibility all together. That is, even if an NGO has tons of money (like Index on Censorship), they won't necessarily engage in programming that fits with regime desires, but will instead stay out of the country due to their organizational norms.
 
 To address this, I redefined "instrumental flexibility" as "programmatic flexibility," which decouples programming decisions and adaptations from instrumental issues like organization size and revenue. These instrumental concerns influence programming decisions, but they do not determine them completely—organizational norms (still represented by the ideal point) are also linked to programming decisions. I clarify this in chapter 4.
 
@@ -58,7 +58,7 @@ Both Tana and Tim noted that my model of amicable contempt is more dynamic than 
 
 ## Tim: Explain response rate, statistical
 
-The original manuscript had a methods appendix with some background details about how the survey was conducted and how the response rate was calculated. Tim wanted more details about the survey, including how I invited and recruited organizations. I expanded the survey methods appendix to include these details and also included the wording of the invitation. The survey instrument itself is too large and unwieldy to include directly in the appendix, but I make the hyperlink more prominent in the appendix text. I also included a long footnote explaining how the participation rate was calculated, since it uses a special formula rather than just dividing the number of respondents by the number of potential respondents.
+The original manuscript had a methods appendix with some background details about how the survey was conducted and how the response rate was calculated. Tim wanted more details about the survey, including how I invited and recruited organizations. I expanded the survey methods appendix to include these details and also included the wording of the invitation. I include the original survey instrument in the appendix and I make the hyperlink to the static online version more prominent in the appendix text. I also included a long footnote explaining how the participation rate was calculated, since it uses a special formula rather than just dividing the number of respondents by the number of potential respondents.
 
 
 ## Timur: Controlling NGOs in other countries by encouraging other countries to control their NGOs
