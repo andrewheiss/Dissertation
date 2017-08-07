@@ -123,6 +123,7 @@ Writing/duke/*
 !Writing/duke/dukedissertation.cls
 Writing/*WILL_BE_OVERWRITTEN*
 Writing/words/words.csv
+Writing/dissertation_orig.tex
 
 # ----------
 # Graphics
