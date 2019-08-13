@@ -43,4 +43,4 @@ plot.words <- ggplot(words.day, aes(x = date, y = total)) +
 plot.words
 
 ggsave("~/Desktop/dissertation_word_count.png", plot.words,
-       width = 6, height = 4)
+       width = 6, height = 4, dpi = 300, type = "cairo")
